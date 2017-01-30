@@ -1,6 +1,5 @@
 package com.conetex.scriptbindings4android;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +12,24 @@ import android.view.MenuItem;
 import org.liquidplayer.webkit.javascriptcore.JSContext;
 import org.liquidplayer.webkit.javascriptcore.JSValue;
 
-//import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Function;
+import org.mozilla.javascript.FunctionObject;
+import org.mozilla.javascript.ImporterTopLevel;
+import org.mozilla.javascript.Script;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static class CallBack{
+        public static void callback4c() {
+            System.out.println("hi! we are in java... O");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,40 +47,57 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+/* //////////////////////////////////////////////////////////////////////////////////////////////
+        try {
+            MyScriptable.main(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/ //////////////////////////////////////////////////////////////////////////////////////////////
 
+/* //////////////////////////////////////////////////////////////////////////////////////////////
         JSContext context = new JSContext();
         String script =
                 "function factorial(x) { var f = 1; for(; x > 1; x--) f *= x; return f; }\n" +
-                        "var fact_a = factorial(a);\n";
+                        "var fact_a = factorial(3);\n";
         JSValue jsValue = context.evaluateScript(script);
         String s = jsValue.toString();
         System.out.println(s);
+*/ //////////////////////////////////////////////////////////////////////////////////////////////
 
-        //Context rhino = org.mozilla.javascript.Context.enter();
-        /*
-
-        Object[] params = new Object[] { "javaScriptParam" };
-
-// Every Rhino VM begins with the enter()
-// This Context is not Android's Context
+///* ////////////////////////////////////////////////////////////////////////////////////////////// C
+        // Every Rhino VM begins with the enter()
+        // This Context is not Android's Context
         Context rhino = Context.enter();
 
-// Turn off optimization to make Rhino Android compatible
+        // Turn off optimization to make Rhino Android compatible
         rhino.setOptimizationLevel(-1);
         try {
             Scriptable scope = rhino.initStandardObjects();
 
             // Note the forth argument is 1, which means the JavaScript source has
             // been compressed to only one line using something like YUI
-            rhino.evaluateString(scope, javaScriptCode, "JavaScript", 1, null);
+            //String classOfThis = "var import = com.conetex.scriptbindings4android.MainActivity.MyScriptable;";
+            //String classOfThis = "var MyJavaClass = Java.type('com.conetex.scriptbindings4android.MainActivity.MyScriptable');";
+            String javaScriptCode =
+                    "var im = Packages.com.conetex.scriptbindings4android.MainActivity.CallBack; " +
+                    "function factorial(x,c) { var f = 1; for(; x > 1; x--) f *= x; im.callback4c(); return f; }\n" //+
+                    //"var fact_a = factorial(3);\n"
+                    ;
+                    //"function factorial(x,c) { var f = 1; for(; x > 1; x--) f *= x; return f; }\n" +
+                    //        "var fact_a = factorial(3);\n";
+            //rhino.evaluateString(scope, classOfThis + javaScriptCode, "JavaScript", 1, null);
+            //rhino.evaluateString(scope, javaScriptCode, "JavaScript", 1, null);
+            rhino.evaluateString(scope, javaScriptCode, "ScriptAPI", 1, null);
 
             // Get the functionName defined in JavaScriptCode
-            Object obj = scope.get(functionNameInJavaScriptCode, scope);
+            Object obj = scope.get("factorial", scope);
 
             if (obj instanceof Function) {
                 Function jsFunction = (Function) obj;
 
                 // Call the function with params
+                Object[] params = {new Integer(4), new CallBack()};
                 Object jsResult = jsFunction.call(rhino, scope, scope, params);
                 // Parse the jsResult object to a String
                 String result = Context.toString(jsResult);
@@ -74,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             Context.exit();
         }
-*/
+//*/ //////////////////////////////////////////////////////////////////////////////////////////////
+
     }
 
     @Override
