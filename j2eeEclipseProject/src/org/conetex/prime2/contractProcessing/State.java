@@ -7,9 +7,63 @@ import org.conetex.prime2.contractProcessing.Types.*;
 
 public class State {
 
+	public static void main(String[] args) throws ValueException{
+		PrimitiveDataType<Base64_256, String> simpleType = PrimitiveDataType.getInstance(Base64_256.class);
+		simpleType = new PrimitiveDataType< Base64_256,  String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValueImp() { return new Base64_256();  } } );
+		
+		ASCII8 str = new ASCII8();
+		str.set("einStr");
+		Attribute<String> attribute = null;
+		try {
+			attribute = simpleType.createAttribute( str );
+		} catch (NullLabelException | EmptyLabelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		Attribute<?>[] theOrderedAttributes = {attribute};
+		
+		ComplexDataType complexType = null;
+		try {
+			complexType = createComplexDataType(theOrderedAttributes);
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ValueFactory<State> x = complexType;
+		PrimitiveDataType<Complex, State> 
+		
+		simpleTypeChild = new PrimitiveDataType< Complex , State> ( Complex.class     , x );
+		//simpleTypeChild = new PrimitiveDataType< Complex , State> ( Complex.class     , new ValueFactory<State>() { public Complex  createValue() { return new Complex()     ; } } );
+		//                new PrimitiveDataType< ASCII8 , String> ( ASCII8.class      , new ValueFactory<String>(){ public ASCII8   createValue() { return new ASCII8()  ; } } )
+		Attribute<String> attributeChild = null;
+		try {
+			attributeChild = simpleType.createAttribute( str );
+		} catch (NullLabelException | EmptyLabelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}		
+		Attribute<?>[] theOrderedAttributesChild = {attributeChild};
+		ComplexDataType complexTypeParent = null;
+		try {
+			complexTypeParent = createComplexDataType(theOrderedAttributesChild);
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		State state = complexTypeParent.createState();
+		
+		Value<String> value = state.getValue("einStr", Base64_256.class);
+		value.set("mat thias.!  #$%. frm");
+		
+		System.out.println("ok");
+	}	
+	
 	public static void mainMail(String[] args) throws ValueException {
 		PrimitiveDataType<MailAddress64, String> simpleType = PrimitiveDataType.getInstance(MailAddress64.class);
-		simpleType = new PrimitiveDataType< MailAddress64,  String   > ( MailAddress64.class , new ValueFactory<String>(){	public MailAddress64 createValue() { return new MailAddress64();  } } );
+		simpleType = new PrimitiveDataType< MailAddress64,  String   > ( MailAddress64.class , new ValueFactory<String>(){	public MailAddress64 createValueImp() { return new MailAddress64();  } } );
 		
 		ASCII8 str = new ASCII8();
 		str.set("einName");
@@ -48,9 +102,9 @@ public class State {
 		//System.out.println(attribute);
 	}	
 	
-	public static void main(String[] args) throws ValueException{
+	public static void main64(String[] args) throws ValueException{
 		PrimitiveDataType<Base64_256, String> simpleType = PrimitiveDataType.getInstance(Base64_256.class);
-		simpleType = new PrimitiveDataType< Base64_256,  String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValue() { return new Base64_256();  } } );
+		simpleType = new PrimitiveDataType< Base64_256,  String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValueImp() { return new Base64_256();  } } );
 		
 		ASCII8 str = new ASCII8();
 		str.set("einStr");
@@ -119,31 +173,51 @@ public class State {
 
 	private static PrimitiveDataType<?,?>[] types = 
 		{
-			  new PrimitiveDataType< Bool     , Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValue() { return new Bool()     ; } } )	
-		    , new PrimitiveDataType< Int      , Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValue() { return new Int()      ; } } )
-			, new PrimitiveDataType< Lng      , Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValue() { return new Lng()      ; } } )
+			  new PrimitiveDataType< Bool     , Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
+		    , new PrimitiveDataType< Int      , Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
+			, new PrimitiveDataType< Lng      , Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
 			
-			, new PrimitiveDataType< ASCII8  , String > ( ASCII8.class  , new ValueFactory<String>()  { public ASCII8   createValue() { return new ASCII8()  ; } } )
-			, new PrimitiveDataType< ASCII12 , String > ( ASCII12.class , new ValueFactory<String>()  { public ASCII12  createValue() { return new ASCII12() ; } } )
-			, new PrimitiveDataType< ASCII16 , String > ( ASCII16.class , new ValueFactory<String>()  { public ASCII16  createValue() { return new ASCII16() ; } } )
-			, new PrimitiveDataType< ASCII32 , String > ( ASCII32.class , new ValueFactory<String>()  { public ASCII32  createValue() { return new ASCII32() ; } } )
-			, new PrimitiveDataType< ASCII64 , String > ( ASCII64.class , new ValueFactory<String>()  { public ASCII64  createValue() { return new ASCII64() ; } } )
-			, new PrimitiveDataType< ASCII128, String > ( ASCII128.class, new ValueFactory<String>()  { public ASCII128 createValue() { return new ASCII128(); } } )
-			, new PrimitiveDataType< ASCII256, String > ( ASCII256.class, new ValueFactory<String>()  { public ASCII256 createValue() { return new ASCII256(); } } )
+			, new PrimitiveDataType< ASCII8  , String > ( ASCII8.class  , new ValueFactory<String>()  { public ASCII8   createValueImp() { return new ASCII8()  ; } } )
+			, new PrimitiveDataType< ASCII12 , String > ( ASCII12.class , new ValueFactory<String>()  { public ASCII12  createValueImp() { return new ASCII12() ; } } )
+			, new PrimitiveDataType< ASCII16 , String > ( ASCII16.class , new ValueFactory<String>()  { public ASCII16  createValueImp() { return new ASCII16() ; } } )
+			, new PrimitiveDataType< ASCII32 , String > ( ASCII32.class , new ValueFactory<String>()  { public ASCII32  createValueImp() { return new ASCII32() ; } } )
+			, new PrimitiveDataType< ASCII64 , String > ( ASCII64.class , new ValueFactory<String>()  { public ASCII64  createValueImp() { return new ASCII64() ; } } )
+			, new PrimitiveDataType< ASCII128, String > ( ASCII128.class, new ValueFactory<String>()  { public ASCII128 createValueImp() { return new ASCII128(); } } )
+			, new PrimitiveDataType< ASCII256, String > ( ASCII256.class, new ValueFactory<String>()  { public ASCII256 createValueImp() { return new ASCII256(); } } )
 
-			, new PrimitiveDataType< Base64_256, String > ( Base64_256.class, new ValueFactory<String>()  { public Base64_256 createValue() { return new Base64_256(); } } )
-			, new PrimitiveDataType< Base64_128, String > ( Base64_128.class, new ValueFactory<String>()  { public Base64_128 createValue() { return new Base64_128(); } } )
-			, new PrimitiveDataType< Base64_64 , String > ( Base64_64.class , new ValueFactory<String>()  { public Base64_64  createValue() { return new Base64_64() ; } } )
+			, new PrimitiveDataType< Base64_256, String > ( Base64_256.class, new ValueFactory<String>()  { public Base64_256 createValueImp() { return new Base64_256(); } } )
+			, new PrimitiveDataType< Base64_128, String > ( Base64_128.class, new ValueFactory<String>()  { public Base64_128 createValueImp() { return new Base64_128(); } } )
+			, new PrimitiveDataType< Base64_64 , String > ( Base64_64.class , new ValueFactory<String>()  { public Base64_64  createValueImp() { return new Base64_64() ; } } )
 			
-			, new PrimitiveDataType< MailAddress64 , String > ( MailAddress64.class , new ValueFactory<String>()  { public MailAddress64  createValue() { return new MailAddress64() ; } } )
-			, new PrimitiveDataType< MailAddress128, String > ( MailAddress128.class, new ValueFactory<String>()  { public MailAddress128 createValue() { return new MailAddress128(); } } )
-			, new PrimitiveDataType< MailAddress254, String > ( MailAddress254.class, new ValueFactory<String>()  { public MailAddress254 createValue() { return new MailAddress254(); } } )
+			, new PrimitiveDataType< MailAddress64 , String > ( MailAddress64.class , new ValueFactory<String>()  { public MailAddress64  createValueImp() { return new MailAddress64() ; } } )
+			, new PrimitiveDataType< MailAddress128, String > ( MailAddress128.class, new ValueFactory<String>()  { public MailAddress128 createValueImp() { return new MailAddress128(); } } )
+			, new PrimitiveDataType< MailAddress254, String > ( MailAddress254.class, new ValueFactory<String>()  { public MailAddress254 createValueImp() { return new MailAddress254(); } } )
 		};	
 	
 	private final ComplexDataType type;
 	
 	private final Value<?>[] values;
 	
+	public static State createState(){
+		Attribute<?>[] theOrderedAttributes = {};
+		ComplexDataType complexType = null;
+		
+		try {
+			complexType = createComplexDataType(theOrderedAttributes);
+		} catch (DuplicateAttributeNameExeption e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		} catch (NullAttributeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+		State state = complexType.createState();
+		return state;
+	}
+
 	private State(final ComplexDataType theAttributeTuple, final Value<?>[] theValues){
 		this.type = theAttributeTuple;
 		this.values = theValues;		
@@ -174,7 +248,7 @@ public class State {
 	}		
 		
 	private static interface ValueFactory<T>{
-		public Value<T> createValue();
+		public Value<T> createValueImp();
 	}
 	
 	public static class ValueException extends Exception {
@@ -192,7 +266,7 @@ public class State {
 		
 	}
 		
-	public static ComplexDataType createComplexDataType(final Attribute<?>[] theOrderedAttributeTypes) throws DuplicateAttributeNameExeption, NullAttributeException{
+	private static ComplexDataType createComplexDataType(final Attribute<?>[] theOrderedAttributeTypes) throws DuplicateAttributeNameExeption, NullAttributeException{
 		Map<String, Integer> theIndex = new HashMap<String, Integer>();
 		for(int i = 0; i < theOrderedAttributeTypes.length; i++){
 			if(theOrderedAttributeTypes[i] == null){
@@ -207,7 +281,7 @@ public class State {
 		return new ComplexDataType(theIndex, theOrderedAttributeTypes);
 	}	
 	
-	private static class ComplexDataType{
+	public static class ComplexDataType implements ValueFactory<State>{
 		
 		private final Map<String, Integer> index;
 		
@@ -248,6 +322,12 @@ public class State {
 				return this.orderedAttributes[i];
 			}			
 			return null;
+		}
+
+		@Override
+		public Value<State> createValueImp() {
+			// here we go
+			return new Complex( createState() );
 		}	
 		
 	}		
@@ -264,7 +344,7 @@ public class State {
 		}
 		
 		public Value<T> createValue() {
-			return this.factory.createValue();
+			return this.factory.createValueImp();
 		}
 		
 		public ASCII8 getLabel() {

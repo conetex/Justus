@@ -3,11 +3,46 @@ package org.conetex.prime2.contractProcessing;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.conetex.prime2.contractProcessing.State;
 import org.conetex.prime2.contractProcessing.State.Value;
 import org.conetex.prime2.contractProcessing.State.ValueException;
 
 public class Types {
+	
+	public static class Complex2 {
+
+		private State value;
 		
+		public void set(State aValue){
+			this.value = aValue;			
+		}
+		
+		public final State get(){
+			return this.value;
+		}
+		
+	}
+	
+	public static class Complex implements Value<State>{
+
+		private State value;
+		
+		public Complex(State aValue){
+			this.value = aValue;			
+		}
+		
+		@Override
+		public void set(State aValue){
+			this.value = aValue;			
+		}
+		
+		@Override
+		public final State get(){
+			return this.value;
+		}
+		
+	}
+	
 	public static class Int implements Value<Integer>{
 
 		private Integer value;
