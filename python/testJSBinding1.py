@@ -9,10 +9,6 @@ import js2py
 
 print ("Content-Type: text/html\n")
 
-f = js2py.eval_js( "function f(name) {return name + ' seen in js';}" )
-add = js2py.eval_js('function add(a, b) {return a + b}')
+message = "this works | no. 1 | import installed js2py"
 
-message = f("this works | no. 5 | ")
 print message
-
-print add(3,4)

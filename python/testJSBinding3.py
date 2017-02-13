@@ -17,10 +17,8 @@ return 55;
 escramble_758();
 """
 
-message = js2py.eval_js(js) 
-
-
-message2 = "hi mfr 2"
-             
+message = js2py.eval_js(js)
 print message
-    
+
+message2 = " ... this works | no. 3"
+print message2

@@ -9,9 +9,10 @@ import js2py
 
 print ("Content-Type: text/html\n")
 
-f = js2py.eval_js( "function (name) {return name.length}" )
+f = js2py.eval_js( "function f(name) {return name.length;}" )
 
-message = f("Piotr")
-             
+str = "this works | no. 4"
+print str
+
+message = f(str)
 print message
-    

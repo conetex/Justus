@@ -6,7 +6,8 @@
 #sys.path.append("/path/to/your/tweepy/directory")
 
 #import tweepy
-from .js2py import base
+#from .js2py import base
+import js2py.evaljs
 
 # does not work:
 # execjs (PyExecJS)
@@ -14,6 +15,6 @@ from .js2py import base
 
 print ("Content-Type: text/html\n")
 
-message = "hi mfr 2"
+message = "this does not work | no. 2 | import copied js2py"
 
 print message
