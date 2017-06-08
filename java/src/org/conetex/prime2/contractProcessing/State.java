@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.conetex.prime2.contractProcessing.State.Value;
 import org.conetex.prime2.contractProcessing.Types.*;
 
 public class State {
@@ -261,11 +262,24 @@ public class State {
 		}
 	}	
 	
+	public static class ValueTransformException extends Exception {
+		private static final long serialVersionUID = 1L;
+		public ValueTransformException(String msg, Exception cause) {
+			super(msg, cause);
+		}
+		public ValueTransformException(String msg) {
+			super(msg);
+		}		
+	}
+	
+	
 	public static interface Value<T>{
 		
 		public abstract T get();
 		
 		public abstract void set(T value) throws ValueException;
+
+		public abstract void transSet(String value) throws ValueTransformException, ValueException;
 		
 	}
 	
@@ -296,11 +310,20 @@ public class State {
 		}
 		
 		public State createState() {
-			Value<?>[] theAttributes = new Value<?>[ this.orderedAttributes.length ];
+			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
 			for(int i = 0; i < this.orderedAttributes.length; i++){
-				theAttributes[i] = this.orderedAttributes[i].createValue();
+				vals[i] = this.orderedAttributes[i].createValue();
 			}
-			return new State(this, theAttributes);
+			return new State(this, vals);
+		}
+		
+		public State createState(Value<?>[] theValues) {
+			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
+			for(int i = 0; i < this.orderedAttributes.length; i++){
+				vals[i] = this.orderedAttributes[i].createValue();
+				theValues[i].getClass()
+			}
+			return new State(this, theValues);
 		}
 		
 		public int getAttributeIndex(String aName){
@@ -339,15 +362,26 @@ public class State {
 		
 		private final ASCII8 label;
 		
-		private final ValueFactory<T> factory;
+		//private final ValueFactory<T> factory;
 		
+		private final PrimitiveDataType<? extends Value<T>, T> type;
+		
+		/*
 		private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
 			this.label = theLabel;
 			this.factory = theFactory;
 		}
+		*/
+		private Attribute(ASCII8 theLabel, PrimitiveDataType<? extends Value<T>, T> theType){
+			this.label = theLabel;
+			//this.factory = theFactory;
+			this.type = theType;
+		}		
+		
 		
 		public Value<T> createValue() {
-			return this.factory.createValueImp();
+			//return this.factory.createValueImp();
+			return this.type.factory.createValueImp();
 		}
 		
 		public ASCII8 getLabel() {
@@ -399,7 +433,7 @@ public class State {
 			if(theName.get().length() < 1){
 				throw new EmptyLabelException();
 			}
-			return new Attribute<T>(theName, this.factory);
+			return new Attribute<T>(theName, this);
 		}
 
 		private Class<V> getClazz() {
