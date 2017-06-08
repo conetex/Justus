@@ -1,6 +1,7 @@
 package org.conetex.prime2.contractProcessing;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.conetex.prime2.contractProcessing.Types.*;
@@ -173,7 +174,9 @@ public class State {
 
 	private static PrimitiveDataType<?,?>[] types = 
 		{
-			  new PrimitiveDataType< Bool     , Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
+			  new PrimitiveDataType< Complex  , State >  ( Complex.class  , new ValueFactory<State>()   { public Complex   createValueImp() { return new Complex()  ; } } )
+			  
+			, new PrimitiveDataType< Bool     , Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
 		    , new PrimitiveDataType< Int      , Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
 			, new PrimitiveDataType< Lng      , Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
 			
@@ -198,7 +201,7 @@ public class State {
 	
 	private final Value<?>[] values;
 	
-	public static State createState(){
+	public static State _createState(){
 		Attribute<?>[] theOrderedAttributes = {};
 		ComplexDataType complexType = null;
 		
@@ -265,8 +268,8 @@ public class State {
 		public abstract void set(T value) throws ValueException;
 		
 	}
-		
-	private static ComplexDataType createComplexDataType(final Attribute<?>[] theOrderedAttributeTypes) throws DuplicateAttributeNameExeption, NullAttributeException{
+	
+	public static ComplexDataType createComplexDataType(final Attribute<?>[] theOrderedAttributeTypes) throws DuplicateAttributeNameExeption, NullAttributeException{
 		Map<String, Integer> theIndex = new HashMap<String, Integer>();
 		for(int i = 0; i < theOrderedAttributeTypes.length; i++){
 			if(theOrderedAttributeTypes[i] == null){
@@ -286,7 +289,7 @@ public class State {
 		private final Map<String, Integer> index;
 		
 		private final Attribute<?>[] orderedAttributes;
-		
+		 
 		private ComplexDataType(final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedAttributeTypes){
 			this.index = theIndex;
 			this.orderedAttributes = theOrderedAttributeTypes;			
@@ -327,12 +330,12 @@ public class State {
 		@Override
 		public Value<State> createValueImp() {
 			// here we go
-			return new Complex( createState() );
+			return new Complex(  );
 		}	
 		
 	}		
 		
-	private static class Attribute<T> {
+	public static class Attribute<T> {
 		
 		private final ASCII8 label;
 		
@@ -353,12 +356,27 @@ public class State {
 		
 	}
 	
-	private static class PrimitiveDataType<V extends Value<T>, T> {
-		
+	public static class PrimitiveDataType<V extends Value<T>, T> {
+				
 		private final Class<V> clazz;
 		
 		private final ValueFactory<T> factory;
 				
+		@SuppressWarnings("unchecked")
+		public static <V extends Value<T>, T> PrimitiveDataType<V, T> getInstance(String dataType){
+			
+			Class<?> theClass;
+			try {
+				theClass = Class.forName(Types.class.getName() + "$" + dataType);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			return getInstance( (Class<V>)theClass );
+			
+		}
+		
 		@SuppressWarnings("unchecked")
 		public static <V extends Value<T>, T> PrimitiveDataType<V, T> getInstance(Class<V> theClass){
 			for (int i = 0; i < types.length; i++){
@@ -386,6 +404,11 @@ public class State {
 
 		private Class<V> getClazz() {
 			return this.clazz;
+		}
+		
+		@SuppressWarnings("unused")
+		private String getClazzName() {
+			return this.clazz.getName();
 		}
 		
 	}

@@ -9,7 +9,7 @@ import org.conetex.prime2.contractProcessing.State.ValueException;
 
 public class Types {
 	
-	public static class Complex2 {
+	public static class Complex implements Value<State>{
 
 		private State value;
 		
@@ -23,11 +23,11 @@ public class Types {
 		
 	}
 	
-	public static class Complex implements Value<State>{
+	public static class ComplexO implements Value<State>{
 
 		private State value;
 		
-		public Complex(State aValue){
+		public ComplexO(State aValue){
 			this.value = aValue;			
 		}
 		
