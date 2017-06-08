@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.conetex.prime2.contractProcessing.State;
 import org.conetex.prime2.contractProcessing.State.Value;
 import org.conetex.prime2.contractProcessing.State.ValueException;
+import org.conetex.prime2.contractProcessing.State.ValueTransformException;
 
 public class Types {
 	
@@ -20,25 +21,10 @@ public class Types {
 		public final State get(){
 			return this.value;
 		}
-		
-	}
-	
-	public static class ComplexO implements Value<State>{
 
-		private State value;
-		
-		public ComplexO(State aValue){
-			this.value = aValue;			
-		}
-		
 		@Override
-		public void set(State aValue){
-			this.value = aValue;			
-		}
-		
-		@Override
-		public final State get(){
-			return this.value;
+		public void transSet(String value) throws ValueTransformException {
+			throw new ValueTransformException("can not convert String to State");
 		}
 		
 	}
@@ -57,6 +43,16 @@ public class Types {
 			return this.value;
 		}
 		
+		@Override
+		public void transSet(String value) throws ValueTransformException {
+			try {
+				Integer v = Integer.parseInt(value);
+				this.set(v);
+			} catch (NumberFormatException e) {
+				throw new ValueTransformException("can not convert " + value + " to Integer", e);
+			}
+		}		
+		
 	}
 
 	public static class Lng implements Value<Long>{
@@ -71,6 +67,16 @@ public class Types {
 		@Override
 		public final Long get(){
 			return this.value;
+		}
+
+		@Override
+		public void transSet(String value) throws ValueTransformException, NumberFormatException {
+			try {
+				Long v = Long.parseLong(value);
+				this.set(v);	
+			} catch (NumberFormatException e) {
+				throw new ValueTransformException("can not convert " + value + " to Long", e);
+			}			
 		}
 		
 	}
@@ -87,6 +93,25 @@ public class Types {
 		@Override
 		public final Boolean get(){
 			return this.value;
+		}
+
+		@Override
+		public void transSet(String value) throws ValueTransformException {
+			if(value.equalsIgnoreCase("true")){
+				this.set(Boolean.TRUE);
+			}
+			else if(value.equalsIgnoreCase("false")){
+				this.set(Boolean.FALSE);
+			}
+			else if(value.equals("1")){
+				this.set(Boolean.TRUE);
+			}
+			else if(value.equals("0")){
+				this.set(Boolean.FALSE);
+			}
+			else {
+				throw new ValueTransformException("can not convert '" + value + "' to Boolean!");
+			}
 		}		
 		
 	}
@@ -163,6 +188,11 @@ public class Types {
 			if( this.check(aValue, allowedChars) ){
 				this.value = aValue;				
 			}
+		}		
+		
+		@Override
+		public void transSet(String value) throws ValueException  {
+			this.set(value);
 		}		
 		
 		@Override
