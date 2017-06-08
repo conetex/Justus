@@ -19,13 +19,14 @@ public class CallJs {
 
 		+"function fun1(name) {"
 		+"    print('Hi there from Javascript, ' + name);"
-		+"    return \"greetings from javascript\";"
+		+"    return \"Hi \" + name + \"! greetings from javascript \";"
 		+"};"
 
 		+"var fun2 = function (object) {"
-		//+ "var result = MyJavaClass.fun1('John Doe');"
+		+ "var result = object.fun1('John Doe');" // does not work
+		+ "return result;"
 		//+ "print(result);"
-		+"    print(\"  JS Class Definition: \" + Object.prototype.toString.call(object));"
+		//+"    print(\"  JS Class Definition: \" + Object.prototype.toString.call(object));"
 		+"};"
 		;
 		
@@ -36,15 +37,19 @@ public class CallJs {
 
 		//Object result = invocable.invokeFunction("fun1", "Peter Parker");
 		//Object result = invocable.invokeFunction("fun2", new Date());
-		 invocable.invokeFunction("fun2", LocalDateTime.now());
-		//Object result = invocable.invokeFunction("fun2", new Asset());
+		
+		//invocable.invokeFunction("fun2", LocalDateTime.now()); // works
+		
+		Object result = invocable.invokeFunction("fun2", new CallJs());
+		System.out.println(result); // works
+		
 		// [object com.winterbe.java8.Person]
 		//System.out.println(result);
 		//System.out.println(result.getClass());
 		
 	}
 	
-	static String fun1(String name) {
+	public static String fun1(String name) {
 	    System.out.format("Hi there from Java, %s", name);
 	    return "greetings from java";
 	}
