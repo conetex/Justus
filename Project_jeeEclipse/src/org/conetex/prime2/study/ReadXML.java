@@ -21,6 +21,7 @@ import org.conetex.prime2.contractProcessing.State.NullLabelException;
 import org.conetex.prime2.contractProcessing.State.PrimitiveDataType;
 import org.conetex.prime2.contractProcessing.State.Value;
 import org.conetex.prime2.contractProcessing.State.ValueException;
+
 import org.conetex.prime2.contractProcessing.State.ValueTransformException;
 import org.conetex.prime2.contractProcessing.Types.ASCII8;
 import org.conetex.prime2.contractProcessing.Types.Base64_256;
@@ -47,12 +48,12 @@ public class ReadXML {
 		         + "  <!ENTITY js \"Jo Smith\">         "
 		         + "]>                                  "
 				
-				 + "<credentials>  &js;               "
+				 + "<cred>  &js;               "
 	             + "  <author>ein &js;</author>		  "
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
-	             + "  <Xvalue typ='MailAddress64'>123</Xvalue>"
-	             + "</credentials>                " 
+	             + "  <Xvalue typ='MailAddress64'>12@32543.com</Xvalue>"
+	             + "</cred>                " 
 				;
 		InputStream is = new ByteArrayInputStream( xml.getBytes(StandardCharsets.UTF_8) );
 		
@@ -62,16 +63,29 @@ public class ReadXML {
 		//String usr = document.getElementsByTagName("user").item(0).getTextContent();
 		//String pwd = document.getElementsByTagName("password").item(0).getTextContent();
 		
-		String reStr = "" ;
-		NodeList children = document.getChildNodes();	
-		List<Attribute<?>> res = parseAttributes(children.item(0));
+		List<State> re = new LinkedList<State>() ;
+		NodeList children = document.getChildNodes();			
+		for(int i = 0; i < children.getLength(); i++){	
+			State x = createState( children.item(i) );
+			if(x != null){
+				re.add(x);				
+			}
+		}
+		
+		//List<Attribute<?>> res = parseAttributes(children.item(0));
 				
-		System.out.println(reStr);
+		System.out.println("asdfasdf");
 		
 	}
 
 	
-	public static List<Attribute<?>> parseAttributes(Node n){
+
+	
+
+	
+	
+	public static State createState(Node n){
+				
 		NodeList children = n.getChildNodes();
 		List<Attribute<?>> attributes = new LinkedList<Attribute<?>>();
 		List<Value<?>> values = new LinkedList<Value<?>>();
@@ -80,15 +94,15 @@ public class ReadXML {
 			short type = c.getNodeType();
 			System.out.println(c.getNodeName() + " - " + type);
 			if(type == Node.ELEMENT_NODE){
-				Attribute<?> resultPart = parseAttribute( n, attributes, values );
+				createAttributesValues( c, attributes, values );
 			}				
-		}
+		}		
 		
 		Attribute<?>[] theOrderedAttributes = new Attribute<?>[ attributes.size() ];
 		attributes.toArray( theOrderedAttributes );
 		
-		Value<?>[] theVals = new Value<?>[ values.size() ];
-		values.toArray( theVals );		
+		Value<?>[] theValues = new Value<?>[ values.size() ];
+		values.toArray( theValues );		
 		
 		ComplexDataType complexType = null;
 		try {
@@ -96,90 +110,136 @@ public class ReadXML {
 		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}		
 		
-		complexType.createState(theVals);
-		
-		
-		return attributes;
-	}	
-	
-
-	
-	public static State parseState(Node n, String indent, String reStr){
-		
-		String name = n.getNodeName() + " (local: " + n.getLocalName() + ")";
-				
-		NodeList children = n.getChildNodes();
-		int countOfChildren = children.getLength();
-		
-		// Complex
-		List<Attribute<?>> attributes = parseAttributes(n);
-		if(! attributes.isEmpty()){
-	
-			
-			
-			//return re;	
-			return null;
+		if(complexType != null){
+			return complexType.createState(theValues);			
 		}
-		else{
-			// TODO: parse Error
-			System.out.println("      " + n.getNodeName() + " Error no children ");
-			return null;
-		}
-			
 		
-	}	
+		return null;
+		
+	}
 	
-	public static Attribute<?> parseAttribute(Node n, List<Attribute<?>> dattributes, List<Value<?>> values){
+	public static boolean createAttributesValues(Node n, List<Attribute<?>> dattributes, List<Value<?>> values){
 		
-		String name = n.getNodeName() + " (local: " + n.getLocalName() + ")";
+		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
 		
 		NamedNodeMap attributes = n.getAttributes();
 		Node dataTypNode = attributes.getNamedItem( "typ" );
-		if(dataTypNode == null){
-			// TODO parse Error
-			return null;
-		}		
-		String type = dataTypNode.getNodeValue();
 		
-		NodeList children = n.getChildNodes();
-		int countOfChildren = children.getLength();
-		if(countOfChildren == 1){
-			Node valueNode = children.item(0);
-			short valueNodeType = valueNode.getNodeType();
-			if(valueNodeType == Node.TEXT_NODE){		
-				// Primitiv	Attribute
-				String value = valueNode.getNodeValue();
-				// "parsed Obj: " + name + " = " + value + " (" + type + ")";
-				createAttribute(name, type, value, dattributes, values); //
-
+		Node valueNode = null;		
+		if(dataTypNode != null){			
+			NodeList children = n.getChildNodes();
+			int countOfChildren = children.getLength();
+			if(countOfChildren == 0){
+				// Primitiv	...
+				valueNode = attributes.getNamedItem("value");
 			}
-			else{
-				// Complex
-			}				
-		}
-		else if(countOfChildren == 0){
-			// Primitiv	
-			Node valueNode = attributes.getNamedItem("value");
+			else if(countOfChildren == 1){
+				Node valueNodeX = children.item(0);
+				short valueNodeType = valueNodeX.getNodeType();
+				if(valueNodeType == Node.TEXT_NODE){		
+					// Primitiv	...
+					valueNode = valueNodeX;
+				}
+				// Complex ...
+			}	
 			if(valueNode != null){
+				// ... Primitiv	
+				String type = dataTypNode.getNodeValue();
 				String value = valueNode.getNodeValue();
-				// "parsed Obj: " + name + " = " + value + " (" + type + ")";
-				createAttribute(name, type, value, dattributes, values); 
-			}
-			else{
-				// TODO: parse Error
-				System.out.println("      " + n.getNodeName() + " Error no value ");
-				return null;			
+				Attribute<?> attribute = createSimpleAttribute(name, type); //
+				if(attribute != null){
+					Value<?> v = createSimpleValue(attribute, value);
+					if(v != null){
+						dattributes.add(attribute);
+						values.add(v);		
+						return true;
+					}
+				}
+				return false;			
+			}			
+		}
+		
+		// ... Complex
+		Attribute<State> attribute = createComplexAttribute(name); //
+		if(attribute != null){
+			State s = createState(n);
+			if(s != null){
+				Value<State> v = createComplexValue(attribute, s);
+				if(v != null){
+					dattributes.add(attribute);
+					values.add(v);						
+					return true;
+				}
 			}
 		}
-		// Complex
-		return createAttribute(name, "Complex");
-	
+		return false;			
 				
 	}
 	
-	public static void createAttribute(String name, String type, String value, List<Attribute<?>> dattributes, List<Value<?>> values){
+
+	
+	public static Value<State> createComplexValue(Attribute<State> attribute, State value){
+		//new PrimitiveDataType< Complex  , State >  ( Complex.class  , new ValueFactory<State>()   { public Complex   createValueImp() { return new Complex()  ; } } )
+		if(attribute != null){
+			Value<State> v = attribute.createValue();
+			try {
+				v.set(value);
+			} catch (ValueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			return v;
+		}		
+		
+		return null;
+	}	
+	
+	public static Attribute<State> createComplexAttribute(String name){
+		//PrimitiveDataType<?, ?> simpleType = PrimitiveDataType.getInstance( type );		
+		PrimitiveDataType<Value<State>, State> simpleType = PrimitiveDataType.getInstance( "Complex" );
+		ASCII8 str = new ASCII8(); 
+		try {
+			str.set(name);
+		} catch (ValueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		Attribute<State> attribute = null;
+		try {
+			attribute = simpleType.createAttribute( str );
+		} catch (NullLabelException | EmptyLabelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}	
+		
+		return attribute;
+		
+	}	
+	
+	public static Value<?> createSimpleValue(Attribute<?> attribute, String value){
+		
+		if(attribute != null){
+			Value<?> v = attribute.createValue();
+			try {
+				v.transSet(value);
+			} catch (ValueTransformException | ValueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			return v;
+		}		
+		
+		return null;
+	}	
+
+	public static Attribute<?> createSimpleAttribute(String name, String type){
 		PrimitiveDataType<?, ?> simpleType = PrimitiveDataType.getInstance( type );				
 		ASCII8 str = new ASCII8(); 
 		try {
@@ -187,7 +247,7 @@ public class ReadXML {
 		} catch (ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return;
+			return null;
 		}
 		Attribute<?> attribute = null;
 		try {
@@ -195,22 +255,11 @@ public class ReadXML {
 		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			return;
+			return null;
 		}	
 		
-		if(attribute != null){
-			Value<?> v = attribute.createValue();
-			try {
-				v.transSet(value);
-			} catch (ValueException | NumberFormatException | ValueTransformException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return;
-			}
-			dattributes.add(attribute);
-			values.add(v);
-		}		
+		return attribute;
 		
-	}	
+	}		
 	
 }

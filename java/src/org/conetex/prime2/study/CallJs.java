@@ -1,6 +1,5 @@
 package org.conetex.prime2.study;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.script.Invocable;

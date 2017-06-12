@@ -55,7 +55,7 @@ public class State {
 			e.printStackTrace();
 		}		
 		
-		State state = complexTypeParent.createState();
+		State state = complexTypeParent._createState();
 		
 		Value<String> value = state.getValue("einStr", Base64_256.class);
 		value.set("mat thias.!  #$%. frm");
@@ -87,7 +87,7 @@ public class State {
 			e.printStackTrace();
 		}
 		
-		State state = complexType.createState();
+		State state = complexType._createState();
 		
 		Value<String> value = state.getValue("einName", MailAddress.class);
 		try {
@@ -128,7 +128,7 @@ public class State {
 			e.printStackTrace();
 		}
 		
-		State state = complexType.createState();
+		State state = complexType._createState();
 		
 		Value<String> value = state.getValue("einStr", Base64_256.class);
 		value.set("mat thias.!  #$%. frm");
@@ -159,7 +159,7 @@ public class State {
 			e.printStackTrace();
 		}
 		
-		State state = complexType.createState();
+		State state = complexType._createState();
 		
 		Value<Integer> value = state.getValue("ein Name", Int.class);
 		try {
@@ -218,7 +218,7 @@ public class State {
 			return null;
 		}
 		
-		State state = complexType.createState();
+		State state = complexType._createState();
 		return state;
 	}
 
@@ -284,6 +284,9 @@ public class State {
 	}
 	
 	public static ComplexDataType createComplexDataType(final Attribute<?>[] theOrderedAttributeTypes) throws DuplicateAttributeNameExeption, NullAttributeException{
+		if(theOrderedAttributeTypes.length == 0){
+			return null;
+		}
 		Map<String, Integer> theIndex = new HashMap<String, Integer>();
 		for(int i = 0; i < theOrderedAttributeTypes.length; i++){
 			if(theOrderedAttributeTypes[i] == null){
@@ -309,7 +312,7 @@ public class State {
 			this.orderedAttributes = theOrderedAttributeTypes;			
 		}
 		
-		public State createState() {
+		public State _createState() {
 			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
 			for(int i = 0; i < this.orderedAttributes.length; i++){
 				vals[i] = this.orderedAttributes[i].createValue();
@@ -318,14 +321,58 @@ public class State {
 		}
 		
 		public State createState(Value<?>[] theValues) {
-			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
-			for(int i = 0; i < this.orderedAttributes.length; i++){
-				vals[i] = this.orderedAttributes[i].createValue();
-				theValues[i].getClass()
-			}
+			if(theValues.length == 0){
+				// TODO Exception
+				return null;
+			}			
+			if(theValues.length != this.orderedAttributes.length){
+				// TODO Exception
+				return null;
+			}		
 			return new State(this, theValues);
 		}
 		
+		public State createState(String[] theValues) {
+			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
+			try {
+				for(int i = 0; i < this.orderedAttributes.length; i++){
+					Value<?> re = this.orderedAttributes[i].createValue();
+					re.transSet( theValues[i] );
+					vals[i] = re;
+				}
+			} catch (ValueTransformException | ValueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}			
+			return new State(this, vals);
+		}
+		
+		public State createState(List<String> theValues) {
+			if(theValues.size() == 0){
+				// TODO Exception
+				return null;
+			}			
+			if(theValues.size() != this.orderedAttributes.length){
+				// TODO Exception
+				return null;
+			}
+			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
+			try {
+				for(int i = 0; i < this.orderedAttributes.length; i++){
+					Value<?> re = this.orderedAttributes[i].createValue();
+					re.transSet( theValues.get(i) );
+					vals[i] = re;
+				}
+			} catch (ValueTransformException | ValueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}			
+			return new State(this, vals);
+		}		
+		
+				
 		public int getAttributeIndex(String aName){
 			Integer i = this.index.get(aName);
 			if(i == null){
