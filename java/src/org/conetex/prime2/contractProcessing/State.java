@@ -7,6 +7,12 @@ import java.util.Map;
 import org.conetex.prime2.contractProcessing.State.Value;
 import org.conetex.prime2.contractProcessing.Types.*;
 
+// TODO: Names 4 ComplexDataTyp. This is 4 strong typing
+// TODO: parsing Schemas / dtd to define the types
+// TODO: Array-Typs ...
+// TODO: length of SimpleDat encoded in Typ-Name ...
+
+
 public class State {
 
 	public static void main(String[] args) throws ValueException{
