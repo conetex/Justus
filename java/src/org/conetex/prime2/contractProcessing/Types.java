@@ -3,10 +3,10 @@ package org.conetex.prime2.contractProcessing;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.conetex.prime2.contractProcessing.State;
-import org.conetex.prime2.contractProcessing.State.Value;
-import org.conetex.prime2.contractProcessing.State.ValueException;
-import org.conetex.prime2.contractProcessing.State.ValueTransformException;
+import org.conetex.prime2.contractProcessing.Data.State;
+import org.conetex.prime2.contractProcessing.Data.Value;
+import org.conetex.prime2.contractProcessing.Data.ValueException;
+import org.conetex.prime2.contractProcessing.Data.ValueTransformException;
 
 public class Types {
 	

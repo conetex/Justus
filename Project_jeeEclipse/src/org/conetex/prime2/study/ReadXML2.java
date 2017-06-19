@@ -11,9 +11,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.conetex.prime2.contractProcessing.Data;
-import org.conetex.prime2.contractProcessing.Data.*;
-import org.conetex.prime2.contractProcessing.Types.*;
+import org.conetex.prime2.contractProcessing2.Data;
+import org.conetex.prime2.contractProcessing2.Data.*;
+import org.conetex.prime2.contractProcessing2.Data.Attribute.DuplicateAttributeNameExeption;
+import org.conetex.prime2.contractProcessing2.Data.Attribute.EmptyLabelException;
+import org.conetex.prime2.contractProcessing2.Data.Attribute.NullLabelException;
+import org.conetex.prime2.contractProcessing2.Data.Type.ComplexDataType;
+import org.conetex.prime2.contractProcessing2.Data.Type.PrimitiveDataType;
+import org.conetex.prime2.contractProcessing2.Types.*;
+import org.conetex.prime2.contractProcessing2.Data.Value.Implementation.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -21,7 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class ReadXML {
+public class ReadXML2 {
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException  {
 		
@@ -51,10 +57,10 @@ public class ReadXML {
 		//String usr = document.getElementsByTagName("user").item(0).getTextContent();
 		//String pwd = document.getElementsByTagName("password").item(0).getTextContent();
 		
-		List<State> re = new LinkedList<State>() ;
+		List<Structure> re = new LinkedList<Structure>() ;
 		NodeList children = document.getChildNodes();			
 		for(int i = 0; i < children.getLength(); i++){	
-			State x = createState( children.item(i) );
+			Structure x = createState( children.item(i) );
 			if(x != null){
 				re.add(x);				
 			}
@@ -72,11 +78,11 @@ public class ReadXML {
 
 	
 	
-	public static State createState(Node n){
+	public static Structure createState(Node n){
 				
 		NodeList children = n.getChildNodes();
 		List<Attribute<?>> attributes = new LinkedList<Attribute<?>>();
-		List<Value<?>> values = new LinkedList<Value<?>>();
+		List<Value.Interface<?>> values = new LinkedList<Value.Interface<?>>();
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
 			short type = c.getNodeType();
@@ -89,27 +95,27 @@ public class ReadXML {
 		Attribute<?>[] theOrderedAttributes = new Attribute<?>[ attributes.size() ];
 		attributes.toArray( theOrderedAttributes );
 		
-		Value<?>[] theValues = new Value<?>[ values.size() ];
+		Value.Interface<?>[] theValues = new Value.Interface<?>[ values.size() ];
 		values.toArray( theValues );		
 		
 		ComplexDataType complexType = null;
 		try {
 			complexType = Data.createComplexDataType(theOrderedAttributes);
-		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+		} catch (DuplicateAttributeNameExeption | Attribute.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}		
 		
 		if(complexType != null){
-			return complexType.createState(theValues);			
+			return complexType.construct(theValues);			
 		}
 		
 		return null;
 		
 	}
 	
-	public static boolean createAttributesValues(Node n, List<Attribute<?>> dattributes, List<Value<?>> values){
+	public static boolean createAttributesValues(Node n, List<Attribute<?>> dattributes, List<Value.Interface<?>> values){
 		
 		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
 		
@@ -139,7 +145,7 @@ public class ReadXML {
 				String value = valueNode.getNodeValue();
 				Attribute<?> attribute = createSimpleAttribute(name, type); //
 				if(attribute != null){
-					Value<?> v = createSimpleValue(attribute, value);
+					Value.Interface<?> v = createSimpleValue(attribute, value);
 					if(v != null){
 						dattributes.add(attribute);
 						values.add(v);		
@@ -151,11 +157,11 @@ public class ReadXML {
 		}
 		
 		// ... Complex
-		Attribute<State> attribute = createComplexAttribute(name); //
+		Attribute<Structure> attribute = createComplexAttribute(name); //
 		if(attribute != null){
-			State s = createState(n);
+			Structure s = createState(n);
 			if(s != null){
-				Value<State> v = createComplexValue(attribute, s);
+				Value.Interface<Structure> v = createComplexValue(attribute, s);
 				if(v != null){
 					dattributes.add(attribute);
 					values.add(v);						
@@ -169,13 +175,13 @@ public class ReadXML {
 	
 
 	
-	public static Value<State> createComplexValue(Attribute<State> attribute, State value){
+	public static Value.Interface<Structure> createComplexValue(Attribute<Structure> attribute, Structure value){
 		//new PrimitiveDataType< Complex  , State >  ( Complex.class  , new ValueFactory<State>()   { public Complex   createValueImp() { return new Complex()  ; } } )
 		if(attribute != null){
-			Value<State> v = attribute.createValue();
+			Value.Interface<Structure> v = attribute.createValue();
 			try {
 				v.set(value);
-			} catch (ValueException e) {
+			} catch (Value.ValueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -186,18 +192,18 @@ public class ReadXML {
 		return null;
 	}	
 	
-	public static Attribute<State> createComplexAttribute(String name){
+	public static Attribute<Structure> createComplexAttribute(String name){
 		//PrimitiveDataType<?, ?> simpleType = PrimitiveDataType.getInstance( type );		
-		PrimitiveDataType<Value<State>, State> simpleType = PrimitiveDataType.getInstance( "Complex" );
+		PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( "Complex" );
 		ASCII8 str = new ASCII8(); 
 		try {
 			str.set(name);
-		} catch (ValueException e) {
+		} catch (Value.ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-		Attribute<State> attribute = null;
+		Attribute<Structure> attribute = null;
 		try {
 			attribute = simpleType.createAttribute( str );
 		} catch (NullLabelException | EmptyLabelException e1) {
@@ -210,13 +216,13 @@ public class ReadXML {
 		
 	}	
 	
-	public static Value<?> createSimpleValue(Attribute<?> attribute, String value){
+	public static Value.Interface<?> createSimpleValue(Attribute<?> attribute, String value){
 		
 		if(attribute != null){
-			Value<?> v = attribute.createValue();
+			Value.Interface<?> v = attribute.createValue();
 			try {
 				v.transSet(value);
-			} catch (ValueTransformException | ValueException e) {
+			} catch (Value.ValueTransformException | Value.ValueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -228,11 +234,11 @@ public class ReadXML {
 	}	
 
 	public static Attribute<?> createSimpleAttribute(String name, String type){
-		PrimitiveDataType<?, ?> simpleType = PrimitiveDataType.getInstance( type );				
+		PrimitiveDataType<?> simpleType = PrimitiveDataType.getInstance( type );				
 		ASCII8 str = new ASCII8(); 
 		try {
 			str.set(name);
-		} catch (ValueException e) {
+		} catch (Value.ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
