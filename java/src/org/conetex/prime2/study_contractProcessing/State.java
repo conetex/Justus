@@ -1,11 +1,12 @@
-package org.conetex.prime2.contractProcessing;
+package org.conetex.prime2.study_contractProcessing;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.conetex.prime2.contractProcessing.State.Value;
-import org.conetex.prime2.contractProcessing.Types.*;
+import org.conetex.prime2.study_contractProcessing.State.Value;
+import org.conetex.prime2.study_contractProcessing.Types.*;
+
 
 // TODO: Names 4 ComplexDataTyp. This is 4 strong typing
 // TODO: parsing Schemas / dtd to define the types
@@ -178,7 +179,7 @@ public class State {
 		//System.out.println(attribute);
 		
 	}
-
+	
 	private static PrimitiveDataType<?,?>[] types = 
 		{
 			  new PrimitiveDataType< Complex  , State >  ( Complex.class  , new ValueFactory<State>()   { public Complex   createValueImp() { return new Complex()  ; } } )

@@ -1,12 +1,9 @@
-package org.conetex.prime2.contractProcessing;
+package org.conetex.prime2.study_contractProcessing;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.conetex.prime2.contractProcessing.Data.State;
-import org.conetex.prime2.contractProcessing.Data.Value;
-import org.conetex.prime2.contractProcessing.Data.ValueException;
-import org.conetex.prime2.contractProcessing.Data.ValueTransformException;
+import org.conetex.prime2.study_contractProcessing.State.*;
 
 public class Types {
 	

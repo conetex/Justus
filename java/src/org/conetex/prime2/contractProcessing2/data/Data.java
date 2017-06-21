@@ -1,4 +1,4 @@
-package org.conetex.prime2.contractProcessing2;
+package org.conetex.prime2.contractProcessing2.data;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.conetex.prime2.contractProcessing2.Data.Structure;
-import org.conetex.prime2.contractProcessing2.Data.Value;
-import org.conetex.prime2.contractProcessing2.Data.Value.ValueFactory;
-import org.conetex.prime2.contractProcessing2.Data.Value.ValueException;
-import org.conetex.prime2.contractProcessing2.Data.Value.ValueTransformException;
-import org.conetex.prime2.contractProcessing2.Data.Value.Implementation.*;
-import org.conetex.prime2.contractProcessing2.Data.Type.*;
+import org.conetex.prime2.contractProcessing2.data.Data.Structure;
+import org.conetex.prime2.contractProcessing2.data.Data.Value;
+import org.conetex.prime2.contractProcessing2.data.Data.Type.*;
+import org.conetex.prime2.contractProcessing2.data.Data.Value.ValueException;
+import org.conetex.prime2.contractProcessing2.data.Data.Value.ValueFactory;
+import org.conetex.prime2.contractProcessing2.data.Data.Value.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.Data.Value.Implementation.*;
 
 // TODO: Names 4 ComplexDataTyp. This is 4 strong typing
 // TODO: parsing Schemas / dtd to define the types
@@ -28,20 +28,20 @@ public class Data {
 		
 		ASCII8 str = new ASCII8();
 		str.set("einStr");
-		Attribute<String> attribute = null;
+		Identifier<String> attribute = null;
 		try {
 			attribute = simpleType.createAttribute( str );
-		} catch (Attribute.NullLabelException | Attribute.EmptyLabelException e1) {
+		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Attribute<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] theOrderedAttributes = {attribute};
 		
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		} catch (Attribute.DuplicateAttributeNameExeption | Attribute.NullAttributeException e) {
+		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -52,18 +52,18 @@ public class Data {
 		simpleTypeChild = new PrimitiveDataType< Structure > ( Struct.class     , x );
 		//simpleTypeChild = new PrimitiveDataType< Complex , State> ( Complex.class     , new ValueFactory<State>() { public Complex  createValue() { return new Complex()     ; } } );
 		//                new PrimitiveDataType< ASCII8 , String> ( ASCII8.class      , new ValueFactory<String>(){ public ASCII8   createValue() { return new ASCII8()  ; } } )
-		Attribute<String> attributeChild = null;
+		Identifier<String> attributeChild = null;
 		try {
 			attributeChild = simpleType.createAttribute( str );
-		} catch (Attribute.NullLabelException | Attribute.EmptyLabelException e1) {
+		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}		
-		Attribute<?>[] theOrderedAttributesChild = {attributeChild};
+		Identifier<?>[] theOrderedAttributesChild = {attributeChild};
 		ComplexDataType complexTypeParent = null;
 		try {
 			complexTypeParent = createComplexDataType(theOrderedAttributesChild);
-		} catch (Attribute.DuplicateAttributeNameExeption | Attribute.NullAttributeException e) {
+		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
@@ -82,20 +82,20 @@ public class Data {
 		
 		ASCII8 str = new ASCII8();
 		str.set("einName");
-		Attribute<String> attribute = null;
+		Identifier<String> attribute = null;
 		try {
 			attribute = simpleType.createAttribute( str );
-		} catch (Attribute.NullLabelException | Attribute.EmptyLabelException e1) {
+		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Attribute<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] theOrderedAttributes = {attribute};
 		
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		} catch (Attribute.DuplicateAttributeNameExeption | Attribute.NullAttributeException e) {
+		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -123,20 +123,20 @@ public class Data {
 		
 		ASCII8 str = new ASCII8();
 		str.set("einStr");
-		Attribute<String> attribute = null;
+		Identifier<String> attribute = null;
 		try {
 			attribute = simpleType.createAttribute( str );
-		} catch (Attribute.NullLabelException | Attribute.EmptyLabelException e1) {
+		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Attribute<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] theOrderedAttributes = {attribute};
 		
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		} catch (Attribute.DuplicateAttributeNameExeption | Attribute.NullAttributeException e) {
+		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -154,20 +154,20 @@ public class Data {
 		PrimitiveDataType<Integer> simpleType = PrimitiveDataType.getInstance(Int.class);
 		ASCII8 str = new ASCII8();
 		str.set("ein Name");
-		Attribute<Integer> attribute = null;
+		Identifier<Integer> attribute = null;
 		try {
 			attribute = simpleType.createAttribute( str );
-		} catch (Attribute.NullLabelException | Attribute.EmptyLabelException e1) {
+		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Attribute<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] theOrderedAttributes = {attribute};
 		
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		} catch (Attribute.DuplicateAttributeNameExeption | Attribute.NullAttributeException e) {
+		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -219,16 +219,16 @@ public class Data {
 		private final Value.Interface<?>[] values;
 		
 		public static Structure _createState(){
-			Attribute<?>[] theOrderedAttributes = {};
+			Identifier<?>[] theOrderedAttributes = {};
 			ComplexDataType complexType = null;
 			
 			try {
 				complexType = createComplexDataType(theOrderedAttributes);
-			} catch (Attribute.DuplicateAttributeNameExeption e) {
+			} catch (Identifier.DuplicateAttributeNameExeption e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			} catch (Attribute.NullAttributeException e) {
+			} catch (Identifier.NullAttributeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -603,25 +603,25 @@ public class Data {
 			
 	}
 	
-	public static ComplexDataType createComplexDataType(final Attribute<?>[] theOrderedAttributeTypes) throws Attribute.DuplicateAttributeNameExeption, Attribute.NullAttributeException{
+	public static ComplexDataType createComplexDataType(final Identifier<?>[] theOrderedAttributeTypes) throws Identifier.DuplicateAttributeNameExeption, Identifier.NullAttributeException{
 		if(theOrderedAttributeTypes.length == 0){
 			return null;
 		}
 		Map<String, Integer> theIndex = new HashMap<String, Integer>();
 		for(int i = 0; i < theOrderedAttributeTypes.length; i++){
 			if(theOrderedAttributeTypes[i] == null){
-				throw new Attribute.NullAttributeException();
+				throw new Identifier.NullAttributeException();
 			}				
 			String label = theOrderedAttributeTypes[i].getLabel().get();
 			if(theIndex.containsKey(label)){
-				throw new Attribute.DuplicateAttributeNameExeption();
+				throw new Identifier.DuplicateAttributeNameExeption();
 			}
 			theIndex.put(label, i);
 		}
 		return new ComplexDataType(theIndex, theOrderedAttributeTypes);
 	}	
 		
-	public static class Attribute<T> {
+	public static class Identifier<T> {
 		
 		private final ASCII8 label;
 		
@@ -635,7 +635,7 @@ public class Data {
 			this.factory = theFactory;
 		}
 		*/
-		private Attribute(ASCII8 theLabel, PrimitiveDataType<T> theType){
+		private Identifier(ASCII8 theLabel, PrimitiveDataType<T> theType){
 			this.label = theLabel;
 			//this.factory = theFactory;
 			this.type = theType;
@@ -686,7 +686,7 @@ public class Data {
 				
 				Class<?> theClass;
 				try {
-					theClass = Class.forName(Types.class.getName() + "$" + dataType);
+					theClass = Class.forName(Data.Value.Implementation.class.getName() + "$" + dataType);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -711,14 +711,14 @@ public class Data {
 				this.factory = theFactory;
 			}
 			
-			public Attribute<T> createAttribute(ASCII8 theName) throws Attribute.NullLabelException, Attribute.EmptyLabelException {
+			public Identifier<T> createAttribute(ASCII8 theName) throws Identifier.NullLabelException, Identifier.EmptyLabelException {
 				if(theName == null || theName.get() == null){
-					throw new Attribute.NullLabelException();
+					throw new Identifier.NullLabelException();
 				}
 				if(theName.get().length() < 1){
-					throw new Attribute.EmptyLabelException();
+					throw new Identifier.EmptyLabelException();
 				}
-				return new Attribute<T>(theName, this);
+				return new Identifier<T>(theName, this);
 			}
 	
 			private Class<? extends Value.Interface<T>> getClazz() {
@@ -736,9 +736,9 @@ public class Data {
 			
 			private final Map<String, Integer> index;
 			
-			private final Attribute<?>[] orderedAttributes;
+			private final Identifier<?>[] orderedAttributes;
 			 
-			private ComplexDataType(final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedAttributeTypes){
+			private ComplexDataType(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedAttributeTypes){
 				this.index = theIndex;
 				this.orderedAttributes = theOrderedAttributeTypes;			
 			}
@@ -813,7 +813,7 @@ public class Data {
 			}
 			
 			@SuppressWarnings("unused")
-			private Attribute<?> _test_getAttribute(String aName){
+			private Identifier<?> _test_getAttribute(String aName){
 				Integer i = this.index.get(aName);
 				if(i == null){
 					return null;
@@ -821,7 +821,7 @@ public class Data {
 				return _test_getAttribute(i);
 			}	
 			
-			private Attribute<?> _test_getAttribute(int i){
+			private Identifier<?> _test_getAttribute(int i){
 				if(i > -1 && i < this.orderedAttributes.length){
 					return this.orderedAttributes[i];
 				}			
