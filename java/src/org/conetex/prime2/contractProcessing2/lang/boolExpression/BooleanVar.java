@@ -1,8 +1,9 @@
-package org.conetex.prime2.contractProcessing2.lang;
+package org.conetex.prime2.contractProcessing2.lang.boolExpression;
 
 import org.conetex.prime2.contractProcessing2.data.Variable;
+import org.conetex.prime2.contractProcessing2.lang.BoolExpression;
 
-public class BooleanVar implements BooleanExpression{
+public class BooleanVar implements BoolExpression{
 
 	public static BooleanVar create(Variable<Boolean> theVar){
 		if(theVar == null){

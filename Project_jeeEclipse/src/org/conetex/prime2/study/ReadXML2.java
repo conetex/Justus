@@ -19,7 +19,12 @@ import org.conetex.prime2.contractProcessing2.data.Data.Identifier.NullLabelExce
 import org.conetex.prime2.contractProcessing2.data.Data.Type.ComplexDataType;
 import org.conetex.prime2.contractProcessing2.data.Data.Type.PrimitiveDataType;
 import org.conetex.prime2.contractProcessing2.data.Data.Value.Implementation.*;
+import org.conetex.prime2.contractProcessing2.lang.BoolExpression;
+import org.conetex.prime2.contractProcessing2.lang.boolExpression.And;
+import org.conetex.prime2.contractProcessing2.lang.boolExpression.Not;
+import org.conetex.prime2.contractProcessing2.lang.boolExpression.Or;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,6 +50,9 @@ public class ReadXML2 {
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
 	             + "  <Xvalue typ='MailAddress64'>12@32543.com</Xvalue>"
+	             + "  <And>"
+	             + "   <a><v typ='Bool'>12@32543.com</v></a>"	             
+	             + "  </And>"
 	             + "</cred>                " 
 				;
 		InputStream is = new ByteArrayInputStream( xml.getBytes(StandardCharsets.UTF_8) );
@@ -70,8 +78,65 @@ public class ReadXML2 {
 		
 	}
 
+	public static Node getChildElement(Node n, int index){
+		NodeList children = n.getChildNodes();
+		int idx = 0;
+		for(int i = 0; i < children.getLength(); i++){
+			Node c = children.item(i);
+			if(c.getNodeType() == Node.ELEMENT_NODE){
+				if(idx == index){
+					return c;
+				}
+				idx++;
+			}				
+		}
+		return null;
+	}
 	
-
+	public static Node getChildElement(Node n, String name){
+		NodeList children = n.getChildNodes();
+		for(int i = 0; i < children.getLength(); i++){
+			Node c = children.item(i);
+			short type = c.getNodeType();
+			if(type == Node.ELEMENT_NODE){
+				String cn = c.getNodeName();
+				if(name.equals(cn)){
+					return c;
+				}
+			}				
+		}
+		return null;
+	}
+	
+	public static BoolExpression createExpression(Node n){
+		if(n == null){
+			return null;
+		}
+	
+			String name = n.getNodeName();
+			if( name.equals("and") ) {			
+				BoolExpression a = createExpression( getChildElement(n, 0) );
+				BoolExpression b = createExpression( getChildElement(n, 1) );
+				if(a != null && b != null){
+					return And.create(a, b);
+				}
+			}
+			else if( name.equals("or") ) {			
+				BoolExpression a = createExpression( getChildElement(n, 0) );
+				BoolExpression b = createExpression( getChildElement(n, 1) );
+				if(a != null && b != null){
+					return Or.create(a, b);
+				}
+			}
+			else if( name.equals("not") ) {			
+				BoolExpression sub = createExpression( getChildElement(n, 0) );
+				if(sub != null){
+					return Not.create(sub);
+				}
+			}
+		
+		return null;
+	}
 	
 
 	
