@@ -1,15 +1,8 @@
 package org.conetex.prime2.study;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ListIterator;
 import java.util.Map.Entry;
-
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;

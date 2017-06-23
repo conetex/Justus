@@ -1,13 +1,9 @@
 package org.conetex.prime2.study;
 
-import java.util.Date;
-
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
-import org.conetex.prime2.study_contractProcessing.Asset;
 
 public class CallJs {
 
