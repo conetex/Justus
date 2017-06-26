@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.conetex.prime2.contractProcessing2.data.Variable;
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateAttributeNameExeption;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
@@ -25,10 +25,12 @@ import org.conetex.prime2.contractProcessing2.data.Value.Implementation.*;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
 import org.conetex.prime2.contractProcessing2.lang.BoolExpression;
+import org.conetex.prime2.contractProcessing2.lang.Variable;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.And;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.BooleanVar;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.Not;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.Or;
+import org.conetex.prime2.contractProcessing2.runtime.Heap;
 import org.conetex.prime2.study_contractProcessing.Data;
 import org.conetex.prime2.study_contractProcessing.Data.*;
 import org.w3c.dom.DOMException;
@@ -58,10 +60,15 @@ public class ReadXML2 {
 	             + "  <author>ein &js;</author>		  "
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
-	             + "  <Xvalue typ='MailAddress64'>12@32543.com</Xvalue>"
+	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
+	             + "  <a2Address typ='MailAddress64'>ab@cdefg.com</a2Address>"
+	             + "  <copy>"
+	             + "    <source>aAddress</source>"
+	             + "    <target>a2Address</target>"
+	             + "  </copy>"
 	             + "  <And>"
-	             + "   <a><v typ='Bool'>true</v></a>"	             
-	             + "   <b><v typ='Bool'>false</v></b>"	             
+	             + "    <a><v typ='Bool'>true</v></a>"	             
+	             + "    <b><v typ='Bool'>false</v></b>"	             
 	             + "  </And>"
 	             + "</cred>                " 
 				;
@@ -73,14 +80,36 @@ public class ReadXML2 {
 		//String usr = document.getElementsByTagName("user").item(0).getTextContent();
 		//String pwd = document.getElementsByTagName("password").item(0).getTextContent();
 		
-		List<Structure> re = new LinkedList<Structure>() ;
+		Structure root = null;
 		NodeList children = document.getChildNodes();			
 		for(int i = 0; i < children.getLength(); i++){	
-			Structure x = createState( children.item(i) );
-			if(x != null){
-				re.add(x);				
+			Node c = children.item(i);
+			short typOfNode = children.item(i).getNodeType();
+			if(typOfNode == Node.ELEMENT_NODE){
+				if(root == null){
+					root = createState( c );
+				}
+				else{
+					System.err.println("more than one root element! can not proceed!");
+				}
 			}
 		}
+		
+		Heap heap = Heap.create(root);
+		
+		
+		//StringTokenizer st = new StringTokenizer("xyz", Label.NAME_SEPERATOR);
+		//while(st.hasMoreTokens()){
+			//System.out.println(st.nextToken());
+		//}
+		
+		//String[] result = "this.is.a.test".split("\\.");
+		// for (int x=0; x<result.length; x++)
+		//     System.out.println(result[x]);
+		
+	    String x = "this";
+
+	    
 		
 		//List<Attribute<?>> res = parseAttributes(children.item(0));
 				
@@ -134,6 +163,66 @@ public class ReadXML2 {
 		}
 		return false;
 	}	
+
+	/*
+
+	  Variable<T>
+	  {
+	    Identifier<T> identifier
+	    {
+	      {
+	        ASCII8 label           : "Contact"
+	        Type.PrimitiveDataType<T> type
+	        {
+	          clazz                : Structure              
+	        }
+	      }	    
+	    }
+	    Value.Interface<T> value
+	    {
+	      Value.Implementation.Struct
+	      {
+	        Structure value: Structure
+			{
+			  Type.ComplexDataType type
+			  {
+			    // TODO: name the type
+			    Identifier<?>[] orderedIdentifiers 
+			    {
+			      {
+			        ASCII8 label           : "name"
+			        Type.PrimitiveDataType<T> type
+			        {
+			          clazz                : ASCII16              
+			        }
+			      }
+			      {
+			        ASCII8 label           : "mail"
+			        Type.PrimitiveDataType<T> type
+			        {
+			          clazz                : MailAddress              
+			        }                                  
+			      }
+			    }
+			  }
+			  Value.Interface<?>[] values 
+			  {
+			    Value.Implementation.ASCII16
+			    {
+			      String value: "john"
+			    }
+			    Value.Implementation.MailAddress
+			    {
+			      String value: "nobody@nocorp.com"
+			    }
+			  }
+			}
+	      }	    
+	    }
+	  }
+	   
+	*/
+	
 	
 	public static BoolExpression createExpression(Node n){
 		if(n == null){
@@ -177,11 +266,8 @@ public class ReadXML2 {
 		return null;
 	}
 	
-
-	
-	
 	public static Structure createState(Node n){
-				
+		
 		NodeList children = n.getChildNodes();
 		List<Identifier<?>> attributes = new LinkedList<Identifier<?>>();
 		List<Value.Interface<?>> values = new LinkedList<Value.Interface<?>>();

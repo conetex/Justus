@@ -1,5 +1,8 @@
-package org.conetex.prime2.contractProcessing2.data;
+package org.conetex.prime2.contractProcessing2.lang;
 
+import org.conetex.prime2.contractProcessing2.data.Identifier;
+import org.conetex.prime2.contractProcessing2.data.Value;
+import org.conetex.prime2.contractProcessing2.data.Value.Interface;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
 
@@ -18,10 +21,10 @@ public class Variable<T> implements Value.Interface<T>{
 
 	Value.Interface<T> value;
 	
-	Identifier<T> id;
+	Identifier<T> identifier;
 		
 	private Variable(Identifier<T> theId, Value.Interface<T> theValue){
-		this.id = theId;
+		this.identifier = theId;
 		this.value = theValue;	
 	}
 	
@@ -38,5 +41,10 @@ public class Variable<T> implements Value.Interface<T>{
 	@Override
 	public T get(){
 		return this.value.get();
+	}
+
+	@Override
+	public T getCopy() {
+		return this.value.getCopy();
 	}	
 }

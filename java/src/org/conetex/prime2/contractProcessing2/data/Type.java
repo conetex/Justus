@@ -16,6 +16,7 @@ import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Base64_2
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Base64_64;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Bool;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Int;
+import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Lng;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress128;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress254;
@@ -26,7 +27,7 @@ import org.conetex.prime2.contractProcessing2.data.Value.ValueFactory;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
 
 public class Type {
-		
+
 	private static PrimitiveDataType<?>[] types = 
 		{   
 			  new PrimitiveDataType< Structure >  ( Struct.class  , new ValueFactory<Structure>()   { public Struct   createValueImp() { return new Struct()  ; } } )
@@ -35,6 +36,7 @@ public class Type {
 		    , new PrimitiveDataType< Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
 			, new PrimitiveDataType< Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
 			
+			, new PrimitiveDataType< String > ( Label.class  , new ValueFactory<String>()  { public Label   createValueImp() { return new Label()  ; } } )
 			, new PrimitiveDataType< String > ( ASCII8.class  , new ValueFactory<String>()  { public ASCII8   createValueImp() { return new ASCII8()  ; } } )
 			, new PrimitiveDataType< String > ( ASCII12.class , new ValueFactory<String>()  { public ASCII12  createValueImp() { return new ASCII12() ; } } )
 			, new PrimitiveDataType< String > ( ASCII16.class , new ValueFactory<String>()  { public ASCII16  createValueImp() { return new ASCII16() ; } } )
@@ -149,6 +151,8 @@ public class Type {
 				this.index = theIndex;
 				this.orderedAttributes = theOrderedAttributeTypes;			
 			}
+			
+			
 			
 			public Structure _createState() {
 				Value.Interface<?>[] vals = new Value.Interface<?>[ this.orderedAttributes.length ];

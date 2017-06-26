@@ -1,6 +1,10 @@
 package org.conetex.prime2.contractProcessing2.data;
 
+import java.util.StringTokenizer;
+
 import org.conetex.prime2.contractProcessing2.data.Type.ComplexDataType;
+import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
+import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Struct;
 
 public class Structure {
 		
@@ -41,9 +45,35 @@ public class Structure {
 		}	
 		
 		public <V extends Value.Interface<?>> V getValue (String aName, Class<V> c){
-			return getValue( this.type.getAttributeIndex(aName), c );
+			int attributeIdx = this.type.getAttributeIndex(aName);
+			if( attributeIdx > -1 ){
+				return getValue( attributeIdx, c );
+			}
+			else{
+			    int i = aName.indexOf(Label.NAME_SEPERATOR);
+			    if(i > -1 && i < aName.length()){
+			    	String nameOfSubStructure = aName.substring(0, i);
+			    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
+			    		if(subStructure != null){
+			    			Structure s = subStructure.get();
+			    			if(s != null){
+			    				aName = aName.substring(i+Label.NAME_SEPERATOR.length());
+			    				return s.getValue(aName, c);
+			    			}
+			    		}
+			    	}
+			    }
+			}
+			return null;
+			
 		}
 		
+		public Value.Interface<?> getValue (String aName){
+			return this.getValue( aName, Value.Interface.class );
+		}
+
 		@SuppressWarnings("unchecked")
 		private <V extends Value.Interface<?>> V getValue (int i, Class<V> c){
 			Value.Interface<?> v = getValue(i);
@@ -51,16 +81,17 @@ public class Structure {
 				return (V) v;
 			}
 			return null;
-		}
-		
-		public Value.Interface<?> getValue (String aName){
-			return getValue( this.type.getAttributeIndex(aName) );
-		}
+		}		
 		
 		private Value.Interface<?> getValue (int i){
 			if(i > -1 && i < this.values.length){
 				return this.values[i];
 			}
+			return null;
+		}
+
+		public Structure createCopy() {
+			// TODO Auto-generated method stub
 			return null;
 		}
 		

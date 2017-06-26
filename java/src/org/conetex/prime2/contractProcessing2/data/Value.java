@@ -33,9 +33,14 @@ public class Value {
 			
 			public abstract T get();
 			
+			public abstract T getCopy();
+			
 			public abstract void set(T value) throws ValueException;
 	
 			public abstract void transSet(String value) throws ValueTransformException, ValueException;
+			
+			public abstract Interface<T> create(Interface<T> pattern);
+
 		}
 		
 		public static class Implementation{
@@ -55,6 +60,14 @@ public class Value {
 				@Override
 				public void transSet(String value) throws ValueTransformException {
 					throw new ValueTransformException("can not convert String to State");
+				}
+
+				@Override
+				public Structure getCopy() {
+					if(this.value == null){
+						return null;
+					}
+					return this.value.createCopy();
 				}
 				
 			}
@@ -81,6 +94,19 @@ public class Value {
 					} catch (NumberFormatException e) {
 						throw new ValueTransformException("can not convert " + value + " to Integer", e);
 					}
+				}
+
+				@Override
+				public Integer getCopy() {
+					if(this.value == null){
+						return null;
+					}
+					return new Integer(this.value);
+				}
+
+				@Override
+				public Interface<Integer> create(Interface<Integer> pattern) {
+					return new Int();
 				}		
 				
 			}
@@ -107,6 +133,14 @@ public class Value {
 					} catch (NumberFormatException e) {
 						throw new ValueTransformException("can not convert " + value + " to Long", e);
 					}			
+				}
+
+				@Override
+				public Long getCopy() {
+					if(this.value == null){
+						return null;
+					}
+					return new Long(this.value);
 				}
 				
 			}
@@ -142,6 +176,14 @@ public class Value {
 					else {
 						throw new ValueTransformException("can not convert '" + value + "' to Boolean!");
 					}
+				}
+
+				@Override
+				public Boolean getCopy() {
+					if(this.value == null){
+						return null;
+					}
+					return new Boolean(this.value);
 				}		
 				
 			}
@@ -230,9 +272,22 @@ public class Value {
 					return this.value;
 				}	
 				
+				@Override
+				public String getCopy() {
+					if(this.value == null){
+						return null;
+					}
+					return new String(this.value);
+				}
+				
 				public abstract int getMaxSize();
 				
 			}
+			
+			public static class Label extends SizedASCII{
+				public static final String NAME_SEPERATOR = ".";
+				public int getMaxSize(){ return 8; }
+			}			
 			
 			public static class ASCII8 extends SizedASCII{
 				public int getMaxSize(){ return 8; }
