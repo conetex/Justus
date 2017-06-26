@@ -46,5 +46,11 @@ public class Variable<T> implements Value.Interface<T>{
 	@Override
 	public T getCopy() {
 		return this.value.getCopy();
+	}
+
+	@Override
+	public Interface<T> createValue() {
+		// TODO sinnlos, das dies hier mal aufgerufen wird ... sollte also nicht das Value Interface implementieren...
+		return new Variable<T>(this.identifier, this.value.createValue());
 	}	
 }

@@ -4,22 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII12;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII128;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII16;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII256;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII32;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII64;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII8;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Base64_128;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Base64_256;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Base64_64;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Bool;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Int;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Lng;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress128;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress254;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress64;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Struct;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
@@ -38,21 +28,24 @@ public class Type {
 			
 			, new PrimitiveDataType< String > ( Label.class  , new ValueFactory<String>()  { public Label   createValueImp() { return new Label()  ; } } )
 			, new PrimitiveDataType< String > ( ASCII8.class  , new ValueFactory<String>()  { public ASCII8   createValueImp() { return new ASCII8()  ; } } )
+/*
 			, new PrimitiveDataType< String > ( ASCII12.class , new ValueFactory<String>()  { public ASCII12  createValueImp() { return new ASCII12() ; } } )
 			, new PrimitiveDataType< String > ( ASCII16.class , new ValueFactory<String>()  { public ASCII16  createValueImp() { return new ASCII16() ; } } )
 			, new PrimitiveDataType< String > ( ASCII32.class , new ValueFactory<String>()  { public ASCII32  createValueImp() { return new ASCII32() ; } } )
 			, new PrimitiveDataType< String > ( ASCII64.class , new ValueFactory<String>()  { public ASCII64  createValueImp() { return new ASCII64() ; } } )
 			, new PrimitiveDataType< String > ( ASCII128.class, new ValueFactory<String>()  { public ASCII128 createValueImp() { return new ASCII128(); } } )
 			, new PrimitiveDataType< String > ( ASCII256.class, new ValueFactory<String>()  { public ASCII256 createValueImp() { return new ASCII256(); } } )
-
+*/
 			, new PrimitiveDataType< String > ( Base64_256.class, new ValueFactory<String>()  { public Base64_256 createValueImp() { return new Base64_256(); } } )
+/*
 			, new PrimitiveDataType< String > ( Base64_128.class, new ValueFactory<String>()  { public Base64_128 createValueImp() { return new Base64_128(); } } )
 			, new PrimitiveDataType< String > ( Base64_64.class , new ValueFactory<String>()  { public Base64_64  createValueImp() { return new Base64_64() ; } } )
-			
+*/			
 			, new PrimitiveDataType< String > ( MailAddress64.class , new ValueFactory<String>()  { public MailAddress64  createValueImp() { return new MailAddress64() ; } } )
+/*
 			, new PrimitiveDataType< String > ( MailAddress128.class, new ValueFactory<String>()  { public MailAddress128 createValueImp() { return new MailAddress128(); } } )
 			, new PrimitiveDataType< String > ( MailAddress254.class, new ValueFactory<String>()  { public MailAddress254 createValueImp() { return new MailAddress254(); } } )
-			
+*/			
 		};	
 	
 		public static class PrimitiveDataType<T> {

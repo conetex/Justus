@@ -1,7 +1,5 @@
 package org.conetex.prime2.contractProcessing2.data;
 
-import java.util.StringTokenizer;
-
 import org.conetex.prime2.contractProcessing2.data.Type.ComplexDataType;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Struct;
@@ -91,10 +89,9 @@ public class Structure {
 		}
 
 		public Structure createCopy() {
-			// TODO Auto-generated method stub
 			Value.Interface<?>[] theValues = new Value.Interface<?>[ this.values.length ];
-			for(int i = 0; i < theValues.length, i++){
-				theValues[i] = this.values[i].getCopy();
+			for(int i = 0; i < theValues.length; i++){
+				theValues[i] = this.values[i].createValue();
 			}
 			return create(type, theValues);
 		}

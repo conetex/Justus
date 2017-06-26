@@ -222,8 +222,7 @@ public class ReadXML2 {
 	  }
 	   
 	*/
-	
-	
+		
 	public static BoolExpression createExpression(Node n){
 		if(n == null){
 			return null;
@@ -254,12 +253,16 @@ public class ReadXML2 {
 			Identifier<Boolean> id = ReadXML2.<Boolean>createSimpleAttribute(name, "Bool");
 			Variable<Boolean> var = Variable.<Boolean>create(id);
 			if(var != null){
-				try {
-					var.transSet(n.getNodeValue());
-				} catch (DOMException | ValueTransformException | ValueException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				Boolean v = Bool.getTrans( n.getNodeValue() );
+				if( v != null ){
+					try {
+						var.set(v);
+					} catch (ValueException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				
 			}
 		}
 		

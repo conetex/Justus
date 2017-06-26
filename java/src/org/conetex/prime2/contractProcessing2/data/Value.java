@@ -39,7 +39,7 @@ public class Value {
 	
 			public abstract void transSet(String value) throws ValueTransformException, ValueException;
 			
-			public abstract Interface<T> create(Interface<T> pattern);
+			public abstract Interface<T> createValue();
 
 		}
 		
@@ -49,10 +49,12 @@ public class Value {
 	
 				private Structure value;
 				
+				@Override
 				public void set(Structure aValue){
 					this.value = aValue;			
 				}
 				
+				@Override
 				public final Structure get(){
 					return this.value;
 				}
@@ -68,6 +70,13 @@ public class Value {
 						return null;
 					}
 					return this.value.createCopy();
+				}
+
+				@Override
+				public Interface<Structure> createValue() {
+					Struct re = new Struct();
+					re.set( this.getCopy() );
+					return re;					
 				}
 				
 			}
@@ -105,8 +114,10 @@ public class Value {
 				}
 
 				@Override
-				public Interface<Integer> create(Interface<Integer> pattern) {
-					return new Int();
+				public Interface<Integer> createValue() {
+					Int re = new Int();
+					re.set( this.getCopy() );
+					return re;
 				}		
 				
 			}
@@ -142,6 +153,13 @@ public class Value {
 					}
 					return new Long(this.value);
 				}
+
+				@Override
+				public Interface<Long> createValue() {
+					Lng re = new Lng();
+					re.set( this.getCopy() );
+					return re;
+				}
 				
 			}
 	
@@ -159,23 +177,31 @@ public class Value {
 					return this.value;
 				}
 	
-				@Override
-				public void transSet(String value) throws ValueTransformException {
+				public static Boolean getTrans(String value) {
 					if(value.equalsIgnoreCase("true")){
-						this.set(Boolean.TRUE);
+						return Boolean.TRUE;
 					}
 					else if(value.equalsIgnoreCase("false")){
-						this.set(Boolean.FALSE);
+						return Boolean.FALSE;
 					}
 					else if(value.equals("1")){
-						this.set(Boolean.TRUE);
+						return Boolean.TRUE;
 					}
 					else if(value.equals("0")){
-						this.set(Boolean.FALSE);
+						return Boolean.FALSE;
 					}
 					else {
+						return null;
+					}
+				}
+				
+				@Override
+				public void transSet(String value) throws ValueTransformException {
+					Boolean v = getTrans(value);
+					if( v == null ){
 						throw new ValueTransformException("can not convert '" + value + "' to Boolean!");
 					}
+					this.set(v);
 				}
 
 				@Override
@@ -184,13 +210,20 @@ public class Value {
 						return null;
 					}
 					return new Boolean(this.value);
+				}
+
+				@Override
+				public Interface<Boolean> createValue() {
+					Bool re = new Bool();
+					re.set( this.getCopy() );
+					return re;
 				}		
 				
 			}
 			
 			public static abstract class SizedASCII implements Value.Interface<String>{
 				
-				private String value;
+				protected String value;
 						
 				protected boolean check(String aValue, String allowedChars) throws ValueException{
 					if(aValue == null){
@@ -279,7 +312,7 @@ public class Value {
 					}
 					return new String(this.value);
 				}
-				
+								
 				public abstract int getMaxSize();
 				
 			}
@@ -287,34 +320,22 @@ public class Value {
 			public static class Label extends SizedASCII{
 				public static final String NAME_SEPERATOR = ".";
 				public int getMaxSize(){ return 8; }
+				@Override
+				public Interface<String> createValue() {
+					Label re = new Label();
+					super.value = this.getCopy();
+					return re;
+				}
 			}			
 			
 			public static class ASCII8 extends SizedASCII{
 				public int getMaxSize(){ return 8; }
-			}	
-			
-			public static class ASCII12 extends SizedASCII{
-				public int getMaxSize(){ return 12; }			
-			}
-			
-			public static class ASCII16 extends SizedASCII{
-				public int getMaxSize(){ return 16; }			
-			}	
-			
-			public static class ASCII32 extends SizedASCII{
-				public int getMaxSize(){ return 32;	}			
-			}	
-			
-			public static class ASCII64 extends SizedASCII{
-				public int getMaxSize(){ return 64;	}			
-			}	
-			
-			public static class ASCII128 extends SizedASCII{
-				public int getMaxSize(){ return 128; }			
-			}	
-			
-			public static class ASCII256 extends SizedASCII{
-				public int getMaxSize(){ return 256; }			
+				@Override
+				public Interface<String> createValue() {
+					Label re = new Label();
+					re.value = this.getCopy();
+					return re;
+				}				
 			}	
 					
 			public static abstract class Base64 extends SizedASCII{
@@ -335,20 +356,17 @@ public class Value {
 			public static class Base64_256 extends Base64{
 				// How to calculate the memory for Base64-encoded data? See https://de.wikipedia.org/wiki/Base64 
 				// 4 * ( ceil (256 / 3) ) = 344
-				public int getMaxSize(){ return 344; }
-			}
-			
-			public static class Base64_128 extends Base64{
 				// 4 * ( ceil (128 / 3) ) = 172
-				public int getMaxSize(){ return 172; }
-			}
-			
-			public static class Base64_64 extends Base64{
 				// 4 * ( ceil (64 / 3) ) = 88
-				public int getMaxSize(){ return 88; }
-			}	
-			
-			
+				public int getMaxSize(){ return 344; }
+
+				@Override
+				public Interface<String> createValue() {
+					Base64_256 re = new Base64_256();
+					re.value = this.getCopy();
+					return re;
+				}
+			}
 			
 			public static abstract class MailAddress extends SizedASCII{
 				
@@ -376,15 +394,14 @@ public class Value {
 			}
 			
 			public static class MailAddress64 extends MailAddress{
-				public int getMaxSize(){ return 64; }
-			}
-			
-			public static class MailAddress128 extends MailAddress{
-				public int getMaxSize(){ return 128; }
-			}	
-			
-			public static class MailAddress254 extends MailAddress{
-				public int getMaxSize(){ return 254; } // longest email-address is 254
+				public int getMaxSize(){ return 64; } // longest email-address is 254
+
+				@Override
+				public Interface<String> createValue() {
+					MailAddress64 re = new MailAddress64();
+					re.value = this.getCopy();
+					return re;
+				}
 			}
 		
 		}

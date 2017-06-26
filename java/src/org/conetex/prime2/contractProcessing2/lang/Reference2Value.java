@@ -50,6 +50,12 @@ public class Reference2Value<T> implements Value.Interface<T>{
 		Interface<T> valueWrapper = this.thisObject.getValue( this.path, this.clazz );
 		return valueWrapper.getCopy();
 	}
+
+	@Override
+	public Interface<T> createValue() {
+		// TODO sinnlos, das dies hier mal aufgerufen wird ... sollte also nicht das Value Interface implementieren...
+		return new Reference2Value<T>(this.thisObject, this.path, this.clazz);
+	}
 	
 	
 }
