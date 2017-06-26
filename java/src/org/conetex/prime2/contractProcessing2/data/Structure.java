@@ -92,7 +92,11 @@ public class Structure {
 
 		public Structure createCopy() {
 			// TODO Auto-generated method stub
-			return null;
+			Value.Interface<?>[] theValues = new Value.Interface<?>[ this.values.length ];
+			for(int i = 0; i < theValues.length, i++){
+				theValues[i] = this.values[i].getCopy();
+			}
+			return create(type, theValues);
 		}
 		
 	}
