@@ -72,6 +72,24 @@ public class Type {
 			}
 			
 			@SuppressWarnings("unchecked")
+			public static <T> Class<Value.Interface<T>> getClass(String dataType){
+				
+				Class<?> theClass;
+				String className = Value.Implementation.class.getName() + "$" + dataType;
+				try {
+					theClass = Class.forName(className);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					System.err.println("can not find " + className);
+					//e.printStackTrace();
+					return null;
+				}
+				return (Class<Value.Interface<T>>)theClass;
+				
+			}			
+			
+			
+			@SuppressWarnings("unchecked")
 			public static <T> PrimitiveDataType<T> getInstance(Class<? extends Value.Interface<T>> theClass){
 				for (int i = 0; i < types.length; i++){
 					if(types[i].getClazz() == theClass){

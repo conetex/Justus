@@ -4,8 +4,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,7 +28,11 @@ import org.conetex.prime2.contractProcessing2.data.Value.Implementation.*;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
 import org.conetex.prime2.contractProcessing2.lang.BoolExpression;
+import org.conetex.prime2.contractProcessing2.lang.Reference2Value;
 import org.conetex.prime2.contractProcessing2.lang.Variable;
+import org.conetex.prime2.contractProcessing2.lang.Assignments.Assignment;
+import org.conetex.prime2.contractProcessing2.lang.Assignments.Copy;
+import org.conetex.prime2.contractProcessing2.lang.Assignments.Ref;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.And;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.BooleanVar;
 import org.conetex.prime2.contractProcessing2.lang.boolExpression.Not;
@@ -40,6 +47,65 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+/*
+
+Variable<T>
+{
+  Identifier<T> identifier
+  {
+    {
+      ASCII8 label           : "Contact"
+      Type.PrimitiveDataType<T> type
+      {
+        clazz                : Structure              
+      }
+    }	    
+  }
+  Value.Interface<T> value
+  {
+    Value.Implementation.Struct
+    {
+      Structure value: Structure
+		{
+		  Type.ComplexDataType type
+		  {
+		    // TODO: name the type
+		    Identifier<?>[] orderedIdentifiers 
+		    {
+		      {
+		        ASCII8 label           : "name"
+		        Type.PrimitiveDataType<T> type
+		        {
+		          clazz                : ASCII16              
+		        }
+		      }
+		      {
+		        ASCII8 label           : "mail"
+		        Type.PrimitiveDataType<T> type
+		        {
+		          clazz                : MailAddress              
+		        }                                  
+		      }
+		    }
+		  }
+		  Value.Interface<?>[] values 
+		  {
+		    Value.Implementation.ASCII16
+		    {
+		      String value: "john"
+		    }
+		    Value.Implementation.MailAddress
+		    {
+		      String value: "nobody@nocorp.com"
+		    }
+		  }
+		}
+    }	    
+  }
+}
+ 
+*/
 
 public class ReadXML2 {
 
@@ -61,10 +127,10 @@ public class ReadXML2 {
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
 	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
-	             + "  <a2Address typ='MailAddress64'>ab@cdefg.com</a2Address>"
+	             + "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
 	             + "  <copy>"
-	             + "    <source>aAddress</source>"
-	             + "    <target>a2Address</target>"
+	             + "    <source typ='MailAddress64'>aAddress</source>"
+	             + "    <target typ='MailAddress64'>a2Addres</target>"
 	             + "  </copy>"
 	             + "  <And>"
 	             + "    <a><v typ='Bool'>true</v></a>"	             
@@ -80,6 +146,9 @@ public class ReadXML2 {
 		//String usr = document.getElementsByTagName("user").item(0).getTextContent();
 		//String pwd = document.getElementsByTagName("password").item(0).getTextContent();
 		
+		Map<ComplexDataType, List<FunctionBuilder>> complexTyps = 
+				new HashMap<ComplexDataType, List<FunctionBuilder>>();
+		
 		Structure root = null;
 		NodeList children = document.getChildNodes();			
 		for(int i = 0; i < children.getLength(); i++){	
@@ -87,13 +156,22 @@ public class ReadXML2 {
 			short typOfNode = children.item(i).getNodeType();
 			if(typOfNode == Node.ELEMENT_NODE){
 				if(root == null){
-					root = createState( c );
+					root = createState( c, complexTyps );
 				}
 				else{
 					System.err.println("more than one root element! can not proceed!");
 				}
 			}
 		}
+		
+        for (Entry<ComplexDataType, List<FunctionBuilder>> pair : complexTyps.entrySet()){
+        	// TODO hier ist die Reihenfolge entscheidend!
+        	ComplexDataType d = pair.getKey();
+        	List<FunctionBuilder> fbs = pair.getValue();
+            for (FunctionBuilder fb : fbs){
+            	fb.build(d);
+            } 
+        }
 		
 		Heap heap = Heap.create(root);
 		
@@ -113,7 +191,7 @@ public class ReadXML2 {
 		
 		//List<Attribute<?>> res = parseAttributes(children.item(0));
 				
-		System.out.println("asdfasdf");
+		System.out.println("ENDE");
 		
 	}
 
@@ -147,6 +225,22 @@ public class ReadXML2 {
 		return null;
 	}
 	
+	public static String getNodeValue(Node n){
+		String re = getAttribute(n, "value");
+		if(re != null){
+			return re;				
+		}
+		NodeList children = n.getChildNodes();
+		if(children != null && children.getLength() == 1){
+			Node textValueNode = children.item(0);
+			short textValueNodeType = textValueNode.getNodeType();
+			if(textValueNodeType == Node.TEXT_NODE){		
+				return textValueNode.getNodeValue();
+			}
+		}
+		return null;
+	}	
+	
 	public static String getAttribute(Node n, String a){
 		NamedNodeMap attributes = n.getAttributes();
 		Node attributeNode = attributes.getNamedItem( a );			
@@ -163,66 +257,63 @@ public class ReadXML2 {
 		}
 		return false;
 	}	
-
-	/*
-
-	  Variable<T>
-	  {
-	    Identifier<T> identifier
-	    {
-	      {
-	        ASCII8 label           : "Contact"
-	        Type.PrimitiveDataType<T> type
-	        {
-	          clazz                : Structure              
-	        }
-	      }	    
-	    }
-	    Value.Interface<T> value
-	    {
-	      Value.Implementation.Struct
-	      {
-	        Structure value: Structure
-			{
-			  Type.ComplexDataType type
-			  {
-			    // TODO: name the type
-			    Identifier<?>[] orderedIdentifiers 
-			    {
-			      {
-			        ASCII8 label           : "name"
-			        Type.PrimitiveDataType<T> type
-			        {
-			          clazz                : ASCII16              
-			        }
-			      }
-			      {
-			        ASCII8 label           : "mail"
-			        Type.PrimitiveDataType<T> type
-			        {
-			          clazz                : MailAddress              
-			        }                                  
-			      }
-			    }
-			  }
-			  Value.Interface<?>[] values 
-			  {
-			    Value.Implementation.ASCII16
-			    {
-			      String value: "john"
-			    }
-			    Value.Implementation.MailAddress
-			    {
-			      String value: "nobody@nocorp.com"
-			    }
-			  }
+	
+	
+	public static abstract class FunctionBuilder{
+		protected Node node;
+		protected FunctionBuilder(Node n){
+			this.node = n;
+		}
+		public abstract void build(ComplexDataType d);
+	}
+	
+	// <T, V extends Value.Interface<T>> 
+	public static Assignment<?> createAssignment(String name, Node n, ComplexDataType c){
+		if(n == null){
+			return null;
+		}		
+		//String name = n.getNodeName();
+		//if( name.equals("copy") || name.equals("ref") ) {			
+			Node c0 = getChildElementByIndex(n, 0);
+			String c0DataType = getAttribute(c0, "typ");
+			Class<Value.Interface<Object>> c0Class = PrimitiveDataType.getClass(c0DataType);
+	
+			Node c1 = getChildElementByIndex(n, 1);
+			String c1DataType = getAttribute(c1, "typ");
+			Class<Value.Interface<Object>> c1Class = PrimitiveDataType.getClass(c1DataType);
+			
+			if(c0Class == c1Class){
+				return createAssignment(name, c0, c1, c0Class);
 			}
-	      }	    
-	    }
-	  }
-	   
-	*/
-		
+			else{
+				// TODO: classes do not match
+				return null;
+			}
+		//}
+		//return null;
+	}
+	
+	private static <T> Assignment<T> createAssignment(String name, Node c0, Node c1, Class<Value.Interface<T>> cClass){
+		Reference2Value<T> src = createReference2Value( c0, cClass );
+		Reference2Value<T> trg = createReference2Value( c1, cClass );
+		if(src != null && trg != null){
+			if(name.equals("copy")){
+				return Copy.<T>create(src, trg);					
+			}
+			if(name.equals("ref")){
+				return Ref.<T>create(src, trg);					
+			}				
+		}
+		return null;
+	}
+	
+	public static <T> Reference2Value<T> createReference2Value(Node n, Class<? extends Value.Interface<T>> theClass){
+		// TODO: whats this object ? now its null ...
+		String path = getNodeValue(n);
+
+		return Reference2Value.<T>create(path, theClass);
+	}	
+	
 	public static BoolExpression createExpression(Node n){
 		if(n == null){
 			return null;
@@ -269,7 +360,13 @@ public class ReadXML2 {
 		return null;
 	}
 	
-	public static Structure createState(Node n){
+	
+
+
+	
+	public static Structure createState(Node n, Map<ComplexDataType, List<FunctionBuilder>> complexTyps){
+		
+		List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
 		
 		NodeList children = n.getChildNodes();
 		List<Identifier<?>> attributes = new LinkedList<Identifier<?>>();
@@ -279,7 +376,33 @@ public class ReadXML2 {
 			short type = c.getNodeType();
 			System.out.println(c.getNodeName() + " - " + type);
 			if(type == Node.ELEMENT_NODE){
-				createAttributesValues( c, attributes, values );
+				
+				String name = c.getNodeName();
+				if( name.equals("copy") ) {
+					functionBuilders.add( 
+							new FunctionBuilder(c){
+								@Override
+								public void build(ComplexDataType c) {
+									createAssignment("copy", super.node, c);
+								}
+							}
+						);
+				}
+				else if( name.equals("ref") ) {
+					functionBuilders.add( 
+							new FunctionBuilder(c){
+								@Override
+								public void build(ComplexDataType c) {
+									createAssignment("ref", super.node, c);
+								}
+							}
+						);					
+				}
+				else{
+					createAttributesValues( c, attributes, values, complexTyps );
+				}
+				
+				
 			}				
 		}		
 		
@@ -299,6 +422,8 @@ public class ReadXML2 {
 		}		
 		
 		if(complexType != null){
+			// TODO keine doppelten complexTyps erlauben ... gib ihnen auch namen...
+			complexTyps.put(complexType, functionBuilders);
 			return complexType.construct(theValues);			
 		}
 		
@@ -306,37 +431,25 @@ public class ReadXML2 {
 		
 	}
 	
-	public static boolean createAttributesValues(Node n, List<Identifier<?>> dattributes, List<Value.Interface<?>> values){
+
+	
+	public static boolean createAttributesValues(Node n, List<Identifier<?>> dattributes, List<Value.Interface<?>> values, Map<ComplexDataType, List<FunctionBuilder>> complexTyps){
 		
 		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
 		
 		NamedNodeMap attributes = n.getAttributes();
 		Node dataTypNode = attributes.getNamedItem( "typ" );
 		
-		Node valueNode = null;		
+		//String valueNode = null;		
 		if(dataTypNode != null){			
-			NodeList children = n.getChildNodes();
-			int countOfChildren = children.getLength();
-			if(countOfChildren == 0){
-				// Primitiv	...
-				valueNode = attributes.getNamedItem("value");
-			}
-			else if(countOfChildren == 1){
-				Node valueNodeX = children.item(0);
-				short valueNodeType = valueNodeX.getNodeType();
-				if(valueNodeType == Node.TEXT_NODE){		
-					// Primitiv	...
-					valueNode = valueNodeX;
-				}
-				// Complex ...
-			}	
+			String valueNode = getNodeValue(n);
 			if(valueNode != null){
 				// ... Primitiv	
 				String type = dataTypNode.getNodeValue();
-				String value = valueNode.getNodeValue();
+				//String value = valueNode;
 				Identifier<?> attribute = createSimpleAttribute(name, type); //
 				if(attribute != null){
-					Value.Interface<?> v = createSimpleValue(attribute, value);
+					Value.Interface<?> v = createSimpleValue(attribute, valueNode);
 					if(v != null){
 						dattributes.add(attribute);
 						values.add(v);		
@@ -350,7 +463,7 @@ public class ReadXML2 {
 		// ... Complex
 		Identifier<Structure> attribute = createComplexAttribute(name); //
 		if(attribute != null){
-			Structure s = createState(n);
+			Structure s = createState(n, complexTyps);
 			if(s != null){
 				Value.Interface<Structure> v = createComplexValue(attribute, s);
 				if(v != null){

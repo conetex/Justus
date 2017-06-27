@@ -6,56 +6,47 @@ import org.conetex.prime2.contractProcessing2.data.Value.Interface;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
 
-public class Reference2Value<T> implements Value.Interface<T>{
+public class Reference2Value<T> //extends Subject 
+//implements Value.Interface<T>
+{
 
-	public static <T> Reference2Value<T> create(Structure theObject, String thePath, Class<? extends Value.Interface<T>> theClass){
-		if(theObject == null || thePath == null){
+	public static <T> Reference2Value<T> create(String thePath, Class<? extends Value.Interface<T>> theClass){
+		if(thePath == null){
 			return null;
 		}
-		return new Reference2Value<T>(theObject, thePath, theClass);
+		return new Reference2Value<T>(thePath, theClass);
 	}
-	
-	private Structure thisObject;
 	
 	private String path;
 	
 	private final Class<? extends Value.Interface<T>> clazz;
 
-	private Reference2Value(Structure theObject, String thePath, Class<? extends Value.Interface<T>> theClass){
-		this.thisObject = theObject;
+	private Reference2Value(String thePath, Class<? extends Value.Interface<T>> theClass){
 		this.path = thePath;
 		this.clazz = theClass;
 	}
 		
-	@Override
-	public T get() {
-		Interface<T> valueWrapper = this.thisObject.getValue( this.path, this.clazz );
+	public T get(Structure thisObject) {
+		Interface<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		return valueWrapper.get();
 	}
 
-	@Override
-	public void set(T value) throws ValueException {
-		Interface<T> valueWrapper = this.thisObject.getValue( this.path, this.clazz );
+	public void set(Structure thisObject, T value) throws ValueException {
+		Interface<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		valueWrapper.set(value);
 	}
 
-	@Override
-	public void transSet(String value) throws ValueTransformException, ValueException {
-		Interface<T> valueWrapper = this.thisObject.getValue( this.path, this.clazz );
+	public void transSet(Structure thisObject, String value) throws ValueTransformException, ValueException {
+		Interface<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		valueWrapper.transSet(value);	
 	}
 
-	@Override
-	public T getCopy() {
-		Interface<T> valueWrapper = this.thisObject.getValue( this.path, this.clazz );
+	public T getCopy(Structure thisObject) {
+		Interface<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		return valueWrapper.getCopy();
 	}
 
-	@Override
-	public Interface<T> createValue() {
-		// TODO sinnlos, das dies hier mal aufgerufen wird ... sollte also nicht das Value Interface implementieren...
-		return new Reference2Value<T>(this.thisObject, this.path, this.clazz);
-	}
+
 	
 	
 }

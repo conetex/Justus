@@ -9,27 +9,7 @@ public class Structure {
 		private final ComplexDataType type;
 		
 		private final Value.Interface<?>[] values;
-		
-		public static Structure _createState(){
-			Identifier<?>[] theOrderedAttributes = {};
-			ComplexDataType complexType = null;
-			
-			try {
-				complexType = Type.ComplexDataType.createComplexDataType(theOrderedAttributes);
-			} catch (Identifier.DuplicateAttributeNameExeption e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			} catch (Identifier.NullAttributeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			
-			Structure state = complexType._createState();
-			return state;
-		}
-		
+				
 		static Structure create(final ComplexDataType theAttributeTuple, final Value.Interface<?>[] theValues){
 			if(theAttributeTuple != null && theValues != null){
 				return new Structure(theAttributeTuple, theValues);
