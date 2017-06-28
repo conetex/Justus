@@ -31,60 +31,7 @@ import org.conetex.prime2.contractProcessing2.data.Value.Implementation.*;
 
 public class Data {
 
-	public static void main(String[] args) throws ValueException{
-		PrimitiveDataType<String> simpleType = PrimitiveDataType.getInstance(Base64_256.class);
-		//simpleType = new PrimitiveDataType< String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValueImp() { return new Base64_256();  } } );
-		
-		ASCII8 str = new ASCII8();
-		str.set("einStr");
-		Identifier<?> attribute = null;
-		try {
-			attribute = simpleType.createAttribute( str );
-		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		Identifier<?>[] theOrderedAttributes = {attribute};
-		
-		ComplexDataType complexType = null;
-		try {
-			complexType = Type.ComplexDataType.createComplexDataType(theOrderedAttributes);
-		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ValueFactory<Structure> x = complexType;
-		PrimitiveDataType<Structure> 
-		
-		simpleTypeChild = //new PrimitiveDataType< Structure > ( Struct.class     , x );
-		PrimitiveDataType.getInstance(Struct.class);
-		//simpleTypeChild = new PrimitiveDataType< Complex , State> ( Complex.class     , new ValueFactory<State>() { public Complex  createValue() { return new Complex()     ; } } );
-		//                new PrimitiveDataType< ASCII8 , String> ( ASCII8.class      , new ValueFactory<String>(){ public ASCII8   createValue() { return new ASCII8()  ; } } )
-		Identifier<String> attributeChild = null;
-		try {
-			attributeChild = simpleType.createAttribute( str );
-		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}		
-		Identifier<?>[] theOrderedAttributesChild = {attributeChild};
-		ComplexDataType complexTypeParent = null;
-		try {
-			complexTypeParent = Type.ComplexDataType.createComplexDataType(theOrderedAttributesChild);
-		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-		
-		Structure state = complexTypeParent._createState();
-		
-		Value.Interface<String> value = state.getValue("einStr", Base64_256.class);
-		value.set("mat thias.!  #$%. frm");
-		
-		System.out.println("ok");
-	}	
+	
 	
 	public static void mainMail(String[] args) throws ValueException {
 		PrimitiveDataType<String> simpleType = PrimitiveDataType.getInstance(MailAddress64.class);

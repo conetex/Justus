@@ -13,7 +13,6 @@ import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Int;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Lng;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress64;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Struct;
 import org.conetex.prime2.contractProcessing2.data.Value.Interface;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueFactory;
@@ -23,9 +22,9 @@ public class Type {
 
 	private static PrimitiveDataType<?>[] types = 
 		{   
-			  new PrimitiveDataType< Structure >  ( Struct.class  , new ValueFactory<Structure>()   { public Struct   createValueImp() { return new Struct()  ; } } )
+			 // new PrimitiveDataType< Structure >  ( Struct.class  , new ValueFactory<Structure>()   { public Struct   createValueImp() { return new Struct()  ; } } )
 			  
-			, new PrimitiveDataType< Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
+			  new PrimitiveDataType< Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
 		    , new PrimitiveDataType< Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
 			, new PrimitiveDataType< Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
 			
@@ -154,7 +153,7 @@ public class Type {
 			
 		}
 		
-		public static class ComplexDataType extends DataType<Structure> implements ValueFactory<Structure>{
+		public static class ComplexDataType extends DataType<Value.Interface<?>[]> implements ValueFactory<Value.Interface<?>[]>{
 			
 			private final Map<String, Integer> index;
 			
@@ -308,28 +307,33 @@ public class Type {
 			
 			
 			
-			@Override
-			public Value.Interface<Structure> createValueImp() {
-				// TODO here we go
-				return new Struct(  );
-			}
-
-			@Override
-			public Value.Interface<Structure> createValue() {
-				// TODO here we go
-				return null;
-			}
 			
+
+			
+			
+		
+
+			
+
 			@Override
-			public Identifier<Structure> createAttribute(ASCII8 theName)
+			public Identifier<Interface<?>[]> createAttribute(ASCII8 theName)
 					throws NullLabelException, EmptyLabelException {
-				return DataType.<Structure>createAttribute(theName, this);
+				return DataType.<Interface<?>[]>createAttribute(theName, this);
 			}
 
 			@Override
-			public Class<? extends Interface<Structure>> getClazz() {
-				// TODO Auto-generated method stub
-				return null;
+			public Class<? extends Interface<Interface<?>[]>> getClazz() {
+				return Structure.class;
+			}
+
+			@Override
+			public Interface<Interface<?>[]> createValue() {
+				return this.createValueImp();
+			}
+
+			@Override
+			public Interface<Interface<?>[]> createValueImp() {
+				return Structure.create(this);
 			}	
 			
 		}		

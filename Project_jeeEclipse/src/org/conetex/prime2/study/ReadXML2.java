@@ -26,6 +26,7 @@ import org.conetex.prime2.contractProcessing2.data.Type.DataType;
 import org.conetex.prime2.contractProcessing2.data.Type.PrimitiveDataType;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.*;
+import org.conetex.prime2.contractProcessing2.data.Value.Interface;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
 import org.conetex.prime2.contractProcessing2.lang.BoolExpression;
@@ -303,7 +304,7 @@ public class ReadXML2 {
 				Class<Value.Interface<Object>> c0ClassX = PrimitiveDataType.getClass(c0DataType);
 			}
 			System.out.println(getNodeValue(c0));
-			Identifier<T> id0 = c.getIdentifier( getNodeValue(c0) );
+			Identifier<T> id0 = c.getIdentifier( getNodeValue(c0) );// TODO geht nich
 			if( id0 != null){
 				DataType<T> t = id0.getType();
 				c0Class = t.getClazz();				
@@ -541,21 +542,21 @@ public class ReadXML2 {
 			complexTyps.put(ct, functionBuilders);
 			
 			Value.Interface<?>[] theValues = new Value.Interface<?>[ subvalues.size() ];
-			values.toArray( theValues );			
+			subvalues.toArray( theValues );			
 			
-			Structure s = ct.construct(theValues);		
+			//Structure s = ct.construct(theValues);		
 			
-			if(s != null){
-				Identifier<Structure> attribute = createComplexAttribute(name, ct); //
+			//if(s != null){
+			    Identifier<Interface<?>[]> attribute = createComplexAttribute(name, ct); //
 				if(attribute != null){
-					Value.Interface<Structure> v = createComplexValue(attribute, s);
+					Value.Interface<Value.Interface<?>[]> v = createComplexValue(attribute, ct, theValues);
 					if(v != null){
 						dattributes.add(attribute);
 						values.add(v);						
 						return true;
 					}
 				}
-			}			
+			//}			
 			
 		}
 
@@ -565,12 +566,16 @@ public class ReadXML2 {
 	
 
 	
-	public static Value.Interface<Structure> createComplexValue(Identifier<Structure> attribute, Structure value){
+	public static Value.Interface<Value.Interface<?>[]> createComplexValue(Identifier<Value.Interface<?>[]> attribute
+			  , ComplexDataType ct
+			  , Value.Interface<?>[] theValues
+			){
 		//new PrimitiveDataType< Complex  , State >  ( Complex.class  , new ValueFactory<State>()   { public Complex   createValueImp() { return new Complex()  ; } } )
 		if(attribute != null){
-			Value.Interface<Structure> v = attribute.createValue();
+			Value.Interface<Value.Interface<?>[]> v = attribute.createValue();
+			//Structure value = ct.construct(theValues);
 			try {
-				v.set(value);
+				v.set(theValues);
 			} catch (Value.ValueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -582,7 +587,7 @@ public class ReadXML2 {
 		return null;
 	}	
 	
-	public static Identifier<Structure> createComplexAttribute(String name, ComplexDataType t){
+	public static Identifier<Interface<?>[]> createComplexAttribute(String name, ComplexDataType t){
 		//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
 		
 		ASCII8 str = new ASCII8(); 
@@ -593,7 +598,7 @@ public class ReadXML2 {
 			e.printStackTrace();
 			return null;
 		}
-		Identifier<Structure> attribute = null;
+		Identifier<Interface<?>[]> attribute = null;
 		try {
 			attribute = t.createAttribute( str );
 		} catch (NullLabelException | EmptyLabelException e1) {

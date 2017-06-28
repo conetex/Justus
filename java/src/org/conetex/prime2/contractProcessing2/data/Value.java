@@ -45,7 +45,7 @@ public class Value {
 		
 		public static class Implementation{
 		
-			public static class Struct implements Value.Interface<Structure>{
+			public static class _Struct implements Value.Interface<Structure>{
 	
 				private Structure value;
 				
@@ -69,12 +69,12 @@ public class Value {
 					if(this.value == null){
 						return null;
 					}
-					return this.value.createCopy();
+					return this.value._createCopy();
 				}
 
 				@Override
 				public Interface<Structure> createValue() {
-					Struct re = new Struct();
+					_Struct re = new _Struct();
 					re.set( this.getCopy() );
 					return re;					
 				}
