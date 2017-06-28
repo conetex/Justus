@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
+import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.ASCII8;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Base64_256;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Bool;
@@ -12,6 +14,7 @@ import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Lng;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.MailAddress64;
 import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Struct;
+import org.conetex.prime2.contractProcessing2.data.Value.Interface;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueFactory;
 import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
@@ -48,9 +51,25 @@ public class Type {
 */			
 		};	
 	
-		public static class PrimitiveDataType<T> {
+	public static abstract class DataType<T> {
+		public abstract Identifier<T> createAttribute(ASCII8 theName) throws Identifier.NullLabelException, Identifier.EmptyLabelException;
+		public abstract Class<? extends Value.Interface<T>> getClazz();
+		public abstract Value.Interface<T> createValue();
+		public static <V> Identifier<V> createAttribute(ASCII8 theName, DataType<V> thisObj) throws Identifier.NullLabelException, Identifier.EmptyLabelException {
+			if(theName == null || theName.get() == null){
+				throw new Identifier.NullLabelException();
+			}
+			if(theName.get().length() < 1){
+				throw new Identifier.EmptyLabelException();
+			}
+			return Identifier.<V>create(theName, thisObj);
+		}		
+	}
+	
+		public static class PrimitiveDataType<T> extends DataType<T>{
 					
 			private final Class<? extends Value.Interface<T>> clazz;
+			//private final Class<Value.Interface<T>> clazz;
 			
 			final ValueFactory<T> factory;
 					
@@ -88,7 +107,6 @@ public class Type {
 				
 			}			
 			
-			
 			@SuppressWarnings("unchecked")
 			public static <T> PrimitiveDataType<T> getInstance(Class<? extends Value.Interface<T>> theClass){
 				for (int i = 0; i < types.length; i++){
@@ -99,23 +117,33 @@ public class Type {
 				return null;
 			} 		
 			
+			//private PrimitiveDataType(Class<Value.Interface<T>> theClass, ValueFactory<T> theFactory){
 			private PrimitiveDataType(Class<? extends Value.Interface<T>> theClass, ValueFactory<T> theFactory){
 				this.clazz = theClass;
 				this.factory = theFactory;
 			}
 			
+			@Override
+			public Value.Interface<T> createValue() {
+				return this.factory.createValueImp();
+			}
+			
+			@Override
 			public Identifier<T> createAttribute(ASCII8 theName) throws Identifier.NullLabelException, Identifier.EmptyLabelException {
+				/*
 				if(theName == null || theName.get() == null){
 					throw new Identifier.NullLabelException();
 				}
 				if(theName.get().length() < 1){
 					throw new Identifier.EmptyLabelException();
 				}
-				//return new Identifier<T>(theName, this);
 				return Identifier.<T>create(theName, this);
+				*/
+				return DataType.<T>createAttribute(theName, this);
 			}
 	
-			private Class<? extends Value.Interface<T>> getClazz() {
+			@Override
+			public Class<? extends Value.Interface<T>> getClazz() {
 				return this.clazz;
 			}
 			
@@ -126,7 +154,7 @@ public class Type {
 			
 		}
 		
-		public static class ComplexDataType implements ValueFactory<Structure>{
+		public static class ComplexDataType extends DataType<Structure> implements ValueFactory<Structure>{
 			
 			private final Map<String, Integer> index;
 			
@@ -238,26 +266,70 @@ public class Type {
 				return i;
 			}
 			
-			@SuppressWarnings("unused")
-			private Identifier<?> _test_getAttribute(String aName){
+			@SuppressWarnings("unchecked")
+			public <T> Identifier<T> getIdentifier(String aName){
 				Integer i = this.index.get(aName);
-				if(i == null){
-					return null;
-				}			
-				return _test_getAttribute(i);
+				if(i != null){
+					if(i < 0 || i >= this.orderedAttributes.length){
+						// TODO i < this.orderedAttributes.length darf auf keinen fall vorkommen! hier bitte schwere Exception werfen!
+						return null;
+					}
+					return (Identifier<T>)this.orderedAttributes[i];
+				}
+				else{
+					
+					String[] names = Structure.split(aName);
+				    if(names[0] != null){
+						if(names[1] != null){
+				    		
+							i = this.index.get( names[0] );
+							if(i != null){
+								if(i < 0 || i >= this.orderedAttributes.length){
+									// TODO i < this.orderedAttributes.length darf auf keinen fall vorkommen! hier bitte schwere Exception werfen!
+									return null;
+								}
+								
+					    		// TODO here we go...
+								DataType<?> dt = this.orderedAttributes[i].getType();
+					    		ComplexDataType subStructure = null;//this.orderedAttributes[i].getType();
+					    		if(subStructure != null){
+					    			return subStructure.getIdentifier( names[1] );
+					    		}
+								
+							}				    		
+						}
+				    }				
+					
+				}
+				
+				return null;
 			}	
 			
-			private Identifier<?> _test_getAttribute(int i){
-				if(i > -1 && i < this.orderedAttributes.length){
-					return this.orderedAttributes[i];
-				}			
-				return null;
+			
+			
+			
+			@Override
+			public Value.Interface<Structure> createValueImp() {
+				// TODO here we go
+				return new Struct(  );
 			}
 
 			@Override
-			public Value.Interface<Structure> createValueImp() {
-				// here we go
-				return new Struct(  );
+			public Value.Interface<Structure> createValue() {
+				// TODO here we go
+				return null;
+			}
+			
+			@Override
+			public Identifier<Structure> createAttribute(ASCII8 theName)
+					throws NullLabelException, EmptyLabelException {
+				return DataType.<Structure>createAttribute(theName, this);
+			}
+
+			@Override
+			public Class<? extends Interface<Structure>> getClazz() {
+				// TODO Auto-generated method stub
+				return null;
 			}	
 			
 		}		

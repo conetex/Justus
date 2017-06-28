@@ -37,7 +37,7 @@ public class Data {
 		
 		ASCII8 str = new ASCII8();
 		str.set("einStr");
-		Identifier<String> attribute = null;
+		Identifier<?> attribute = null;
 		try {
 			attribute = simpleType.createAttribute( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {

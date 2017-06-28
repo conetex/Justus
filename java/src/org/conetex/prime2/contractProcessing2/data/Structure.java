@@ -22,15 +22,32 @@ public class Structure {
 			this.values = theValues;		
 		}	
 		
+		public static String[] split(String aName){
+			String[] re = new String[2];
+			if(aName == null){
+				return re;
+			}
+		    int i = aName.indexOf(Label.NAME_SEPERATOR);
+			if(i > -1 && i < aName.length()){
+				re[0] = aName.substring(0, i);
+		    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+		    		re[1] = aName.substring(i+Label.NAME_SEPERATOR.length());
+		    	}
+		    }
+			return re;
+		}
+				
 		public <V extends Value.Interface<?>> V getValue (String aName, Class<V> c){
+			// TODO do xpath syntax. access parent objects ???
 			int attributeIdx = this.type.getAttributeIndex(aName);
 			if( attributeIdx > -1 ){
 				return getValue( attributeIdx, c );
 			}
 			else{
+				/*
 			    int i = aName.indexOf(Label.NAME_SEPERATOR);
-			    if(i > -1 && i < aName.length()){
-			    	String nameOfSubStructure = aName.substring(0, i);
+				if(i > -1 && i < aName.length()){
+					String nameOfSubStructure = aName.substring(0, i);
 			    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
 			    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
 			    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
@@ -43,9 +60,24 @@ public class Structure {
 			    		}
 			    	}
 			    }
+			    */
+				String[] names = Structure.split(aName);
+			    if(names[0] != null){
+					if(names[1] != null){
+			    		attributeIdx = this.type.getAttributeIndex( names[0] );
+			    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
+			    		if(subStructure != null){
+			    			Structure s = subStructure.get();
+			    			if(s != null){
+			    				//aName = names[1];
+			    				return s.getValue(names[1], c);
+			    			}
+			    		}
+					}
+			    }				
+				
 			}
 			return null;
-			
 		}
 		
 		public Value.Interface<?> getValue (String aName){
