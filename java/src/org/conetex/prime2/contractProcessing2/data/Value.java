@@ -13,5 +13,4 @@ public interface Value <T>{
 
 	public abstract void transSet(String value) throws ValueTransformException, ValueException;
 	
-	public abstract Value<T> createValue();
 }

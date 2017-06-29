@@ -47,9 +47,4 @@ public class _Variable<T> implements Value<T>{
 		return this.value.getCopy();
 	}
 
-	@Override
-	public Value<T> createValue() {
-		// TODO sinnlos, das dies hier mal aufgerufen wird ... sollte also nicht das Value Interface implementieren...
-		return new _Variable<T>(this.identifier, this.value.createValue());
-	}	
 }

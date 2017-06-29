@@ -9,10 +9,4 @@ public class Base64_256 extends Base64{
 	// 4 * ( ceil (64 / 3) ) = 88
 	public int getMaxSize(){ return 344; }
 
-	@Override
-	public Value<String> createValue() {
-		Base64_256 re = new Base64_256();
-		re.value = this.getCopy();
-		return re;
-	}
 }

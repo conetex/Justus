@@ -40,12 +40,12 @@ public class Identifier<T> {
 		return this.label;
 	}
 
-	public static class DuplicateAttributeNameExeption extends Exception {
+	public static class DuplicateIdentifierNameExeption extends Exception {
 		private static final long serialVersionUID = 1L;
 
 	}
 
-	public static class NullAttributeException extends Exception {
+	public static class NullIdentifierException extends Exception {
 		private static final long serialVersionUID = 1L;
 
 	}

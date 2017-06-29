@@ -13,49 +13,49 @@ import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
 
-	public class Complex extends AbstractType<Value<?>[]> implements ValueFactory<Value<?>[]>{
+	public class Complex extends AbstractType<Value<?>[]> { // implements ValueFactory<Value<?>[]>
 		
 		private final Map<String, Integer> index;
 		
-		private final Identifier<?>[] orderedAttributes;
+		private final Identifier<?>[] orderedIdentifier;
 		 
-		public static Complex create(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedAttributeTypes){
-			if(theIndex != null && theOrderedAttributeTypes != null){
-				return new Complex(theIndex, theOrderedAttributeTypes);
+		private static Complex create(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
+			if(theIndex != null && theOrderedIdentifiers != null){
+				return new Complex(theIndex, theOrderedIdentifiers);
 			}
 			return null;
 		}			
 		
-		public static Complex createComplexDataType(final Identifier<?>[] theOrderedAttributeTypes) throws Identifier.DuplicateAttributeNameExeption, Identifier.NullAttributeException{
-			if(theOrderedAttributeTypes.length == 0){
+		public static Complex createComplexDataType(final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
+			if(theOrderedIdentifiers.length == 0){
 				return null;
 			}
 			Map<String, Integer> theIndex = new HashMap<String, Integer>();
-			for(int i = 0; i < theOrderedAttributeTypes.length; i++){
-				if(theOrderedAttributeTypes[i] == null){
-					throw new Identifier.NullAttributeException();
+			for(int i = 0; i < theOrderedIdentifiers.length; i++){
+				if(theOrderedIdentifiers[i] == null){
+					throw new Identifier.NullIdentifierException();
 				}				
-				String label = theOrderedAttributeTypes[i].getLabel().get();
+				String label = theOrderedIdentifiers[i].getLabel().get();
 				if(theIndex.containsKey(label)){
-					throw new Identifier.DuplicateAttributeNameExeption();
+					throw new Identifier.DuplicateIdentifierNameExeption();
 				}
 				theIndex.put(label, i);
 			}
 			//return new ComplexDataType(theIndex, theOrderedAttributeTypes);
-			return Complex.create(theIndex, theOrderedAttributeTypes);
+			return Complex.create(theIndex, theOrderedIdentifiers);
 		}			
 		
-		private Complex(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedAttributeTypes){
+		private Complex(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
 			this.index = theIndex;
-			this.orderedAttributes = theOrderedAttributeTypes;			
+			this.orderedIdentifier = theOrderedIdentifiers;			
 		}
 		
 		
 		
 		public Structure _createState() {
-			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
-			for(int i = 0; i < this.orderedAttributes.length; i++){
-				vals[i] = this.orderedAttributes[i].createValue();
+			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
+			for(int i = 0; i < this.orderedIdentifier.length; i++){
+				vals[i] = this.orderedIdentifier[i].createValue();
 			}
 			//return new Structure(this, vals);
 			return Structure.create(this, vals);
@@ -66,7 +66,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 				// TODO Exception
 				return null;
 			}			
-			if(theValues.length != this.orderedAttributes.length){
+			if(theValues.length != this.orderedIdentifier.length){
 				// TODO Exception
 				return null;
 			}		
@@ -75,10 +75,10 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 		}
 		
 		public Structure construct(String[] theValues) {
-			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
+			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
 			try {
-				for(int i = 0; i < this.orderedAttributes.length; i++){
-					Value<?> re = this.orderedAttributes[i].createValue();
+				for(int i = 0; i < this.orderedIdentifier.length; i++){
+					Value<?> re = this.orderedIdentifier[i].createValue();
 					re.transSet( theValues[i] );
 					vals[i] = re;
 				}
@@ -96,14 +96,14 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 				// TODO Exception
 				return null;
 			}			
-			if(theValues.size() != this.orderedAttributes.length){
+			if(theValues.size() != this.orderedIdentifier.length){
 				// TODO Exception
 				return null;
 			}
-			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
+			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
 			try {
-				for(int i = 0; i < this.orderedAttributes.length; i++){
-					Value<?> re = this.orderedAttributes[i].createValue();
+				for(int i = 0; i < this.orderedIdentifier.length; i++){
+					Value<?> re = this.orderedIdentifier[i].createValue();
 					re.transSet( theValues.get(i) );
 					vals[i] = re;
 				}
@@ -117,7 +117,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 		}		
 		
 				
-		public int getAttributeIndex(String aName){
+		public int getSubIdentifierIndex(String aName){
 			Integer i = this.index.get(aName);
 			if(i == null){
 				return -1;
@@ -129,12 +129,12 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 		public <V> Identifier<V> getSubIdentifier(String aName){
 			Integer i = this.index.get(aName);
 			if(i != null){
-				if(i < 0 || i >= this.orderedAttributes.length){
+				if(i < 0 || i >= this.orderedIdentifier.length){
 					// TODO i < this.orderedAttributes.length darf auf keinen fall vorkommen! hier bitte schwere Exception werfen!
 					return null;
 				}
 				// TODO typ-check !!!
-				return (Identifier<V>)this.orderedAttributes[i];
+				return (Identifier<V>)this.orderedIdentifier[i];
 			}
 			else{
 				
@@ -144,12 +144,12 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 			    		
 						i = this.index.get( names[0] );
 						if(i != null){
-							if(i < 0 || i >= this.orderedAttributes.length){
+							if(i < 0 || i >= this.orderedIdentifier.length){
 								// TODO i < this.orderedAttributes.length darf auf keinen fall vorkommen! hier bitte schwere Exception werfen!
 								return null;
 							}
 							
-				    		AbstractType<?> dt = this.orderedAttributes[i].getType();
+				    		AbstractType<?> dt = this.orderedIdentifier[i].getType();
 				    		if(dt != null){
 				    			return dt.getSubIdentifier( names[1] );
 				    		}
@@ -187,12 +187,8 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 
 		@Override
 		public Value<Value<?>[]> createValue() {
-			return this.createValueImp();
+			return Structure.create(this);
 		}
 
-		@Override
-		public Value<Value<?>[]> createValueImp() {
-			return Structure.create(this);
-		}	
 		
 	}		

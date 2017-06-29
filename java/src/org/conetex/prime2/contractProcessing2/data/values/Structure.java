@@ -2,6 +2,7 @@ package org.conetex.prime2.contractProcessing2.data.values;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
+import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
 
@@ -47,9 +48,9 @@ public class Structure implements Value<Value<?>[]>{
 				
 		public <V extends Value<?>> V getValue (String aName, Class<V> c){
 			// TODO do xpath syntax. access parent objects ???
-			int attributeIdx = this.type.getAttributeIndex(aName);
-			if( attributeIdx > -1 ){
-				return getValue( attributeIdx, c );
+			int idIndex = this.type.getSubIdentifierIndex(aName);
+			if( idIndex > -1 ){
+				return getValue( idIndex, c );
 			}
 			else{
 				/*
@@ -72,10 +73,10 @@ public class Structure implements Value<Value<?>[]>{
 				String[] names = Structure.split(aName);
 			    if(names[0] != null){
 					if(names[1] != null){
-			    		attributeIdx = this.type.getAttributeIndex( names[0] );
+						idIndex = this.type.getSubIdentifierIndex( names[0] );
 			    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
 			    		// sollte das vernünftig gemeldet werden!!!
-			    		Structure subStructure = getValue(attributeIdx, Structure.class);
+			    		Structure subStructure = getValue(idIndex, Structure.class);
 			    		if(subStructure != null){
 			    			return subStructure.getValue(names[1], c);
 			    		}
@@ -106,40 +107,10 @@ public class Structure implements Value<Value<?>[]>{
 			}
 			return null;
 		}
-
-		public Structure _createCopy() {
-			Value<?>[] theValues = new Value<?>[ this.values.length ];
-			for(int i = 0; i < theValues.length; i++){
-				theValues[i] = this.values[i].createValue();
-			}
-			return create(type, theValues);
-		}
-
-
-
 		
-		private static <T> Value<T> clone(Value<T> in){
-			Value<T> newV = in.createValue();
-			T val = in.getCopy();
-			try {
-				newV.set( val );
-			} catch (ValueException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			return newV;
-		}
-
 		@Override
 		public void transSet(String value) throws ValueTransformException, ValueException {
 			throw new ValueTransformException("can not create Structure from String!");
-		}
-
-		@Override
-		public Value<Value<?>[]> createValue() {
-			// TODO drop those methods! sinnlos!
-			return null;
 		}
 
 		@Override
@@ -165,6 +136,21 @@ public class Structure implements Value<Value<?>[]>{
 			return theValues;
 		}
 
+		private static <T> Value<T> clone(Value<T> src){
+			Primitive<T> type = Primitive.<T>getInstance(src.getClass());
+			Value<T> re = type.createValue();
+			T val = src.getCopy();
+			try {
+				re.set( val );
+			} catch (ValueException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			return re;
+		}		
+		
+		
 		@Override
 		public void set(Value<?>[] svalues) throws ValueException {
 			// TODO typcheck ...

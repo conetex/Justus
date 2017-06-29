@@ -9,12 +9,5 @@ public class Label extends SizedASCII {
 	public int getMaxSize() {
 		return 8;
 	}
-
-	@Override
-	public Value<String> createValue() {
-		Label re = new Label();
-		re.value = this.getCopy();
-		return re;
-	}
 	
 }

@@ -34,20 +34,20 @@ public class Data {
 		
 		Label str = new Label();
 		str.set("einName");
-		Identifier<String> attribute = null;
+		Identifier<String> id = null;
 		try {
-			attribute = simpleType.createIdentifier( str );
+			id = simpleType.createIdentifier( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Identifier<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] ids = {id};
 		
 		Complex complexType = null;
 		try {
-			complexType = Complex.createComplexDataType(theOrderedAttributes);
-		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
+			complexType = Complex.createComplexDataType(ids);
+		} catch (Identifier.DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -75,20 +75,20 @@ public class Data {
 		
 		Label str = new Label();
 		str.set("einStr");
-		Identifier<String> attribute = null;
+		Identifier<String> id = null;
 		try {
-			attribute = simpleType.createIdentifier( str );
+			id = simpleType.createIdentifier( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Identifier<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] theOrderedIdentifiers = {id};
 		
 		Complex complexType = null;
 		try {
-			complexType = Complex.createComplexDataType(theOrderedAttributes);
-		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
+			complexType = Complex.createComplexDataType(theOrderedIdentifiers);
+		} catch (Identifier.DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -106,20 +106,20 @@ public class Data {
 		Primitive<Integer> simpleType = Primitive.getInstance(Int.class);
 		Label str = new Label();
 		str.set("ein Name");
-		Identifier<Integer> attribute = null;
+		Identifier<Integer> id = null;
 		try {
-			attribute = simpleType.createIdentifier( str );
+			id = simpleType.createIdentifier( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-		Identifier<?>[] theOrderedAttributes = {attribute};
+		Identifier<?>[] ids = {id};
 		
 		Complex complexType = null;
 		try {
-			complexType = Complex.createComplexDataType(theOrderedAttributes);
-		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
+			complexType = Complex.createComplexDataType(ids);
+		} catch (Identifier.DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

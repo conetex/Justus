@@ -33,13 +33,6 @@ public class Int implements Value<Integer>{
 			return null;
 		}
 		return new Integer(this.value);
-	}
-
-	@Override
-	public Value<Integer> createValue() {
-		Int re = new Int();
-		re.set( this.getCopy() );
-		return re;
-	}		
+	}	
 	
 }

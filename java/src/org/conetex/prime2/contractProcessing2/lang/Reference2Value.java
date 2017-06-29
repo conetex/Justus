@@ -5,7 +5,7 @@ import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
 
-public class Reference2Value<T> //extends Subject 
+public class Reference2Value<T> implements AbstractValueAccess<T> //extends Subject 
 //implements Value.Interface<T>
 {
 
@@ -25,11 +25,13 @@ public class Reference2Value<T> //extends Subject
 		this.clazz = theClass;
 	}
 		
+	@Override
 	public T get(Structure thisObject) {
 		Value<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		return valueWrapper.get();
 	}
 
+	@Override
 	public void set(Structure thisObject, T value) throws ValueException {
 		Value<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		valueWrapper.set(value);
@@ -40,6 +42,7 @@ public class Reference2Value<T> //extends Subject
 		valueWrapper.transSet(value);	
 	}
 
+	@Override
 	public T getCopy(Structure thisObject) {
 		Value<T> valueWrapper = thisObject.getValue( this.path, this.clazz );
 		return valueWrapper.getCopy();

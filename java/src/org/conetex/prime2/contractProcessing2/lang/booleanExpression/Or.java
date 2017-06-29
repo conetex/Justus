@@ -1,30 +1,49 @@
 package org.conetex.prime2.contractProcessing2.lang.booleanExpression;
 
-public class Or implements AbstractBooleanExpression{
+import org.conetex.prime2.contractProcessing2.data.values.Structure;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 
-	public static Or create(AbstractBooleanExpression theA, AbstractBooleanExpression theB){
+public class Or extends AbstractBooleanExpression<Boolean>{
+
+	public static Or create(AbstractBooleanExpression<Boolean> theA, AbstractBooleanExpression<Boolean> theB){
 		if(theA == null || theB == null){
 			return null;
 		}
 		return new Or(theA, theB);
 	}
-		
-	private AbstractBooleanExpression a;
-	private AbstractBooleanExpression b;
+			
+	private Or(AbstractBooleanExpression<Boolean> theA, AbstractBooleanExpression<Boolean> theB){
+		super(theA, theB);
+	}	
+
+	@Override
+	public boolean compute(Structure thisObject) {
+		// TODO Auto-generated method stub
+		return false;
+	}	
 	
-	private Or(AbstractBooleanExpression theA, AbstractBooleanExpression theB){
-		this.a = theA;
-		this.b = theB;
+	@Override
+	public Boolean get(Structure thisObject) {
+		boolean a = super.getA().get(thisObject);
+		boolean b = super.getB().get(thisObject);
+		if( a || b ){
+			return Boolean.TRUE;
+		}		
+		return Boolean.FALSE;
 	}
 
 	@Override
-	public boolean compute() {
-		boolean a = this.a.compute();
-		boolean b = this.b.compute();
-		if( a || b ){
-			return true;
-		}		
-		return false;
+	public void set(Structure thisObject, Boolean value) throws ValueException {
+		// TODO Auto-generated method stub
+		
 	}
+
+	@Override
+	public Boolean getCopy(Structure thisObject) {
+		return this.get(thisObject);
+	}
+
+
+
 	
 }

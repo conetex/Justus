@@ -16,12 +16,12 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 			{   
 				 // new PrimitiveDataType< Structure >  ( Struct.class  , new ValueFactory<Structure>()   { public Struct   createValueImp() { return new Struct()  ; } } )
 				  
-				  new Primitive< Boolean> ( Bool.class     , new ValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
-			    , new Primitive< Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
-				, new Primitive< Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
+				  new Primitive< Boolean> ( Bool.class     , new PrimitiveValueFactory<Boolean>() { public Bool      createValueImp() { return new Bool()     ; } } )	
+			    , new Primitive< Integer> ( Int.class      , new PrimitiveValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
+				, new Primitive< Long   > ( Lng.class      , new PrimitiveValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
 				
-				, new Primitive< String > ( ASCII8.class  , new ValueFactory<String>()  { public ASCII8   createValueImp() { return new ASCII8()  ; } } )
-				, new Primitive< String > ( Label.class  , new ValueFactory<String>()  { public Label   createValueImp() { return new Label()  ; } } )
+				, new Primitive< String > ( ASCII8.class  , new PrimitiveValueFactory<String>()  { public ASCII8   createValueImp() { return new ASCII8()  ; } } )
+				, new Primitive< String > ( Label.class   , new PrimitiveValueFactory<String>()  { public Label    createValueImp() { return new Label()  ; } } )
 	/*
 				, new PrimitiveDataType< String > ( ASCII12.class , new ValueFactory<String>()  { public ASCII12  createValueImp() { return new ASCII12() ; } } )
 				, new PrimitiveDataType< String > ( ASCII16.class , new ValueFactory<String>()  { public ASCII16  createValueImp() { return new ASCII16() ; } } )
@@ -30,12 +30,12 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 				, new PrimitiveDataType< String > ( ASCII128.class, new ValueFactory<String>()  { public ASCII128 createValueImp() { return new ASCII128(); } } )
 				, new PrimitiveDataType< String > ( ASCII256.class, new ValueFactory<String>()  { public ASCII256 createValueImp() { return new ASCII256(); } } )
 	*/
-				, new Primitive< String > ( Base64_256.class, new ValueFactory<String>()  { public Base64_256 createValueImp() { return new Base64_256(); } } )
+				, new Primitive< String > ( Base64_256.class, new PrimitiveValueFactory<String>()  { public Base64_256 createValueImp() { return new Base64_256(); } } )
 	/*
 				, new PrimitiveDataType< String > ( Base64_128.class, new ValueFactory<String>()  { public Base64_128 createValueImp() { return new Base64_128(); } } )
 				, new PrimitiveDataType< String > ( Base64_64.class , new ValueFactory<String>()  { public Base64_64  createValueImp() { return new Base64_64() ; } } )
 	*/			
-				, new Primitive< String > ( MailAddress64.class , new ValueFactory<String>()  { public MailAddress64  createValueImp() { return new MailAddress64() ; } } )
+				, new Primitive< String > ( MailAddress64.class , new PrimitiveValueFactory<String>()  { public MailAddress64  createValueImp() { return new MailAddress64() ; } } )
 	/*
 				, new PrimitiveDataType< String > ( MailAddress128.class, new ValueFactory<String>()  { public MailAddress128 createValueImp() { return new MailAddress128(); } } )
 				, new PrimitiveDataType< String > ( MailAddress254.class, new ValueFactory<String>()  { public MailAddress254 createValueImp() { return new MailAddress254(); } } )
@@ -46,10 +46,9 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 		private final Class<? extends Value<T>> clazz;
 		//private final Class<Value.Interface<T>> clazz;
 		
-		final ValueFactory<T> factory;
+		final PrimitiveValueFactory<T> factory;
 				
-		@SuppressWarnings("unchecked")
-		public static <T> Primitive<T> getInstance(String dataType){
+		public static <V> Primitive<V> getInstance(String dataType){
 			
 			Class<?> theClass;
 			String className = "org.conetex.prime2.contractProcessing2.data.Values." + dataType;//TODO: klappt das
@@ -61,8 +60,33 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 				//e.printStackTrace();
 				return null;
 			}
-			return getInstance( (Class<Value<T>>)theClass );
+			//return _getInstance( (Class<Value<T>>)theClass );
+			Primitive<V> re = getInstance( theClass );
+			if(re != null){
+				return re;
+			}
+			return null;
 			
+		}
+		
+		@SuppressWarnings("unchecked")
+		public static <V> Primitive<V> _getInstance(Class<? extends Value<V>> theClass){
+			for (int i = 0; i < types.length; i++){
+				if(types[i].getClazz() == theClass){
+					return (Primitive<V>)Primitive.types[i];
+				}
+			}
+			return null;
+		} 	
+		
+		public static <W> Primitive<W> getInstance(Class<?> theClass) {
+			for (int i = 0; i < types.length; i++){
+				if(types[i].getClazz() == theClass){
+					// TODO typ check !!!
+					return (Primitive<W>) Primitive.types[i];
+				}
+			}
+			return null;
 		}
 		
 		@SuppressWarnings("unchecked")
@@ -83,18 +107,10 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 			
 		}			
 		
-		@SuppressWarnings("unchecked")
-		public static <V> Primitive<V> getInstance(Class<? extends Value<V>> theClass){
-			for (int i = 0; i < types.length; i++){
-				if(types[i].getClazz() == theClass){
-					return (Primitive<V>)Primitive.types[i];
-				}
-			}
-			return null;
-		} 		
+		
 		
 		//private PrimitiveDataType(Class<Value.Interface<T>> theClass, ValueFactory<T> theFactory){
-		private Primitive(Class<? extends Value<T>> theClass, ValueFactory<T> theFactory){
+		private Primitive(Class<? extends Value<T>> theClass, PrimitiveValueFactory<T> theFactory){
 			this.clazz = theClass;
 			this.factory = theFactory;
 		}
@@ -132,5 +148,7 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 		public <U> Identifier<U> getSubIdentifier(String aName) {
 			return null;
 		}
+
+
 		
 	}

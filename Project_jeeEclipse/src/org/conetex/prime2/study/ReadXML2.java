@@ -15,7 +15,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
-import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateAttributeNameExeption;
+import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifierNameExeption;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.Value;
@@ -143,11 +143,10 @@ public class ReadXML2 {
 	             //+ "    </copy>"
                  + "  </sub>"	             
 	             
-	             
-	             
+	             + "  <v typ='Bool'>true</v>"	             
 	             + "  <And>"
-	             + "    <a><v typ='Bool'>true</v></a>"	             
-	             + "    <b><v typ='Bool'>false</v></b>"	             
+	             + "    <a>v</a>"	             
+	             + "    <b>v</b>"	             
 	             + "  </And>"
 	             + "</cred>                " 
 				;
@@ -335,8 +334,8 @@ public class ReadXML2 {
 	}
 	
 	private static <T> AbstractAssigment<T> createAssignment(String name, Node c0, Node c1, Class<? extends Value<T>> cClass){
-		Reference2Value<T> src = createReference2Value( c0, cClass );
-		Reference2Value<T> trg = createReference2Value( c1, cClass );
+		Reference2Value<T> trg = createReference2Value( c0, cClass );
+		Reference2Value<T> src = createReference2Value( c1, cClass );
 		if(src != null && trg != null){
 			if(name.equals("copy")){
 				return Copy.<T>create(src, trg);					
@@ -381,6 +380,7 @@ public class ReadXML2 {
 				return Not.create(sub);
 			}
 		}
+		// TODO refernce2
 		else if( isAttribute(n, "typ", "Bool") ) {
 			Identifier<Boolean> id = ReadXML2.<Boolean>createSimpleAttribute(name, "Bool");
 			_Variable<Boolean> var = _Variable.<Boolean>create(id);
@@ -428,7 +428,7 @@ public class ReadXML2 {
 		//List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
 		
 		NodeList children = n.getChildNodes();
-		List<Identifier<?>> attributes = new LinkedList<Identifier<?>>();
+		List<Identifier<?>> identifiers = new LinkedList<Identifier<?>>();
 		//List<Value.Interface<?>> values = new LinkedList<Value.Interface<?>>();
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
@@ -464,23 +464,23 @@ public class ReadXML2 {
 						);					
 				}
 				else{
-					createAttributesValues( c, attributes, values, complexTyps );
+					createAttributesValues( c, identifiers, values, complexTyps );
 				}
 				
 				
 			}				
 		}		
 		
-		Identifier<?>[] theOrderedAttributes = new Identifier<?>[ attributes.size() ];
-		attributes.toArray( theOrderedAttributes );
+		Identifier<?>[] theOrderedIdentifiers = new Identifier<?>[ identifiers.size() ];
+		identifiers.toArray( theOrderedIdentifiers );
 		
 		//Value.Interface<?>[] theValues = new Value.Interface<?>[ values.size() ];
 		//values.toArray( theValues );		
 		
 		Complex complexType = null;
 		try {
-			complexType = Complex.createComplexDataType(theOrderedAttributes);
-		} catch (DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
+			complexType = Complex.createComplexDataType(theOrderedIdentifiers);
+		} catch (DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -626,7 +626,7 @@ public class ReadXML2 {
 	}	
 
 	public static <T> Identifier<T> createSimpleAttribute(String name, String type){
-		Primitive<T> simpleType = Primitive.getInstance( type );				
+		Primitive<T> simpleType = Primitive.<T>getInstance( type );				
 		Label str = new Label(); 
 		try {
 			str.set(name);

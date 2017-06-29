@@ -2,17 +2,13 @@ package org.conetex.prime2.contractProcessing2.lang.assignment;
 
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.lang.AbstractPairComputer;
 import org.conetex.prime2.contractProcessing2.lang.Reference2Value;
 
-public abstract class AbstractAssigment<T> {
-
-	private Reference2Value<T> source;
-	
-	private Reference2Value<T> target;
+public abstract class AbstractAssigment<T> extends AbstractPairComputer<T>{
 		
-	protected AbstractAssigment(Reference2Value<T> src, Reference2Value<T> trg){
-		this.source = src;
-		this.target = trg;
+	protected AbstractAssigment(Reference2Value<T> trg, Reference2Value<T> src){
+		super(trg, src);
 	}
 
 	public abstract boolean doCopy();
@@ -20,14 +16,14 @@ public abstract class AbstractAssigment<T> {
 	public boolean compute(Structure thisObject) {
 		T value = null;
 		if(this.doCopy()){
-			value = source.getCopy(thisObject);			
+			value = super.getB().getCopy(thisObject);			
 		}
 		else{
-			value = source.get(thisObject);
+			value = super.getB().get(thisObject);
 		}
 
 		try {
-			target.set( thisObject, value );
+			super.getB().set( thisObject, value );
 		} catch (ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

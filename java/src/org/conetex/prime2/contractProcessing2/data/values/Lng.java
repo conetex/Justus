@@ -34,12 +34,5 @@ public class Lng implements Value<Long>{
 		}
 		return new Long(this.value);
 	}
-
-	@Override
-	public Value<Long> createValue() {
-		Lng re = new Lng();
-		re.set( this.getCopy() );
-		return re;
-	}
 	
 }

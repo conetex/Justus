@@ -50,13 +50,6 @@ public class Bool implements Value<Boolean>{
 			return null;
 		}
 		return new Boolean(this.value);
-	}
-
-	@Override
-	public Value<Boolean> createValue() {
-		Bool re = new Bool();
-		re.set( this.getCopy() );
-		return re;
 	}		
 	
 }
