@@ -8,7 +8,7 @@ import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
-import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.values.Label;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
@@ -126,7 +126,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 		}
 		
 		@SuppressWarnings("unchecked")
-		public <V> Identifier<V> getIdentifier(String aName){
+		public <V> Identifier<V> getSubIdentifier(String aName){
 			Integer i = this.index.get(aName);
 			if(i != null){
 				if(i < 0 || i >= this.orderedAttributes.length){
@@ -151,7 +151,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 							
 				    		AbstractType<?> dt = this.orderedAttributes[i].getType();
 				    		if(dt != null){
-				    			return dt.getIdentifier( names[1] );
+				    			return dt.getSubIdentifier( names[1] );
 				    		}
 							
 						}				    		
@@ -175,9 +175,9 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 		
 
 		@Override
-		public Identifier<Value<?>[]> createAttribute(ASCII8 theName)
+		public Identifier<Value<?>[]> createIdentifier(Label theName)
 				throws NullLabelException, EmptyLabelException {
-			return AbstractType.<Value<?>[]>createAttribute(theName, this);
+			return AbstractType.<Value<?>[]>createIdentifier(theName, this);
 		}
 
 		@Override

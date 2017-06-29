@@ -2,11 +2,11 @@ package org.conetex.prime2.contractProcessing2.data.type;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.values.Label;
 import org.conetex.prime2.contractProcessing2.data.values.Base64_256;
 import org.conetex.prime2.contractProcessing2.data.values.Bool;
 import org.conetex.prime2.contractProcessing2.data.values.Int;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
+import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
 import org.conetex.prime2.contractProcessing2.data.values.Lng;
 import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 
@@ -20,8 +20,8 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 			    , new Primitive< Integer> ( Int.class      , new ValueFactory<Integer>() { public Int       createValueImp() { return new Int()      ; } } )
 				, new Primitive< Long   > ( Lng.class      , new ValueFactory<Long>()    { public Lng       createValueImp() { return new Lng()      ; } } )
 				
-				, new Primitive< String > ( Label.class  , new ValueFactory<String>()  { public Label   createValueImp() { return new Label()  ; } } )
 				, new Primitive< String > ( ASCII8.class  , new ValueFactory<String>()  { public ASCII8   createValueImp() { return new ASCII8()  ; } } )
+				, new Primitive< String > ( Label.class  , new ValueFactory<String>()  { public Label   createValueImp() { return new Label()  ; } } )
 	/*
 				, new PrimitiveDataType< String > ( ASCII12.class , new ValueFactory<String>()  { public ASCII12  createValueImp() { return new ASCII12() ; } } )
 				, new PrimitiveDataType< String > ( ASCII16.class , new ValueFactory<String>()  { public ASCII16  createValueImp() { return new ASCII16() ; } } )
@@ -105,7 +105,7 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 		}
 		
 		@Override
-		public Identifier<T> createAttribute(ASCII8 theName) throws Identifier.NullLabelException, Identifier.EmptyLabelException {
+		public Identifier<T> createIdentifier(Label theName) throws Identifier.NullLabelException, Identifier.EmptyLabelException {
 			/*
 			if(theName == null || theName.get() == null){
 				throw new Identifier.NullLabelException();
@@ -115,7 +115,7 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 			}
 			return Identifier.<T>create(theName, this);
 			*/
-			return AbstractType.<T>createAttribute(theName, this);
+			return AbstractType.<T>createIdentifier(theName, this);
 		}
 
 		@Override
@@ -129,8 +129,7 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 		}
 
 		@Override
-		public <U> Identifier<U> getIdentifier(String aName) {
-			// TODO Auto-generated method stub
+		public <U> Identifier<U> getSubIdentifier(String aName) {
 			return null;
 		}
 		

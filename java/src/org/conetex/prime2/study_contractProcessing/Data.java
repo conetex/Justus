@@ -10,7 +10,7 @@ import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.values.Label;
 import org.conetex.prime2.contractProcessing2.data.values.Base64_256;
 import org.conetex.prime2.contractProcessing2.data.values.Int;
 import org.conetex.prime2.contractProcessing2.data.values.MailAddress;
@@ -32,11 +32,11 @@ public class Data {
 		Primitive<String> simpleType = Primitive.getInstance(MailAddress64.class);
 		//simpleType = new PrimitiveDataType<  String   > ( MailAddress64.class , new Value.ValueFactory<String>(){	public MailAddress64 createValueImp() { return new MailAddress64();  } } );
 		
-		ASCII8 str = new ASCII8();
+		Label str = new Label();
 		str.set("einName");
 		Identifier<String> attribute = null;
 		try {
-			attribute = simpleType.createAttribute( str );
+			attribute = simpleType.createIdentifier( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -73,11 +73,11 @@ public class Data {
 		Primitive<String> simpleType = Primitive.getInstance(Base64_256.class);
 		//simpleType = new PrimitiveDataType<   String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValueImp() { return new Base64_256();  } } );
 		
-		ASCII8 str = new ASCII8();
+		Label str = new Label();
 		str.set("einStr");
 		Identifier<String> attribute = null;
 		try {
-			attribute = simpleType.createAttribute( str );
+			attribute = simpleType.createIdentifier( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -104,11 +104,11 @@ public class Data {
 	public static void mainInt(String[] args) throws ValueException{
 		
 		Primitive<Integer> simpleType = Primitive.getInstance(Int.class);
-		ASCII8 str = new ASCII8();
+		Label str = new Label();
 		str.set("ein Name");
 		Identifier<Integer> attribute = null;
 		try {
-			attribute = simpleType.createAttribute( str );
+			attribute = simpleType.createIdentifier( str );
 		} catch (Identifier.NullLabelException | Identifier.EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

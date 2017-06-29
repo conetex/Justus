@@ -22,7 +22,7 @@ import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.values.Label;
 import org.conetex.prime2.contractProcessing2.data.values.Bool;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
@@ -123,14 +123,17 @@ public class ReadXML2 {
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
 	             
-	             //+ "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
-	             //+ "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
-	             
+	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
+	             + "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
+	             + "  <copy>"
+	             + "    <source typ='MailAddress64'>aAddress</source>"
+	             + "    <target typ='MailAddress64'>a2Addres</target>"
+	             + "  </copy>"	             
 	             + "  <copy>"
 	             + "    <source typ='MailAddress64'>sub.aAddress</source>"
 	             + "    <target typ='MailAddress64'>sub.a2Addres</target>"
 	             + "  </copy>"
-
+	             
                  + "  <sub>"	             
 	             + "    <aAddress typ='MailAddress64'>yy@yyy.com</aAddress>"
 	             + "    <a2Addres typ='MailAddress64'>xx@xxx.com</a2Addres>"
@@ -297,7 +300,7 @@ public class ReadXML2 {
 				Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
 			}
 			System.out.println(getNodeValue(c0));
-			Identifier<T> id0 = c.getIdentifier( getNodeValue(c0) );// TODO geht nich
+			Identifier<T> id0 = c.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
 			if( id0 != null){
 				AbstractType<T> t = id0.getType();
 				c0Class = t.getClazz();				
@@ -313,7 +316,7 @@ public class ReadXML2 {
 				Class<Value<Object>> c1ClassX = Primitive.getClass(c1DataType);
 			}
 			System.out.println(getNodeValue(c1));
-			Identifier<T> id1 = c.<T>getIdentifier( getNodeValue(c1) );
+			Identifier<T> id1 = c.<T>getSubIdentifier( getNodeValue(c1) );
 			if( id1 != null){
 				AbstractType<T> t = id1.getType();
 				c1Class = t.getClazz();				
@@ -583,7 +586,7 @@ public class ReadXML2 {
 	public static Identifier<Value<?>[]> createComplexAttribute(String name, Complex t){
 		//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
 		
-		ASCII8 str = new ASCII8(); 
+		Label str = new Label(); 
 		try {
 			str.set(name);
 		} catch (ValueException e) {
@@ -593,7 +596,7 @@ public class ReadXML2 {
 		}
 		Identifier<Value<?>[]> attribute = null;
 		try {
-			attribute = t.createAttribute( str );
+			attribute = t.createIdentifier( str );
 		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -624,7 +627,7 @@ public class ReadXML2 {
 
 	public static <T> Identifier<T> createSimpleAttribute(String name, String type){
 		Primitive<T> simpleType = Primitive.getInstance( type );				
-		ASCII8 str = new ASCII8(); 
+		Label str = new Label(); 
 		try {
 			str.set(name);
 		} catch (ValueException e) {
@@ -634,7 +637,7 @@ public class ReadXML2 {
 		}
 		Identifier<T> attribute = null;
 		try {
-			attribute = simpleType.createAttribute( str );
+			attribute = simpleType.createIdentifier( str );
 		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
