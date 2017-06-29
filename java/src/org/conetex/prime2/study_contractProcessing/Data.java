@@ -7,21 +7,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
-import org.conetex.prime2.contractProcessing2.data.Structure;
-import org.conetex.prime2.contractProcessing2.data.Type;
-import org.conetex.prime2.contractProcessing2.data.Type.ComplexDataType;
-import org.conetex.prime2.contractProcessing2.data.Type.PrimitiveDataType;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateAttributeNameExeption;
-import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullAttributeException;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation;
-import org.conetex.prime2.contractProcessing2.data.Value.Interface;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueFactory;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.*;
+import org.conetex.prime2.contractProcessing2.data.type.Complex;
+import org.conetex.prime2.contractProcessing2.data.type.Primitive;
+import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.values.Base64_256;
+import org.conetex.prime2.contractProcessing2.data.values.Int;
+import org.conetex.prime2.contractProcessing2.data.values.MailAddress;
+import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
+import org.conetex.prime2.contractProcessing2.data.values.Structure;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 
 // TODO: Names 4 ComplexDataTyp. This is 4 strong typing
 // TODO: parsing Schemas / dtd to define the types
@@ -34,7 +29,7 @@ public class Data {
 	
 	
 	public static void mainMail(String[] args) throws ValueException {
-		PrimitiveDataType<String> simpleType = PrimitiveDataType.getInstance(MailAddress64.class);
+		Primitive<String> simpleType = Primitive.getInstance(MailAddress64.class);
 		//simpleType = new PrimitiveDataType<  String   > ( MailAddress64.class , new Value.ValueFactory<String>(){	public MailAddress64 createValueImp() { return new MailAddress64();  } } );
 		
 		ASCII8 str = new ASCII8();
@@ -49,9 +44,9 @@ public class Data {
 		
 		Identifier<?>[] theOrderedAttributes = {attribute};
 		
-		ComplexDataType complexType = null;
+		Complex complexType = null;
 		try {
-			complexType = Type.ComplexDataType.createComplexDataType(theOrderedAttributes);
+			complexType = Complex.createComplexDataType(theOrderedAttributes);
 		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,7 +54,7 @@ public class Data {
 		
 		Structure state = complexType._createState();
 		
-		Value.Interface<String> value = state.getValue("einName", MailAddress.class);
+		Value<String> value = state.getValue("einName", MailAddress.class);
 		try {
 			value.set("matthias.franke@conetex.com");
 			value.set("2@3.1");
@@ -75,7 +70,7 @@ public class Data {
 	}	
 	
 	public static void main64(String[] args) throws ValueException{
-		PrimitiveDataType<String> simpleType = PrimitiveDataType.getInstance(Base64_256.class);
+		Primitive<String> simpleType = Primitive.getInstance(Base64_256.class);
 		//simpleType = new PrimitiveDataType<   String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValueImp() { return new Base64_256();  } } );
 		
 		ASCII8 str = new ASCII8();
@@ -90,9 +85,9 @@ public class Data {
 		
 		Identifier<?>[] theOrderedAttributes = {attribute};
 		
-		ComplexDataType complexType = null;
+		Complex complexType = null;
 		try {
-			complexType = Type.ComplexDataType.createComplexDataType(theOrderedAttributes);
+			complexType = Complex.createComplexDataType(theOrderedAttributes);
 		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -100,7 +95,7 @@ public class Data {
 		
 		Structure state = complexType._createState();
 		
-		Value.Interface<String> value = state.getValue("einStr", Base64_256.class);
+		Value<String> value = state.getValue("einStr", Base64_256.class);
 		value.set("mat thias.!  #$%. frm");
 		
 		System.out.println("ok");
@@ -108,7 +103,7 @@ public class Data {
 	
 	public static void mainInt(String[] args) throws ValueException{
 		
-		PrimitiveDataType<Integer> simpleType = PrimitiveDataType.getInstance(Int.class);
+		Primitive<Integer> simpleType = Primitive.getInstance(Int.class);
 		ASCII8 str = new ASCII8();
 		str.set("ein Name");
 		Identifier<Integer> attribute = null;
@@ -121,9 +116,9 @@ public class Data {
 		
 		Identifier<?>[] theOrderedAttributes = {attribute};
 		
-		ComplexDataType complexType = null;
+		Complex complexType = null;
 		try {
-			complexType = Type.ComplexDataType.createComplexDataType(theOrderedAttributes);
+			complexType = Complex.createComplexDataType(theOrderedAttributes);
 		} catch (Identifier.DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -131,7 +126,7 @@ public class Data {
 		
 		Structure state = complexType._createState();
 		
-		Value.Interface<Integer> value = state.getValue("ein Name", Int.class);
+		Value<Integer> value = state.getValue("ein Name", Int.class);
 		try {
 			value.set(3);
 		} catch (ValueException e) {
