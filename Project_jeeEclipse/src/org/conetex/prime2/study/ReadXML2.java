@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.StringTokenizer;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,33 +18,27 @@ import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateAttributeNameExeption;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
-import org.conetex.prime2.contractProcessing2.data.Structure;
-import org.conetex.prime2.contractProcessing2.data.Type;
-import org.conetex.prime2.contractProcessing2.data.Type.ComplexDataType;
-import org.conetex.prime2.contractProcessing2.data.Type.DataType;
-import org.conetex.prime2.contractProcessing2.data.Type.PrimitiveDataType;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.*;
-import org.conetex.prime2.contractProcessing2.data.Value.Interface;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
-import org.conetex.prime2.contractProcessing2.lang.BoolExpression;
+import org.conetex.prime2.contractProcessing2.data.type.Complex;
+import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
+import org.conetex.prime2.contractProcessing2.data.type.Primitive;
+import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.values.Bool;
+import org.conetex.prime2.contractProcessing2.data.values.Structure;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
 import org.conetex.prime2.contractProcessing2.lang.Reference2Value;
-import org.conetex.prime2.contractProcessing2.lang.Variable;
-import org.conetex.prime2.contractProcessing2.lang.Assignments.Assignment;
-import org.conetex.prime2.contractProcessing2.lang.Assignments.Copy;
-import org.conetex.prime2.contractProcessing2.lang.Assignments.Ref;
-import org.conetex.prime2.contractProcessing2.lang.boolExpression.And;
-import org.conetex.prime2.contractProcessing2.lang.boolExpression.BooleanVar;
-import org.conetex.prime2.contractProcessing2.lang.boolExpression.Not;
-import org.conetex.prime2.contractProcessing2.lang.boolExpression.Or;
+import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
+import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
+import org.conetex.prime2.contractProcessing2.lang.assignment.Ref;
+import org.conetex.prime2.contractProcessing2.lang.booleanExpression.AbstractBooleanExpression;
+import org.conetex.prime2.contractProcessing2.lang.booleanExpression.And;
+import org.conetex.prime2.contractProcessing2.lang.booleanExpression.Not;
+import org.conetex.prime2.contractProcessing2.lang.booleanExpression.Or;
+import org.conetex.prime2.contractProcessing2.lang.booleanExpression._Variable;
 import org.conetex.prime2.contractProcessing2.runtime.Heap;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
-import org.conetex.prime2.study_contractProcessing.Data;
-import org.conetex.prime2.study_contractProcessing.Data.*;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -163,8 +156,8 @@ public class ReadXML2 {
 		//String usr = document.getElementsByTagName("user").item(0).getTextContent();
 		//String pwd = document.getElementsByTagName("password").item(0).getTextContent();
 		
-		Map<ComplexDataType, List<FunctionBuilder>> complexTyps = 
-				new HashMap<ComplexDataType, List<FunctionBuilder>>();
+		Map<Complex, List<FunctionBuilder>> complexTyps = 
+				new HashMap<Complex, List<FunctionBuilder>>();
 		
 		Structure root = null;
 		NodeList children = document.getChildNodes();			
@@ -181,9 +174,9 @@ public class ReadXML2 {
 			}
 		}
 		
-        for (Entry<ComplexDataType, List<FunctionBuilder>> pair : complexTyps.entrySet()){
+        for (Entry<Complex, List<FunctionBuilder>> pair : complexTyps.entrySet()){
         	// TODO hier ist die Reihenfolge entscheidend!
-        	ComplexDataType d = pair.getKey();
+        	Complex d = pair.getKey();
         	List<FunctionBuilder> fbs = pair.getValue();
             for (FunctionBuilder fb : fbs){
             	fb.build(d);
@@ -192,7 +185,7 @@ public class ReadXML2 {
 		
 		Heap heap = Heap.create(root);
 		
-		for(Assignment<?> a : Program.steps){
+		for(AbstractAssigment<?> a : Program.steps){
 			a.compute(root);
 		}
 		
@@ -285,44 +278,44 @@ public class ReadXML2 {
 		protected FunctionBuilder(Node n){
 			this.node = n;
 		}
-		public abstract void build(ComplexDataType d);
+		public abstract void build(Complex d);
 	}
 	
 	// <T, V extends Value.Interface<T>> 
-	public static <T> Assignment<?> createAssignment(String name, Node n, ComplexDataType c){
+	public static <T> AbstractAssigment<?> createAssignment(String name, Node n, Complex c){
 		if(n == null){
 			return null;
 		}		
 		//String aName = n.getNodeName();
 		//if( name.equals("copy") || name.equals("ref") ) {			
 			Node c0 = getChildElementByIndex(n, 0);
-			Class<? extends Value.Interface<T>> c0Class = null;
+			Class<? extends Value<T>> c0Class = null;
 			
 			String c0DataType = getAttribute(c0, "typ");
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
-				Class<Value.Interface<Object>> c0ClassX = PrimitiveDataType.getClass(c0DataType);
+				Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
 			}
 			System.out.println(getNodeValue(c0));
 			Identifier<T> id0 = c.getIdentifier( getNodeValue(c0) );// TODO geht nich
 			if( id0 != null){
-				DataType<T> t = id0.getType();
+				AbstractType<T> t = id0.getType();
 				c0Class = t.getClazz();				
 			}
 				
 	
 			Node c1 = getChildElementByIndex(n, 1);
-			Class<? extends Value.Interface<T>> c1Class = null;
+			Class<? extends Value<T>> c1Class = null;
 			
 			String c1DataType = getAttribute(c1, "typ");
 			if( c1DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
-				Class<Value.Interface<Object>> c1ClassX = PrimitiveDataType.getClass(c1DataType);
+				Class<Value<Object>> c1ClassX = Primitive.getClass(c1DataType);
 			}
 			System.out.println(getNodeValue(c1));
 			Identifier<T> id1 = c.<T>getIdentifier( getNodeValue(c1) );
 			if( id1 != null){
-				DataType<T> t = id1.getType();
+				AbstractType<T> t = id1.getType();
 				c1Class = t.getClazz();				
 			}			
 			
@@ -338,7 +331,7 @@ public class ReadXML2 {
 		//return null;
 	}
 	
-	private static <T> Assignment<T> createAssignment(String name, Node c0, Node c1, Class<? extends Value.Interface<T>> cClass){
+	private static <T> AbstractAssigment<T> createAssignment(String name, Node c0, Node c1, Class<? extends Value<T>> cClass){
 		Reference2Value<T> src = createReference2Value( c0, cClass );
 		Reference2Value<T> trg = createReference2Value( c1, cClass );
 		if(src != null && trg != null){
@@ -352,42 +345,42 @@ public class ReadXML2 {
 		return null;
 	}
 	
-	public static <T> Reference2Value<T> createReference2Value(Node n, Class<? extends Value.Interface<T>> theClass){
+	public static <T> Reference2Value<T> createReference2Value(Node n, Class<? extends Value<T>> theClass){
 		// TODO: whats this object ? now its null ...
 		String path = getNodeValue(n);
 
 		return Reference2Value.<T>create(path, theClass);
 	}	
 	
-	public static BoolExpression createExpression(Node n){
+	public static AbstractBooleanExpression createExpression(Node n){
 		if(n == null){
 			return null;
 		}
 	
 		String name = n.getNodeName();
 		if( name.equals("and") ) {			
-			BoolExpression a = createExpression( getChildElementByIndex(n, 0) );
-			BoolExpression b = createExpression( getChildElementByIndex(n, 1) );
+			AbstractBooleanExpression a = createExpression( getChildElementByIndex(n, 0) );
+			AbstractBooleanExpression b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return And.create(a, b);
 			}
 		}
 		else if( name.equals("or") ) {			
-			BoolExpression a = createExpression( getChildElementByIndex(n, 0) );
-			BoolExpression b = createExpression( getChildElementByIndex(n, 1) );
+			AbstractBooleanExpression a = createExpression( getChildElementByIndex(n, 0) );
+			AbstractBooleanExpression b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return Or.create(a, b);
 			}
 		}
 		else if( name.equals("not") ) {			
-			BoolExpression sub = createExpression( getChildElementByIndex(n, 0) );
+			AbstractBooleanExpression sub = createExpression( getChildElementByIndex(n, 0) );
 			if(sub != null){
 				return Not.create(sub);
 			}
 		}
 		else if( isAttribute(n, "typ", "Bool") ) {
 			Identifier<Boolean> id = ReadXML2.<Boolean>createSimpleAttribute(name, "Bool");
-			Variable<Boolean> var = Variable.<Boolean>create(id);
+			_Variable<Boolean> var = _Variable.<Boolean>create(id);
 			if(var != null){
 				Boolean v = Bool.getTrans( n.getNodeValue() );
 				if( v != null ){
@@ -407,19 +400,19 @@ public class ReadXML2 {
 	
 	
 
-	public static Structure createState(Node n, Map<ComplexDataType, List<FunctionBuilder>> complexTyps){
+	public static Structure createState(Node n, Map<Complex, List<FunctionBuilder>> complexTyps){
 		
 		List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
 		
-		List<Value.Interface<?>> values = new LinkedList<Value.Interface<?>>();		
+		List<Value<?>> values = new LinkedList<Value<?>>();		
 		
-		ComplexDataType complexType = createState2(n, functionBuilders, values, complexTyps);
+		Complex complexType = createState2(n, functionBuilders, values, complexTyps);
 		if(complexType != null){
 			// TODO keine doppelten complexTyps erlauben ... gib ihnen auch namen...
 			//return complexType;
 			complexTyps.put(complexType, functionBuilders);
 			
-			Value.Interface<?>[] theValues = new Value.Interface<?>[ values.size() ];
+			Value<?>[] theValues = new Value<?>[ values.size() ];
 			values.toArray( theValues );			
 			
 			return complexType.construct(theValues);			
@@ -427,7 +420,7 @@ public class ReadXML2 {
 		return null;
 	}
 	
-	public static ComplexDataType createState2(Node n, List<FunctionBuilder> functionBuilders, List<Value.Interface<?>> values, Map<ComplexDataType, List<FunctionBuilder>> complexTyps){
+	public static Complex createState2(Node n, List<FunctionBuilder> functionBuilders, List<Value<?>> values, Map<Complex, List<FunctionBuilder>> complexTyps){
 		
 		//List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
 		
@@ -445,8 +438,8 @@ public class ReadXML2 {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
-								public void build(ComplexDataType c) {
-									Assignment<?> x = createAssignment("copy", super.node, c);
+								public void build(Complex c) {
+									AbstractAssigment<?> x = createAssignment("copy", super.node, c);
 									if(x != null){
 										Program.steps.add(x);										
 									}
@@ -458,8 +451,8 @@ public class ReadXML2 {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
-								public void build(ComplexDataType c) {
-									Assignment<?> x = createAssignment("ref", super.node, c);
+								public void build(Complex c) {
+									AbstractAssigment<?> x = createAssignment("ref", super.node, c);
 									if(x != null){
 										Program.steps.add(x);										
 									}
@@ -481,9 +474,9 @@ public class ReadXML2 {
 		//Value.Interface<?>[] theValues = new Value.Interface<?>[ values.size() ];
 		//values.toArray( theValues );		
 		
-		ComplexDataType complexType = null;
+		Complex complexType = null;
 		try {
-			complexType = Type.ComplexDataType.createComplexDataType(theOrderedAttributes);
+			complexType = Complex.createComplexDataType(theOrderedAttributes);
 		} catch (DuplicateAttributeNameExeption | Identifier.NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -503,7 +496,7 @@ public class ReadXML2 {
 	
 
 	
-	public static boolean createAttributesValues(Node n, List<Identifier<?>> dattributes, List<Value.Interface<?>> values, Map<ComplexDataType, List<FunctionBuilder>> complexTyps){
+	public static boolean createAttributesValues(Node n, List<Identifier<?>> dattributes, List<Value<?>> values, Map<Complex, List<FunctionBuilder>> complexTyps){
 		
 		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
 		
@@ -519,7 +512,7 @@ public class ReadXML2 {
 				//String value = valueNode;
 				Identifier<?> attribute = createSimpleAttribute(name, type); //
 				if(attribute != null){
-					Value.Interface<?> v = createSimpleValue(attribute, valueNode);
+					Value<?> v = createSimpleValue(attribute, valueNode);
 					if(v != null){
 						dattributes.add(attribute);
 						values.add(v);		
@@ -533,23 +526,23 @@ public class ReadXML2 {
 		// ... Complex
 		//Structure s = createState(n, complexTyps);
 		List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
-		List<Value.Interface<?>> subvalues = new LinkedList<Value.Interface<?>>();		
-		ComplexDataType ct = createState2(n, functionBuilders, subvalues, complexTyps);
+		List<Value<?>> subvalues = new LinkedList<Value<?>>();		
+		Complex ct = createState2(n, functionBuilders, subvalues, complexTyps);
 		
 		if(ct != null){
 			// TODO keine doppelten complexTyps erlauben ... gib ihnen auch namen...
 			//return complexType;
 			complexTyps.put(ct, functionBuilders);
 			
-			Value.Interface<?>[] theValues = new Value.Interface<?>[ subvalues.size() ];
+			Value<?>[] theValues = new Value<?>[ subvalues.size() ];
 			subvalues.toArray( theValues );			
 			
 			//Structure s = ct.construct(theValues);		
 			
 			//if(s != null){
-			    Identifier<Interface<?>[]> attribute = createComplexAttribute(name, ct); //
+			    Identifier<Value<?>[]> attribute = createComplexAttribute(name, ct); //
 				if(attribute != null){
-					Value.Interface<Value.Interface<?>[]> v = createComplexValue(attribute, ct, theValues);
+					Value<Value<?>[]> v = createComplexValue(attribute, ct, theValues);
 					if(v != null){
 						dattributes.add(attribute);
 						values.add(v);						
@@ -566,17 +559,17 @@ public class ReadXML2 {
 	
 
 	
-	public static Value.Interface<Value.Interface<?>[]> createComplexValue(Identifier<Value.Interface<?>[]> attribute
-			  , ComplexDataType ct
-			  , Value.Interface<?>[] theValues
+	public static Value<Value<?>[]> createComplexValue(Identifier<Value<?>[]> attribute
+			  , Complex ct
+			  , Value<?>[] theValues
 			){
 		//new PrimitiveDataType< Complex  , State >  ( Complex.class  , new ValueFactory<State>()   { public Complex   createValueImp() { return new Complex()  ; } } )
 		if(attribute != null){
-			Value.Interface<Value.Interface<?>[]> v = attribute.createValue();
+			Value<Value<?>[]> v = attribute.createValue();
 			//Structure value = ct.construct(theValues);
 			try {
 				v.set(theValues);
-			} catch (Value.ValueException e) {
+			} catch (ValueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -587,18 +580,18 @@ public class ReadXML2 {
 		return null;
 	}	
 	
-	public static Identifier<Interface<?>[]> createComplexAttribute(String name, ComplexDataType t){
+	public static Identifier<Value<?>[]> createComplexAttribute(String name, Complex t){
 		//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
 		
 		ASCII8 str = new ASCII8(); 
 		try {
 			str.set(name);
-		} catch (Value.ValueException e) {
+		} catch (ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
-		Identifier<Interface<?>[]> attribute = null;
+		Identifier<Value<?>[]> attribute = null;
 		try {
 			attribute = t.createAttribute( str );
 		} catch (NullLabelException | EmptyLabelException e1) {
@@ -611,13 +604,13 @@ public class ReadXML2 {
 		
 	}	
 	
-	public static <T> Value.Interface<T> createSimpleValue(Identifier<T> attribute, String value){
+	public static <T> Value<T> createSimpleValue(Identifier<T> attribute, String value){
 		
 		if(attribute != null){
-			Value.Interface<T> v = attribute.createValue();
+			Value<T> v = attribute.createValue();
 			try {
 				v.transSet(value);
-			} catch (Value.ValueTransformException | Value.ValueException e) {
+			} catch (ValueTransformException | ValueException e) {
 				// TODO Auto-generated catch block
 				System.err.println(e.getMessage());
 				//e.printStackTrace();
@@ -630,11 +623,11 @@ public class ReadXML2 {
 	}	
 
 	public static <T> Identifier<T> createSimpleAttribute(String name, String type){
-		PrimitiveDataType<T> simpleType = PrimitiveDataType.getInstance( type );				
+		Primitive<T> simpleType = Primitive.getInstance( type );				
 		ASCII8 str = new ASCII8(); 
 		try {
 			str.set(name);
-		} catch (Value.ValueException e) {
+		} catch (ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

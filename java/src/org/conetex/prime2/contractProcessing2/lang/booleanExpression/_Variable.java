@@ -1,29 +1,28 @@
-package org.conetex.prime2.contractProcessing2.lang;
+package org.conetex.prime2.contractProcessing2.lang.booleanExpression;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Value.Interface;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
 
-public class Variable<T> implements Value.Interface<T>{
+public class _Variable<T> implements Value<T>{
 
-	public static <T> Variable<T> create(Identifier<T> id){
+	public static <T> _Variable<T> create(Identifier<T> id){
 		if(id == null){
 			return null;
 		}
-		Value.Interface<T> value = id.createValue();
+		Value<T> value = id.createValue();
 		if(value == null){
 			return null;
 		}
-		return new Variable<T>(id, value);
+		return new _Variable<T>(id, value);
 	}
 
-	Value.Interface<T> value;
+	Value<T> value;
 	
 	Identifier<T> identifier;
 		
-	private Variable(Identifier<T> theId, Value.Interface<T> theValue){
+	private _Variable(Identifier<T> theId, Value<T> theValue){
 		this.identifier = theId;
 		this.value = theValue;	
 	}
@@ -49,8 +48,8 @@ public class Variable<T> implements Value.Interface<T>{
 	}
 
 	@Override
-	public Interface<T> createValue() {
+	public Value<T> createValue() {
 		// TODO sinnlos, das dies hier mal aufgerufen wird ... sollte also nicht das Value Interface implementieren...
-		return new Variable<T>(this.identifier, this.value.createValue());
+		return new _Variable<T>(this.identifier, this.value.createValue());
 	}	
 }

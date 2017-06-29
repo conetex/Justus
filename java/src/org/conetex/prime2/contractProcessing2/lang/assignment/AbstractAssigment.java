@@ -1,16 +1,16 @@
-package org.conetex.prime2.contractProcessing2.lang.Assignments;
+package org.conetex.prime2.contractProcessing2.lang.assignment;
 
-import org.conetex.prime2.contractProcessing2.data.Structure;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.Structure;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
 import org.conetex.prime2.contractProcessing2.lang.Reference2Value;
 
-public abstract class Assignment<T> {
+public abstract class AbstractAssigment<T> {
 
 	private Reference2Value<T> source;
 	
 	private Reference2Value<T> target;
 		
-	protected Assignment(Reference2Value<T> src, Reference2Value<T> trg){
+	protected AbstractAssigment(Reference2Value<T> src, Reference2Value<T> trg){
 		this.source = src;
 		this.target = trg;
 	}

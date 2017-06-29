@@ -1,32 +1,31 @@
-package org.conetex.prime2.contractProcessing2.data;
+package org.conetex.prime2.contractProcessing2.data.values;
 
-import org.conetex.prime2.contractProcessing2.data.Type.ComplexDataType;
-import org.conetex.prime2.contractProcessing2.data.Value.Implementation.Label;
-import org.conetex.prime2.contractProcessing2.data.Value.Interface;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueException;
-import org.conetex.prime2.contractProcessing2.data.Value.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.Value;
+import org.conetex.prime2.contractProcessing2.data.type.Complex;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
 
-public class Structure implements Value.Interface<Value.Interface<?>[]>{
+public class Structure implements Value<Value<?>[]>{
 		
-		private final ComplexDataType type;
+		private final Complex type;
 		
-		private Value.Interface<?>[] values;
+		private Value<?>[] values;
 				
-		static Structure create(final ComplexDataType theAttributeTuple, final Value.Interface<?>[] theValues){
+		public static Structure create(final Complex theAttributeTuple, final Value<?>[] theValues){
 			if(theAttributeTuple != null && theValues != null){
 				return new Structure(theAttributeTuple, theValues);
 			}
 			return null;
 		}				
 
-		static Structure create(final ComplexDataType theAttributeTuple){
+		public static Structure create(final Complex theAttributeTuple){
 			if(theAttributeTuple != null){
 				return new Structure(theAttributeTuple, null);
 			}
 			return null;
 		}	
 		
-		private Structure(final ComplexDataType theAttributeTuple, final Value.Interface<?>[] theValues){
+		private Structure(final Complex theAttributeTuple, final Value<?>[] theValues){
 			this.type = theAttributeTuple;
 			this.values = theValues;		
 		}	
@@ -46,7 +45,7 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 			return re;
 		}
 				
-		public <V extends Value.Interface<?>> V getValue (String aName, Class<V> c){
+		public <V extends Value<?>> V getValue (String aName, Class<V> c){
 			// TODO do xpath syntax. access parent objects ???
 			int attributeIdx = this.type.getAttributeIndex(aName);
 			if( attributeIdx > -1 ){
@@ -87,13 +86,13 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 			return null;
 		}
 		
-		public Value.Interface<?> getValue (String aName){
-			return this.getValue( aName, Value.Interface.class );// TODO seltsam sieht das aus ...
+		public Value<?> getValue (String aName){
+			return this.getValue( aName, Value.class );// TODO seltsam sieht das aus ...
 		}
 
 		@SuppressWarnings("unchecked")
-		private <V extends Value.Interface<?>> V getValue (int i, Class<V> c){
-			Value.Interface<?> v = getValue(i);
+		private <V extends Value<?>> V getValue (int i, Class<V> c){
+			Value<?> v = getValue(i);
 			if( v != null ){
 				// TODO check this cast
 				return (V) v;
@@ -101,7 +100,7 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 			return null;
 		}		
 		
-		private Value.Interface<?> getValue (int i){
+		private Value<?> getValue (int i){
 			if(i > -1 && i < this.values.length){
 				return this.values[i];
 			}
@@ -109,7 +108,7 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 		}
 
 		public Structure _createCopy() {
-			Value.Interface<?>[] theValues = new Value.Interface<?>[ this.values.length ];
+			Value<?>[] theValues = new Value<?>[ this.values.length ];
 			for(int i = 0; i < theValues.length; i++){
 				theValues[i] = this.values[i].createValue();
 			}
@@ -119,8 +118,8 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 
 
 		
-		private static <T> Interface<T> clone(Interface<T> in){
-			Interface<T> newV = in.createValue();
+		private static <T> Value<T> clone(Value<T> in){
+			Value<T> newV = in.createValue();
 			T val = in.getCopy();
 			try {
 				newV.set( val );
@@ -138,13 +137,13 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 		}
 
 		@Override
-		public Interface<Interface<?>[]> createValue() {
+		public Value<Value<?>[]> createValue() {
 			// TODO drop those methods! sinnlos!
 			return null;
 		}
 
 		@Override
-		public Interface<?>[] get() {
+		public Value<?>[] get() {
 			if(this.values == null){
 				return null;
 			}
@@ -152,11 +151,11 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 		}
 
 		@Override
-		public Interface<?>[] getCopy() {
+		public Value<?>[] getCopy() {
 			if(this.values == null){
 				return null;
 			}			
-			Value.Interface<?>[] theValues = new Value.Interface<?>[ this.values.length ];
+			Value<?>[] theValues = new Value<?>[ this.values.length ];
 			for(int i = 0; i < theValues.length; i++){
 				theValues[i] = clone(this.values[i]);
 				if(theValues[i] == null){
@@ -167,7 +166,7 @@ public class Structure implements Value.Interface<Value.Interface<?>[]>{
 		}
 
 		@Override
-		public void set(Interface<?>[] svalues) throws ValueException {
+		public void set(Value<?>[] svalues) throws ValueException {
 			// TODO typcheck ...
 			if(this.values == null || this.values.length == svalues.length){
 				this.values = svalues;

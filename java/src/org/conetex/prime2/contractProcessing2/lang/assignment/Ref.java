@@ -1,8 +1,8 @@
-package org.conetex.prime2.contractProcessing2.lang.Assignments;
+package org.conetex.prime2.contractProcessing2.lang.assignment;
 
 import org.conetex.prime2.contractProcessing2.lang.Reference2Value;
 
-public class Ref<T> extends Assignment<T>{
+public class Ref<T> extends AbstractAssigment<T>{
 
 	public static <T> Ref<T> create(Reference2Value<T> src, Reference2Value<T> trg){
 		if(src == null || trg == null){
