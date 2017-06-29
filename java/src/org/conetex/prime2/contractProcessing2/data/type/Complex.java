@@ -10,8 +10,8 @@ import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelExceptio
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.values.Label;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 
 	public class Complex extends AbstractType<Value<?>[]> { // implements ValueFactory<Value<?>[]>
 		
@@ -79,10 +79,10 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 			try {
 				for(int i = 0; i < this.orderedIdentifier.length; i++){
 					Value<?> re = this.orderedIdentifier[i].createValue();
-					re.transSet( theValues[i] );
+					re.setConverted( theValues[i] );
 					vals[i] = re;
 				}
-			} catch (ValueTransformException | ValueException e) {
+			} catch (Inconvertible | Invalid e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -104,10 +104,10 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransfo
 			try {
 				for(int i = 0; i < this.orderedIdentifier.length; i++){
 					Value<?> re = this.orderedIdentifier[i].createValue();
-					re.transSet( theValues.get(i) );
+					re.setConverted( theValues.get(i) );
 					vals[i] = re;
 				}
-			} catch (ValueTransformException | ValueException e) {
+			} catch (Inconvertible | Invalid e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;

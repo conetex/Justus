@@ -1,38 +1,35 @@
 package org.conetex.prime2.contractProcessing2.data.values;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 
 public class Int implements Value<Integer>{
 
-	private Integer value;
+	private Integer actual;
 	
 	@Override
 	public void set(Integer aValue){
-		this.value = aValue;			
+		this.actual = aValue;			
 	}
 	
 	@Override
 	public final Integer get(){
-		return this.value;
+		return this.actual;
 	}
 	
 	@Override
-	public void transSet(String value) throws ValueTransformException {
+	public void setConverted(String value) throws Inconvertible {
 		try {
 			Integer v = Integer.parseInt(value);
 			this.set(v);
 		} catch (NumberFormatException e) {
-			throw new ValueTransformException("can not convert " + value + " to Integer", e);
+			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}
 
 	@Override
-	public Integer getCopy() {
-		if(this.value == null){
-			return null;
-		}
-		return new Integer(this.value);
+	public Integer copy() {
+		return this.get();
 	}	
 	
 }

@@ -16,7 +16,7 @@ import org.conetex.prime2.contractProcessing2.data.values.Int;
 import org.conetex.prime2.contractProcessing2.data.values.MailAddress;
 import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 
 // TODO: Names 4 ComplexDataTyp. This is 4 strong typing
 // TODO: parsing Schemas / dtd to define the types
@@ -28,7 +28,7 @@ public class Data {
 
 	
 	
-	public static void mainMail(String[] args) throws ValueException {
+	public static void mainMail(String[] args) throws Invalid {
 		Primitive<String> simpleType = Primitive.getInstance(MailAddress64.class);
 		//simpleType = new PrimitiveDataType<  String   > ( MailAddress64.class , new Value.ValueFactory<String>(){	public MailAddress64 createValueImp() { return new MailAddress64();  } } );
 		
@@ -62,14 +62,14 @@ public class Data {
 			//value.set("matthias.franke.conetex.com");
 			value.set("2@3.de");
 			//value.set("2ü@3.de");
-		} catch (ValueException e) {
+		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		//System.out.println(attribute);
 	}	
 	
-	public static void main64(String[] args) throws ValueException{
+	public static void main64(String[] args) throws Invalid{
 		Primitive<String> simpleType = Primitive.getInstance(Base64_256.class);
 		//simpleType = new PrimitiveDataType<   String   > ( Base64_256.class , new ValueFactory<String>(){	public Base64_256 createValueImp() { return new Base64_256();  } } );
 		
@@ -101,7 +101,7 @@ public class Data {
 		System.out.println("ok");
 	}	
 	
-	public static void mainInt(String[] args) throws ValueException{
+	public static void mainInt(String[] args) throws Invalid{
 		
 		Primitive<Integer> simpleType = Primitive.getInstance(Int.class);
 		Label str = new Label();
@@ -129,7 +129,7 @@ public class Data {
 		Value<Integer> value = state.getValue("ein Name", Int.class);
 		try {
 			value.set(3);
-		} catch (ValueException e) {
+		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

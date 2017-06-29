@@ -1,38 +1,35 @@
 package org.conetex.prime2.contractProcessing2.data.values;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 
 public class Lng implements Value<Long>{
 
-	private Long value;
+	private Long actual;
 	
 	@Override
 	public void set(Long aValue){
-		this.value = aValue;			
+		this.actual = aValue;			
 	}
 	
 	@Override
 	public final Long get(){
-		return this.value;
+		return this.actual;
 	}
 
 	@Override
-	public void transSet(String value) throws ValueTransformException, NumberFormatException {
+	public void setConverted(String value) throws Inconvertible, NumberFormatException {
 		try {
 			Long v = Long.parseLong(value);
 			this.set(v);	
 		} catch (NumberFormatException e) {
-			throw new ValueTransformException("can not convert " + value + " to Long", e);
+			throw new Inconvertible("can not convert " + value + " to Long", e);
 		}			
 	}
 
 	@Override
-	public Long getCopy() {
-		if(this.value == null){
-			return null;
-		}
-		return new Long(this.value);
+	public Long copy() {
+		return this.get();
 	}
 	
 }

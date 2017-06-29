@@ -1,7 +1,5 @@
 package org.conetex.prime2.contractProcessing2.data.values;
 
-import org.conetex.prime2.contractProcessing2.data.Value;
-
 public class Base64_256 extends Base64{
 	// How to calculate the memory for Base64-encoded data? See https://de.wikipedia.org/wiki/Base64 
 	// 4 * ( ceil (256 / 3) ) = 344

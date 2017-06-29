@@ -2,8 +2,8 @@ package org.conetex.prime2.contractProcessing2.lang.booleanExpression;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 
 public class _Variable<T> implements Value<T>{
 
@@ -28,13 +28,13 @@ public class _Variable<T> implements Value<T>{
 	}
 	
 	@Override
-	public void set(T value) throws ValueException{
+	public void set(T value) throws Invalid{
 		this.value.set(value);
 	}
 	
 	@Override
-	public void transSet(String value) throws ValueTransformException, ValueException{
-		this.value.transSet(value);
+	public void setConverted(String value) throws Inconvertible, Invalid{
+		this.value.setConverted(value);
 	}
 	
 	@Override
@@ -43,8 +43,8 @@ public class _Variable<T> implements Value<T>{
 	}
 
 	@Override
-	public T getCopy() {
-		return this.value.getCopy();
+	public T copy() throws Invalid {
+		return this.value.copy();
 	}
 
 }

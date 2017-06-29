@@ -25,13 +25,14 @@ import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.data.values.Label;
 import org.conetex.prime2.contractProcessing2.data.values.Bool;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
-import org.conetex.prime2.contractProcessing2.lang.Reference2Value;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Ref;
-import org.conetex.prime2.contractProcessing2.lang.booleanExpression.AbstractBooleanExpression;
+import org.conetex.prime2.contractProcessing2.lang.booleanExpression._AbstractBooleanExpression;
 import org.conetex.prime2.contractProcessing2.lang.booleanExpression.And;
 import org.conetex.prime2.contractProcessing2.lang.booleanExpression.Not;
 import org.conetex.prime2.contractProcessing2.lang.booleanExpression.Or;
@@ -334,8 +335,8 @@ public class ReadXML2 {
 	}
 	
 	private static <T> AbstractAssigment<T> createAssignment(String name, Node c0, Node c1, Class<? extends Value<T>> cClass){
-		Reference2Value<T> trg = createReference2Value( c0, cClass );
-		Reference2Value<T> src = createReference2Value( c1, cClass );
+		AccessibleValue<T> trg = createReference2Value( c0, cClass );
+		AccessibleValue<T> src = createReference2Value( c1, cClass );
 		if(src != null && trg != null){
 			if(name.equals("copy")){
 				return Copy.<T>create(src, trg);					
@@ -347,35 +348,35 @@ public class ReadXML2 {
 		return null;
 	}
 	
-	public static <T> Reference2Value<T> createReference2Value(Node n, Class<? extends Value<T>> theClass){
+	public static <T> AccessibleValue<T> createReference2Value(Node n, Class<? extends Value<T>> theClass){
 		// TODO: whats this object ? now its null ...
 		String path = getNodeValue(n);
 
-		return Reference2Value.<T>create(path, theClass);
+		return AccessibleValue.<T>create(path, theClass);
 	}	
 	
-	public static AbstractBooleanExpression createExpression(Node n){
+	public static Accessible<Boolean> createExpression(Node n){
 		if(n == null){
 			return null;
 		}
 	
 		String name = n.getNodeName();
 		if( name.equals("and") ) {			
-			AbstractBooleanExpression a = createExpression( getChildElementByIndex(n, 0) );
-			AbstractBooleanExpression b = createExpression( getChildElementByIndex(n, 1) );
+			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return And.create(a, b);
 			}
 		}
 		else if( name.equals("or") ) {			
-			AbstractBooleanExpression a = createExpression( getChildElementByIndex(n, 0) );
-			AbstractBooleanExpression b = createExpression( getChildElementByIndex(n, 1) );
+			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return Or.create(a, b);
 			}
 		}
 		else if( name.equals("not") ) {			
-			AbstractBooleanExpression sub = createExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> sub = createExpression( getChildElementByIndex(n, 0) );
 			if(sub != null){
 				return Not.create(sub);
 			}
@@ -389,7 +390,7 @@ public class ReadXML2 {
 				if( v != null ){
 					try {
 						var.set(v);
-					} catch (ValueException e) {
+					} catch (Invalid e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -572,7 +573,7 @@ public class ReadXML2 {
 			//Structure value = ct.construct(theValues);
 			try {
 				v.set(theValues);
-			} catch (ValueException e) {
+			} catch (Invalid e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -589,7 +590,7 @@ public class ReadXML2 {
 		Label str = new Label(); 
 		try {
 			str.set(name);
-		} catch (ValueException e) {
+		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -612,8 +613,8 @@ public class ReadXML2 {
 		if(attribute != null){
 			Value<T> v = attribute.createValue();
 			try {
-				v.transSet(value);
-			} catch (ValueTransformException | ValueException e) {
+				v.setConverted(value);
+			} catch (Inconvertible | Invalid e) {
 				// TODO Auto-generated catch block
 				System.err.println(e.getMessage());
 				//e.printStackTrace();
@@ -630,7 +631,7 @@ public class ReadXML2 {
 		Label str = new Label(); 
 		try {
 			str.set(name);
-		} catch (ValueException e) {
+		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

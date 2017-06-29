@@ -1,20 +1,20 @@
 package org.conetex.prime2.contractProcessing2.data.values;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 
 public class Bool implements Value<Boolean>{
 	
-	private Boolean value;
+	private Boolean actual;
 	
 	@Override
 	public void set(Boolean aValue){
-		this.value = aValue;
+		this.actual = aValue;
 	}
 	
 	@Override
 	public final Boolean get(){
-		return this.value;
+		return this.actual;
 	}
 
 	public static Boolean getTrans(String value) {
@@ -36,20 +36,17 @@ public class Bool implements Value<Boolean>{
 	}
 	
 	@Override
-	public void transSet(String value) throws ValueTransformException {
+	public void setConverted(String value) throws Inconvertible {
 		Boolean v = getTrans(value);
 		if( v == null ){
-			throw new ValueTransformException("can not convert '" + value + "' to Boolean!");
+			throw new Inconvertible("can not convert '" + value + "' to Boolean!");
 		}
 		this.set(v);
 	}
 
 	@Override
-	public Boolean getCopy() {
-		if(this.value == null){
-			return null;
-		}
-		return new Boolean(this.value);
+	public Boolean copy() {
+		return this.get();
 	}		
 	
 }

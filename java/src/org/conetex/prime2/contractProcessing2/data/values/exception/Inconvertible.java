@@ -1,12 +1,12 @@
 package org.conetex.prime2.contractProcessing2.data.values.exception;
 
-public class ValueTransformException extends Exception {
+public class Inconvertible extends Exception {
 
 		private static final long serialVersionUID = 1L;
-		public ValueTransformException(String msg, Exception cause) {
+		public Inconvertible(String msg, Exception cause) {
 			super(msg, cause);
 		}
-		public ValueTransformException(String msg) {
+		public Inconvertible(String msg) {
 			super(msg);
 		}		
 	}

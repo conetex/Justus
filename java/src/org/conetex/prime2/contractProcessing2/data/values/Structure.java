@@ -3,8 +3,8 @@ package org.conetex.prime2.contractProcessing2.data.values;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueTransformException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 
 public class Structure implements Value<Value<?>[]>{
 		
@@ -109,8 +109,8 @@ public class Structure implements Value<Value<?>[]>{
 		}
 		
 		@Override
-		public void transSet(String value) throws ValueTransformException, ValueException {
-			throw new ValueTransformException("can not create Structure from String!");
+		public void setConverted(String value) throws Inconvertible, Invalid {
+			throw new Inconvertible("can not create Structure from String!");
 		}
 
 		@Override
@@ -121,38 +121,29 @@ public class Structure implements Value<Value<?>[]>{
 			return this.values;
 		}
 
-		@Override
-		public Value<?>[] getCopy() {
+		// @Override
+		public Value<?>[] copy() throws Invalid {
 			if(this.values == null){
 				return null;
 			}			
 			Value<?>[] theValues = new Value<?>[ this.values.length ];
 			for(int i = 0; i < theValues.length; i++){
 				theValues[i] = clone(this.values[i]);
-				if(theValues[i] == null){
-					return null;
-				}
 			}
 			return theValues;
 		}
 
-		private static <T> Value<T> clone(Value<T> src){
+		private static <T> Value<T> clone(Value<T> src) throws Invalid{
 			Primitive<T> type = Primitive.<T>getInstance(src.getClass());
 			Value<T> re = type.createValue();
-			T val = src.getCopy();
-			try {
-				re.set( val );
-			} catch (ValueException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
+			T val = src.copy();
+			re.set( val ); // throws the Exception
 			return re;
 		}		
 		
 		
 		@Override
-		public void set(Value<?>[] svalues) throws ValueException {
+		public void set(Value<?>[] svalues) throws Invalid {
 			// TODO typcheck ...
 			if(this.values == null || this.values.length == svalues.length){
 				this.values = svalues;

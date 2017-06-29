@@ -1,26 +1,26 @@
 package org.conetex.prime2.contractProcessing2.lang.booleanExpression;
 
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
-import org.conetex.prime2.contractProcessing2.lang.AbstractPairComputer;
-import org.conetex.prime2.contractProcessing2.lang.AbstractValueAccess;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public abstract class AbstractBooleanExpression<T> extends AbstractPairComputer<T> implements AbstractValueAccess<Boolean>{
+public interface _AbstractBooleanExpression<T> extends Accessible<Boolean>{
 
+	/*
 	protected AbstractBooleanExpression(AbstractValueAccess<T> theA, AbstractValueAccess<T> theB) {
 		super(theA, theB);
 	}
+	*/
 			
-	@Override
-	public abstract boolean compute(Structure thisObject);
+	//public abstract boolean compute(Structure thisObject);
 	
 	@Override
-	public abstract Boolean get(Structure thisObject);
+	public Boolean get(Structure thisObject);
 
 	@Override
-	public abstract void set(Structure thisObject, Boolean value) throws ValueException;
+	public void set(Structure thisObject, Boolean value) throws Invalid;
 	
 	@Override
-	public abstract Boolean getCopy(Structure thisObject);
+	public Boolean copy(Structure thisObject);
 	
 }

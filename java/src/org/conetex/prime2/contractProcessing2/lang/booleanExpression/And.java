@@ -1,18 +1,20 @@
 package org.conetex.prime2.contractProcessing2.lang.booleanExpression;
 
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
+import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class And extends AbstractBooleanExpression<Boolean>{
+public class And extends ComputablePair<Boolean> implements _AbstractBooleanExpression<Boolean>{
 
-	public static And create(AbstractBooleanExpression<Boolean> theA, AbstractBooleanExpression<Boolean> theB){
+	public static And create(Accessible<Boolean> theA, Accessible<Boolean> theB){
 		if(theA == null || theB == null){
 			return null;
 		}
 		return new And(theA, theB);
 	}
 			
-	private And(AbstractBooleanExpression<Boolean> theA, AbstractBooleanExpression<Boolean> theB){
+	private And(Accessible<Boolean> theA, Accessible<Boolean> theB){
 		super(theA, theB);
 	}
 
@@ -27,13 +29,13 @@ public class And extends AbstractBooleanExpression<Boolean>{
 	}
 
 	@Override
-	public void set(Structure thisObject, Boolean value) throws ValueException {
+	public void set(Structure thisObject, Boolean value) throws Invalid {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Boolean getCopy(Structure thisObject) {
+	public Boolean copy(Structure thisObject) {
 		return this.get(thisObject);
 	}
 

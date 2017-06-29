@@ -2,25 +2,26 @@ package org.conetex.prime2.contractProcessing2.lang;
 
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 
-public abstract class AbstractPairComputer<T> {
+public abstract class ComputablePair<T> implements Computable{
 
-	private AbstractValueAccess<T> a;
+	private Accessible<T> a;
 	
-	private AbstractValueAccess<T> b;
+	private Accessible<T> b;
 
-	protected AbstractPairComputer(AbstractValueAccess<T> theA, AbstractValueAccess<T> theB){
+	protected ComputablePair(Accessible<T> theA, Accessible<T> theB){
 		this.a = theA;
 		this.b = theB;
 	}
 	
-	protected AbstractValueAccess<T> getA(){
+	protected Accessible<T> getA(){
 		return this.a;
 	}
 	
-	protected AbstractValueAccess<T> getB(){
+	protected Accessible<T> getB(){
 		return this.b;
 	}
 	
+	@Override
 	public abstract boolean compute(Structure thisObject);
 	
 }

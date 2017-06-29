@@ -4,19 +4,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.ValueException;
+import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 
 	public abstract class SizedASCII implements Value<String>{
 		
-		protected String value;
+		protected String actual;
 				
-		protected boolean check(String aValue, String allowedChars) throws ValueException{
+		protected boolean check(String aValue, String allowedChars) throws Invalid{
 			if(aValue == null){
 				return true;
 			}
 			
 			if(aValue.length() > this.getMaxSize()){
-				throw new ValueException("Input is longer than " + this.getMaxSize() + ": '" + aValue + "'");
+				throw new Invalid("Input is longer than " + this.getMaxSize() + ": '" + aValue + "'");
 			}
 
 			// HINT: Take care adding allowed control chars. You have to adjust throwing Exceptions.
@@ -55,47 +55,44 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.ValueExcepti
 						if(groupCount > 0){
 							String strBevorCtrlChar = ctrlCharMatcher.group(1);
 							if(strBevorCtrlChar == null || strBevorCtrlChar.length() == 0){								
-								throw new ValueException("found control char at begin of Input! Don't use control chars!");						
+								throw new Invalid("found control char at begin of Input! Don't use control chars!");						
 							}
-							throw new ValueException("Please do not use control chars! found control char after '" + strBevorCtrlChar + "'");
+							throw new Invalid("Please do not use control chars! found control char after '" + strBevorCtrlChar + "'");
 						}
 					}
-					throw new ValueException("found control char in Input! Don't use control chars!");
+					throw new Invalid("found control char in Input! Don't use control chars!");
 				}
 				
-				throw new ValueException("Please do not use '" + noASCII + "' in '" + aValue + "'!");
+				throw new Invalid("Please do not use '" + noASCII + "' in '" + aValue + "'!");
 			}
 			
 			// when code above is correct we should never go here ... 
-			throw new ValueException("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue + "'! Please report! This Issue should be debugged!");
+			throw new Invalid("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue + "'! Please report! This Issue should be debugged!");
 		
 		}
 		
 		@Override
-		public void set(String aValue) throws ValueException{
+		public void set(String aValue) throws Invalid{
 			// ascii without control characters:
 			String allowedChars = " !\"#\\$%&'\\(\\)\\*\\+,\\-\\./0-9:;<=>\\?@A-Z\\[\\\\\\]\\^_`a-z\\{\\|\\}~"; // "\t !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~"
 			if( this.check(aValue, allowedChars) ){
-				this.value = aValue;				
+				this.actual = aValue;				
 			}
 		}		
 		
 		@Override
-		public void transSet(String value) throws ValueException  {
-			this.set(value);
+		public void setConverted(String newValue) throws Invalid  {
+			this.set(newValue);
 		}		
 		
 		@Override
 		public final String get(){
-			return this.value;
+			return this.actual;
 		}	
 		
 		@Override
-		public String getCopy() {
-			if(this.value == null){
-				return null;
-			}
-			return new String(this.value);
+		public String copy() {
+			return this.get();
 		}
 						
 		public abstract int getMaxSize();
