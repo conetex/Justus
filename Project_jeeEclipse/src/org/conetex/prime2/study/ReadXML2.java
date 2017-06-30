@@ -29,14 +29,14 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.Computable;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Ref;
-import org.conetex.prime2.contractProcessing2.lang.booleanExpression._AbstractBooleanExpression;
-import org.conetex.prime2.contractProcessing2.lang.booleanExpression.And;
-import org.conetex.prime2.contractProcessing2.lang.booleanExpression.Not;
-import org.conetex.prime2.contractProcessing2.lang.booleanExpression.Or;
-import org.conetex.prime2.contractProcessing2.lang.booleanExpression._Variable;
+import org.conetex.prime2.contractProcessing2.lang.bool.operator.And;
+import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
+import org.conetex.prime2.contractProcessing2.lang.bool.operator.Or;
+import org.conetex.prime2.contractProcessing2.lang.bool.operator.XOr;
 import org.conetex.prime2.contractProcessing2.runtime.Heap;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
 import org.w3c.dom.Document;
@@ -144,11 +144,34 @@ public class ReadXML2 {
 	             //+ "    </copy>"
                  + "  </sub>"	             
 	             
-	             + "  <v typ='Bool'>true</v>"	             
-	             + "  <And>"
-	             + "    <a>v</a>"	             
-	             + "    <b>v</b>"	             
-	             + "  </And>"
+	             + "  <bTrue typ='Bool'>true</bTrue>"	             
+	             + "  <and>" // true
+	             + "    <a>bTrue</a>"	             
+	             + "    <b>bTrue</b>"	             
+	             + "  </and>"
+	             
+	             + "  <bFalse typ='Bool'>false</bFalse>"	             
+	             + "  <and>" // false
+	             + "    <a>bTrue</a>"	             
+	             + "    <b>bFalse</b>"	             
+	             + "  </and>"	             
+	             + "  <or>" // true
+	             + "    <a>bTrue</a>"	             
+	             + "    <b>bFalse</b>"	             
+	             + "  </or>"	 
+	             + "  <and>" // false
+	             + "    <a>bFalse</a>"	             
+	             + "    <b>bFalse</b>"	             
+	             + "  </and>"
+	             
+	             + "  <not><and>" // true
+	             + "    <a>bFalse</a>"	             
+	             + "    <or>" // true
+	             + "      <a>bTrue</a>"	             
+	             + "      <b>bFalse</b>"	             
+	             + "    </or>"	             
+	             + "  </and></not>"	             
+	             
 	             + "</cred>                " 
 				;
 		InputStream is = new ByteArrayInputStream( xml.getBytes(StandardCharsets.UTF_8) );
@@ -188,9 +211,13 @@ public class ReadXML2 {
 		
 		Heap heap = Heap.create(root);
 		
-		for(AbstractAssigment<?> a : Program.steps){
-			a.compute(root);
+		for(Computable c : Program.steps){
+			c.compute(root);
 		}
+		for(Accessible<Boolean> a : Program.boolExpress){
+			Boolean re = a.get(root);
+			System.out.println(re);
+		}		
 		
 		
 		//StringTokenizer st = new StringTokenizer("xyz", Label.NAME_SEPERATOR);
@@ -297,7 +324,9 @@ public class ReadXML2 {
 			String c0DataType = getAttribute(c0, "typ");
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
-				Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
+				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
+				Class<?> c0ClassX = Primitive.getClass(c0DataType);
+				
 			}
 			System.out.println(getNodeValue(c0));
 			Identifier<T> id0 = c.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
@@ -313,7 +342,8 @@ public class ReadXML2 {
 			String c1DataType = getAttribute(c1, "typ");
 			if( c1DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
-				Class<Value<Object>> c1ClassX = Primitive.getClass(c1DataType);
+				//Class<Value<Object>> c1ClassX = Primitive.getClass(c1DataType);
+				Class<?> c1ClassX = Primitive.getClass(c1DataType);
 			}
 			System.out.println(getNodeValue(c1));
 			Identifier<T> id1 = c.<T>getSubIdentifier( getNodeValue(c1) );
@@ -375,13 +405,24 @@ public class ReadXML2 {
 				return Or.create(a, b);
 			}
 		}
+		else if( name.equals("xor") ) {			
+			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
+			if(a != null && b != null){
+				return XOr.create(a, b);
+			}
+		}		
 		else if( name.equals("not") ) {			
 			Accessible<Boolean> sub = createExpression( getChildElementByIndex(n, 0) );
 			if(sub != null){
 				return Not.create(sub);
 			}
 		}
-		// TODO refernce2
+		else{
+			return createReference2Value( n, Bool.class );
+		}
+		
+		/*
 		else if( isAttribute(n, "typ", "Bool") ) {
 			Identifier<Boolean> id = ReadXML2.<Boolean>createSimpleAttribute(name, "Bool");
 			_Variable<Boolean> var = _Variable.<Boolean>create(id);
@@ -398,6 +439,7 @@ public class ReadXML2 {
 				
 			}
 		}
+		*/
 		
 		return null;
 	}
@@ -464,6 +506,21 @@ public class ReadXML2 {
 							}
 						);					
 				}
+				
+				else if( name.equals("and") || name.equals("or") || name.equals("not") || name.equals("xor") ) {
+					functionBuilders.add( 
+							new FunctionBuilder(c){
+								@Override
+								public void build(Complex c) {
+									Accessible<Boolean> x = createExpression( super.node );
+									if(x != null){
+										Program.boolExpress.add(x);										
+									}
+								}
+							}
+						);					
+				}
+				
 				else{
 					createAttributesValues( c, identifiers, values, complexTyps );
 				}

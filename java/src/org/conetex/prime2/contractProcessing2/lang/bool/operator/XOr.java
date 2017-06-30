@@ -4,18 +4,17 @@ import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
-import org.conetex.prime2.contractProcessing2.lang.Computable;
 
-public class Or extends ComputablePair<Boolean> implements Accessible<Boolean> {
+public class XOr extends ComputablePair<Boolean> implements Accessible<Boolean> {
 
-	public static Or create(Accessible<Boolean> theA, Accessible<Boolean> theB) {
+	public static XOr create(Accessible<Boolean> theA, Accessible<Boolean> theB) {
 		if (theA == null || theB == null) {
 			return null;
 		}
-		return new Or(theA, theB);
+		return new XOr(theA, theB);
 	}
 
-	private Or(Accessible<Boolean> theA, Accessible<Boolean> theB) {
+	private XOr(Accessible<Boolean> theA, Accessible<Boolean> theB) {
 		super(theA, theB);
 	}
 
@@ -29,7 +28,7 @@ public class Or extends ComputablePair<Boolean> implements Accessible<Boolean> {
 	public Boolean get(Structure thisObject) {
 		boolean a = super.getA().get(thisObject);
 		boolean b = super.getB().get(thisObject);
-		if (a || b) {
+		if (a ^ b) {
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

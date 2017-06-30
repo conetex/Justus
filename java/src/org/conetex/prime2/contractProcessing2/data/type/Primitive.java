@@ -9,6 +9,7 @@ import org.conetex.prime2.contractProcessing2.data.values.Int;
 import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
 import org.conetex.prime2.contractProcessing2.data.values.Lng;
 import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
+import org.conetex.prime2.contractProcessing2.data.values.Structure;
 
 	public class Primitive<T> extends AbstractType<T>{
 		
@@ -50,7 +51,43 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 				
 		public static <V> Primitive<V> getInstance(String dataType){
 			
+			Class<?> theClass = getClass(dataType);
+			Primitive<V> re = getInstance( theClass );
+			if(re != null){
+				return re;
+			}
+			return null;
+			
+		}
+		
+		public static Class<?> getClass(String dataType){
+			
+			Class<?> theClass = null;
+			
+			String className = Bool.class.getPackage().getName() + "." + dataType;
+			try {
+				theClass = Class.forName(className);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				System.err.println("can not find " + className);
+				//e.printStackTrace();
+				return null;
+			}
+			catch (NoClassDefFoundError e) {
+				// TODO Auto-generated catch block
+				System.err.println("can not find " + className);
+				//e.printStackTrace();
+				return null;
+			}			
+			
+			return theClass;
+			
+		}			
+		
+		public static <T> Class<Value<T>> _getClass(String dataType){
+			
 			Class<?> theClass;
+			//String className = Imp.class.getName() + "$" + dataType;
 			String className = "org.conetex.prime2.contractProcessing2.data.Values." + dataType;//TODO: klappt das
 			try {
 				theClass = Class.forName(className);
@@ -60,16 +97,10 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 				//e.printStackTrace();
 				return null;
 			}
-			//return _getInstance( (Class<Value<T>>)theClass );
-			Primitive<V> re = getInstance( theClass );
-			if(re != null){
-				return re;
-			}
-			return null;
+			return (Class<Value<T>>)theClass;
 			
-		}
+		}		
 		
-		@SuppressWarnings("unchecked")
 		public static <V> Primitive<V> _getInstance(Class<? extends Value<V>> theClass){
 			for (int i = 0; i < types.length; i++){
 				if(types[i].getClazz() == theClass){
@@ -89,23 +120,7 @@ import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
 			return null;
 		}
 		
-		@SuppressWarnings("unchecked")
-		public static <T> Class<Value<T>> getClass(String dataType){
-			
-			Class<?> theClass;
-			//String className = Imp.class.getName() + "$" + dataType;
-			String className = "org.conetex.prime2.contractProcessing2.data.Values." + dataType;//TODO: klappt das
-			try {
-				theClass = Class.forName(className);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				System.err.println("can not find " + className);
-				//e.printStackTrace();
-				return null;
-			}
-			return (Class<Value<T>>)theClass;
-			
-		}			
+		
 		
 		
 		

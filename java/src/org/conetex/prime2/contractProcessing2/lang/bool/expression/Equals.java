@@ -1,28 +1,28 @@
-package org.conetex.prime2.contractProcessing2.lang.bool.operator;
+package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class And extends ComputablePair<Boolean> implements Accessible<Boolean>{
+public class Equals<T> extends ComputablePair<T> implements Accessible<Boolean>{
 
-	public static And create(Accessible<Boolean> theA, Accessible<Boolean> theB){
+	public static <V> Equals<V> create(Accessible<V> theA, Accessible<V> theB){
 		if(theA == null || theB == null){
 			return null;
 		}
-		return new And(theA, theB);
+		return new Equals<V>(theA, theB);
 	}
 			
-	private And(Accessible<Boolean> theA, Accessible<Boolean> theB){
+	private Equals(Accessible<T> theA, Accessible<T> theB){
 		super(theA, theB);
 	}
 
 	@Override
 	public Boolean get(Structure thisObject) {
-		boolean a = super.getA().get(thisObject);
-		boolean b = super.getB().get(thisObject);
-		if( a && b ){
+		T a = super.getA().get(thisObject);
+		T b = super.getB().get(thisObject);
+		if( a == b ){
 			return Boolean.TRUE;
 		}		
 		return Boolean.FALSE;
