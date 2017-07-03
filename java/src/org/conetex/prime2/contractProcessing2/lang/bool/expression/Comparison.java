@@ -3,6 +3,7 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
+import org.conetex.prime2.contractProcessing2.lang.math.Arithmetic;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
 public class Comparison<T extends Number & Comparable<T>> extends ComputablePair<T> implements Accessible<Boolean>{
@@ -11,6 +12,7 @@ public class Comparison<T extends Number & Comparable<T>> extends ComputablePair
 	private static final int EQUAL = 0;
 	private static final int GREATER = 1;
 	
+	/*
 	public static <V extends Number & Comparable<V>> Comparison<V> createSmaller(Accessible<V> theA, Accessible<V> theB){
 		return Comparison.<V>create(theA, theB, Comparison.SMALLER);
 	}
@@ -22,19 +24,23 @@ public class Comparison<T extends Number & Comparable<T>> extends ComputablePair
 	public static <V extends Number & Comparable<V>> Comparison<V> createGreater(Accessible<V> theA, Accessible<V> theB){
 		return Comparison.<V>create(theA, theB, Comparison.GREATER);
 	}
+	*/
 	
-	private static <V extends Number & Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
+	public static <V extends Number & Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
+		if(operation < Comparison.SMALLER || operation > Comparison.GREATER){
+			return null;
+		}		
 		return new Comparison<V>(theA, theB, operation);
 	}
 			
-	private int i;
+	private int operator;
 	
-	private Comparison(Accessible<T> theA, Accessible<T> theB, int operation){
+	private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
 		super(theA, theB);
-		this.i = operation;
+		this.operator = theOperation;
 	}
 
 	@Override
@@ -42,7 +48,7 @@ public class Comparison<T extends Number & Comparable<T>> extends ComputablePair
 		T a = super.getA().getFrom(thisObject);
 		T b = super.getB().getFrom(thisObject);
 		if( a == null ){
-			if( b == null && this.i == Comparison.EQUAL ){
+			if( b == null && this.operator == Comparison.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -51,13 +57,13 @@ public class Comparison<T extends Number & Comparable<T>> extends ComputablePair
 			return null;
 		}	
 		
-		if( this.i == Comparison.GREATER && a.compareTo(b) > 0  ){
+		if( this.operator == Comparison.GREATER && a.compareTo(b) > 0  ){
 			return Boolean.TRUE; 
 		}
-		if( this.i == Comparison.SMALLER && a.compareTo(b) < 0  ){
+		if( this.operator == Comparison.SMALLER && a.compareTo(b) < 0  ){
 			return Boolean.TRUE; 
 		}
-        if( this.i == Comparison.EQUAL   && a.compareTo(b) == 0 ){
+        if( this.operator == Comparison.EQUAL   && a.compareTo(b) == 0 ){
         	return Boolean.TRUE; 
 		}		
 		return Boolean.FALSE;
