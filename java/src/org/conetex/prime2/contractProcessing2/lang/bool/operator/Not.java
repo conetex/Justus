@@ -49,4 +49,9 @@ public class Not implements Accessible<Boolean>, Computable{
 		return true;
 	}
 
+	@Override
+	public Class<Boolean> getBaseType() {
+		return Boolean.class;
+	}
+
 }

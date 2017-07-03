@@ -11,4 +11,6 @@ public interface Accessible<T> {//accessible
 	
 	public void setTo(Structure thisObject, T value) throws Invalid;
 	
+    public Class<T> getBaseType();
+	
 }

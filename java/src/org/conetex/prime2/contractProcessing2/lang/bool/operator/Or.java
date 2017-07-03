@@ -48,5 +48,8 @@ public class Or extends ComputablePair<Boolean> implements Accessible<Boolean> {
 		return this.getFrom(thisObject);
 	}
 
-	
+	@Override
+	public Class<Boolean> getBaseType() {
+		return Boolean.class;
+	}
 }

@@ -86,5 +86,10 @@ public class Comparison<T extends Number & Comparable<T>> extends ComputablePair
 		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
 		return true;
 	}
+
+	@Override
+	public Class<Boolean> getBaseType() {
+		return Boolean.class;
+	}
 	
 }

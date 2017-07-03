@@ -94,7 +94,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 		public String copy() {
 			return this.get();
 		}
-						
+		
 		public abstract int getMaxSize();
 		
 	}

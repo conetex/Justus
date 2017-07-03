@@ -15,12 +15,25 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 	private static final int DIVIDED_BY = 3;   // Division 
 	private static final int REMAINS = 4;      // Remainder 
 	
-	public static <AI extends Number, AO extends Number> Arithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, Class<AO> resultTyp, int operation){
-		// TODO: was ist bei result Integer, wenn a/b Long oder BigInt ist?
-		// TODO: was istbei result Long, wenn a/b BigInt ist?
+	public static <AI extends Number, AO extends Number> Arithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
 		if(theA == null || theB == null){
 			return null;
 		}
+		if(resultTyp == Long.class){
+			if(theA.getBaseType() == BigInteger.class){
+				return null;
+			}
+		}
+		else if(resultTyp == Integer.class){
+			if(theA.getBaseType() == BigInteger.class || theA.getBaseType() == Long.class){
+				return null;
+			}
+		}
+		else if(resultTyp == Byte.class){
+			if(theA.getBaseType() == BigInteger.class || theA.getBaseType() == Long.class  || theA.getBaseType() == Integer.class){
+				return null;
+			}
+		}		
 		if(operation < Arithmetic.PLUS || operation > Arithmetic.REMAINS){
 			return null;
 		}
@@ -28,6 +41,7 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 	}
 			
 	private int operator;
+	
 	private Class<O> resultTyp;
 	
 	private Arithmetic(Accessible<I> theA, Accessible<I> theB, Class<O> theResultTyp, int theOperation){
@@ -36,94 +50,85 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 		this.resultTyp = theResultTyp;
 	}
 
-	private Integer getInt(Number a, Number b) throws ArithmeticException {
+	private Integer calcInt(int a, int b) throws ArithmeticException {
 		if(this.operator == Arithmetic.PLUS){
-			return Math.addExact( a.intValue(), b.intValue()) ;				
+			return Math.addExact( a, b ) ;				
 		}
 		else if(this.operator == Arithmetic.MINUS){
-			return Math.subtractExact(a.intValue(), b.intValue());				
+			return Math.subtractExact( a, b );				
 		}
 		else if(this.operator == Arithmetic.TIMES){
-			return Math.multiplyExact(a.intValue(), b.intValue());				
+			return Math.multiplyExact( a, b );				
 		}
 		else if(this.operator == Arithmetic.DIVIDED_BY){
-			return a.intValue() / b.intValue();				
+			return a / b;				
 		}
 		else if(this.operator == Arithmetic.REMAINS){
-			return a.intValue() % b.intValue();				
+			return a % b;				
 		}
 		return null;
 	}
 	
-	private Long getLong(Number a, Number b) throws ArithmeticException {
+	private Long calcLong(long a, long b) throws ArithmeticException {
 		if(this.operator == Arithmetic.PLUS){
-			return Math.addExact(a.longValue(), b.longValue());				
+			return Math.addExact( a, b );				
 		}
 		else if(this.operator == Arithmetic.MINUS){
-			return Math.subtractExact(a.longValue(), b.longValue());				
+			return Math.subtractExact( a, b );				
 		}
 		else if(this.operator == Arithmetic.TIMES){
-			return Math.multiplyExact(a.longValue(), b.longValue());				
+			return Math.multiplyExact( a, b );				
 		}
 		else if(this.operator == Arithmetic.DIVIDED_BY){
-			return a.longValue() / b.longValue();				
+			return a / b;				
 		}
 		else if(this.operator == Arithmetic.REMAINS){
-			return a.longValue() % b.longValue();				
+			return a % b;				
 		}
 		return null;
 	}	
 	
-	private BigInteger getBigInteger(Number a, Number b) throws ArithmeticException {
-		BigInteger bigA = null;
-		if(a instanceof BigInteger){
-			bigA = (BigInteger)a;
-		}
-		else{
-			bigA = BigInteger.valueOf( a.longValue() ); 
-		}
-
-		BigInteger bigB = null;			
-		if(b instanceof BigInteger){
-			bigB = (BigInteger)b;
-		}
-		else{
-			bigB = BigInteger.valueOf( b.longValue() ); 
-		}
-		
+	private BigInteger calcBigInt(long a, long b) throws ArithmeticException {
+		return this.calcBigInt( BigInteger.valueOf(a), BigInteger.valueOf(b) );
+	}
+	
+	private BigInteger calcBigInt(BigInteger a, BigInteger b) throws ArithmeticException {
 		if(this.operator == Arithmetic.PLUS){
-			return bigA.add(bigB);				
+			return a.add(b);				
 		}
 		else if(this.operator == Arithmetic.MINUS){
-			return bigA.subtract(bigB);				
+			return a.subtract(b);				
 		}
 		else if(this.operator == Arithmetic.TIMES){
-			return bigA.multiply(bigB);				
+			return a.multiply(b);				
 		}
 		else if(this.operator == Arithmetic.DIVIDED_BY){
-			return bigA.divide(bigB);				
+			return a.divide(b);				
 		}
 		else if(this.operator == Arithmetic.REMAINS){
-			return bigA.remainder(bigB);				
+			return a.remainder(b);				
 		}
 		return null;
 	}	
 	
 	@Override
 	public O getFrom(Structure thisObject) throws ArithmeticException {
-		Number a = super.getA().getFrom(thisObject);
-		Number b = super.getB().getFrom(thisObject);
+		I a = super.getA().getFrom(thisObject);
+		I b = super.getB().getFrom(thisObject);
 		if( a == null || b == null ){
 			return null;
 		}
-		if(resultTyp == Integer.class){
-			return (O) this.getInt(a, b);
+		else if(resultTyp == Integer.class){
+			return (O)( this.calcInt(a.intValue(), b.intValue()) );
 		}
 		else if(resultTyp ==  Long.class){
-			return (O) this.getLong(a, b);
+			return (O)( this.calcLong(a.longValue(), b.longValue()) );
 		}
 		else if(resultTyp == BigInteger.class){
-			return (O) this.getBigInteger(a, b);
+			if(a instanceof BigInteger){
+				return (O)( this.calcBigInt((BigInteger)a, (BigInteger)b) );
+			}
+			return (O)( this.calcBigInt(a.longValue(), b.longValue()) );
 		}		
 		return null;		
 	}
@@ -139,16 +144,15 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 		return this.getFrom(thisObject);
 	}
 
-
 	@Override
 	public boolean compute(Structure thisObject) {
 		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
 		return true;
 	}
 
+	@Override
+	public Class<O> getBaseType() {
+		return this.resultTyp;
+	}
 
-
-
-
-	
 }

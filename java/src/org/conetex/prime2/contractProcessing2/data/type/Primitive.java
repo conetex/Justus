@@ -17,25 +17,25 @@ public class Primitive<T> extends AbstractType<T> {
 			// ValueFactory<Structure>() { public Struct createValueImp() {
 			// return new Struct() ; } } )
 
-			new Primitive<Boolean>(Bool.class, new PrimitiveValueFactory<Boolean>() {
+			new Primitive<Boolean>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>() {
 				public Bool createValueImp() {
 					return new Bool();
 				}
-			}), new Primitive<Integer>(Int.class, new PrimitiveValueFactory<Integer>() {
+			}), new Primitive<Integer>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>() {
 				public Int createValueImp() {
 					return new Int();
 				}
-			}), new Primitive<Long>(Lng.class, new PrimitiveValueFactory<Long>() {
+			}), new Primitive<Long>(Lng.class, Long.class, new PrimitiveValueFactory<Long>() {
 				public Lng createValueImp() {
 					return new Lng();
 				}
 			})
 
-			, new Primitive<String>(ASCII8.class, new PrimitiveValueFactory<String>() {
+			, new Primitive<String>(ASCII8.class, String.class, new PrimitiveValueFactory<String>() {
 				public ASCII8 createValueImp() {
 					return new ASCII8();
 				}
-			}), new Primitive<String>(Label.class, new PrimitiveValueFactory<String>() {
+			}), new Primitive<String>(Label.class, String.class, new PrimitiveValueFactory<String>() {
 				public Label createValueImp() {
 					return new Label();
 				}
@@ -57,7 +57,7 @@ public class Primitive<T> extends AbstractType<T> {
 			 * ASCII256.class, new ValueFactory<String>() { public ASCII256
 			 * createValueImp() { return new ASCII256(); } } )
 			 */
-			, new Primitive<String>(Base64_256.class, new PrimitiveValueFactory<String>() {
+			, new Primitive<String>(Base64_256.class, String.class, new PrimitiveValueFactory<String>() {
 				public Base64_256 createValueImp() {
 					return new Base64_256();
 				}
@@ -69,7 +69,7 @@ public class Primitive<T> extends AbstractType<T> {
 			 * ( Base64_64.class , new ValueFactory<String>() { public Base64_64
 			 * createValueImp() { return new Base64_64() ; } } )
 			 */
-			, new Primitive<String>(MailAddress64.class, new PrimitiveValueFactory<String>() {
+			, new Primitive<String>(MailAddress64.class, String.class, new PrimitiveValueFactory<String>() {
 				public MailAddress64 createValueImp() {
 					return new MailAddress64();
 				}
@@ -85,6 +85,9 @@ public class Primitive<T> extends AbstractType<T> {
 	};
 
 	private final Class<? extends Value<T>> clazz;
+	
+	private final Class<T> baseType;
+	
 	// private final Class<Value.Interface<T>> clazz;
 
 	final PrimitiveValueFactory<T> factory;
@@ -151,7 +154,7 @@ public class Primitive<T> extends AbstractType<T> {
 		return null;
 	}
 
-	public static <W> Primitive<W> getInstance(Class<?> theClass) {
+	public static <W> Primitive<W> getInstance(Class<?> theClass) {// TODO alle aufrufe müssen getestet werden
 		for (int i = 0; i < types.length; i++) {
 			if (types[i].getClazz() == theClass) {
 				// TODO typ check !!!
@@ -163,8 +166,9 @@ public class Primitive<T> extends AbstractType<T> {
 
 	// private PrimitiveDataType(Class<Value.Interface<T>> theClass,
 	// ValueFactory<T> theFactory){
-	private Primitive(Class<? extends Value<T>> theClass, PrimitiveValueFactory<T> theFactory) {
+	private Primitive(Class<? extends Value<T>> theClass, Class<T> theBaseType, PrimitiveValueFactory<T> theFactory) {
 		this.clazz = theClass;
+		this.baseType = theBaseType;
 		this.factory = theFactory;
 	}
 
@@ -195,6 +199,10 @@ public class Primitive<T> extends AbstractType<T> {
 		return this.clazz.getName();
 	}
 
+	public Class<T> getBaseType() {
+		return this.baseType;
+	}	
+	
 	@Override
 	public <U> Identifier<U> getSubIdentifier(String aName) {
 		return null;

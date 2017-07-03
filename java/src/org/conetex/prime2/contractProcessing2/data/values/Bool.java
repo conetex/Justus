@@ -48,5 +48,5 @@ public class Bool implements Value<Boolean>{
 	public Boolean copy() {
 		return this.get();
 	}		
-	
+
 }

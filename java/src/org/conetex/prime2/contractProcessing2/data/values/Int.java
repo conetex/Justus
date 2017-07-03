@@ -9,7 +9,7 @@ public class Int implements Value<Integer>{
 	
 	@Override
 	public void set(Integer aValue){
-		this.actual = aValue;			
+		this.actual = aValue;
 	}
 	
 	@Override

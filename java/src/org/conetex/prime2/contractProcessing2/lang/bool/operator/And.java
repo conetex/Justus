@@ -47,5 +47,10 @@ public class And extends ComputablePair<Boolean> implements Accessible<Boolean>{
 		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
 		return true;
 	}
+
+	@Override
+	public Class<Boolean> getBaseType() {
+		return Boolean.class;
+	}
 	
 }

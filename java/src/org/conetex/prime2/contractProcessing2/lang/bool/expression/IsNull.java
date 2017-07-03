@@ -7,22 +7,22 @@ import org.conetex.prime2.contractProcessing2.lang.Computable;
 
 public class IsNull implements Accessible<Boolean>, Computable{
 
-	public static IsNull create(Accessible<Boolean> theSub){
+	public static IsNull create(Accessible<?> theSub){
 		if(theSub == null){
 			return null;
 		}
 		return new IsNull(theSub);
 	}
 		
-	private Accessible<Boolean> sub;
+	private Accessible<?> sub;
 	
-	private IsNull(Accessible<Boolean> theSub){
+	private IsNull(Accessible<?> theSub){
 		this.sub = theSub;
 	}
 
 	@Override
 	public Boolean getFrom(Structure thisObject) {
-		Boolean b = this.sub.getFrom(thisObject);
+		Object b = this.sub.getFrom(thisObject);
 		if( b == null ){
 			return Boolean.TRUE;
 		}		
@@ -44,6 +44,11 @@ public class IsNull implements Accessible<Boolean>, Computable{
 	public boolean compute(Structure thisObject) {
 		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
 		return true;
+	}
+
+	@Override
+	public Class<Boolean> getBaseType() {
+		return Boolean.class;
 	}
 
 }

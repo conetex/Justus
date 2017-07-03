@@ -31,5 +31,5 @@ public class Lng implements Value<Long>{
 	public Long copy() {
 		return this.get();
 	}
-	
+
 }
