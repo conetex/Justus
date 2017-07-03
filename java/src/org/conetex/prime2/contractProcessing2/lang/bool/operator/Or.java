@@ -4,7 +4,6 @@ import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
-import org.conetex.prime2.contractProcessing2.lang.Computable;
 
 public class Or extends ComputablePair<Boolean> implements Accessible<Boolean> {
 
@@ -21,14 +20,17 @@ public class Or extends ComputablePair<Boolean> implements Accessible<Boolean> {
 
 	@Override
 	public boolean compute(Structure thisObject) {
-		get(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
+		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
 		return true;
 	}
 
 	@Override
-	public Boolean get(Structure thisObject) {
-		boolean a = super.getA().get(thisObject);
-		boolean b = super.getB().get(thisObject);
+	public Boolean getFrom(Structure thisObject) {
+		Boolean a = super.getA().getFrom(thisObject);
+		Boolean b = super.getB().getFrom(thisObject);
+		if( a == null || b == null ){
+			return null;
+		}		
 		if (a || b) {
 			return Boolean.TRUE;
 		}
@@ -36,14 +38,14 @@ public class Or extends ComputablePair<Boolean> implements Accessible<Boolean> {
 	}
 
 	@Override
-	public void set(Structure thisObject, Boolean value) throws Invalid {
+	public void setTo(Structure thisObject, Boolean value) throws Invalid {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Boolean copy(Structure thisObject) {
-		return this.get(thisObject);
+	public Boolean copyFrom(Structure thisObject) {
+		return this.getFrom(thisObject);
 	}
 
 	

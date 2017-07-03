@@ -5,10 +5,10 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 
 public interface Accessible<T> {//accessible
 
-	public T get(Structure thisObject);
+	public T getFrom(Structure thisObject);
 
-	public T copy(Structure thisObject) throws Invalid;
+	public T copyFrom(Structure thisObject) throws Invalid;
 	
-	public void set(Structure thisObject, T value) throws Invalid;
+	public void setTo(Structure thisObject, T value) throws Invalid;
 	
 }

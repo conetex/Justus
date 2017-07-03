@@ -24,13 +24,13 @@ public class AccessibleValue<T> implements Accessible<T> {
 	}
 
 	@Override
-	public T get(Structure thisObject) {
+	public T getFrom(Structure thisObject) {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		return value.get();
 	}
 
 	@Override
-	public void set(Structure thisObject, T newValue) throws Invalid {
+	public void setTo(Structure thisObject, T newValue) throws Invalid {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		value.set(newValue);
 	}
@@ -41,7 +41,7 @@ public class AccessibleValue<T> implements Accessible<T> {
 	}
 
 	@Override
-	public T copy(Structure thisObject) throws Invalid {
+	public T copyFrom(Structure thisObject) throws Invalid {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		return value.copy();
 	}

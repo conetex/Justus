@@ -18,13 +18,13 @@ public abstract class AbstractAssigment<T> extends ComputablePair<T>{
 		try {
 			
 			if(this.doCopy()){
-				value = super.getB().copy(thisObject);			
+				value = super.getB().copyFrom(thisObject);			
 			}
 			else{
-				value = super.getB().get(thisObject);
+				value = super.getB().getFrom(thisObject);
 			}
 
-			super.getB().set( thisObject, value );
+			super.getB().setTo( thisObject, value );
 		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -215,7 +215,7 @@ public class ReadXML2 {
 			c.compute(root);
 		}
 		for(Accessible<Boolean> a : Program.boolExpress){
-			Boolean re = a.get(root);
+			Boolean re = a.getFrom(root);
 			System.out.println(re);
 		}		
 		

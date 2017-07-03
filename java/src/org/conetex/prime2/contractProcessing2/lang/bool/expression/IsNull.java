@@ -1,22 +1,22 @@
-package org.conetex.prime2.contractProcessing2.lang.bool.operator;
+package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
 
-public class Not implements Accessible<Boolean>, Computable{
+public class IsNull implements Accessible<Boolean>, Computable{
 
-	public static Not create(Accessible<Boolean> theSub){
+	public static IsNull create(Accessible<Boolean> theSub){
 		if(theSub == null){
 			return null;
 		}
-		return new Not(theSub);
+		return new IsNull(theSub);
 	}
 		
 	private Accessible<Boolean> sub;
 	
-	private Not(Accessible<Boolean> theSub){
+	private IsNull(Accessible<Boolean> theSub){
 		this.sub = theSub;
 	}
 
@@ -24,12 +24,9 @@ public class Not implements Accessible<Boolean>, Computable{
 	public Boolean getFrom(Structure thisObject) {
 		Boolean b = this.sub.getFrom(thisObject);
 		if( b == null ){
-			return null;
+			return Boolean.TRUE;
 		}		
-		if( b ){
-			return Boolean.FALSE;
-		}		
-		return Boolean.TRUE;
+		return Boolean.FALSE;
 	}
 
 	@Override
