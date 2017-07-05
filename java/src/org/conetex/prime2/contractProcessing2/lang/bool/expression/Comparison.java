@@ -3,7 +3,7 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 import org.conetex.prime2.contractProcessing2.data.values.Structure;
 import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
-import org.conetex.prime2.contractProcessing2.lang.math.Arithmetic;
+import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
 public class Comparison<T extends Number & Comparable<T>> extends ComputablePair<T> implements Accessible<Boolean>{

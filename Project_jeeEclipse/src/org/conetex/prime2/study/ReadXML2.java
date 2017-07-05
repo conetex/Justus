@@ -32,11 +32,9 @@ import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
-import org.conetex.prime2.contractProcessing2.lang.assignment.Ref;
-import org.conetex.prime2.contractProcessing2.lang.bool.operator.And;
+import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
+import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
-import org.conetex.prime2.contractProcessing2.lang.bool.operator.Or;
-import org.conetex.prime2.contractProcessing2.lang.bool.operator.XOr;
 import org.conetex.prime2.contractProcessing2.runtime.Heap;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
 import org.w3c.dom.Document;
@@ -143,6 +141,15 @@ public class ReadXML2 {
 	             //+ "      <target typ='MailAddress64'>sub.a2Addres</target>"
 	             //+ "    </copy>"
                  + "  </sub>"	             
+	             
+                 
+	             + "  <ai typ='Int'>1</ai>"
+	             + "  <bi typ='Int'>2</bi>"	             
+	             + "  <plus>" // true
+	             + "    <a>ai</a>"	             
+	             + "    <b>bi</b>"	             
+	             + "  </plus>"                 
+	             
 	             
 	             + "  <bTrue typ='Bool'>true</bTrue>"	             
 	             + "  <and>" // true
@@ -372,7 +379,7 @@ public class ReadXML2 {
 				return Copy.<T>create(src, trg);					
 			}
 			if(name.equals("ref")){
-				return Ref.<T>create(src, trg);					
+				return Reference.<T>create(src, trg);					
 			}				
 		}
 		return null;
@@ -395,21 +402,21 @@ public class ReadXML2 {
 			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
 			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
-				return And.create(a, b);
+				return Binary.createAdd(a, b);
 			}
 		}
 		else if( name.equals("or") ) {			
 			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
 			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
-				return Or.create(a, b);
+				return Binary.createOr(a, b);
 			}
 		}
 		else if( name.equals("xor") ) {			
 			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
 			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
-				return XOr.create(a, b);
+				return Binary.createXOr(a, b);
 			}
 		}		
 		else if( name.equals("not") ) {			

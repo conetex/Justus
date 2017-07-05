@@ -7,7 +7,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class Arithmetic<I extends Number, O extends Number> extends ComputablePair<I> implements Accessible<O>{
+public class ElementaryArithmetic<I extends Number, O extends Number> extends ComputablePair<I> implements Accessible<O>{
 	
 	private static final int PLUS = 0;         // Addition
 	private static final int MINUS = 1;        // Subtraction 
@@ -15,7 +15,7 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 	private static final int DIVIDED_BY = 3;   // Division 
 	private static final int REMAINS = 4;      // Remainder 
 	
-	public static <AI extends Number, AO extends Number> Arithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
+	public static <AI extends Number, AO extends Number> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
 		if(theA == null || theB == null){
 			return null;
 		}
@@ -34,55 +34,55 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 				return null;
 			}
 		}		
-		if(operation < Arithmetic.PLUS || operation > Arithmetic.REMAINS){
+		if(operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS){
 			return null;
 		}
-		return new Arithmetic<AI, AO>(theA, theB, resultTyp, operation);
+		return new ElementaryArithmetic<AI, AO>(theA, theB, resultTyp, operation);
 	}
 			
 	private int operator;
 	
 	private Class<O> resultTyp;
 	
-	private Arithmetic(Accessible<I> theA, Accessible<I> theB, Class<O> theResultTyp, int theOperation){
+	private ElementaryArithmetic(Accessible<I> theA, Accessible<I> theB, Class<O> theResultTyp, int theOperation){
 		super(theA, theB);
 		this.operator = theOperation;
 		this.resultTyp = theResultTyp;
 	}
 
 	private Integer calcInt(int a, int b) throws ArithmeticException {
-		if(this.operator == Arithmetic.PLUS){
+		if(this.operator == ElementaryArithmetic.PLUS){
 			return Math.addExact( a, b ) ;				
 		}
-		else if(this.operator == Arithmetic.MINUS){
+		else if(this.operator == ElementaryArithmetic.MINUS){
 			return Math.subtractExact( a, b );				
 		}
-		else if(this.operator == Arithmetic.TIMES){
+		else if(this.operator == ElementaryArithmetic.TIMES){
 			return Math.multiplyExact( a, b );				
 		}
-		else if(this.operator == Arithmetic.DIVIDED_BY){
+		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
 			return a / b;				
 		}
-		else if(this.operator == Arithmetic.REMAINS){
+		else if(this.operator == ElementaryArithmetic.REMAINS){
 			return a % b;				
 		}
 		return null;
 	}
 	
 	private Long calcLong(long a, long b) throws ArithmeticException {
-		if(this.operator == Arithmetic.PLUS){
+		if(this.operator == ElementaryArithmetic.PLUS){
 			return Math.addExact( a, b );				
 		}
-		else if(this.operator == Arithmetic.MINUS){
+		else if(this.operator == ElementaryArithmetic.MINUS){
 			return Math.subtractExact( a, b );				
 		}
-		else if(this.operator == Arithmetic.TIMES){
+		else if(this.operator == ElementaryArithmetic.TIMES){
 			return Math.multiplyExact( a, b );				
 		}
-		else if(this.operator == Arithmetic.DIVIDED_BY){
+		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
 			return a / b;				
 		}
-		else if(this.operator == Arithmetic.REMAINS){
+		else if(this.operator == ElementaryArithmetic.REMAINS){
 			return a % b;				
 		}
 		return null;
@@ -93,19 +93,19 @@ public class Arithmetic<I extends Number, O extends Number> extends ComputablePa
 	}
 	
 	private BigInteger calcBigInt(BigInteger a, BigInteger b) throws ArithmeticException {
-		if(this.operator == Arithmetic.PLUS){
+		if(this.operator == ElementaryArithmetic.PLUS){
 			return a.add(b);				
 		}
-		else if(this.operator == Arithmetic.MINUS){
+		else if(this.operator == ElementaryArithmetic.MINUS){
 			return a.subtract(b);				
 		}
-		else if(this.operator == Arithmetic.TIMES){
+		else if(this.operator == ElementaryArithmetic.TIMES){
 			return a.multiply(b);				
 		}
-		else if(this.operator == Arithmetic.DIVIDED_BY){
+		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
 			return a.divide(b);				
 		}
-		else if(this.operator == Arithmetic.REMAINS){
+		else if(this.operator == ElementaryArithmetic.REMAINS){
 			return a.remainder(b);				
 		}
 		return null;

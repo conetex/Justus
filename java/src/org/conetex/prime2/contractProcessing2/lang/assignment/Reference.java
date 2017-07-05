@@ -2,16 +2,16 @@ package org.conetex.prime2.contractProcessing2.lang.assignment;
 
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 
-public class Ref<T> extends AbstractAssigment<T>{
+public class Reference<T> extends AbstractAssigment<T>{
 
-	public static <T> Ref<T> create(AccessibleValue<T> trg, AccessibleValue<T> src){
+	public static <T> Reference<T> create(AccessibleValue<T> trg, AccessibleValue<T> src){
 		if(src == null || trg == null){
 			return null;
 		}
-		return new Ref<T>(trg, src);
+		return new Reference<T>(trg, src);
 	}
 	
-	private Ref(AccessibleValue<T> trg, AccessibleValue<T> src){
+	private Reference(AccessibleValue<T> trg, AccessibleValue<T> src){
 		super(trg, src);
 	}
 	

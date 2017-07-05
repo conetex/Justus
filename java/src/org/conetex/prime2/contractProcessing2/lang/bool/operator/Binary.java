@@ -5,19 +5,59 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class And extends ComputablePair<Boolean> implements Accessible<Boolean>{
+public abstract class Binary extends ComputablePair<Boolean> implements Accessible<Boolean>{
 
-	public static And create(Accessible<Boolean> theA, Accessible<Boolean> theB){
+	public static Binary createAdd(Accessible<Boolean> theA, Accessible<Boolean> theB){
 		if(theA == null || theB == null){
 			return null;
 		}
-		return new And(theA, theB);
+		return new Binary(theA, theB){
+				@Override
+				protected Boolean calc(Boolean a, Boolean b) {
+					if( a && b ){
+						return Boolean.TRUE;
+					}		
+					return Boolean.FALSE;
+				}
+			};
 	}
+	
+	public static Binary createOr(Accessible<Boolean> theA, Accessible<Boolean> theB){
+		if(theA == null || theB == null){
+			return null;
+		}
+		return new Binary(theA, theB){
+				@Override
+				protected Boolean calc(Boolean a, Boolean b) {
+					if (a || b) {
+						return Boolean.TRUE;
+					}
+					return Boolean.FALSE;
+				}
+			};
+	}	
+	
+	public static Binary createXOr(Accessible<Boolean> theA, Accessible<Boolean> theB){
+		if(theA == null || theB == null){
+			return null;
+		}
+		return new Binary(theA, theB){
+				@Override
+				protected Boolean calc(Boolean a, Boolean b) {
+					if (a ^ b) {
+						return Boolean.TRUE;
+					}
+					return Boolean.FALSE;
+				}
+			};
+	}		
 			
-	private And(Accessible<Boolean> theA, Accessible<Boolean> theB){
+	private Binary(Accessible<Boolean> theA, Accessible<Boolean> theB){
 		super(theA, theB);
 	}
 
+	protected abstract Boolean calc(Boolean a, Boolean b);
+	
 	@Override
 	public Boolean getFrom(Structure thisObject) {
 		Boolean a = super.getA().getFrom(thisObject);
@@ -25,10 +65,7 @@ public class And extends ComputablePair<Boolean> implements Accessible<Boolean>{
 		if( a == null || b == null ){
 			return null;
 		}
-		if( a && b ){
-			return Boolean.TRUE;
-		}		
-		return Boolean.FALSE;
+		return this.calc(a, b);
 	}
 
 	@Override

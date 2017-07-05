@@ -5,6 +5,7 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
 
+//Unary operation
 public class Not implements Accessible<Boolean>, Computable{
 
 	public static Not create(Accessible<Boolean> theSub){
