@@ -22,19 +22,23 @@ import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
-import org.conetex.prime2.contractProcessing2.data.values.Bool;
-import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Bool;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Int;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
+import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
+import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.runtime.Heap;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
 import org.w3c.dom.Document;
@@ -122,6 +126,7 @@ public class ReadXML2 {
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
 	             
+	        // ASSIGNMENT
 	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
 	             + "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
 	             + "  <copy>"
@@ -142,15 +147,33 @@ public class ReadXML2 {
 	             //+ "    </copy>"
                  + "  </sub>"	             
 	             
-                 
-	             + "  <ai typ='Int'>1</ai>"
-	             + "  <bi typ='Int'>2</bi>"	             
-	             + "  <plus>" // true
+  // MATH     
+	             + "  <ai typ='Int'>3</ai>"
+	             + "  <bi typ='Int'>4</bi>"	             
+	             + "  <plus>" // 7
 	             + "    <a>ai</a>"	             
 	             + "    <b>bi</b>"	             
-	             + "  </plus>"                 
+	             + "  </plus>"   
+	                         
+	             + "  <minus>" // -4
+	             + "    <a>ai</a>"	             
+	             + "    <plus>" // 7
+	             + "      <a>ai</a>"	             
+	             + "      <b>bi</b>"	             
+	             + "    </plus>"              
+	             + "  </minus>" 	             
+
+	             + "    <remains>" 
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "      <const>9</const>"	             
+	             + "    </remains>" 	             
+  
+  // Comparsion / IsNull 
 	             
-	             
+/*// BOOL STUFF	             
 	             + "  <bTrue typ='Bool'>true</bTrue>"	             
 	             + "  <and>" // true
 	             + "    <a>bTrue</a>"	             
@@ -178,7 +201,7 @@ public class ReadXML2 {
 	             + "      <b>bFalse</b>"	             
 	             + "    </or>"	             
 	             + "  </and></not>"	             
-	             
+*/         
 	             + "</cred>                " 
 				;
 		InputStream is = new ByteArrayInputStream( xml.getBytes(StandardCharsets.UTF_8) );
@@ -225,7 +248,10 @@ public class ReadXML2 {
 			Boolean re = a.getFrom(root);
 			System.out.println(re);
 		}		
-		
+		for(Accessible<Number> a : Program.mathExpress){
+			Number re = a.getFrom(root);
+			System.out.println(re);
+		}		
 		
 		//StringTokenizer st = new StringTokenizer("xyz", Label.NAME_SEPERATOR);
 		//while(st.hasMoreTokens()){
@@ -236,7 +262,7 @@ public class ReadXML2 {
 		// for (int x=0; x<result.length; x++)
 		//     System.out.println(result[x]);
 		
-	    String x = "this";
+	   // String x = "this";
 
 	    
 		
@@ -319,7 +345,7 @@ public class ReadXML2 {
 	}
 	
 	// <T, V extends Value.Interface<T>> 
-	public static <T> AbstractAssigment<?> createAssignment(String name, Node n, Complex c){
+	public static <T> AbstractAssigment<T> createAssignment(String name, Node n, Complex c){
 		if(n == null){
 			return null;
 		}		
@@ -328,7 +354,7 @@ public class ReadXML2 {
 			Node c0 = getChildElementByIndex(n, 0);
 			Class<? extends Value<T>> c0Class = null;
 			
-			String c0DataType = getAttribute(c0, "typ");
+			String c0DataType = getAttribute(c0, Symbol.TYP);
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
 				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
@@ -346,7 +372,7 @@ public class ReadXML2 {
 			Node c1 = getChildElementByIndex(n, 1);
 			Class<? extends Value<T>> c1Class = null;
 			
-			String c1DataType = getAttribute(c1, "typ");
+			String c1DataType = getAttribute(c1, Symbol.TYP);
 			if( c1DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
 				//Class<Value<Object>> c1ClassX = Primitive.getClass(c1DataType);
@@ -375,10 +401,10 @@ public class ReadXML2 {
 		AccessibleValue<T> trg = createReference2Value( c0, cClass );
 		AccessibleValue<T> src = createReference2Value( c1, cClass );
 		if(src != null && trg != null){
-			if(name.equals("copy")){
+			if(name.equals(Symbol.COPY)){
 				return Copy.<T>create(src, trg);					
 			}
-			if(name.equals("ref")){
+			if(name.equals(Symbol.REFERENCE)){
 				return Reference.<T>create(src, trg);					
 			}				
 		}
@@ -392,35 +418,35 @@ public class ReadXML2 {
 		return AccessibleValue.<T>create(path, theClass);
 	}	
 	
-	public static Accessible<Boolean> createExpression(Node n){
+	public static Accessible<Boolean> createBoolExpression(Node n){
 		if(n == null){
 			return null;
 		}
 	
 		String name = n.getNodeName();
-		if( name.equals("and") ) {			
-			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
-			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
+		if( name.equals(Symbol.AND) ) {			
+			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return Binary.createAdd(a, b);
 			}
 		}
-		else if( name.equals("or") ) {			
-			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
-			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
+		else if( name.equals(Symbol.OR) ) {			
+			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return Binary.createOr(a, b);
 			}
 		}
-		else if( name.equals("xor") ) {			
-			Accessible<Boolean> a = createExpression( getChildElementByIndex(n, 0) );
-			Accessible<Boolean> b = createExpression( getChildElementByIndex(n, 1) );
+		else if( name.equals(Symbol.XOR) ) {			
+			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
+			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
 				return Binary.createXOr(a, b);
 			}
 		}		
-		else if( name.equals("not") ) {			
-			Accessible<Boolean> sub = createExpression( getChildElementByIndex(n, 0) );
+		else if( name.equals(Symbol.NOT) ) {			
+			Accessible<Boolean> sub = createBoolExpression( getChildElementByIndex(n, 0) );
 			if(sub != null){
 				return Not.create(sub);
 			}
@@ -451,6 +477,69 @@ public class ReadXML2 {
 		return null;
 	}
 	
+	public static <V extends Number, Z extends Number> Accessible<Z> createNumExpression(Node n, Primitive<Z> theClass){
+		if(n == null){
+			return null;
+		}
+	
+		String name = n.getNodeName();
+		if( name.equals(Symbol.PLUS) ) {			
+			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			if(a != null && b != null){
+				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.PLUS, theClass.getBaseType() );
+			}
+		}
+		else if( name.equals(Symbol.MINUS) ) {			
+			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			if(a != null && b != null){
+				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.MINUS, theClass.getBaseType() );
+			}
+		}
+		else if( name.equals(Symbol.TIMES) ) {			
+			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			if(a != null && b != null){
+				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.TIMES, theClass.getBaseType() );
+			}
+		}		
+		else if( name.equals(Symbol.DIVIDED_BY) ) {			
+			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			if(a != null && b != null){
+				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.DIVIDED_BY, theClass.getBaseType() );
+			}
+		}		
+		else if( name.equals(Symbol.REMAINS) ) {			
+			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			if(a != null && b != null){
+				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.REMAINS, theClass.getBaseType() );
+			}
+		}
+		else if( name.equals(Symbol.CONST) ) {			
+			Value<Z> constVal = theClass.createValue();
+			String valueOfNode = getNodeValue(n);
+			try {
+				constVal.setConverted(valueOfNode);
+			} catch (Inconvertible | Invalid e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			AccessibleConstant<Z> re = AccessibleConstant.<Z>create(constVal);
+			return re;
+		}		
+		else{
+			AccessibleValue<Z> re = createReference2Value(n, theClass.getClazz() );
+			return re;
+		}
+	
+
+		
+		return null;
+	}
 	
 
 	public static Structure createState(Node n, Map<Complex, List<FunctionBuilder>> complexTyps){
@@ -487,12 +576,12 @@ public class ReadXML2 {
 			if(type == Node.ELEMENT_NODE){
 				
 				String name = c.getNodeName();
-				if( name.equals("copy") ) {
+				if( name.equals(Symbol.COPY) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									AbstractAssigment<?> x = createAssignment("copy", super.node, c);
+									AbstractAssigment<?> x = createAssignment(Symbol.COPY, super.node, c);
 									if(x != null){
 										Program.steps.add(x);										
 									}
@@ -500,12 +589,12 @@ public class ReadXML2 {
 							}
 						);
 				}
-				else if( name.equals("ref") ) {
+				else if( name.equals(Symbol.REFERENCE) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									AbstractAssigment<?> x = createAssignment("ref", super.node, c);
+									AbstractAssigment<?> x = createAssignment(Symbol.REFERENCE, super.node, c);
 									if(x != null){
 										Program.steps.add(x);										
 									}
@@ -513,15 +602,27 @@ public class ReadXML2 {
 							}
 						);					
 				}
-				
-				else if( name.equals("and") || name.equals("or") || name.equals("not") || name.equals("xor") ) {
+				else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.NOT) || name.equals(Symbol.XOR) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									Accessible<Boolean> x = createExpression( super.node );
+									Accessible<Boolean> x = createBoolExpression( super.node );
 									if(x != null){
 										Program.boolExpress.add(x);										
+									}
+								}
+							}
+						);					
+				}				
+				else if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
+					functionBuilders.add( 
+							new FunctionBuilder(c){
+								@Override
+								public void build(Complex c) {
+									Accessible<Number> x = createNumExpression( super.node, Primitive.getInstance(Int.class) );
+									if(x != null){
+										Program.mathExpress.add(x);										
 									}
 								}
 							}
@@ -531,7 +632,6 @@ public class ReadXML2 {
 				else{
 					createAttributesValues( c, identifiers, values, complexTyps );
 				}
-				
 				
 			}				
 		}		
@@ -569,7 +669,7 @@ public class ReadXML2 {
 		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
 		
 		NamedNodeMap attributes = n.getAttributes();
-		Node dataTypNode = attributes.getNamedItem( "typ" );
+		Node dataTypNode = attributes.getNamedItem( Symbol.TYP );
 		
 		//String valueNode = null;		
 		if(dataTypNode != null){			

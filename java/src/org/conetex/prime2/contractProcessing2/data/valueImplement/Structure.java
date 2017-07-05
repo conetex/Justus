@@ -1,10 +1,10 @@
-package org.conetex.prime2.contractProcessing2.data.values;
+package org.conetex.prime2.contractProcessing2.data.valueImplement;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 public class Structure implements Value<Value<?>[]>{
 		
@@ -149,6 +149,11 @@ public class Structure implements Value<Value<?>[]>{
 				this.values = svalues;
 			}
 			
+		}
+
+		@Override
+		public Class<Value<?>[]> getBaseType() {
+			return null;
 		}
 		
 	}

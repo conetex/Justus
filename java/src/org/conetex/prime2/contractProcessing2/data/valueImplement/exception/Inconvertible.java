@@ -1,4 +1,4 @@
-package org.conetex.prime2.contractProcessing2.data.values.exception;
+package org.conetex.prime2.contractProcessing2.data.valueImplement.exception;
 
 public class Inconvertible extends Exception {
 

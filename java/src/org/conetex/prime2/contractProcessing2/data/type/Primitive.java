@@ -2,13 +2,13 @@ package org.conetex.prime2.contractProcessing2.data.type;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
-import org.conetex.prime2.contractProcessing2.data.values.Base64_256;
-import org.conetex.prime2.contractProcessing2.data.values.Bool;
-import org.conetex.prime2.contractProcessing2.data.values.Int;
-import org.conetex.prime2.contractProcessing2.data.values.ASCII8;
-import org.conetex.prime2.contractProcessing2.data.values.Lng;
-import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.ASCII8;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Base64_256;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Bool;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Int;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Lng;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.MailAddress64;
 
 public class Primitive<T> extends AbstractType<T> {
 

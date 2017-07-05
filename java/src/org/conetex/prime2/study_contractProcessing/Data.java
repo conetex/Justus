@@ -10,13 +10,13 @@ import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
-import org.conetex.prime2.contractProcessing2.data.values.Base64_256;
-import org.conetex.prime2.contractProcessing2.data.values.Int;
-import org.conetex.prime2.contractProcessing2.data.values.MailAddress;
-import org.conetex.prime2.contractProcessing2.data.values.MailAddress64;
-import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Base64_256;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Int;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.MailAddress;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.MailAddress64;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 // TODO: Names 4 ComplexDataTyp. This is 4 strong typing
 // TODO: parsing Schemas / dtd to define the types

@@ -1,6 +1,6 @@
-package org.conetex.prime2.contractProcessing2.data.values;
+package org.conetex.prime2.contractProcessing2.data.valueImplement;
 
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 public abstract class Base64 extends SizedASCII{
 	@Override	

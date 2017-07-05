@@ -1,10 +1,10 @@
-package org.conetex.prime2.contractProcessing2.data.values;
+package org.conetex.prime2.contractProcessing2.data.valueImplement;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 	public abstract class SizedASCII implements Value<String>{
 		
@@ -93,6 +93,11 @@ import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
 		@Override
 		public String copy() {
 			return this.get();
+		}
+		
+		@Override
+		public Class<String> getBaseType() {
+			return String.class;
 		}
 		
 		public abstract int getMaxSize();

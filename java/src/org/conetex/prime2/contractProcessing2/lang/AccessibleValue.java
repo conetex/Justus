@@ -2,9 +2,9 @@ package org.conetex.prime2.contractProcessing2.lang;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 public class AccessibleValue<T> implements Accessible<T> {
 

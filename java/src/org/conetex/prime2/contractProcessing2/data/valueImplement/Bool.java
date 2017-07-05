@@ -1,7 +1,7 @@
-package org.conetex.prime2.contractProcessing2.data.values;
+package org.conetex.prime2.contractProcessing2.data.valueImplement;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 
 public class Bool implements Value<Boolean>{
 	
@@ -47,6 +47,11 @@ public class Bool implements Value<Boolean>{
 	@Override
 	public Boolean copy() {
 		return this.get();
+	}
+
+	@Override
+	public Class<Boolean> getBaseType() {
+		return Boolean.class;
 	}		
 
 }

@@ -2,18 +2,18 @@ package org.conetex.prime2.contractProcessing2.lang.math;
 
 import java.math.BigInteger;
 
-import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
 public class ElementaryArithmetic<I extends Number, O extends Number> extends ComputablePair<I> implements Accessible<O>{
 	
-	private static final int PLUS = 0;         // Addition
-	private static final int MINUS = 1;        // Subtraction 
-	private static final int TIMES = 2;        // Multiplication 
-	private static final int DIVIDED_BY = 3;   // Division 
-	private static final int REMAINS = 4;      // Remainder 
+	public static final int PLUS = 0;         // Addition
+	public static final int MINUS = 1;        // Subtraction 
+	public static final int TIMES = 2;        // Multiplication 
+	public static final int DIVIDED_BY = 3;   // Division 
+	public static final int REMAINS = 4;      // Remainder 
 	
 	public static <AI extends Number, AO extends Number> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
 		if(theA == null || theB == null){

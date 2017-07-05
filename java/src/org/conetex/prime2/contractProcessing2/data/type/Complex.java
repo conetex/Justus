@@ -8,10 +8,10 @@ import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
-import org.conetex.prime2.contractProcessing2.data.values.Structure;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 	public class Complex extends AbstractType<Value<?>[]> { // implements ValueFactory<Value<?>[]>
 		

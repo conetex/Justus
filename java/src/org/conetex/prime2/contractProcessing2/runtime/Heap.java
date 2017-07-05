@@ -1,6 +1,6 @@
 package org.conetex.prime2.contractProcessing2.runtime;
 
-import org.conetex.prime2.contractProcessing2.data.values.Structure;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 
 public class Heap {

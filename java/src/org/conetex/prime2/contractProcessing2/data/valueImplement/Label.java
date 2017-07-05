@@ -1,4 +1,4 @@
-package org.conetex.prime2.contractProcessing2.data.values;
+package org.conetex.prime2.contractProcessing2.data.valueImplement;
 
 public class Label extends SizedASCII {
 

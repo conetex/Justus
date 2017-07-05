@@ -1,7 +1,7 @@
-package org.conetex.prime2.contractProcessing2.data.values;
+package org.conetex.prime2.contractProcessing2.data.valueImplement;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.exception.Inconvertible;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 
 public class Int implements Value<Integer>{
 
@@ -30,6 +30,11 @@ public class Int implements Value<Integer>{
 	@Override
 	public Integer copy() {
 		return this.get();
+	}
+
+	@Override
+	public Class<Integer> getBaseType() {
+		return Integer.class;
 	}	
 	
 }

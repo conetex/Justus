@@ -3,8 +3,8 @@ package org.conetex.prime2.contractProcessing2.data.type;
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
 
 public abstract class AbstractType<T> {
 

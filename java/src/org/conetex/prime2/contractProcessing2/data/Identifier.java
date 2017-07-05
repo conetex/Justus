@@ -1,7 +1,7 @@
 package org.conetex.prime2.contractProcessing2.data;
 
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
-import org.conetex.prime2.contractProcessing2.data.values.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 
 public class Identifier<T> {
 
