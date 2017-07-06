@@ -8,6 +8,13 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 
 public class AccessibleValue<T> implements Accessible<T> {
 
+	public static <T> AccessibleValue<T> create2(String thePath, Class<? extends Value<T>> theClass, Class<T> clazz) {
+		if (thePath == null) {
+			return null;
+		}
+		return new AccessibleValue<T>(thePath, theClass);
+	}
+	
 	public static <T> AccessibleValue<T> create(String thePath, Class<? extends Value<T>> theClass) {
 		if (thePath == null) {
 			return null;
@@ -55,5 +62,7 @@ public class AccessibleValue<T> implements Accessible<T> {
 		}
 		return pri.getBaseType();
 	}
+
+
 
 }

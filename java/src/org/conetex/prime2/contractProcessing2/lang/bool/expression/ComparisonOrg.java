@@ -6,7 +6,7 @@ import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class Comparison<T extends Comparable<T>> extends ComputablePair<T> implements Accessible<Boolean>{
+public class ComparisonOrg<T extends Number & Comparable<T>> extends ComputablePair<T> implements Accessible<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
@@ -26,19 +26,19 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 	}
 	*/
 	
-	public static <V extends Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
+	public static <V extends Number & Comparable<V>> ComparisonOrg<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
-		if(operation < Comparison.SMALLER || operation > Comparison.GREATER){
+		if(operation < ComparisonOrg.SMALLER || operation > ComparisonOrg.GREATER){
 			return null;
 		}		
-		return new Comparison<V>(theA, theB, operation);
+		return new ComparisonOrg<V>(theA, theB, operation);
 	}
 			
 	private int operator;
 	
-	private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
+	private ComparisonOrg(Accessible<T> theA, Accessible<T> theB, int theOperation){
 		super(theA, theB);
 		this.operator = theOperation;
 	}
@@ -48,7 +48,7 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 		T a = super.getA().getFrom(thisObject);
 		T b = super.getB().getFrom(thisObject);
 		if( a == null ){
-			if( b == null && this.operator == Comparison.EQUAL ){
+			if( b == null && this.operator == ComparisonOrg.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -57,25 +57,16 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 			return null;
 		}	
 		
-		if( this.operator == Comparison.GREATER ){
-			if(a.compareTo(b) > 0){
-				return Boolean.TRUE; 
-			}
-			return Boolean.FALSE;
+		if( this.operator == ComparisonOrg.GREATER && a.compareTo(b) > 0  ){
+			return Boolean.TRUE; 
 		}
-		if( this.operator == Comparison.SMALLER ){
-			if(a.compareTo(b) < 0){
-				return Boolean.TRUE; 
-			}
-			return Boolean.FALSE;
+		if( this.operator == ComparisonOrg.SMALLER && a.compareTo(b) < 0  ){
+			return Boolean.TRUE; 
 		}
-        if( this.operator == Comparison.EQUAL ){
-			if(a.compareTo(b) == 0){
-				return Boolean.TRUE; 
-			}
-			return Boolean.FALSE;
+        if( this.operator == ComparisonOrg.EQUAL   && a.compareTo(b) == 0 ){
+        	return Boolean.TRUE; 
 		}		
-		return null;
+		return Boolean.FALSE;
 		
 	}
 

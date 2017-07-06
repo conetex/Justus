@@ -31,11 +31,13 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
@@ -173,6 +175,37 @@ public class ReadXML2 {
   
   // Comparsion / IsNull 
 	             
+	             + "    <smaller>" 
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "      <const>9</const>"	    // false         
+	             + "    </smaller>"   
+	             + "    <greater>" 
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "      <const>9</const>"	    // true         
+	             + "    </greater>" 
+	             + "    <smaller>" 
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "      <const>13</const>"	    // true         
+	             + "    </smaller>"   
+	             + "    <greater>" 
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "      <const>13</const>"	    // false         
+	             + "    </greater>"
+	             
+	             
+	             
 /*// BOOL STUFF	             
 	             + "  <bTrue typ='Bool'>true</bTrue>"	             
 	             + "  <and>" // true
@@ -248,7 +281,7 @@ public class ReadXML2 {
 			Boolean re = a.getFrom(root);
 			System.out.println(re);
 		}		
-		for(Accessible<Number> a : Program.mathExpress){
+		for(Accessible<? extends Number> a : Program.mathExpress){
 			Number re = a.getFrom(root);
 			System.out.println(re);
 		}		
@@ -418,6 +451,8 @@ public class ReadXML2 {
 		return AccessibleValue.<T>create(path, theClass);
 	}	
 	
+
+	
 	public static Accessible<Boolean> createBoolExpression(Node n){
 		if(n == null){
 			return null;
@@ -451,6 +486,55 @@ public class ReadXML2 {
 				return Not.create(sub);
 			}
 		}
+		else if( name.equals(Symbol.SMALLER) ) {			
+			// TODO
+			Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
+			//Accessible<? extends Comparable<?>> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
+			//Accessible<? extends Comparable<?>> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
+			Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
+			Accessible<Integer> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
+
+			if(a != null && b != null){
+				//Accessible<Boolean>
+				//<V extends Number & Comparable<V>> 
+				Comparison<Integer> re = Comparison.create(a, b, Comparison.SMALLER);
+				return re;
+			}
+		}	
+		else if( name.equals(Symbol.GREATER) ) {			
+			
+			Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
+			//Accessible<? extends Comparable<?>> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
+			//Accessible<? extends Comparable<?>> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
+			Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
+			Accessible<Integer> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
+
+			if(a != null && b != null){
+				//Accessible<Boolean>
+				//<V extends Number & Comparable<V>> 
+				Comparison<Integer> re = Comparison.create(a, b, Comparison.GREATER);
+				return re;
+			}
+		}
+		else if( name.equals(Symbol.EQUAL) ) {			
+			
+			Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
+			//Accessible<? extends Comparable<?>> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
+			//Accessible<? extends Comparable<?>> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
+			Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
+			Accessible<Integer> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
+
+			if(a != null && b != null){
+				//Accessible<Boolean>
+				//<V extends Number & Comparable<V>> 
+				Comparison<Integer> re = Comparison.create(a, b, Comparison.EQUAL);
+				return re;
+			}
+		}		
+		else if( name.equals(Symbol.ISNULL) ) {			
+			// TODO
+
+		}		
 		else{
 			return createReference2Value( n, Bool.class );
 		}
@@ -477,7 +561,60 @@ public class ReadXML2 {
 		return null;
 	}
 	
-	public static <V extends Number, Z extends Number> Accessible<Z> createNumExpression(Node n, Primitive<Z> theClass){
+	
+	
+	public static Accessible<?> createAccessible(Node child, Complex parentTyp){
+		
+		//  AccessibleValue
+		Identifier<?> idChild = parentTyp.getSubIdentifier( getNodeValue(child) );
+		if( idChild != null){
+			AbstractType<?> t = idChild.getType();
+			Class<? extends Value<?>> clazzChild = t.getClazz();
+			Primitive<?> pri = Primitive.getInstance( clazzChild );
+			Class<?> baseType = pri.getBaseType();
+			String path = getNodeValue(child);
+			AccessibleValueNew<?> re = AccessibleValueNew.create(path, baseType);			
+			return re;
+		}		
+
+		return null;
+	}
+
+	public static Accessible<?> createAccessible(Node n){
+		Primitive<Integer> c = Primitive.<Integer>getInstance(Int.class);
+		Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), c );
+		
+		Accessible<?> childAccess = createAccessible(getChildElementByIndex(n, 0), null);
+		Class<?> childBaseType = childAccess.getBaseType();
+		if( childBaseType == Integer.class ){
+			
+		}
+		
+		return null;
+		/*
+		Primitive<? extends Comparable<Z>> c2 = Primitive.<Comparable<Z>>getInstance(Int.class);
+		Accessible<? extends Comparable<Integer>> a2 = createComparableExpression( getChildElementByIndex(n, 0), Integer.class );
+		
+		Primitive<? extends Comparable<?>> c3 = Primitive.<Comparable<?>>getInstance(Int.class);
+		Accessible<? extends Comparable<?>> a3 = createComparableExpression( getChildElementByIndex(n, 0), Integer.class );
+		*/
+		/*
+		String name = n.getNodeName();
+		if( name.equals(Symbol.PLUS) ) {			
+			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			if(a != null && b != null){
+				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.PLUS, theClass.getBaseType() );
+			}
+		}
+		*/
+
+		
+		
+	}
+
+		
+	public static <V extends Number, Z extends Number & Comparable<Z>> Accessible<Z> createNumExpression(Node n, Primitive<Z> theClass){
 		if(n == null){
 			return null;
 		}
@@ -602,7 +739,8 @@ public class ReadXML2 {
 							}
 						);					
 				}
-				else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.NOT) || name.equals(Symbol.XOR) ) {
+				else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.NOT) || name.equals(Symbol.XOR) || 
+						 name.equals(Symbol.SMALLER) || name.equals(Symbol.EQUAL) || name.equals(Symbol.GREATER) || name.equals(Symbol.ISNULL) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
@@ -620,14 +758,15 @@ public class ReadXML2 {
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									Accessible<Number> x = createNumExpression( super.node, Primitive.getInstance(Int.class) );
+									Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
+									Accessible<? extends Number> x = createNumExpression( super.node, theClass );
 									if(x != null){
 										Program.mathExpress.add(x);										
 									}
 								}
 							}
 						);					
-				}
+				}				
 				
 				else{
 					createAttributesValues( c, identifiers, values, complexTyps );

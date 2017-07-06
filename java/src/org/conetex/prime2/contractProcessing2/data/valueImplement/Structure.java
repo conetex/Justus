@@ -99,7 +99,60 @@ public class Structure implements Value<Value<?>[]>{
 				return (V) v;
 			}
 			return null;
+		}
+		
+		
+		private <R> Value<R> getValueNew (int i, Class<R> c){
+			Value<?> v = getValue(i);
+			if( v != null ){
+				// TODO check this cast
+				return (Value<R>) v;
+			}
+			return null;
 		}		
+		
+		public <R> Value<R> getValueNew(String aName, Class<R> clazz) {
+		//public <V extends Value<?>> V getValue (String aName, Class<V> c){
+				// TODO do xpath syntax. access parent objects ???
+				int idIndex = this.type.getSubIdentifierIndex(aName);
+				if( idIndex > -1 ){
+					return getValueNew( idIndex, clazz );
+				}
+				else{
+					/*
+				    int i = aName.indexOf(Label.NAME_SEPERATOR);
+					if(i > -1 && i < aName.length()){
+						String nameOfSubStructure = aName.substring(0, i);
+				    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+				    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+				    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
+				    		if(subStructure != null){
+				    			Structure s = subStructure.get();
+				    			if(s != null){
+				    				aName = aName.substring(i+Label.NAME_SEPERATOR.length());
+				    				return s.getValue(aName, c);
+				    			}
+				    		}
+				    	}
+				    }
+				    */
+					String[] names = Structure.split(aName);
+				    if(names[0] != null){
+						if(names[1] != null){
+							idIndex = this.type.getSubIdentifierIndex( names[0] );
+				    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
+				    		// sollte das vernünftig gemeldet werden!!!
+				    		Structure subStructure = getValue(idIndex, Structure.class);
+				    		if(subStructure != null){
+				    			return subStructure.getValueNew(names[1], clazz);
+				    		}
+						}
+				    }				
+					
+				}
+				return null;
+			}		
+		
 		
 		private Value<?> getValue (int i){
 			if(i > -1 && i < this.values.length){
@@ -155,5 +208,7 @@ public class Structure implements Value<Value<?>[]>{
 		public Class<Value<?>[]> getBaseType() {
 			return null;
 		}
+
+
 		
 	}
