@@ -5,9 +5,10 @@ import java.math.BigInteger;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
+import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class ElementaryArithmetic<I extends Number, O extends Number> extends ComputablePair<I> implements Accessible<O>{
+public class ElementaryArithmetic<I extends Number, O> extends ComputablePair<I> implements Accessible<O>{
 	
 	public static final int PLUS = 0;         // Addition
 	public static final int MINUS = 1;        // Subtraction 
@@ -15,7 +16,29 @@ public class ElementaryArithmetic<I extends Number, O extends Number> extends Co
 	public static final int DIVIDED_BY = 3;   // Division 
 	public static final int REMAINS = 4;      // Remainder 
 	
-	public static <AI extends Number, AO extends Number> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
+	public static <AI extends Number, AO> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, String operation, Class<AO> resultTyp ){
+		if(theA == null || theB == null){
+			return null;
+		}
+		if( operation.equals(Symbol.PLUS) ) {
+			return create(theA, theB, ElementaryArithmetic.PLUS, resultTyp );
+		}
+		if( operation.equals(Symbol.MINUS) ) {
+			return create(theA, theB, ElementaryArithmetic.MINUS, resultTyp );
+		}
+		if( operation.equals(Symbol.TIMES) ) {
+			return create(theA, theB, ElementaryArithmetic.TIMES, resultTyp );
+		}
+		if( operation.equals(Symbol.DIVIDED_BY) ) {
+			return create(theA, theB, ElementaryArithmetic.DIVIDED_BY, resultTyp );
+		}
+		if( operation.equals(Symbol.REMAINS) ) {
+			return create(theA, theB, ElementaryArithmetic.REMAINS, resultTyp );
+		}		
+		return null;
+	}
+	
+	public static <AI extends Number, AO> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
 		if(theA == null || theB == null){
 			return null;
 		}
@@ -133,8 +156,7 @@ public class ElementaryArithmetic<I extends Number, O extends Number> extends Co
 		return null;		
 	}
 
-	@Override
-	public void setTo(Structure thisObject, Number value) throws Invalid {
+	public void setTo_(Structure thisObject, Number value) throws Invalid {
 		// TODO Auto-generated method stub
 		
 	}	
@@ -153,6 +175,12 @@ public class ElementaryArithmetic<I extends Number, O extends Number> extends Co
 	@Override
 	public Class<O> getBaseType() {
 		return this.resultTyp;
+	}
+
+	@Override
+	public void setTo(Structure thisObject, O value) throws Invalid {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
