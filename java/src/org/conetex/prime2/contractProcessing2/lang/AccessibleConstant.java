@@ -27,6 +27,7 @@ public class AccessibleConstant<T> implements Accessible<T> {
 		return this.value.get();
 	}
 
+	/*
 	@Override
 	public void setTo(Structure thisObject, T newValue) throws Invalid {
 		this.value.set(newValue);
@@ -35,6 +36,7 @@ public class AccessibleConstant<T> implements Accessible<T> {
 	public void transSet(Structure thisObject, String newValue) throws Inconvertible, Invalid {
 		this.value.setConverted(newValue);
 	}
+	*/
 
 	@Override
 	public T copyFrom(Structure thisObject) throws Invalid {

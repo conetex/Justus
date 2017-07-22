@@ -177,10 +177,4 @@ public class ElementaryArithmetic<I extends Number, O> extends ComputablePair<I>
 		return this.resultTyp;
 	}
 
-	@Override
-	public void setTo(Structure thisObject, O value) throws Invalid {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -8,11 +8,18 @@ public abstract class ComputablePair<T> implements Computable{
 	
 	private Accessible<T> b;
 
+	//protected ComputablePair(Accessible<T> theA, Accessible<T> theB){
 	protected ComputablePair(Accessible<T> theA, Accessible<T> theB){
 		this.a = theA;
 		this.b = theB;
 	}
 	
+	/*
+	public ComputablePair(Accessible<Comparable> theA, Accessible<Comparable> theB) {
+		this.a = theA;
+		this.b = theB;
+	}
+	*/
 	protected Accessible<T> getA(){
 		return this.a;
 	}

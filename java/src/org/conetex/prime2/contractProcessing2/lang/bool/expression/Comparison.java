@@ -3,6 +3,7 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
+import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
@@ -26,6 +27,22 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 	}
 	*/
 	
+	public static <V extends Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, String operation){
+		if(theA == null || theB == null){
+			return null;
+		}
+		if( operation.equals(Symbol.SMALLER) ) {
+			return create(theA, theB, Comparison.SMALLER );
+		}
+		if( operation.equals(Symbol.EQUAL) ) {
+			return create(theA, theB, Comparison.EQUAL );
+		}
+		if( operation.equals(Symbol.GREATER) ) {
+			return create(theA, theB, Comparison.GREATER );
+		}
+		return null;
+	}
+	
 	public static <V extends Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
@@ -34,14 +51,49 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 			return null;
 		}		
 		return new Comparison<V>(theA, theB, operation);
+	}	
+
+	public static <V extends Comparable<V>> Comparison<V> createXX(Accessible<V> a, Accessible<V> b, String operation){
+		if(a == null || b == null){
+			return null;
+		}
+		if( operation.equals(Symbol.SMALLER) ) {
+			return createXX(a, b, Comparison.SMALLER );
+		}
+		if( operation.equals(Symbol.EQUAL) ) {
+			return createXX(a, b, Comparison.EQUAL );
+		}
+		if( operation.equals(Symbol.GREATER) ) {
+			return createXX(a, b, Comparison.GREATER );
+		}
+		return null;
+	}
+
+	public static <V extends Comparable<V>> Comparison<V> createXX(Accessible<V> a, Accessible<V> b, int operation){
+		if(a == null || b == null){
+			return null;
+		}
+		if(operation < Comparison.SMALLER || operation > Comparison.GREATER){
+			return null;
+		}		
+		return new Comparison<V>(a, b, operation);
 	}
 			
 	private int operator;
 	
-	private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
+	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
+	private Comparison(Accessible<T> a, Accessible<T> b, int theOperation){
+		super(a, b);
+		this.operator = theOperation;
+	}
+
+	//public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>> theB, int theOperation) {
+	/*
+	public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>> theB, int theOperation) {
 		super(theA, theB);
 		this.operator = theOperation;
 	}
+	*/
 
 	@Override
 	public Boolean getFrom(Structure thisObject) {
@@ -80,12 +132,6 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 	}
 
 	@Override
-	public void setTo(Structure thisObject, Boolean value) throws Invalid {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Boolean copyFrom(Structure thisObject) {
 		return this.getFrom(thisObject);
 	}
@@ -100,5 +146,7 @@ public class Comparison<T extends Comparable<T>> extends ComputablePair<T> imple
 	public Class<Boolean> getBaseType() {
 		return Boolean.class;
 	}
+
+
 	
 }

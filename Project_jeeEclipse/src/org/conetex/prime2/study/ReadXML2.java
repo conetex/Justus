@@ -30,7 +30,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inco
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
-import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
@@ -431,8 +431,8 @@ public class ReadXML2 {
 	}
 	
 	private static <T> AbstractAssigment<T> createAssignment(String name, Node c0, Node c1, Class<? extends Value<T>> cClass){
-		AccessibleValue<T> trg = createReference2Value( c0, cClass );
-		AccessibleValue<T> src = createReference2Value( c1, cClass );
+		SetableValue<T> trg = createReference2Value( c0, cClass );
+		SetableValue<T> src = createReference2Value( c1, cClass );
 		if(src != null && trg != null){
 			if(name.equals(Symbol.COPY)){
 				return Copy.<T>create(src, trg);					
@@ -444,11 +444,11 @@ public class ReadXML2 {
 		return null;
 	}
 	
-	public static <T> AccessibleValue<T> createReference2Value(Node n, Class<? extends Value<T>> theClass){
+	public static <T> SetableValue<T> createReference2Value(Node n, Class<? extends Value<T>> theClass){
 		// TODO: whats this object ? now its null ...
 		String path = getNodeValue(n);
 
-		return AccessibleValue.<T>create(path, theClass);
+		return SetableValue.<T>create(path, theClass);
 	}	
 	
 
@@ -669,7 +669,7 @@ public class ReadXML2 {
 			return re;
 		}		
 		else{
-			AccessibleValue<Z> re = createReference2Value(n, theClass.getClazz() );
+			SetableValue<Z> re = createReference2Value(n, theClass.getClazz() );
 			return re;
 		}
 	

@@ -1,7 +1,7 @@
 package org.conetex.prime2.contractProcessing2.runtime;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
-import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 
 public class Heap {
 	
@@ -18,7 +18,7 @@ public class Heap {
 		this.root = theRoot;
 	}
 	
-	public AccessibleValue createRef(String referenceString){
+	public SetableValue createRef(String referenceString){
 		return null;
 	}
 	

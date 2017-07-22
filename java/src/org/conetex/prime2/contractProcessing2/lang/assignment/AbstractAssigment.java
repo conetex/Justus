@@ -3,12 +3,20 @@ package org.conetex.prime2.contractProcessing2.lang.assignment;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
-import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.Setable;
+import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.SetableValue;
+import org.conetex.prime2.contractProcessing2.lang.Computable;
 
-public abstract class AbstractAssigment<T> extends ComputablePair<T>{
-		
-	protected AbstractAssigment(AccessibleValue<T> trg, AccessibleValue<T> src){
-		super(trg, src);
+public abstract class AbstractAssigment<T> implements Computable{// extends ComputablePair<T>{
+
+	private Setable<T> target;
+
+	private Accessible<T> source;
+	
+	protected AbstractAssigment(Setable<T> trg, Accessible<T> src){
+		this.source = src;
+		this.target = trg;
 	}
 
 	public abstract boolean doCopy();
@@ -18,13 +26,14 @@ public abstract class AbstractAssigment<T> extends ComputablePair<T>{
 		try {
 			
 			if(this.doCopy()){
-				value = super.getB().copyFrom(thisObject);			
+				value = this.source.copyFrom(thisObject);			
 			}
 			else{
-				value = super.getB().getFrom(thisObject);
+				value = this.source.getFrom(thisObject);
 			}
 
-			super.getB().setTo( thisObject, value );
+			this.target.setTo( thisObject, value );
+			
 		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

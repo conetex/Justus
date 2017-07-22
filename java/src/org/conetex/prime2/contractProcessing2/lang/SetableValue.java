@@ -6,27 +6,27 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class AccessibleValue<T> implements Accessible<T> {
+public class SetableValue<T> implements Setable<T> {
 
-	public static <T> AccessibleValue<T> create2(String thePath, Class<? extends Value<T>> theClass, Class<T> clazz) {
+	public static <T> SetableValue<T> create2(String thePath, Class<? extends Value<T>> theClass, Class<T> clazz) {
 		if (thePath == null) {
 			return null;
 		}
-		return new AccessibleValue<T>(thePath, theClass);
+		return new SetableValue<T>(thePath, theClass);
 	}
 	
-	public static <T> AccessibleValue<T> create(String thePath, Class<? extends Value<T>> theClass) {
+	public static <T> SetableValue<T> create(String thePath, Class<? extends Value<T>> theClass) {
 		if (thePath == null) {
 			return null;
 		}
-		return new AccessibleValue<T>(thePath, theClass);
+		return new SetableValue<T>(thePath, theClass);
 	}
 
 	private String path;
 
 	private final Class<? extends Value<T>> valueClazz;
 
-	private AccessibleValue(String thePath, Class<? extends Value<T>> theClass) {
+	private SetableValue(String thePath, Class<? extends Value<T>> theClass) {
 		this.path = thePath;
 		this.valueClazz = theClass;
 	}

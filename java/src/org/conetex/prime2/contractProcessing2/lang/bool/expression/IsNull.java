@@ -30,12 +30,6 @@ public class IsNull implements Accessible<Boolean>, Computable{
 	}
 
 	@Override
-	public void setTo(Structure thisObject, Boolean value) throws Invalid {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public Boolean copyFrom(Structure thisObject) {
 		return this.getFrom(thisObject);
 	}

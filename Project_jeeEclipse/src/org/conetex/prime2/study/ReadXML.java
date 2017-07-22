@@ -31,7 +31,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inco
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
-import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
 import org.conetex.prime2.contractProcessing2.lang.Computable;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
@@ -383,186 +383,90 @@ public class ReadXML {
 		if(n == null){
 			return null;
 		}		
-		//String aName = n.getNodeName();
-		//if( name.equals("copy") || name.equals("ref") ) {			
+		// TODO dies hier nach createAccessible einbaun, Assigment muss Accessible implementieren ...
+		if( name.equals("copy") || name.equals("ref") ) {			
 			Node c0 = getChildElementByIndex(n, 0);
-			Class<? extends Value<T>> c0Class = null;
+			System.out.println(getNodeValue(c0));
+			Identifier<T> id0 = c.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
+
+			Node c1 = getChildElementByIndex(n, 1);
+			System.out.println(getNodeValue(c1));
+			Identifier<T> id1 = c.<T>getSubIdentifier( getNodeValue(c1) );
 			
 			String c0DataType = getAttribute(c0, Symbol.TYP);
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
 				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
-				Class<?> c0ClassX = Primitive.getClass(c0DataType);
-				
+				Class<?> c0ClassX = Primitive.getClass(c0DataType);				
 			}
-			System.out.println(getNodeValue(c0));
-			Identifier<T> id0 = c.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
+		
+			// TODO: der teil hier könnte ausgelagert werden nach AbstractAssigment
+			
+			Class<? extends Value<T>> c0Class = null;
 			if( id0 != null){
 				AbstractType<T> t = id0.getType();
 				c0Class = t.getClazz();				
-			}
-				
-	
-			Node c1 = getChildElementByIndex(n, 1);
+			}			
 			Class<? extends Value<T>> c1Class = null;
-			
-			String c1DataType = getAttribute(c1, Symbol.TYP);
-			if( c1DataType != null ){
-				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
-				//Class<Value<Object>> c1ClassX = Primitive.getClass(c1DataType);
-				Class<?> c1ClassX = Primitive.getClass(c1DataType);
-			}
-			System.out.println(getNodeValue(c1));
-			Identifier<T> id1 = c.<T>getSubIdentifier( getNodeValue(c1) );
 			if( id1 != null){
 				AbstractType<T> t = id1.getType();
 				c1Class = t.getClazz();				
 			}			
 			
-			
+			// TODO hier reicht eigentlich gleicher base-typ !!!
 			if(c0Class != null && c1Class != null && c0Class == c1Class){
-				return createAssignment(name, c0, c1, c1Class);
+				String path0 = getNodeValue(c0);
+				SetableValue<T> trg = SetableValue.<T>create(path0, c0Class);
+				
+				Primitive<T> pri1 = Primitive.getInstance( c1Class );
+				Class<T> baseType1 = pri1.getBaseType();	
+				Accessible<T> src = createAccessible(c1, c, baseType1);
+				if(src != null && trg != null){
+					if(name.equals(Symbol.COPY)){
+						return Copy.<T>create(trg, src);					
+					}
+					if(name.equals(Symbol.REFERENCE)){
+						return Reference.<T>create(trg, src);					
+					}				
+				}
+				return null;
 			}
 			else{
 				// TODO: classes do not match
 				return null;
 			}
-		//}
-		//return null;
+		}
+		
+		
+		return null;
 	}
 	
-	private static <T> AbstractAssigment<T> createAssignment(String name, Node c0, Node c1, Class<? extends Value<T>> cClass){
-		AccessibleValue<T> trg = createReference2Value( c0, cClass );
-		AccessibleValue<T> src = createReference2Value( c1, cClass );
+	private static <T> AbstractAssigment<T> _createAssignment(String name, Node c0, Node c1, Complex c, Class<? extends Value<T>> c1Class){
+		String path0 = getNodeValue(c0);
+		SetableValue<T> trg = //createReference2Value( c0, c1Class );
+				SetableValue.<T>create(path0, c1Class);
+		//String path1 = getNodeValue(c1);
+		//AccessibleValue<T> src = SetableValue.<T>create(path1, c1Class);
+		Primitive<T> pri = Primitive.getInstance( c1Class );
+		Class<T> baseType = pri.getBaseType();	
+		Accessible<T> src = createAccessible(c1, c, baseType);
 		if(src != null && trg != null){
 			if(name.equals(Symbol.COPY)){
-				return Copy.<T>create(src, trg);					
+				return Copy.<T>create(trg, src);					
 			}
 			if(name.equals(Symbol.REFERENCE)){
-				return Reference.<T>create(src, trg);					
+				return Reference.<T>create(trg, src);					
 			}				
 		}
 		return null;
 	}
-	
-	public static <T> AccessibleValue<T> createReference2Value(Node n, Class<? extends Value<T>> theClass){
-		// TODO: whats this object ? now its null ...
-		String path = getNodeValue(n);
-
-		return AccessibleValue.<T>create(path, theClass);
-	}	
-	
-
-	
-	public static Accessible<Boolean> createBoolExpression(Node n){
-		if(n == null){
-			return null;
-		}
-	
-		String name = n.getNodeName();
-		if( name.equals(Symbol.AND) ) {			
-			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
-			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
-			if(a != null && b != null){
-				return Binary.createAdd(a, b);
-			}
-		}
-		else if( name.equals(Symbol.OR) ) {			
-			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
-			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
-			if(a != null && b != null){
-				return Binary.createOr(a, b);
-			}
-		}
-		else if( name.equals(Symbol.XOR) ) {			
-			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
-			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
-			if(a != null && b != null){
-				return Binary.createXOr(a, b);
-			}
-		}		
-		else if( name.equals(Symbol.NOT) ) {			
-			Accessible<Boolean> sub = createBoolExpression( getChildElementByIndex(n, 0) );
-			if(sub != null){
-				return Not.create(sub);
-			}
-		}
-		else if( name.equals(Symbol.SMALLER) ) {			
-			// TODO
-			Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
-			//Accessible<? extends Comparable<?>> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
-			//Accessible<? extends Comparable<?>> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
-			Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
-			Accessible<Integer> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
-
-			if(a != null && b != null){
-				//Accessible<Boolean>
-				//<V extends Number & Comparable<V>> 
-				Comparison<Integer> re = Comparison.create(a, b, Comparison.SMALLER);
-				return re;
-			}
-		}	
-		else if( name.equals(Symbol.GREATER) ) {			
-			
-			Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
-			//Accessible<? extends Comparable<?>> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
-			//Accessible<? extends Comparable<?>> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
-			Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
-			Accessible<Integer> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
-
-			if(a != null && b != null){
-				//Accessible<Boolean>
-				//<V extends Number & Comparable<V>> 
-				Comparison<Integer> re = Comparison.create(a, b, Comparison.GREATER);
-				return re;
-			}
-		}
-		else if( name.equals(Symbol.EQUAL) ) {			
-			
-			Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
-			//Accessible<? extends Comparable<?>> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
-			//Accessible<? extends Comparable<?>> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
-			Accessible<Integer> a = createNumExpression( getChildElementByIndex(n, 0), theClass );			
-			Accessible<Integer> b = createNumExpression( getChildElementByIndex(n, 1), theClass );			
-
-			if(a != null && b != null){
-				//Accessible<Boolean>
-				//<V extends Number & Comparable<V>> 
-				Comparison<Integer> re = Comparison.create(a, b, Comparison.EQUAL);
-				return re;
-			}
-		}		
-		else if( name.equals(Symbol.ISNULL) ) {			
-			// TODO
-
-		}		
-		else{
-			return createReference2Value( n, Bool.class );
-		}
 		
-		/*
-		else if( isAttribute(n, "typ", "Bool") ) {
-			Identifier<Boolean> id = ReadXML2.<Boolean>createSimpleAttribute(name, "Bool");
-			_Variable<Boolean> var = _Variable.<Boolean>create(id);
-			if(var != null){
-				Boolean v = Bool.getTrans( n.getNodeValue() );
-				if( v != null ){
-					try {
-						var.set(v);
-					} catch (Invalid e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-			}
-		}
-		*/
-		
-		return null;
-	}
 	
-	public static <I extends Number, RE> Accessible<RE> createAccessibleNum(Node n, Complex parentTyp, Class<I> inBaseTyp, Class<RE> expectedBaseTyp){
+
+	
+	
+	public static <I extends Number, RE> Accessible<RE> _createAccessibleNum(Node n, Complex parentTyp, Class<I> inBaseTyp, Class<RE> expectedBaseTyp){
+		// TODO drop this ...
 		if(expectedBaseTyp == BigInteger.class){
 			Accessible<I> a = createAccessible( getChildElementByIndex(n, 0), parentTyp, inBaseTyp );
 			Accessible<I> b = createAccessible( getChildElementByIndex(n, 1), parentTyp, inBaseTyp );
@@ -572,7 +476,7 @@ public class ReadXML {
 		}	
 		return null;
 	}
-	
+
 	public static <RE> Accessible<RE> createAccessible(Node n, Complex parentTyp, Class<RE> expectedBaseTyp){
 		
 		String name = n.getNodeName();
@@ -598,7 +502,60 @@ public class ReadXML {
 					return ElementaryArithmetic.<Integer,RE>create(a, b, name, expectedBaseTyp );
 				}				
 			}			
+		}
+		else if( name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL) ){	
+			Accessible<?> a = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Comparable.class );
+			if(a != null){
+				Class<?> expectedBaseTypB = a.getBaseType();
+				if(expectedBaseTypB == BigInteger.class){
+					Accessible<BigInteger> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, BigInteger.class );
+					if(b != null){
+						Accessible<Boolean> re = Comparison.create( (Accessible<BigInteger>)a, b, name );
+						return (Accessible<RE>)re;
+					}			
+				}
+				else if(expectedBaseTypB == Long.class){
+					Accessible<Long> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Long.class );
+					if(b != null){
+						return (Accessible<RE>)Comparison.create( (Accessible<Long>)a, b, name );
+					}			
+				}
+				else if(expectedBaseTypB == Integer.class){
+					Accessible<Integer> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Integer.class );
+					if(b != null){
+						return (Accessible<RE>)Comparison.create( (Accessible<Integer>)a, b, name );
+					}				
+				}
+				else if(expectedBaseTypB == String.class){
+					Accessible<String> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, String.class );
+					if(b != null){
+						return (Accessible<RE>)Comparison.create( (Accessible<String>)a, b, name );
+					}				
+				}
+			}
+		}
+		else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) ) {	
+			Accessible<Boolean> a = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Boolean.class );
+			Accessible<Boolean> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Boolean.class );
+			if(a != null && b != null){
+				return (Accessible<RE>)Binary.create(a, b, name);
+			}
+		}
+		else if( name.equals(Symbol.NOT) ) {			
+			Accessible<Boolean> sub = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Boolean.class );
+			if(sub != null){
+				return (Accessible<RE>) Not.create(sub);
+			}
+		}
+		else if( name.equals(Symbol.ISNULL) ) {			
+			// TODO
+
 		}		
+		//|| name.equals(Symbol.NOT)
+		// is null
+		//Accessible<OUT> a = null;
+		//Accessible<OUT> b = null;								
+		
 		
 		//  AccessibleValue
 		Identifier<?> id = parentTyp.getSubIdentifier( getNodeValue(n) );
@@ -620,6 +577,7 @@ public class ReadXML {
 	
 		
 	public static <V extends Number, Z extends Number & Comparable<Z>> Accessible<Z> createNumExpression(Node n, Primitive<Z> theClass){
+		// TODO drop this ...
 		if(n == null){
 			return null;
 		}
@@ -672,12 +630,13 @@ public class ReadXML {
 			}
 			AccessibleConstant<Z> re = AccessibleConstant.<Z>create(constVal);
 			return re;
-		}		
+		}	
+	/*
 		else{
 			AccessibleValue<Z> re = createReference2Value(n, theClass.getClazz() );
 			return re;
 		}
-	
+	*/
 
 		
 		return null;
@@ -744,20 +703,22 @@ public class ReadXML {
 							}
 						);					
 				}
-				else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.NOT) || name.equals(Symbol.XOR) || 
+				else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) || name.equals(Symbol.NOT) || 
 						 name.equals(Symbol.SMALLER) || name.equals(Symbol.EQUAL) || name.equals(Symbol.GREATER) || name.equals(Symbol.ISNULL) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									Accessible<Boolean> x = createBoolExpression( super.node );
+									Accessible<Boolean> x = //createBoolExpression( super.node );
+									ReadXML.createAccessible( super.node, c, Boolean.class );
 									if(x != null){
 										Program.boolExpress.add(x);										
 									}
 								}
 							}
 						);					
-				}				
+				}
+				/*
 				else if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
@@ -771,7 +732,8 @@ public class ReadXML {
 								}
 							}
 						);					
-				}				
+				}
+				*/
 				
 				else{
 					createAttributesValues( c, identifiers, values, complexTyps );

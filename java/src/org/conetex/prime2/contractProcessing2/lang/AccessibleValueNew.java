@@ -30,6 +30,7 @@ public class AccessibleValueNew<T> implements Accessible<T> {
 		return value.get();
 	}
 
+	/*
 	@Override
 	public void setTo(Structure thisObject, T newValue) throws Invalid {
 		Value<T> value = thisObject.getValueNew(this.path, this.clazz);
@@ -40,6 +41,7 @@ public class AccessibleValueNew<T> implements Accessible<T> {
 		Value<T> value = thisObject.getValueNew(this.path, this.clazz);
 		value.setConverted(newValue);
 	}
+	*/
 
 	@Override
 	public T copyFrom(Structure thisObject) throws Invalid {
