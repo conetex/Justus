@@ -8,6 +8,13 @@ import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
 public abstract class Binary extends ComputablePair<Boolean> implements Accessible<Boolean> {
 
+	public static <RE> Accessible<RE> create(Accessible<Boolean> theA, Accessible<Boolean> theB, String operation, Class<RE> re) {
+		if(re == Boolean.class){
+			return (Accessible<RE>) create(theA, theB, operation);
+		}
+		return null;
+	}
+	
 	public static Binary create(Accessible<Boolean> theA, Accessible<Boolean> theB, String operation) {
 		if (theA == null || theB == null) {
 			return null;

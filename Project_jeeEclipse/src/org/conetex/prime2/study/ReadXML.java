@@ -23,9 +23,12 @@ import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.BigInt;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Bool;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Int;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Lng;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.SizedASCII;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
@@ -128,7 +131,7 @@ public class ReadXML {
 	             + "  <author>ein &js;</author>		  "
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
-	             
+	               
 	        // ASSIGNMENT
 	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
 	             + "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
@@ -171,7 +174,7 @@ public class ReadXML {
 	             + "        <a>ai</a>"	             
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
-	             + "      <const>9</const>"	             
+	             + "      <const>8</const>"	             
 	             + "    </remains>" 	             
   
   // Comparsion / IsNull 
@@ -503,6 +506,38 @@ public class ReadXML {
 				}				
 			}			
 		}
+		else if( name.equals(Symbol.CONST) ) {	
+			Primitive<RE> theClass = null;			
+			if(expectedBaseTyp == BigInteger.class){
+				theClass = Primitive.<RE>getInstance(BigInt.class);
+			}
+			else if(expectedBaseTyp == Long.class){
+				theClass = Primitive.<RE>getInstance(Lng.class);
+			}			
+			else if(expectedBaseTyp == Integer.class){
+				theClass = Primitive.<RE>getInstance(Int.class);
+			}			
+			else if(expectedBaseTyp == String.class){
+				theClass = Primitive.<RE>getInstance(SizedASCII.class);
+			}			
+			else if(expectedBaseTyp == Boolean.class){
+				theClass = Primitive.<RE>getInstance(Bool.class);
+			}
+			if(theClass != null){
+				Value<RE> constVal = theClass.createValue();
+				String valueOfNode = getNodeValue(n);
+				try {
+					constVal.setConverted(valueOfNode);
+				} catch (Inconvertible | Invalid e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
+				AccessibleConstant<RE> re = AccessibleConstant.<RE>create(constVal);
+				return re;				
+			}
+		}
+		
 		else if( name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL) ){	
 			Accessible<?> a = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Comparable.class );
 			if(a != null){
@@ -538,7 +573,7 @@ public class ReadXML {
 			Accessible<Boolean> a = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Boolean.class );
 			Accessible<Boolean> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Boolean.class );
 			if(a != null && b != null){
-				return (Accessible<RE>)Binary.create(a, b, name);
+				return (Accessible<RE>)Binary.<RE>create(a, b, name);
 			}
 		}
 		else if( name.equals(Symbol.NOT) ) {			
@@ -718,14 +753,15 @@ public class ReadXML {
 							}
 						);					
 				}
-				/*
+				
 				else if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
-									Accessible<? extends Number> x = createNumExpression( super.node, theClass );
+									//Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
+									Accessible<? extends Number> x = //createNumExpression( super.node, theClass );
+											ReadXML.createAccessible( super.node, c, Integer.class );
 									if(x != null){
 										Program.mathExpress.add(x);										
 									}
@@ -733,7 +769,7 @@ public class ReadXML {
 							}
 						);					
 				}
-				*/
+				
 				
 				else{
 					createAttributesValues( c, identifiers, values, complexTyps );

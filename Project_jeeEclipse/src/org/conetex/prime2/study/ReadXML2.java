@@ -463,21 +463,21 @@ public class ReadXML2 {
 			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
 			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
-				return Binary.createAdd(a, b);
+				return null;//Binary.createAdd(a, b);
 			}
 		}
 		else if( name.equals(Symbol.OR) ) {			
 			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
 			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
-				return Binary.createOr(a, b);
+				return null;//Binary.createOr(a, b);
 			}
 		}
 		else if( name.equals(Symbol.XOR) ) {			
 			Accessible<Boolean> a = createBoolExpression( getChildElementByIndex(n, 0) );
 			Accessible<Boolean> b = createBoolExpression( getChildElementByIndex(n, 1) );
 			if(a != null && b != null){
-				return Binary.createXOr(a, b);
+				return null;//Binary.createXOr(a, b);
 			}
 		}		
 		else if( name.equals(Symbol.NOT) ) {			
