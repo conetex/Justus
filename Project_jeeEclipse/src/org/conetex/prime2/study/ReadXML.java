@@ -42,6 +42,7 @@ import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
@@ -153,9 +154,11 @@ public class ReadXML {
 	             //+ "    </copy>"
                  + "  </sub>"	             
 	             
-  // MATH     
+  // MATH ok 
+
 	             + "  <ai typ='Int'>3</ai>"
 	             + "  <bi typ='Int'>4</bi>"	             
+/*	             
 	             + "  <plus>" // 7
 	             + "    <a>ai</a>"	             
 	             + "    <b>bi</b>"	             
@@ -176,7 +179,8 @@ public class ReadXML {
 	             + "      </times>" // 12 	             
 	             + "      <const>8</const>"	             
 	             + "    </remains>" 	             
-  
+  */
+	             
   // Comparsion / IsNull 
 	             
 	             + "    <smaller>" 
@@ -185,7 +189,8 @@ public class ReadXML {
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
 	             + "      <const>9</const>"	    // false         
-	             + "    </smaller>"   
+	             + "    </smaller>"  
+/*	             
 	             + "    <greater>" 
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
@@ -207,7 +212,7 @@ public class ReadXML {
 	             + "      </times>" // 12 	             
 	             + "      <const>13</const>"	    // false         
 	             + "    </greater>"
-	             
+*/	             
 	             
 	             
 /*// BOOL STUFF	             
@@ -281,10 +286,12 @@ public class ReadXML {
 		for(Computable c : Program.steps){
 			c.compute(root);
 		}
+		System.out.println("BOOL");		
 		for(Accessible<Boolean> a : Program.boolExpress){
 			Boolean re = a.getFrom(root);
 			System.out.println(re);
 		}		
+		System.out.println("MATH");		
 		for(Accessible<? extends Number> a : Program.mathExpress){
 			Number re = a.getFrom(root);
 			System.out.println(re);
@@ -504,7 +511,24 @@ public class ReadXML {
 				if(a != null && b != null){
 					return ElementaryArithmetic.<Integer,RE>create(a, b, name, expectedBaseTyp );
 				}				
-			}			
+			}
+			else if(expectedBaseTyp == Comparable.class){
+				Accessible<Number> a = createAccessible( getChildElementByIndex(n, 0), parentTyp, Number.class );
+				Accessible<Number> b = createAccessible( getChildElementByIndex(n, 1), parentTyp, Number.class );
+				if(a != null && b != null){
+					Accessible<Number> re = ElementaryArithmetic.<Number,Number>create(a, b, name, Number.class );
+					return (Accessible<RE>) re;
+				}				
+			}
+			/*
+			else if(expectedBaseTyp == Comparable.class){
+				Accessible<BigInteger> a = createAccessible( getChildElementByIndex(n, 0), parentTyp, BigInteger.class );
+				Accessible<BigInteger> b = createAccessible( getChildElementByIndex(n, 1), parentTyp, BigInteger.class );
+				if(a != null && b != null){
+					return ElementaryArithmetic.<BigInteger,RE>create(a, b, name, expectedBaseTyp );
+				}				
+			}	
+			*/
 		}
 		else if( name.equals(Symbol.CONST) ) {	
 			Primitive<RE> theClass = null;			
@@ -561,6 +585,12 @@ public class ReadXML {
 						return (Accessible<RE>)Comparison.create( (Accessible<Integer>)a, b, name );
 					}				
 				}
+				else if(expectedBaseTypB == Number.class){
+					Accessible<Number> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Number.class );
+					if(b != null){
+						return (Accessible<RE>)ComparisonNum.create( (Accessible<Number>)a, b, name );
+					}				
+				}				
 				else if(expectedBaseTypB == String.class){
 					Accessible<String> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, String.class );
 					if(b != null){
