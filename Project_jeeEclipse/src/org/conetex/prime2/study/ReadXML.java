@@ -154,11 +154,11 @@ public class ReadXML {
 	             //+ "    </copy>"
                  + "  </sub>"	             
 	             
-  // MATH ok 
-
+  // MATH OK
+	
 	             + "  <ai typ='Int'>3</ai>"
 	             + "  <bi typ='Int'>4</bi>"	             
-/*	             
+   /*  */      
 	             + "  <plus>" // 7
 	             + "    <a>ai</a>"	             
 	             + "    <b>bi</b>"	             
@@ -166,54 +166,70 @@ public class ReadXML {
 	                         
 	             + "  <minus>" // -4
 	             + "    <a>ai</a>"	             
-	             + "    <plus>" // 7
+	             + "    <plus>"
 	             + "      <a>ai</a>"	             
 	             + "      <b>bi</b>"	             
 	             + "    </plus>"              
 	             + "  </minus>" 	             
 
-	             + "    <remains>" 
+	             + "    <remains>" // 4
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
 	             + "        <b>bi</b>"	             
-	             + "      </times>" // 12 	             
-	             + "      <const>8</const>"	             
+	             + "      </times>" 	             
+	             + "      <Integer>8</Integer>"	             
 	             + "    </remains>" 	             
-  */
+
 	             
-  // Comparsion / IsNull 
+  // Comparsion / IsNull OK
 	             
 	             + "    <smaller>" 
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
-	             + "      <const>9</const>"	    // false         
+	             + "      <Integer>9</Integer>"	        // false         
 	             + "    </smaller>"  
-/*	             
+	             
 	             + "    <greater>" 
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
-	             + "      <const>9</const>"	    // true         
+	             + "      <Integer>9</Integer>"	        // true         
 	             + "    </greater>" 
 	             + "    <smaller>" 
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
-	             + "      <const>13</const>"	    // true         
-	             + "    </smaller>"   
+	             + "      <Integer>13</Integer>"	    // true         
+	             + "    </smaller>" 
+	               
 	             + "    <greater>" 
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
-	             + "      <const>13</const>"	    // false         
+	             + "      <Integer>13</Integer>"	// false         
 	             + "    </greater>"
-*/	             
 	             
+	             + "    <greater>" 
+	             + "      <Integer>13</Integer>"       
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "    </greater>"	                // true 
+	             
+	             + "    <greater>" 
+	             + "      <Integer>11</Integer>"       
+	             + "      <times>" 
+	             + "        <a>ai</a>"	             
+	             + "        <b>bi</b>"	             
+	             + "      </times>" // 12 	             
+	             + "    </greater>"	                // false  	             
+	             /* */
 	             
 /*// BOOL STUFF	             
 	             + "  <bTrue typ='Bool'>true</bTrue>"	             
@@ -490,6 +506,8 @@ public class ReadXML {
 	public static <RE> Accessible<RE> createAccessible(Node n, Complex parentTyp, Class<RE> expectedBaseTyp){
 		
 		String name = n.getNodeName();
+		
+		// MATH
 		if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
 			if(expectedBaseTyp == BigInteger.class){
 				Accessible<BigInteger> a = createAccessible( getChildElementByIndex(n, 0), parentTyp, BigInteger.class );
@@ -530,7 +548,25 @@ public class ReadXML {
 			}	
 			*/
 		}
-		else if( name.equals(Symbol.CONST) ) {	
+		
+		// VARIABLE
+		else if( name.equals(Symbol.BOOL) ) {	
+			return (AccessibleConstant<RE>) AccessibleConstant.<Boolean>create2(Boolean.class, getNodeValue(n));
+		}
+		else if( name.equals(Symbol.BINT) ) {	
+			return (AccessibleConstant<RE>) AccessibleConstant.<BigInteger>create2(BigInteger.class, getNodeValue(n));
+		}
+		else if( name.equals(Symbol.INT) ) {	
+			return (AccessibleConstant<RE>) AccessibleConstant.<Integer>create2(Integer.class, getNodeValue(n));
+		}
+		else if( name.equals(Symbol.LNG) ) {	
+			return (AccessibleConstant<RE>) AccessibleConstant.<Long>create2(Long.class, getNodeValue(n));
+		}
+		else if( name.equals(Symbol.STR) ) {	
+			return (AccessibleConstant<RE>) AccessibleConstant.<String>create2(String.class, getNodeValue(n));
+		}
+
+		/*else if( name.equals(Symbol.CONST) ) {	
 			Primitive<RE> theClass = null;			
 			if(expectedBaseTyp == BigInteger.class){
 				theClass = Primitive.<RE>getInstance(BigInt.class);
@@ -560,8 +596,8 @@ public class ReadXML {
 				AccessibleConstant<RE> re = AccessibleConstant.<RE>create(constVal);
 				return re;				
 			}
-		}
-		
+		}*/
+		// COMPARISON
 		else if( name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL) ){	
 			Accessible<?> a = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Comparable.class );
 			if(a != null){
@@ -585,6 +621,12 @@ public class ReadXML {
 						return (Accessible<RE>)Comparison.create( (Accessible<Integer>)a, b, name );
 					}				
 				}
+				else if(expectedBaseTypB == Byte.class){
+					Accessible<Byte> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Byte.class );
+					if(b != null){
+						return (Accessible<RE>)Comparison.create( (Accessible<Byte>)a, b, name );
+					}				
+				}				
 				else if(expectedBaseTypB == Number.class){
 					Accessible<Number> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Number.class );
 					if(b != null){
@@ -599,6 +641,7 @@ public class ReadXML {
 				}
 			}
 		}
+		// BOOL
 		else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) ) {	
 			Accessible<Boolean> a = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, Boolean.class );
 			Accessible<Boolean> b = ReadXML.createAccessible( getChildElementByIndex(n, 1), parentTyp, Boolean.class );
@@ -622,20 +665,29 @@ public class ReadXML {
 		//Accessible<OUT> b = null;								
 		
 		
-		//  AccessibleValue
-		Identifier<?> id = parentTyp.getSubIdentifier( getNodeValue(n) );
-		if( id != null){
-			AbstractType<?> t = id.getType();
-			Class<? extends Value<?>> clazzChild = t.getClazz();
-			Primitive<?> pri = Primitive.getInstance( clazzChild );
-			Class<?> baseType = pri.getBaseType();
-			if( expectedBaseTyp.isAssignableFrom(baseType) ){ // TODO dann sollte noch Long Int implementieren ...
-				String path = getNodeValue(n);
-				AccessibleValueNew<RE> re = AccessibleValueNew.create(path, expectedBaseTyp);			
-				return re;				
+		//  REFERENCE
+		else{
+			System.out.println("get_id from " + name + " (" + getNodeValue(n) + ")");
+			Identifier<?> id = parentTyp.getSubIdentifier( getNodeValue(n) );
+			if( id != null){
+				AbstractType<?> t = id.getType();
+				Class<? extends Value<?>> clazzChild = t.getClazz();
+				Primitive<?> pri = Primitive.getInstance( clazzChild );
+				Class<?> baseType = pri.getBaseType();
+				if( expectedBaseTyp.isAssignableFrom(baseType) ){ // TODO dann sollte noch Long Int implementieren ...
+					String path = getNodeValue(n);
+					//AccessibleValueNew<RE> re = AccessibleValueNew.create(path, expectedBaseTyp);			
+					AccessibleValueNew<RE> re = (AccessibleValueNew<RE>) AccessibleValueNew.create(path, baseType);
+					return re;				
+				}
+				else{
+					System.out.println("ERR: can not reference '" + getNodeValue(n) + "'");
+				}
 			}
-		}		
-
+			else{
+				System.out.println("ERR: can not find '" + getNodeValue(n) + "'");
+			}
+		}
 		return null;
 	}
 
@@ -683,6 +735,7 @@ public class ReadXML {
 				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.REMAINS, theClass.getBaseType() );
 			}
 		}
+		/*
 		else if( name.equals(Symbol.CONST) ) {			
 			Value<Z> constVal = theClass.createValue();
 			String valueOfNode = getNodeValue(n);
@@ -695,7 +748,8 @@ public class ReadXML {
 			}
 			AccessibleConstant<Z> re = AccessibleConstant.<Z>create(constVal);
 			return re;
-		}	
+		}
+		*/
 	/*
 		else{
 			AccessibleValue<Z> re = createReference2Value(n, theClass.getClazz() );

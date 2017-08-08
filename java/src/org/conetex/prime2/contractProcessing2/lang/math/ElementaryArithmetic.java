@@ -39,28 +39,84 @@ public class ElementaryArithmetic<I extends Number, O> extends ComputablePair<I>
 	}
 	
 	public static <AI extends Number, AO> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
+
+		if(operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS){
+			return null;
+		}
+		
 		if(theA == null || theB == null){
 			return null;
 		}
+		Class<AI> inputTypA = theA.getBaseType();
+		Class<AI> inputTypB = theB.getBaseType();
+		Class<AI> inputTyp = getBiggest(inputTypA, inputTypB);	
+		if(inputTyp == null){
+			// TODO Error unknown Typ
+			return null;
+		}
+		
 		if(resultTyp == Long.class){
-			if(theA.getBaseType() == BigInteger.class){
+			if(inputTyp == BigInteger.class){
 				return null;
 			}
 		}
 		else if(resultTyp == Integer.class){
-			if(theA.getBaseType() == BigInteger.class || theA.getBaseType() == Long.class){
+			if(inputTyp == BigInteger.class || inputTyp == Long.class){
 				return null;
 			}
 		}
 		else if(resultTyp == Byte.class){
-			if(theA.getBaseType() == BigInteger.class || theA.getBaseType() == Long.class  || theA.getBaseType() == Integer.class){
+			if(inputTyp == BigInteger.class || inputTyp == Long.class || inputTyp == Integer.class){
 				return null;
 			}
-		}		
-		if(operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS){
-			return null;
-		}
+		}	
+		
+		else if(resultTyp == Number.class){
+			if(     inputTyp == BigInteger.class){
+				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, BigInteger>(theA, theB, BigInteger.class, operation);
+			}
+			else if(inputTyp == Long.class){
+				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, Long>(theA, theB, Long.class, operation);
+			}
+			else if(inputTyp == Integer.class){
+				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, Integer>(theA, theB, Integer.class, operation);
+			}
+			else if(inputTyp == Byte.class){
+				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, Byte>(theA, theB, Byte.class, operation);
+			}			
+			else {
+				// TODO Error unknown Typ
+				return null;
+			}	
+		}	
+		
 		return new ElementaryArithmetic<AI, AO>(theA, theB, resultTyp, operation);
+	}
+	
+	private static <AI extends Number> Class<AI> getBiggest(Class<AI> a, Class<AI> b){
+		Class<?>[] classes = {
+				  BigInteger.class
+				, Long.class
+				, Integer.class
+				, Byte.class
+		};
+		
+		for(int ai = 0; ai < classes.length; ai++){
+			if(classes[ai] == a){
+				for(int bi = 0; bi < classes.length; bi++){
+					if(classes[bi] == b){
+						if(ai < bi){
+							return a;
+						}
+						else{
+							return b;
+						}
+					}
+				}				
+			}
+		}
+		// TODO: ERROR unknown typ
+		return a;
 	}
 			
 	private int operator;

@@ -5,7 +5,13 @@ public class Symbol {
 	// description of data
 		public static final String TYP = "typ";
 		
-		public static final String CONST = "const";
+		public static final String BOOL = "Boolean";
+		
+		public static final String BINT = "BigInteger";
+		public static final String INT  = "Integer";
+		public static final String LNG  = "Long";
+		
+		public static final String STR = "String";
 		
 	// assignment of data
 		public static final String COPY = "copy";
