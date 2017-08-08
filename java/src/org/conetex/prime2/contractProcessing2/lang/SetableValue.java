@@ -40,7 +40,9 @@ public class SetableValue<T> implements Setable<T> {
 	@Override
 	public void setTo(Structure thisObject, T newValue) throws Invalid {
 		Value<T> value = thisObject.getValue(this.path, this.valueClazz);
+		T valueOld = value.get();
 		value.set(newValue);
+		System.out.println( valueOld + " setTo " + newValue + " -> " + value.get());
 	}
 
 	public void transSet(Structure thisObject, String newValue) throws Inconvertible, Invalid {

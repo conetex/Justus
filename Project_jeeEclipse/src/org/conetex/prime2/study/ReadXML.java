@@ -133,13 +133,14 @@ public class ReadXML {
 	             + "  <user>testusr</user>        "
 	             + "  <password>testpwd</password>"
 	               
-	        // ASSIGNMENT
+	        // ASSIGNMENT OK
 	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
 	             + "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
 	             + "  <copy>"
 	             + "    <source typ='MailAddress64'>aAddress</source>"
 	             + "    <target typ='MailAddress64'>a2Addres</target>"
-	             + "  </copy>"	             
+	             + "  </copy>"	           
+	             
 	             + "  <copy>"
 	             + "    <source typ='MailAddress64'>sub.aAddress</source>"
 	             + "    <target typ='MailAddress64'>sub.a2Addres</target>"
@@ -158,7 +159,7 @@ public class ReadXML {
 	
 	             + "  <ai typ='Int'>3</ai>"
 	             + "  <bi typ='Int'>4</bi>"	             
-   /*  */      
+          
 	             + "  <plus>" // 7
 	             + "    <a>ai</a>"	             
 	             + "    <b>bi</b>"	             
@@ -179,10 +180,9 @@ public class ReadXML {
 	             + "      </times>" 	             
 	             + "      <Integer>8</Integer>"	             
 	             + "    </remains>" 	             
-
 	             
   // Comparsion / IsNull OK
-	             
+	              
 	             + "    <smaller>" 
 	             + "      <times>" 
 	             + "        <a>ai</a>"	             
@@ -229,20 +229,20 @@ public class ReadXML {
 	             + "        <b>bi</b>"	             
 	             + "      </times>" // 12 	             
 	             + "    </greater>"	                // false  	             
-	             /* */
 	             
-/*// BOOL STUFF	             
+// BOOL STUFF OK         
 	             + "  <bTrue typ='Bool'>true</bTrue>"	             
 	             + "  <and>" // true
 	             + "    <a>bTrue</a>"	             
 	             + "    <b>bTrue</b>"	             
 	             + "  </and>"
-	             
+	             	             
 	             + "  <bFalse typ='Bool'>false</bFalse>"	             
 	             + "  <and>" // false
 	             + "    <a>bTrue</a>"	             
 	             + "    <b>bFalse</b>"	             
-	             + "  </and>"	             
+	             + "  </and>"	
+	             
 	             + "  <or>" // true
 	             + "    <a>bTrue</a>"	             
 	             + "    <b>bFalse</b>"	             
@@ -254,12 +254,12 @@ public class ReadXML {
 	             
 	             + "  <not><and>" // true
 	             + "    <a>bFalse</a>"	             
-	             + "    <or>" // true
+	             + "    <or>" 
 	             + "      <a>bTrue</a>"	             
 	             + "      <b>bFalse</b>"	             
 	             + "    </or>"	             
-	             + "  </and></not>"	             
-*/         
+	             + "  </and></not>"	
+	            
 	             + "</cred>                " 
 				;
 		InputStream is = new ByteArrayInputStream( xml.getBytes(StandardCharsets.UTF_8) );
@@ -302,11 +302,13 @@ public class ReadXML {
 		for(Computable c : Program.steps){
 			c.compute(root);
 		}
+		
 		System.out.println("BOOL");		
 		for(Accessible<Boolean> a : Program.boolExpress){
 			Boolean re = a.getFrom(root);
 			System.out.println(re);
 		}		
+		
 		System.out.println("MATH");		
 		for(Accessible<? extends Number> a : Program.mathExpress){
 			Number re = a.getFrom(root);
@@ -845,7 +847,7 @@ public class ReadXML {
 								public void build(Complex c) {
 									//Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
 									Accessible<? extends Number> x = //createNumExpression( super.node, theClass );
-											ReadXML.createAccessible( super.node, c, Integer.class );
+											ReadXML.createAccessible( super.node, c, Integer.class );// TODO mach das zu number ...
 									if(x != null){
 										Program.mathExpress.add(x);										
 									}
