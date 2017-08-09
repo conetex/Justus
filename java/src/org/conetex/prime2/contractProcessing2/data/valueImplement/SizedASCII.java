@@ -72,12 +72,13 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 		}
 		
 		@Override
-		public void set(String aValue) throws Invalid{
+		public String set(String aValue) throws Invalid{
 			// ascii without control characters:
 			String allowedChars = " !\"#\\$%&'\\(\\)\\*\\+,\\-\\./0-9:;<=>\\?@A-Z\\[\\\\\\]\\^_`a-z\\{\\|\\}~"; // "\t !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~"
 			if( this.check(aValue, allowedChars) ){
 				this.actual = aValue;				
 			}
+			return this.actual;
 		}		
 		
 		@Override

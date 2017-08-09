@@ -8,8 +8,9 @@ public class Int implements Value<Integer>{
 	private Integer actual;
 	
 	@Override
-	public void set(Integer aValue){
+	public Integer set(Integer aValue){
 		this.actual = aValue;
+		return this.actual;
 	}
 	
 	@Override

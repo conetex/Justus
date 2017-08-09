@@ -8,8 +8,9 @@ public class Lng implements Value<Long>{
 	private Long actual;
 	
 	@Override
-	public void set(Long aValue){
-		this.actual = aValue;			
+	public Long set(Long aValue){
+		this.actual = aValue;
+		return this.actual;
 	}
 	
 	@Override

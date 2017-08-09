@@ -36,7 +36,6 @@ import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
 import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
-import org.conetex.prime2.contractProcessing2.lang.Computable;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
@@ -299,8 +298,10 @@ public class ReadXML {
 		
 		Heap heap = Heap.create(root);
 		
-		for(Computable c : Program.steps){
-			c.compute(root);
+		System.out.println("ASSIG");	
+		for(Accessible<?> c : Program.assignments){
+			Object re = c.getFrom(root);
+			System.out.println(re);
 		}
 		
 		System.out.println("BOOL");		
@@ -407,7 +408,7 @@ public class ReadXML {
 	}
 	
 	// <T, V extends Value.Interface<T>> 
-	public static <T> AbstractAssigment<T> createAssignment(String name, Node n, Complex c){
+	public static <T> AbstractAssigment<T> createAssignment(String name, Node n, Complex parentTyp){
 		if(n == null){
 			return null;
 		}		
@@ -415,11 +416,11 @@ public class ReadXML {
 		if( name.equals("copy") || name.equals("ref") ) {			
 			Node c0 = getChildElementByIndex(n, 0);
 			System.out.println(getNodeValue(c0));
-			Identifier<T> id0 = c.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
+			Identifier<T> id0 = parentTyp.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
 
 			Node c1 = getChildElementByIndex(n, 1);
 			System.out.println(getNodeValue(c1));
-			Identifier<T> id1 = c.<T>getSubIdentifier( getNodeValue(c1) );
+			Identifier<T> id1 = parentTyp.<T>getSubIdentifier( getNodeValue(c1) );
 			
 			String c0DataType = getAttribute(c0, Symbol.TYP);
 			if( c0DataType != null ){
@@ -448,7 +449,7 @@ public class ReadXML {
 				
 				Primitive<T> pri1 = Primitive.getInstance( c1Class );
 				Class<T> baseType1 = pri1.getBaseType();	
-				Accessible<T> src = createAccessible(c1, c, baseType1);
+				Accessible<T> src = createAccessible(c1, parentTyp, baseType1);
 				if(src != null && trg != null){
 					if(name.equals(Symbol.COPY)){
 						return Copy.<T>create(trg, src);					
@@ -509,8 +510,62 @@ public class ReadXML {
 		
 		String name = n.getNodeName();
 		
+		// ASSIGNMENT
+		if( name.equals("copy") || name.equals("ref") ) {	
+		   //createAssignment(name, n, parentTyp);
+			Node c0 = getChildElementByIndex(n, 0);
+			System.out.println(getNodeValue(c0));
+			Identifier<RE> id0 = parentTyp.getSubIdentifier( getNodeValue(c0) );// TODO geht nich
+
+			Node c1 = getChildElementByIndex(n, 1);
+			System.out.println(getNodeValue(c1));
+			Identifier<RE> id1 = parentTyp.<RE>getSubIdentifier( getNodeValue(c1) );
+			
+			String c0DataType = getAttribute(c0, Symbol.TYP);
+			if( c0DataType != null ){
+				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
+				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
+				Class<?> c0ClassX = Primitive.getClass(c0DataType);				
+			}
+		
+			// TODO: der teil hier könnte ausgelagert werden nach AbstractAssigment
+			
+			Class<? extends Value<RE>> c0Class = null;
+			if( id0 != null){
+				AbstractType<RE> t = id0.getType();
+				c0Class = t.getClazz();				
+			}			
+			Class<? extends Value<RE>> c1Class = null;
+			if( id1 != null){
+				AbstractType<RE> t = id1.getType();
+				c1Class = t.getClazz();				
+			}			
+			
+			// TODO hier reicht eigentlich gleicher base-typ !!!
+			if(c0Class != null && c1Class != null && c0Class == c1Class){
+				String path0 = getNodeValue(c0);
+				SetableValue<RE> trg = SetableValue.<RE>create(path0, c0Class);
+				
+				Primitive<RE> pri1 = Primitive.getInstance( c1Class );
+				Class<RE> baseType1 = pri1.getBaseType();	
+				Accessible<RE> src = createAccessible(c1, parentTyp, baseType1);
+				if(src != null && trg != null){
+					if(name.equals(Symbol.COPY)){
+						return Copy.<RE>create(trg, src);					
+					}
+					if(name.equals(Symbol.REFERENCE)){
+						return Reference.<RE>create(trg, src);					
+					}				
+				}
+				return null;
+			}
+			else{
+				// TODO: classes do not match
+				return null;
+			}			
+		}
 		// MATH
-		if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
+		else if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
 			if(expectedBaseTyp == BigInteger.class){
 				Accessible<BigInteger> a = createAccessible( getChildElementByIndex(n, 0), parentTyp, BigInteger.class );
 				Accessible<BigInteger> b = createAccessible( getChildElementByIndex(n, 1), parentTyp, BigInteger.class );
@@ -695,7 +750,7 @@ public class ReadXML {
 
 	
 		
-	public static <V extends Number, Z extends Number & Comparable<Z>> Accessible<Z> createNumExpression(Node n, Primitive<Z> theClass){
+	public static <V extends Number, Z extends Number & Comparable<Z>> Accessible<Z> _createNumExpression(Node n, Primitive<Z> theClass){
 		// TODO drop this ...
 		if(n == null){
 			return null;
@@ -703,36 +758,36 @@ public class ReadXML {
 	
 		String name = n.getNodeName();
 		if( name.equals(Symbol.PLUS) ) {			
-			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
-			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			Accessible<Z> a = _createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = _createNumExpression( getChildElementByIndex(n, 1), theClass );
 			if(a != null && b != null){
 				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.PLUS, theClass.getBaseType() );
 			}
 		}
 		else if( name.equals(Symbol.MINUS) ) {			
-			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
-			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			Accessible<Z> a = _createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = _createNumExpression( getChildElementByIndex(n, 1), theClass );
 			if(a != null && b != null){
 				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.MINUS, theClass.getBaseType() );
 			}
 		}
 		else if( name.equals(Symbol.TIMES) ) {			
-			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
-			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			Accessible<Z> a = _createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = _createNumExpression( getChildElementByIndex(n, 1), theClass );
 			if(a != null && b != null){
 				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.TIMES, theClass.getBaseType() );
 			}
 		}		
 		else if( name.equals(Symbol.DIVIDED_BY) ) {			
-			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
-			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			Accessible<Z> a = _createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = _createNumExpression( getChildElementByIndex(n, 1), theClass );
 			if(a != null && b != null){
 				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.DIVIDED_BY, theClass.getBaseType() );
 			}
 		}		
 		else if( name.equals(Symbol.REMAINS) ) {			
-			Accessible<Z> a = createNumExpression( getChildElementByIndex(n, 0), theClass );
-			Accessible<Z> b = createNumExpression( getChildElementByIndex(n, 1), theClass );
+			Accessible<Z> a = _createNumExpression( getChildElementByIndex(n, 0), theClass );
+			Accessible<Z> b = _createNumExpression( getChildElementByIndex(n, 1), theClass );
 			if(a != null && b != null){
 				return ElementaryArithmetic.<Z,Z>create(a, b, ElementaryArithmetic.REMAINS, theClass.getBaseType() );
 			}
@@ -803,9 +858,10 @@ public class ReadXML {
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									AbstractAssigment<?> x = createAssignment(Symbol.COPY, super.node, c);
+									//AbstractAssigment<?> x = createAssignment(Symbol.COPY, super.node, c);
+									Accessible<?> x = ReadXML.createAccessible( super.node, c, Object.class );
 									if(x != null){
-										Program.steps.add(x);										
+										Program.assignments.add(x);										
 									}
 								}
 							}
@@ -816,9 +872,10 @@ public class ReadXML {
 							new FunctionBuilder(c){
 								@Override
 								public void build(Complex c) {
-									AbstractAssigment<?> x = createAssignment(Symbol.REFERENCE, super.node, c);
+									//AbstractAssigment<?> x = createAssignment(Symbol.REFERENCE, super.node, c);
+									Accessible<?> x = ReadXML.createAccessible( super.node, c, Object.class );									
 									if(x != null){
-										Program.steps.add(x);										
+										Program.assignments.add(x);										
 									}
 								}
 							}

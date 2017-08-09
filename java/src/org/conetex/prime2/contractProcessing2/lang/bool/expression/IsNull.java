@@ -3,9 +3,8 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
-import org.conetex.prime2.contractProcessing2.lang.Computable;
 
-public class IsNull implements Accessible<Boolean>, Computable{
+public class IsNull implements Accessible<Boolean>{
 
 	public static IsNull create(Accessible<?> theSub){
 		if(theSub == null){
@@ -32,12 +31,6 @@ public class IsNull implements Accessible<Boolean>, Computable{
 	@Override
 	public Boolean copyFrom(Structure thisObject) {
 		return this.getFrom(thisObject);
-	}
-
-	@Override
-	public boolean compute(Structure thisObject) {
-		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
-		return true;
 	}
 
 	@Override

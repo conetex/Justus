@@ -76,12 +76,6 @@ public class ComparisonOrg<T extends Number & Comparable<T>> extends ComputableP
 	}
 
 	@Override
-	public boolean compute(Structure thisObject) {
-		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten ist das ja sinnlos hier!
-		return true;
-	}
-
-	@Override
 	public Class<Boolean> getBaseType() {
 		return Boolean.class;
 	}

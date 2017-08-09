@@ -8,8 +8,9 @@ public class Bool implements Value<Boolean>{
 	private Boolean actual;
 	
 	@Override
-	public void set(Boolean aValue){
+	public Boolean set(Boolean aValue){
 		this.actual = aValue;
+		return this.actual;
 	}
 	
 	@Override

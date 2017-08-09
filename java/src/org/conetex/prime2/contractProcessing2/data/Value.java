@@ -10,8 +10,9 @@ public interface Value<T> {
 	
 	public T copy() throws Invalid;
 	
-	public void set(T value) throws Invalid;
+	public T set(T value) throws Invalid;
 
+	// TODO: return T but void
 	public void setConverted(String value) throws Inconvertible, Invalid;
 	
 	public Class<T> getBaseType();

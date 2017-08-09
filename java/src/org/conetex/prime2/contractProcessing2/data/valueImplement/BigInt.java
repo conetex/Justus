@@ -11,8 +11,9 @@ public class BigInt implements Value<BigInteger>{
 	private BigInteger actual;
 	
 	@Override
-	public void set(BigInteger aValue){
+	public BigInteger set(BigInteger aValue){
 		this.actual = aValue;
+		return this.actual;
 	}
 	
 	@Override

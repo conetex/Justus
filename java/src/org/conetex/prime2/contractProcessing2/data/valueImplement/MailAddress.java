@@ -8,7 +8,7 @@ public abstract class MailAddress extends SizedASCII{
 	public abstract int getMaxSize(); // longest email-address is 254
 	
 	@Override
-	public void set(String aValue) throws Invalid{
+	public String set(String aValue) throws Invalid{
 		if(aValue == null){
 			super.actual = null;
 		}
@@ -24,5 +24,7 @@ public abstract class MailAddress extends SizedASCII{
 		else{
 			throw new Invalid("'" + aValue + "' is no valid mail-Address");
 		}
+		
+		return super.actual;
 	}		
 }

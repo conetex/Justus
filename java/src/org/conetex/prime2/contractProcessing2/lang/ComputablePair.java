@@ -2,7 +2,15 @@ package org.conetex.prime2.contractProcessing2.lang;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 
-public abstract class ComputablePair<T> implements Computable{
+/*
+public interface Computable {
+
+	public abstract boolean compute(Structure thisObject);
+	
+} 
+*/
+
+public abstract class ComputablePair<T>{// implements Computable{
 
 	private Accessible<T> a;
 	
@@ -28,7 +36,7 @@ public abstract class ComputablePair<T> implements Computable{
 		return this.b;
 	}
 	
-	@Override
-	public abstract boolean compute(Structure thisObject);
+	//@Override
+	//public abstract boolean compute(Structure thisObject);
 	
 }

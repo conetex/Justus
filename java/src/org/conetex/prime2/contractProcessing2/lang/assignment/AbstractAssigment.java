@@ -6,9 +6,20 @@ import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Setable;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.SetableValue;
-import org.conetex.prime2.contractProcessing2.lang.Computable;
 
-public abstract class AbstractAssigment<T> implements Computable{// extends ComputablePair<T>{
+/*
+public interface Accessible<T> {//accessible
+
+	public T getFrom(Structure thisObject);
+
+	public T copyFrom(Structure thisObject) throws Invalid;
+		
+    public Class<T> getBaseType();
+	
+}
+*/
+
+public abstract class AbstractAssigment<T> implements Accessible<T>{//Computable{// extends ComputablePair<T>{
 
 	private Setable<T> target;
 
@@ -21,7 +32,8 @@ public abstract class AbstractAssigment<T> implements Computable{// extends Comp
 
 	public abstract boolean doCopy();
 	
-	public boolean compute(Structure thisObject)  {
+	@Override
+	public T getFrom(Structure thisObject) {
 		T value = null;
 		try {
 			
@@ -32,15 +44,28 @@ public abstract class AbstractAssigment<T> implements Computable{// extends Comp
 				value = this.source.getFrom(thisObject);
 			}
 
-			this.target.setTo( thisObject, value );
+			value = this.target.setTo( thisObject, value );
 			
 		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+			return null;
 		}
 			
-		return true;
-	}	
+		return value;
+	}
+
+	@Override
+	public T copyFrom(Structure thisObject) throws Invalid {
+		// TODO: das wird ja nur selten gebraucht...
+		return getFrom(thisObject);
+	}
+
+	@Override
+	public Class<T> getBaseType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 }

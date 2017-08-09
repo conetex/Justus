@@ -196,12 +196,12 @@ public class Structure implements Value<Value<?>[]>{
 		
 		
 		@Override
-		public void set(Value<?>[] svalues) throws Invalid {
+		public Value<?>[] set(Value<?>[] svalues) throws Invalid {
 			// TODO typcheck ...
 			if(this.values == null || this.values.length == svalues.length){
 				this.values = svalues;
 			}
-			
+			return this.values;
 		}
 
 		@Override

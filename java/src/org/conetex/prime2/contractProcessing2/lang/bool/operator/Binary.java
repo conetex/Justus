@@ -74,12 +74,14 @@ public abstract class Binary extends ComputablePair<Boolean> implements Accessib
 		return this.getFrom(thisObject);
 	}
 
+	/*
 	@Override
 	public boolean compute(Structure thisObject) {
 		getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten
 								// ist das ja sinnlos hier!
 		return true;
 	}
+	*/
 
 	@Override
 	public Class<Boolean> getBaseType() {
