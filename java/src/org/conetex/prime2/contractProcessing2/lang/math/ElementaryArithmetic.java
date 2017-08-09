@@ -4,11 +4,11 @@ import java.math.BigInteger;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
+import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class ElementaryArithmetic<I extends Number, O> extends ComputablePair<I> implements Accessible<O>{
+public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implements Accessible<O>{
 	
 	public static final int PLUS = 0;         // Addition
 	public static final int MINUS = 1;        // Subtraction 

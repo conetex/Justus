@@ -1,9 +1,6 @@
 package org.conetex.prime2.contractProcessing2.lang.assignment;
 
-import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
-import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 import org.conetex.prime2.contractProcessing2.lang.Setable;
 
 public class Reference<T> extends AbstractAssigment<T>{

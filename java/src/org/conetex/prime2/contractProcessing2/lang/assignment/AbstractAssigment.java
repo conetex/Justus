@@ -2,10 +2,8 @@ package org.conetex.prime2.contractProcessing2.lang.assignment;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
 import org.conetex.prime2.contractProcessing2.lang.Setable;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
-import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 
 /*
 public interface Accessible<T> {//accessible

@@ -1,13 +1,11 @@
 package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
-import org.conetex.prime2.contractProcessing2.lang.Symbol;
-import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.Pair;
+import org.conetex.prime2.contractProcessing2.lang.Symbol;
 
-public class Comparison<T extends Comparable<T>> extends ComputablePair<T> implements Accessible<Boolean>{
+public class Comparison<T extends Comparable<T>> extends Pair<T> implements Accessible<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;

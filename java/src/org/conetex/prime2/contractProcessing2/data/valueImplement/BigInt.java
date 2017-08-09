@@ -4,7 +4,6 @@ import java.math.BigInteger;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 public class BigInt implements Value<BigInteger>{
 

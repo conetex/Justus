@@ -2,11 +2,11 @@ package org.conetex.prime2.contractProcessing2.lang.bool.operator;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.ComputablePair;
+import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public abstract class Binary extends ComputablePair<Boolean> implements Accessible<Boolean> {
+public abstract class Binary extends Pair<Boolean> implements Accessible<Boolean> {
 
 	public static <RE> Accessible<RE> create(Accessible<Boolean> theA, Accessible<Boolean> theB, String operation, Class<RE> re) {
 		if(re == Boolean.class){
