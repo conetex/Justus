@@ -37,12 +37,12 @@ public class Bool implements Value<Boolean>{
 	}
 	
 	@Override
-	public void setConverted(String value) throws Inconvertible {
+	public Boolean setConverted(String value) throws Inconvertible {
 		Boolean v = getTrans(value);
 		if( v == null ){
 			throw new Inconvertible("can not convert '" + value + "' to Boolean!");
 		}
-		this.set(v);
+		return this.set(v);
 	}
 
 	@Override

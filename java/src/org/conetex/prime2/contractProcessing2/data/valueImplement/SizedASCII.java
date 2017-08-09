@@ -82,8 +82,8 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 		}		
 		
 		@Override
-		public void setConverted(String newValue) throws Invalid  {
-			this.set(newValue);
+		public String setConverted(String newValue) throws Invalid  {
+			return this.set(newValue);
 		}		
 		
 		@Override

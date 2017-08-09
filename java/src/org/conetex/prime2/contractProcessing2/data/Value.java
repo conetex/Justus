@@ -12,8 +12,7 @@ public interface Value<T> {
 	
 	public T set(T value) throws Invalid;
 
-	// TODO: return T but void
-	public void setConverted(String value) throws Inconvertible, Invalid;
+	public T setConverted(String value) throws Inconvertible, Invalid;
 	
 	public Class<T> getBaseType();
 	

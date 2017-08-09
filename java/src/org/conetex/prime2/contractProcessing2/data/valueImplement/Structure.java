@@ -162,7 +162,7 @@ public class Structure implements Value<Value<?>[]>{
 		}
 		
 		@Override
-		public void setConverted(String value) throws Inconvertible, Invalid {
+		public Value<?>[] setConverted(String value) throws Inconvertible, Invalid {
 			throw new Inconvertible("can not create Structure from String!");
 		}
 

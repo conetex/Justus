@@ -22,10 +22,10 @@ public class BigInt implements Value<BigInteger>{
 	}
 	
 	@Override
-	public void setConverted(String value) throws Inconvertible {
+	public BigInteger setConverted(String value) throws Inconvertible {
 		try {
 			BigInteger v = new BigInteger(value);
-			this.set(v);
+			return this.set(v);
 		} catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
