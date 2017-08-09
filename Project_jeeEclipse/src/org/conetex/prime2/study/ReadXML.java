@@ -35,7 +35,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
 import org.conetex.prime2.contractProcessing2.lang.SetableValue;
-import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.AbstractAssigment;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
@@ -734,7 +734,7 @@ public class ReadXML {
 				if( expectedBaseTyp.isAssignableFrom(baseType) ){ // TODO dann sollte noch Long Int implementieren ...
 					String path = getNodeValue(n);
 					//AccessibleValueNew<RE> re = AccessibleValueNew.create(path, expectedBaseTyp);			
-					AccessibleValueNew<RE> re = (AccessibleValueNew<RE>) AccessibleValueNew.create(path, baseType);
+					AccessibleValue<RE> re = (AccessibleValue<RE>) AccessibleValue.create(path, baseType);
 					return re;				
 				}
 				else{

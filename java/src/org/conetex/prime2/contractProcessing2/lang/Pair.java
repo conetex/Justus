@@ -1,7 +1,5 @@
 package org.conetex.prime2.contractProcessing2.lang;
 
-import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
-
 /*
 public interface Computable {
 
@@ -10,14 +8,14 @@ public interface Computable {
 } 
 */
 
-public abstract class ComputablePair<T>{// implements Computable{
+public abstract class Pair<T>{// implements Computable{
 
 	private Accessible<T> a;
 	
 	private Accessible<T> b;
 
 	//protected ComputablePair(Accessible<T> theA, Accessible<T> theB){
-	protected ComputablePair(Accessible<T> theA, Accessible<T> theB){
+	protected Pair(Accessible<T> theA, Accessible<T> theB){
 		this.a = theA;
 		this.b = theB;
 	}

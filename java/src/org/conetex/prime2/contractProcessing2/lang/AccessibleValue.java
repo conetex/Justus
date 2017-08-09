@@ -1,25 +1,23 @@
 package org.conetex.prime2.contractProcessing2.lang;
 
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class AccessibleValueNew<T> implements Accessible<T> {
+public class AccessibleValue<T> implements Accessible<T> {
 
-	public static <T> AccessibleValueNew<T> create(String thePath, Class<T> theClass) {
+	public static <T> AccessibleValue<T> create(String thePath, Class<T> theClass) {
 		if (thePath == null) {
 			return null;
 		}
-		return new AccessibleValueNew<T>(thePath, theClass);
+		return new AccessibleValue<T>(thePath, theClass);
 	}
 
 	private String path;
 
 	private final Class<T> clazz;
 
-	private AccessibleValueNew(String thePath, Class<T> theClass) {
+	private AccessibleValue(String thePath, Class<T> theClass) {
 		this.path = thePath;
 		this.clazz = theClass;
 	}
