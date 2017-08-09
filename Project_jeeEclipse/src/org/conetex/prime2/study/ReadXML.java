@@ -408,7 +408,7 @@ public class ReadXML {
 	}
 	
 	// <T, V extends Value.Interface<T>> 
-	public static <T> AbstractAssigment<T> createAssignment(String name, Node n, Complex parentTyp){
+	public static <T> AbstractAssigment<T> _createAssignment(String name, Node n, Complex parentTyp){
 		if(n == null){
 			return null;
 		}		
@@ -853,21 +853,8 @@ public class ReadXML {
 			if(type == Node.ELEMENT_NODE){
 				
 				String name = c.getNodeName();
-				if( name.equals(Symbol.COPY) ) {
-					functionBuilders.add( 
-							new FunctionBuilder(c){
-								@Override
-								public void build(Complex c) {
-									//AbstractAssigment<?> x = createAssignment(Symbol.COPY, super.node, c);
-									Accessible<?> x = ReadXML.createAccessible( super.node, c, Object.class );
-									if(x != null){
-										Program.assignments.add(x);										
-									}
-								}
-							}
-						);
-				}
-				else if( name.equals(Symbol.REFERENCE) ) {
+
+				if( name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
@@ -896,7 +883,6 @@ public class ReadXML {
 							}
 						);					
 				}
-				
 				else if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
