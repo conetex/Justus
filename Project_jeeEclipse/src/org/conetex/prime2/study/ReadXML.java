@@ -427,7 +427,7 @@ public class ReadXML {
 		protected FunctionBuilder(Node n){
 			this.node = n;
 		}
-		public abstract void build(Complex d);
+		public abstract Accessible<?> build(Complex d);
 	}
 	
 	// <T, V extends Value.Interface<T>> 
@@ -750,13 +750,14 @@ public class ReadXML {
 			Map<Complex, List<FunctionBuilder>> complexTyps = new HashMap<Complex, List<FunctionBuilder>>();
 		
 			Structure data = createState( n, complexTyps );	
+			List<Accessible<?>> steps = new LinkedList<Accessible<?>>();
 			
 	        for (Entry<Complex, List<FunctionBuilder>> pair : complexTyps.entrySet()){
 	        	// TODO hier ist die Reihenfolge entscheidend!
 	        	Complex d = pair.getKey();
 	        	List<FunctionBuilder> fbs = pair.getValue();
 	            for (FunctionBuilder fb : fbs){
-	            	fb.build(d);
+	            	steps.add( fb.build(d) );
 	            } 
 	        }		
 		
@@ -899,12 +900,13 @@ public class ReadXML {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
-								public void build(Complex c) {
+								public Accessible<?> build(Complex c) {
 									//AbstractAssigment<?> x = createAssignment(Symbol.REFERENCE, super.node, c);
 									Accessible<?> x = ReadXML.createAccessible( super.node, c, Object.class );									
 									if(x != null){
 										Program.assignments.add(x);										
 									}
+									return x;
 								}
 							}
 						);					
@@ -913,12 +915,13 @@ public class ReadXML {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
-								public void build(Complex c) {
+								public Accessible<?> build(Complex c) {
 									Accessible<?> x = //createBoolExpression( super.node );
 									ReadXML.createAccessible( super.node, c, Object.class );
 									if(x != null){
 										Program.assignments.add(x);										
 									}
+									return x;
 								}
 							}
 						);					
@@ -928,12 +931,13 @@ public class ReadXML {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
-								public void build(Complex c) {
+								public Accessible<?> build(Complex c) {
 									Accessible<Boolean> x = //createBoolExpression( super.node );
 									ReadXML.createAccessible( super.node, c, Boolean.class );
 									if(x != null){
 										Program.boolExpress.add(x);										
 									}
+									return x;
 								}
 							}
 						);					
@@ -942,13 +946,14 @@ public class ReadXML {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
-								public void build(Complex c) {
+								public Accessible<?> build(Complex c) {
 									//Primitive<Integer> theClass = Primitive.<Integer>getInstance(Int.class);
 									Accessible<? extends Number> x = //createNumExpression( super.node, theClass );
 											ReadXML.createAccessible( super.node, c, Integer.class );// TODO mach das zu number ...
 									if(x != null){
 										Program.mathExpress.add(x);										
 									}
+									return x;
 								}
 							}
 						);					
