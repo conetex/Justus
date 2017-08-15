@@ -44,6 +44,7 @@ import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
+import org.conetex.prime2.contractProcessing2.lang.control.function.Function;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Return;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.runtime.Heap;
@@ -749,17 +750,28 @@ public class ReadXML {
 		else if( name.equals(Symbol.FUNCTION) ) {		
 			Map<Complex, List<FunctionBuilder>> complexTyps = new HashMap<Complex, List<FunctionBuilder>>();
 		
-			Structure data = createState( n, complexTyps );	
 			List<Accessible<?>> steps = new LinkedList<Accessible<?>>();
 			
-	        for (Entry<Complex, List<FunctionBuilder>> pair : complexTyps.entrySet()){
-	        	// TODO hier ist die Reihenfolge entscheidend!
-	        	Complex d = pair.getKey();
-	        	List<FunctionBuilder> fbs = pair.getValue();
-	            for (FunctionBuilder fb : fbs){
-	            	steps.add( fb.build(d) );
-	            } 
-	        }		
+	        
+	        List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
+	        List<Value<?>> values = new LinkedList<Value<?>>();		
+			Complex complexType = createState2(n, functionBuilders, values, complexTyps);
+			if(complexType != null){
+				
+				Value<?>[] theValues = new Value<?>[ values.size() ];
+				values.toArray( theValues );			
+				
+				Structure data = complexType.construct(theValues);	
+	            
+				for (FunctionBuilder fb : functionBuilders){
+	            	steps.add( fb.build(complexType) );
+	            }
+		        Accessible<?>[] theSteps = new Accessible<?>[ steps.size() ];
+		     
+		        return (Accessible<RE>) Function.create(data, steps.toArray( theSteps ) );
+			}	        
+	        
+	        return null;
 		
 		}
 		
