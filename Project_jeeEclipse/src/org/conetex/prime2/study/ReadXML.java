@@ -44,6 +44,7 @@ import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
+import org.conetex.prime2.contractProcessing2.lang.control.function.Return;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.runtime.Heap;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
@@ -130,9 +131,31 @@ public class ReadXML {
 				 + "<cred>  &js;               "
 	             + "  <author>ein &js;</author>		  "
 	             + "  <user>testusr</user>        "
-	             + "  <password>testpwd</password>"
-	               
-	        // ASSIGNMENT OK
+	             + "  <password typ='ASCII8'>testpwd</password>" // TODO nur wenn es felder gibt wird die komplex cred gebaut...
+
+// CTRL
+	            // + "  <ai2 typ='Int'>3</ai2>"
+	            // + "  <bi2 typ='Int'>4</bi2>"	
+	             
+	             + "    <return>" // 40
+	             + "      <times>" 
+	             + "        <Integer>8</Integer>"	       
+	             + "        <Integer>8</Integer>"	
+	             + "      </times>" 	             
+	             + "    </return>" 	   
+	             
+	             + "    <function typ='Int'>" // 40
+		         + "      <ai2 typ='Int'>3</ai2>"
+		         + "      <bi2 typ='Int'>4</bi2>"		             
+	             + "      <times>" 
+	             + "        <Integer>8</Integer>"	       
+	             + "        <Integer>8</Integer>"	
+	             + "      </times>" 	             
+	             + "    </function>" 	             
+                 
+
+                 /*
+// ASSIGNMENT OK
 	             + "  <aAddress typ='MailAddress64'>12@32543.com</aAddress>"
 	             + "  <a2Addres typ='MailAddress64'>ab@cdefg.com</a2Addres>"
 	             + "  <copy>"
@@ -153,8 +176,8 @@ public class ReadXML {
 	             //+ "      <target typ='MailAddress64'>sub.a2Addres</target>"
 	             //+ "    </copy>"
                  + "  </sub>"	             
-	             
-  // MATH OK
+
+// MATH OK
 	
 	             + "  <ai typ='Int'>3</ai>"
 	             + "  <bi typ='Int'>4</bi>"	             
@@ -258,7 +281,7 @@ public class ReadXML {
 	             + "      <b>bFalse</b>"	             
 	             + "    </or>"	             
 	             + "  </and></not>"	
-	            
+*/	            
 	             + "</cred>                " 
 				;
 		InputStream is = new ByteArrayInputStream( xml.getBytes(StandardCharsets.UTF_8) );
@@ -587,7 +610,7 @@ public class ReadXML {
 					return ElementaryArithmetic.<Integer,RE>create(a, b, name, expectedBaseTyp );
 				}				
 			}
-			else if(expectedBaseTyp == Comparable.class){
+			else if(expectedBaseTyp == Comparable.class || expectedBaseTyp == Object.class){
 				Accessible<Number> a = createAccessible( getChildElementByIndex(n, 0), parentTyp, Number.class );
 				Accessible<Number> b = createAccessible( getChildElementByIndex(n, 1), parentTyp, Number.class );
 				if(a != null && b != null){
@@ -715,11 +738,29 @@ public class ReadXML {
 		else if( name.equals(Symbol.ISNULL) ) {			
 			// TODO
 
-		}		
-		//|| name.equals(Symbol.NOT)
-		// is null
-		//Accessible<OUT> a = null;
-		//Accessible<OUT> b = null;								
+		}
+		// CONTROL FUNCTION
+		else if( name.equals(Symbol.RETURN) ) {			
+			Accessible<RE> e = ReadXML.createAccessible( getChildElementByIndex(n, 0), parentTyp, expectedBaseTyp );
+			//Class<?> expectedBaseTypExp = e.getBaseType();
+			return Return.create2(e);
+			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
+		}							
+		else if( name.equals(Symbol.FUNCTION) ) {		
+			Map<Complex, List<FunctionBuilder>> complexTyps = new HashMap<Complex, List<FunctionBuilder>>();
+		
+			Structure data = createState( n, complexTyps );	
+			
+	        for (Entry<Complex, List<FunctionBuilder>> pair : complexTyps.entrySet()){
+	        	// TODO hier ist die Reihenfolge entscheidend!
+	        	Complex d = pair.getKey();
+	        	List<FunctionBuilder> fbs = pair.getValue();
+	            for (FunctionBuilder fb : fbs){
+	            	fb.build(d);
+	            } 
+	        }		
+		
+		}
 		
 		
 		//  REFERENCE
@@ -868,6 +909,20 @@ public class ReadXML {
 							}
 						);					
 				}
+				else if( name.equals(Symbol.RETURN) || name.equals(Symbol.FUNCTION) ) {
+					functionBuilders.add( 
+							new FunctionBuilder(c){
+								@Override
+								public void build(Complex c) {
+									Accessible<?> x = //createBoolExpression( super.node );
+									ReadXML.createAccessible( super.node, c, Object.class );
+									if(x != null){
+										Program.assignments.add(x);										
+									}
+								}
+							}
+						);					
+				}				
 				else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) || name.equals(Symbol.NOT) || 
 						 name.equals(Symbol.SMALLER) || name.equals(Symbol.EQUAL) || name.equals(Symbol.GREATER) || name.equals(Symbol.ISNULL) ) {
 					functionBuilders.add( 
@@ -915,7 +970,7 @@ public class ReadXML {
 		
 		Complex complexType = null;
 		try {
-			complexType = Complex.createComplexDataType(theOrderedIdentifiers);
+			complexType = Complex.createComplexDataType(theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen elemente enthalten, sonst gibts keinen typ
 		} catch (DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -38,6 +38,9 @@ public class Symbol {
 	public static final String DIVIDED_BY = "divided_by";   // Division 
 	public static final String REMAINS = "remains";         // Remainder 	
 
+	// control function
+	public static final String FUNCTION = "function";
+	public static final String RETURN = "return";
 	
 	
 	
