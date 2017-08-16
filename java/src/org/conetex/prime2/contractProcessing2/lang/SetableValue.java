@@ -42,6 +42,7 @@ public class SetableValue<T> implements Setable<T> {
 		Value<T> value = thisObject.getValue(this.path, this.valueClazz);
 		T valueOld = value.get();
 		value.set(newValue);
+		value = thisObject.getValue(this.path, this.valueClazz);//TODO delete this. was just 4 debug
 		System.out.println( valueOld + " setTo " + newValue + " -> " + value.get());
 		return newValue;
 	}

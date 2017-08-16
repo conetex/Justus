@@ -132,7 +132,7 @@ public class ReadXML {
 				 + "<cred>  &js;               "
 	             + "  <author>ein &js;</author>		  "
 	             + "  <user>testusr</user>        "
-	             + "  <password typ='ASCII8'>testpwd</password>" // TODO nur wenn es felder gibt wird die komplex cred gebaut...
+	             + "  <password type='ASCII8'>testpwd</password>" // TODO nur wenn es felder gibt wird die komplex cred gebaut...
 
 // CTRL
 	            // + "  <ai2 typ='Int'>3</ai2>"
@@ -145,13 +145,24 @@ public class ReadXML {
 	             + "      </times>" 	             
 	             + "    </return>" 	   
 	             
-	             + "    <function typ='Int'>" // 40
-		         + "      <ai2 typ='Int'>3</ai2>"
-		         + "      <bi2 typ='Int'>4</bi2>"		             
+	             + "  <aParam type='Int'>8</aParam>"	             
+	             + "  <copy>"
+	             + "    <target type='Int'>function.param</target>"
+	             + "    <source type='Int'>aParam</source>"
+	             + "  </copy>"	             
+	             
+	             + "    <function type='Int' name='foo'>" // 40
+		         + "      <param type='Int'>3</param>"
 	             + "      <times>" 
-	             + "        <Integer>8</Integer>"	       
-	             + "        <Integer>8</Integer>"	
-	             + "      </times>" 	             
+	             + "        <Integer>2</Integer>"	       
+	             + "        <Integer>9</Integer>"	
+	             + "      </times>" 
+	             + "      <return>" // 40
+	             + "        <times>" 
+	             + "          <x>param</x>"	       // TODO this does not work jet
+	             + "          <Integer>8</Integer>"	
+	             + "        </times>" 	             
+	             + "      </return>" 		             
 	             + "    </function>" 	             
                  
 
@@ -446,7 +457,7 @@ public class ReadXML {
 			System.out.println(getNodeValue(c1));
 			Identifier<T> id1 = parentTyp.<T>getSubIdentifier( getNodeValue(c1) );
 			
-			String c0DataType = getAttribute(c0, Symbol.TYP);
+			String c0DataType = getAttribute(c0, Symbol.TYPE);
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
 				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
@@ -545,7 +556,7 @@ public class ReadXML {
 			System.out.println(getNodeValue(c1));
 			Identifier<RE> id1 = parentTyp.<RE>getSubIdentifier( getNodeValue(c1) );
 			
-			String c0DataType = getAttribute(c0, Symbol.TYP);
+			String c0DataType = getAttribute(c0, Symbol.TYPE);
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
 				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
@@ -768,7 +779,8 @@ public class ReadXML {
 	            }
 		        Accessible<?>[] theSteps = new Accessible<?>[ steps.size() ];
 		     
-		        return (Accessible<RE>) Function.create(data, steps.toArray( theSteps ) );
+		        return (Accessible<RE>) Function.create(//data, 
+		        		steps.toArray( theSteps ) );
 			}	        
 	        
 	        return null;
@@ -903,7 +915,7 @@ public class ReadXML {
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
 			short type = c.getNodeType();
-			System.out.println(c.getNodeName() + " - " + type);
+			System.out.println("createState2  " + c.getNodeName() + " - " + type);
 			if(type == Node.ELEMENT_NODE){
 				
 				String name = c.getNodeName();
@@ -923,7 +935,7 @@ public class ReadXML {
 							}
 						);					
 				}
-				else if( name.equals(Symbol.RETURN) || name.equals(Symbol.FUNCTION) ) {
+				else if( name.equals(Symbol.RETURN) ) {
 					functionBuilders.add( 
 							new FunctionBuilder(c){
 								@Override
@@ -931,7 +943,23 @@ public class ReadXML {
 									Accessible<?> x = //createBoolExpression( super.node );
 									ReadXML.createAccessible( super.node, c, Object.class );
 									if(x != null){
-										Program.assignments.add(x);										
+										 //Program.assignments.add(x);										
+									}
+									return x;
+								}
+							}
+						);					
+				}
+				else if( name.equals(Symbol.FUNCTION) ) {
+					createAttributesValues( c, identifiers, values, complexTyps );
+					functionBuilders.add( 
+							new FunctionBuilder(c){
+								@Override
+								public Accessible<?> build(Complex c) {
+									Accessible<?> x = //createBoolExpression( super.node );
+									ReadXML.createAccessible( super.node, c, Object.class );
+									if(x != null){
+										 Program.assignments.add(x);										
 									}
 									return x;
 								}
@@ -1012,7 +1040,7 @@ public class ReadXML {
 		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
 		
 		NamedNodeMap attributes = n.getAttributes();
-		Node dataTypNode = attributes.getNamedItem( Symbol.TYP );
+		Node dataTypNode = attributes.getNamedItem( Symbol.TYPE );
 		
 		//String valueNode = null;		
 		if(dataTypNode != null){			

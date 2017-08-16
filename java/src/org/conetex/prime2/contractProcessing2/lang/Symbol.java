@@ -3,7 +3,7 @@ package org.conetex.prime2.contractProcessing2.lang;
 public class Symbol {
 
 	// description of data
-		public static final String TYP = "typ";
+		public static final String TYPE = "type";
 		
 		public static final String BOOL = "Boolean";
 		
@@ -41,6 +41,13 @@ public class Symbol {
 	// control function
 	public static final String FUNCTION = "function";
 	public static final String RETURN = "return";
+
+	
+	
+	
+	public static final String COMPLEX = "complexType";
+	public static final String ELEMENT = "element";
+	public static final String NAME = "name";
 	
 	
 	
