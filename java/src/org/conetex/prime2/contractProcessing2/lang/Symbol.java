@@ -48,6 +48,7 @@ public class Symbol {
 	public static final String COMPLEX = "complexType";
 	public static final String ELEMENT = "element";
 	public static final String NAME = "name";
+	public static final String SIMPLE_TYPE_NS = "t:";
 	
 	
 	

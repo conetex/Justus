@@ -87,8 +87,6 @@ System.out.println("createComplexList " + name);
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
 			if(c.getNodeType() == Node.ELEMENT_NODE && c.getNodeName() == Symbol.ELEMENT){ 
-				String name = getAttribute(c, Symbol.NAME);//c.getNodeName();
-System.out.println("createComplex " + name);
 					createAttributesValues( c, identifiers//, values, complexTyps 
 							);					
 			}				
@@ -113,26 +111,38 @@ System.out.println("createComplex " + name);
 	public static boolean createAttributesValues(Node n, List<Identifier<?>> dattributes//, List<Value<?>> values, Map<Complex, List<FunctionBuilder>> complexTyps
 			){
 		
-		String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
-		
+		//String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
+		String name = getAttribute(n, Symbol.NAME);//c.getNodeName();
+//System.out.println("createAttributesValues " + name);
+
 		NamedNodeMap attributes = n.getAttributes();
-		Node dataTypNode = attributes.getNamedItem( Symbol.TYPE );
+		//Node dataTypNode = attributes.getNamedItem( Symbol.TYPE );
 		
 		//String valueNode = null;		
-		if(dataTypNode != null){			
-			String valueNode = getNodeValue(n);
-			if(valueNode != null){
+		//if(dataTypNode != null){			
+		//	String valueNode = getNodeValue(n);
+		//	if(valueNode != null){
 				// ... Primitiv	
-				String type = dataTypNode.getNodeValue();
+				//String type = dataTypNode.getNodeValue();
+				String type = getAttribute(n, Symbol.TYPE);
+		if(type.startsWith(Symbol.SIMPLE_TYPE_NS)){
 				//String value = valueNode;
-				Identifier<?> attribute = createSimpleAttribute(name, type); //
+				Identifier<?> attribute = createSimpleAttribute(name, type.substring(Symbol.SIMPLE_TYPE_NS.length())); //
+System.out.println("createAttributesValues " + name + " " + type.substring(Symbol.SIMPLE_TYPE_NS.length()) + " / " + type + " ==> " + attribute);				
 				if(attribute != null){
 					dattributes.add(attribute);
 					return true;
 				}
-				return false;			
-			}			
 		}
+		else {
+			
+		}
+		
+		
+				return false;		
+				
+		//	}			
+		//}
 /*		
 		// ... Complex
 		//Structure s = createState(n, complexTyps);
@@ -163,13 +173,41 @@ System.out.println("createComplex " + name);
 			//}			
 			
 		}
-*/
+
 		return false;			
-				
+*/				
+	}	
+	
+	public static Identifier<Value<?>[]> createComplexAttribute(String name, Complex t){
+		//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
+		
+		Label str = new Label(); 
+		try {
+			str.set(name);
+		} catch (Invalid e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		Identifier<Value<?>[]> attribute = null;
+		try {
+			attribute = t.createIdentifier( str );
+		} catch (NullLabelException | EmptyLabelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}	
+		
+		return attribute;
+		
 	}	
 	
 	public static <T> Identifier<T> createSimpleAttribute(String name, String type){
-		Primitive<T> simpleType = Primitive.<T>getInstance( type );				
+		Primitive<T> simpleType = Primitive.<T>getInstance( type );	
+		if(simpleType == null) {
+			System.err.println("unknown simple Type " + type);
+			return null;
+		}
 		Label str = new Label(); 
 		try {
 			str.set(name);

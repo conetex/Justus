@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
-<credit t="http://www.conetex.org/baseTyps">   
+<credit t="http://conetex.org/justus/baseTyps">   
 	<complexType name="cred">  
 		<element name="glaeubiger" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		<element name="schuldner" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>

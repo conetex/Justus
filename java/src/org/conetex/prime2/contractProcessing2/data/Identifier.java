@@ -41,6 +41,10 @@ public class Identifier<T> {
 	}
 
 	public static class DuplicateIdentifierNameExeption extends Exception {
+		public DuplicateIdentifierNameExeption(String msg) {
+			super(msg);
+		}
+
 		private static final long serialVersionUID = 1L;
 
 	}

@@ -17,7 +17,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 		
 		private final Map<String, Integer> index;
 		
-		private final Identifier<?>[] orderedIdentifier;
+		private Identifier<?>[] orderedIdentifier;
 		 
 		private static Complex create(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
 			if(theIndex != null && theOrderedIdentifiers != null){
@@ -31,19 +31,35 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 				return null;
 			}
 			Map<String, Integer> theIndex = new HashMap<String, Integer>();
+			createIndex(theIndex, theOrderedIdentifiers);
+			//return new ComplexDataType(theIndex, theOrderedAttributeTypes);
+			return Complex.create(theIndex, theOrderedIdentifiers);
+		}			
+		
+		private static void createIndex(Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
 			for(int i = 0; i < theOrderedIdentifiers.length; i++){
 				if(theOrderedIdentifiers[i] == null){
 					throw new Identifier.NullIdentifierException();
 				}				
 				String label = theOrderedIdentifiers[i].getLabel().get();
 				if(theIndex.containsKey(label)){
-					throw new Identifier.DuplicateIdentifierNameExeption();
+					throw new Identifier.DuplicateIdentifierNameExeption(label);
 				}
 				theIndex.put(label, i);
 			}
-			//return new ComplexDataType(theIndex, theOrderedAttributeTypes);
-			return Complex.create(theIndex, theOrderedIdentifiers);
 		}			
+		
+		public void init(final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
+			this.orderedIdentifier = theOrderedIdentifiers;
+			this.index.clear();//TODO statt clear lieber ne exception wenns nicht leer ist...
+			createIndex(this.index, theOrderedIdentifiers);
+		}		
+		
+		public static Complex create() {
+			Map<String, Integer> index = new HashMap<String, Integer>();
+			Identifier<?>[] idents = new Identifier<?>[0];
+			return Complex.create(index, idents);
+		}
 		
 		private Complex(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
 			this.index = theIndex;
