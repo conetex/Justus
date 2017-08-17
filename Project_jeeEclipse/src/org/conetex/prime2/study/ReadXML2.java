@@ -6,9 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,8 +21,11 @@ import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifierNameExeption;
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
+import org.conetex.prime2.contractProcessing2.data.Identifier.NullIdentifierException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
+import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
+import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
@@ -62,189 +68,158 @@ public class ReadXML2 {
 		
 	}
 	
+	public static class Recursive<I>{ public I function; }
+	
+	private static interface Run { public void run(Node node, Complex parent); }
+	
 	private static List<Complex> createComplexList(Node n){
+		Complex.clearInstances();
+		Map<String, Complex> unformedComplexTypes = new HashMap<String, Complex>();
+		Set<String> referringComplexTypeNames = new TreeSet<String>();
 		List<Complex> re = new LinkedList<Complex>();
-		NodeList children = n.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++){
-			Node c = children.item(i);
-			String name = c.getNodeName();
-			if( name.equals(Symbol.COMPLEX) || name.equals(Symbol.FUNCTION) ) {
-System.out.println("createComplexList " + name);
-				Complex complexType = createComplex(c);
-				if(complexType != null){
-					re.add(complexType);			
+		
+		Recursive<Run> recursive = new Recursive<Run>();
+		recursive.function = (Node node, Complex parent) -> 
+		{
+			NodeList children = node.getChildNodes();
+			for(int i = 0; i < children.getLength(); i++){
+				Node c = children.item(i);
+				String name = c.getNodeName();
+				if( name.equals(Symbol.COMPLEX) || name.equals(Symbol.FUNCTION) ) {
+					Complex complexType = createComplex(c, parent, unformedComplexTypes, referringComplexTypeNames);
+					if(complexType != null){
+						re.add(complexType);			
+						recursive.function.run(c, complexType);
+					}
 				}
 			}
+		};
+		recursive.function.run(n, null);
+		
+		/*
+		if(unformedComplexTypes.size() > 0){
+			Complex.clearInstances();
+			for(String unformedComplex : unformedComplexTypes.keySet()){
+				System.err.println("createComplexList unformed Complex: " + unformedComplex);			
+			}
+			// TODO throw Exception: wir konnten nicht alles kompilieren!!!
+			return null;
+		}*/
+		
+for(String createdComplex : Complex.getInstanceNames()){
+System.out.println("createComplexList known: " + createdComplex);			
+}
+
+		boolean error = false;
+		for(String typeName : referringComplexTypeNames){
+System.out.println("createComplexList referenced complex Type " + typeName);
+			if( Complex.getInstance(typeName) == null ){
+				error = true;
+				System.err.println("createComplexList unkown Complex: " + typeName);
+				// TODO throw Exception: wir kennen einen Typen nicht ...
+			}
 		}
+		if(error){
+			Complex.clearInstances();
+			return null;
+		}
+		
 		return re;
 	}
 	
-	public static Complex createComplex(Node n){
-				
+	public static Complex createComplex(Node n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> referringComplexTypeNames){
+		String typeName = getAttribute(n, Symbol.TYPE_NAME);
+		if(typeName == null){
+			// TODO Exception
+			System.err.println("no typeName for complex");			
+			return null;
+		}
+		if(parent != null){
+			typeName = parent.getName() + "." + typeName;
+		}
+System.out.println("createComplex " + typeName);		
 		List<Identifier<?>> identifiers = new LinkedList<Identifier<?>>();
-
 		NodeList children = n.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
-			if(c.getNodeType() == Node.ELEMENT_NODE && c.getNodeName() == Symbol.ELEMENT){ 
-					createAttributesValues( c, identifiers//, values, complexTyps 
-							);					
+			if(c.getNodeType() == Node.ELEMENT_NODE){ 
+				Identifier<?> id = null;
+				if( (c.getNodeName() == Symbol.IDENTIFIER) ){ 
+					String idTypeName = getAttribute(c, Symbol.IDENTIFIER_TYPE);
+					String idName = getAttribute(c, Symbol.IDENTIFIER_NAME);
+					if(idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)){
+						// Simple
+						id = Primitive.createIdentifier( idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()) );	
+					}
+					else{
+						// Complex
+						referringComplexTypeNames.add(idTypeName);
+						id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );						
+					}
+				}
+				else if(c.getNodeName() == Symbol.FUNCTION){ 
+					// Complex
+					String idTypeName = typeName + "." + getAttribute(c, Symbol.FUNCTION_NAME);
+					String idName = getAttribute(c, Symbol.FUNCTION_NAME);
+					referringComplexTypeNames.add(idTypeName);
+					id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );				
+				}
+				if(id != null){
+					identifiers.add(id);
+				}
+				else{
+					// TODO Exception
+				}
 			}				
 		}		
-		
 		Identifier<?>[] theOrderedIdentifiers = new Identifier<?>[ identifiers.size() ];
 		identifiers.toArray( theOrderedIdentifiers );
 		
-		Complex complexType = null;
-		try {
-			complexType = Complex.createComplexDataType(theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen elemente enthalten, sonst gibts keinen typ
-		} catch (DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}		
-				
-		return complexType;
-		
-	}	
-	
-	public static boolean createAttributesValues(Node n, List<Identifier<?>> dattributes//, List<Value<?>> values, Map<Complex, List<FunctionBuilder>> complexTyps
-			){
-		
-		//String name = n.getNodeName();// + " (local: " + n.getLocalName() + ")";
-		String name = getAttribute(n, Symbol.NAME);//c.getNodeName();
-//System.out.println("createAttributesValues " + name);
-
-		NamedNodeMap attributes = n.getAttributes();
-		//Node dataTypNode = attributes.getNamedItem( Symbol.TYPE );
-		
-		//String valueNode = null;		
-		//if(dataTypNode != null){			
-		//	String valueNode = getNodeValue(n);
-		//	if(valueNode != null){
-				// ... Primitiv	
-				//String type = dataTypNode.getNodeValue();
-				String type = getAttribute(n, Symbol.TYPE);
-		if(type.startsWith(Symbol.SIMPLE_TYPE_NS)){
-				//String value = valueNode;
-				Identifier<?> attribute = createSimpleAttribute(name, type.substring(Symbol.SIMPLE_TYPE_NS.length())); //
-System.out.println("createAttributesValues " + name + " " + type.substring(Symbol.SIMPLE_TYPE_NS.length()) + " / " + type + " ==> " + attribute);				
-				if(attribute != null){
-					dattributes.add(attribute);
-					return true;
-				}
+		Complex complexType = unformedComplexTypes.get(typeName);
+		if(complexType == null){
+			try {
+				complexType = Complex.createInit(typeName, theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen elemente enthalten, sonst gibts keinen typ
+			} catch (DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (DublicateComplexException e) {
+				// TODO Auto-generated catch block
+				System.err.println(e.getMessage());
+				e.printStackTrace();
+				return null;
+			}							
+			return complexType;			
 		}
-		else {
-			
-		}
-		
-		
-				return false;		
-				
-		//	}			
-		//}
-/*		
-		// ... Complex
-		//Structure s = createState(n, complexTyps);
-		List<FunctionBuilder> functionBuilders = new LinkedList<FunctionBuilder>();
-		List<Value<?>> subvalues = new LinkedList<Value<?>>();		
-		Complex ct = createState2(n, functionBuilders, subvalues, complexTyps);
-		
-		if(ct != null){
-			// TODO keine doppelten complexTyps erlauben ... gib ihnen auch namen...
-			//return complexType;
-			complexTyps.put(ct, functionBuilders);
-			
-			Value<?>[] theValues = new Value<?>[ subvalues.size() ];
-			subvalues.toArray( theValues );			
-			
-			//Structure s = ct.construct(theValues);		
-			
-			//if(s != null){
-			    Identifier<Value<?>[]> attribute = createComplexAttribute(name, ct); //
-				if(attribute != null){
-					Value<Value<?>[]> v = createComplexValue(attribute, ct, theValues);
-					if(v != null){
-						dattributes.add(attribute);
-						values.add(v);						
-						return true;
-					}
-				}
-			//}			
-			
-		}
-
-		return false;			
-*/				
-	}	
-	
-	public static Identifier<Value<?>[]> createComplexAttribute(String name, Complex t){
-		//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
-		
-		Label str = new Label(); 
-		try {
-			str.set(name);
-		} catch (Invalid e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		Identifier<Value<?>[]> attribute = null;
-		try {
-			attribute = t.createIdentifier( str );
-		} catch (NullLabelException | EmptyLabelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return null;
-		}	
-		
-		return attribute;
-		
-	}	
-	
-	public static <T> Identifier<T> createSimpleAttribute(String name, String type){
-		Primitive<T> simpleType = Primitive.<T>getInstance( type );	
-		if(simpleType == null) {
-			System.err.println("unknown simple Type " + type);
-			return null;
-		}
-		Label str = new Label(); 
-		try {
-			str.set(name);
-		} catch (Invalid e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		Identifier<T> attribute = null;
-		try {
-			attribute = simpleType.createIdentifier( str );
-		} catch (NullLabelException | EmptyLabelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return null;
-		}	
-		
-		return attribute;
-		
-	}
-
-	public static String getNodeValue(Node n){
-		String re = getAttribute(n, "value");
-		if(re != null){
-			return re;				
-		}
-		NodeList children = n.getChildNodes();
-		if(children != null && children.getLength() == 1){
-			Node textValueNode = children.item(0);
-			short textValueNodeType = textValueNode.getNodeType();
-			if(textValueNodeType == Node.TEXT_NODE){		
-				return textValueNode.getNodeValue();
+		else{
+			try {
+				complexType.init(typeName, theOrderedIdentifiers);
+			} catch (DuplicateIdentifierNameExeption e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (NullIdentifierException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (ComplexWasInitializedExeption e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (DublicateComplexException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 			}
+			unformedComplexTypes.remove(typeName);
+			return complexType;		
 		}
-		return null;
 	}	
-
+	
+	
+	
+	
+	
 	public static String getAttribute(Node n, String a){
 		NamedNodeMap attributes = n.getAttributes();
 		Node attributeNode = attributes.getNamedItem( a );			

@@ -21,6 +21,7 @@ import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelExceptio
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
+import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.BigInt;
@@ -1015,11 +1016,15 @@ public class ReadXML {
 		
 		Complex complexType = null;
 		try {
-			complexType = Complex.createComplexDataType(theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen elemente enthalten, sonst gibts keinen typ
+			// TODO seit Complex.create den Name als Param aufnimmt, wird das hier nicht mehr funktionieren!
+			complexType = Complex.createInit("", theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen elemente enthalten, sonst gibts keinen typ
 		} catch (DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
+		} catch (DublicateComplexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}		
 		
 		if(complexType != null){

@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
-<credit t="http://conetex.org/justus/baseTyps">   
-	<complexType name="cred">  
-		<element name="glaeubiger" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<element name="schuldner" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>
+<contract t="http://conetex.org/justus/baseTyps">
+
+	<complexType name="credit">  
+		<element name="glaeubig" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<element name="schuldne" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>
 		<element name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
 		<element name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
 	</complexType>	
 	<complexType name="person">  
 		<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/> 
-		<function name="person">  
+		<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<complexType name="person">  
 			<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
 			<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		</complexType> 		 
+		<function name="tuWas">  
+			<element name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		</function>       
 	</complexType>	
-</credit>
+
+	<credit>  
+		<glaeubig> 
+			<name>hobo</name>        
+			<mail>hobo@dida.de</mail>
+		</glaeubig> 
+		<schuldne> 
+			<name>biba</name>        
+			<mail>biba@dida.de</mail>
+		</schuldne>				       
+		<betrag>1024</betrag>
+		<aktiv>true</aktiv>       
+	</credit>		
+
+</contract>
