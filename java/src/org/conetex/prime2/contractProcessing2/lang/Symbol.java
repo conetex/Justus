@@ -39,16 +39,24 @@ public class Symbol {
 	public static final String REMAINS = "remains";         // Remainder 	
 
 	// control function
-	public static final String FUNCTION = "function";
 	public static final String RETURN = "return";
 
 	
 	
 	
+
 	public static final String COMPLEX = "complexType";
-	public static final String ELEMENT = "element";
-	public static final String NAME = "name";
 	public static final String SIMPLE_TYPE_NS = "t:";
+
+	public static final String TYPE_NAME = "name";
+	
+	public static final String FUNCTION = "function";
+	public static final String FUNCTION_NAME = "name";
+	
+	public static final String IDENTIFIER = "element";
+	public static final String IDENTIFIER_NAME = "name";
+	public static final String IDENTIFIER_TYPE = "type";
+	
 	
 	
 	

@@ -2,6 +2,8 @@ package org.conetex.prime2.contractProcessing2.data.type;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
+import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
+import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.ASCII8;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Base64_256;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Bool;
@@ -9,6 +11,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Int;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Lng;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.MailAddress64;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 public class Primitive<T> extends AbstractType<T> {
 
@@ -164,6 +167,46 @@ public class Primitive<T> extends AbstractType<T> {
 		return null;
 	}
 
+	public static <T> Identifier<T> createIdentifier(String attributeName, String typeName){
+		// SimpleType
+		if(typeName == null || typeName.length() == 0){
+			// TODO exception
+			return null;
+		}
+		if(attributeName == null || attributeName.length() == 0){
+			// TODO exception
+			return null;
+		}		
+		
+		Primitive<T> simpleType = Primitive.<T>getInstance( typeName );	
+		if(simpleType == null) {
+			System.err.println("unknown simple Type " + typeName);
+			return null;
+		}
+		Label str = new Label(); 
+		try {
+			str.set(attributeName);
+		} catch (Invalid e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		Identifier<T> re = null;
+		try {
+			re = simpleType.createIdentifier( str );
+		} catch (NullLabelException | EmptyLabelException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}		
+		
+System.out.println("Primitive.createIdentifier " + attributeName + " " + typeName + " ==> " + re);
+		return re;
+	}
+	
+
+	
+	
 	// private PrimitiveDataType(Class<Value.Interface<T>> theClass,
 	// ValueFactory<T> theFactory){
 	private Primitive(Class<? extends Value<T>> theClass, Class<T> theBaseType, PrimitiveValueFactory<T> theFactory) {

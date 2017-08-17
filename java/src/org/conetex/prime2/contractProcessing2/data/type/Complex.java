@@ -3,6 +3,7 @@ package org.conetex.prime2.contractProcessing2.data.type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
 import org.conetex.prime2.contractProcessing2.data.Value;
@@ -15,28 +16,59 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 
 	public class Complex extends AbstractType<Value<?>[]> { // implements ValueFactory<Value<?>[]>
 		
+		private static Map<String, Complex> instances = new HashMap<String, Complex>();
+		
+		public static Complex getInstance(String typeName){
+			return instances.get(typeName);
+		}
+		
+		public static void clearInstances(){
+			instances.clear();
+		}
+		
+		public static Set<String> getInstanceNames() {
+			return instances.keySet();
+		}		
+		
 		private final Map<String, Integer> index;
 		
-		private Identifier<?>[] orderedIdentifier;
+		private Identifier<?>[] orderedIdentifier;// TODO kann das nicht doch final werden?
 		 
-		private static Complex create(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
+		private String name;
+		
+		public String getName() {
+			return this.name;
+		}
+
+		private static Complex createImpl(final String theName, final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers) {
 			if(theIndex != null && theOrderedIdentifiers != null){
-				return new Complex(theIndex, theOrderedIdentifiers);
+				return new Complex(theName, theIndex, theOrderedIdentifiers);
 			}
 			return null;
 		}			
 		
-		public static Complex createComplexDataType(final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
+		public static Complex create(final String theName) {
+			Map<String, Integer> index = new HashMap<String, Integer>();
+			Identifier<?>[] idents = new Identifier<?>[0];
+			return Complex.createImpl(theName, index, idents);
+		}
+		
+		public static Complex createInit(String typeName, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException, DublicateComplexException{
 			if(theOrderedIdentifiers.length == 0){
 				return null;
 			}
 			Map<String, Integer> theIndex = new HashMap<String, Integer>();
-			createIndex(theIndex, theOrderedIdentifiers);
+			buildIndex(theIndex, theOrderedIdentifiers);
 			//return new ComplexDataType(theIndex, theOrderedAttributeTypes);
-			return Complex.create(theIndex, theOrderedIdentifiers);
+			if(Complex.instances.containsKey(typeName)){
+				throw new DublicateComplexException(typeName);
+			}		
+			Complex re = Complex.createImpl(typeName, theIndex, theOrderedIdentifiers);
+			Complex.instances.put(typeName, re);
+			return re;
 		}			
-		
-		private static void createIndex(Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
+				
+		private static void buildIndex(Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
 			for(int i = 0; i < theOrderedIdentifiers.length; i++){
 				if(theOrderedIdentifiers[i] == null){
 					throw new Identifier.NullIdentifierException();
@@ -47,24 +79,30 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 				}
 				theIndex.put(label, i);
 			}
-		}			
-		
-		public void init(final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
-			this.orderedIdentifier = theOrderedIdentifiers;
-			this.index.clear();//TODO statt clear lieber ne exception wenns nicht leer ist...
-			createIndex(this.index, theOrderedIdentifiers);
-		}		
-		
-		public static Complex create() {
-			Map<String, Integer> index = new HashMap<String, Integer>();
-			Identifier<?>[] idents = new Identifier<?>[0];
-			return Complex.create(index, idents);
 		}
 		
-		private Complex(final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
+		
+		
+		
+		private Complex(final String theName, final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
+			this.name = theName;
 			this.index = theIndex;
 			this.orderedIdentifier = theOrderedIdentifiers;			
 		}
+		
+		public void init(String typeName, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException{
+			if(this.index.size() > 0 || this.orderedIdentifier.length > 0){
+				throw new ComplexWasInitializedExeption();
+			}
+			if(Complex.instances.containsKey(typeName)){
+				throw new DublicateComplexException(typeName);
+			}
+			this.orderedIdentifier = theOrderedIdentifiers;
+			buildIndex(this.index, theOrderedIdentifiers);
+			Complex.instances.put(typeName, this);
+		}
+		
+
 		
 		
 		
@@ -187,8 +225,52 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 		
 		
 	
-
+		public Identifier<Value<?>[]> createComplexAttribute(String name){
+			//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
+			
+			Label str = new Label(); 
+			try {
+				str.set(name);
+			} catch (Invalid e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			Identifier<Value<?>[]> attribute = null;
+			try {
+				attribute = this.createIdentifier( str );
+			} catch (NullLabelException | EmptyLabelException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				return null;
+			}	
+			
+			return attribute;
+			
+		}	
 		
+		public static Identifier<?> createIdentifier(String attributeName, String typeName, Map<String, Complex> unformedComplexTypes){
+			// ComplexType
+			if(typeName == null || typeName.length() == 0){
+				// TODO exception
+				return null;
+			}
+			if(attributeName == null || attributeName.length() == 0){
+				// TODO exception
+				return null;
+			}
+			Complex c = Complex.getInstance(typeName);
+			if(c == null){
+				c = unformedComplexTypes.get(typeName);
+				if(c == null){
+					c = Complex.create(typeName);
+					unformedComplexTypes.put(typeName, c);
+				}				
+			}
+			Identifier<Value<?>[]> re = c.createComplexAttribute(attributeName);
+	System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
+			return re;
+		}		
 
 		@Override
 		public Identifier<Value<?>[]> createIdentifier(Label theName)
@@ -206,5 +288,16 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 			return Structure.create(this);
 		}
 
+		public static class ComplexWasInitializedExeption extends Exception{
+			private static final long serialVersionUID = 1L;
+		}
 		
+		public static class DublicateComplexException extends Exception{
+			public DublicateComplexException(String name) {
+				super(name);
+			}
+			private static final long serialVersionUID = 1L;			
+		}
+
+
 	}		
