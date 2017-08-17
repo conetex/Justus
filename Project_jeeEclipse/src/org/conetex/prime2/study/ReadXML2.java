@@ -1,11 +1,7 @@
 package org.conetex.prime2.study;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,22 +14,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.conetex.prime2.contractProcessing2.data.Identifier;
-import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifierNameExeption;
-import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullIdentifierException;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
-import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
-import org.conetex.prime2.contractProcessing2.runtime.Program;
-import org.conetex.prime2.study.ReadXML.FunctionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
