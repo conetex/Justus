@@ -2,6 +2,8 @@
 
 <contract t="http://conetex.org/justus/baseTyps">
 
+	<element name="instance" type="credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
+	
 	<complexType name="credit">  
 		<element name="glaeubig" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		<element name="schuldne" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>
@@ -20,7 +22,7 @@
 		</function>       
 	</complexType>	
 
-	<credit>  
+	<x type="credit">  
 		<glaeubig> 
 			<name>hobo</name>        
 			<mail>hobo@dida.de</mail>
@@ -31,6 +33,6 @@
 		</schuldne>				       
 		<betrag>1024</betrag>
 		<aktiv>true</aktiv>       
-	</credit>		
+	</x>		
 
 </contract>

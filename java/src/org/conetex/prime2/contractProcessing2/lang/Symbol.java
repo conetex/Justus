@@ -42,7 +42,7 @@ public class Symbol {
 	public static final String RETURN = "return";
 
 	
-	
+	public static final String VALUE = "value";
 	
 
 	public static final String COMPLEX = "complexType";
@@ -57,8 +57,7 @@ public class Symbol {
 	public static final String IDENTIFIER_NAME = "name";
 	public static final String IDENTIFIER_TYPE = "type";
 	
-	
-	
+	public static final String VALUE_TYPE = "type";
 	
 	
 }
