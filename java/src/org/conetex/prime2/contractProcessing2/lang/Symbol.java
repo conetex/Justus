@@ -45,6 +45,9 @@ public class Symbol {
 	public static final String VALUE = "value";
 	
 
+	
+	
+	
 	public static final String COMPLEX = "complexType";
 	public static final String SIMPLE_TYPE_NS = "t:";
 

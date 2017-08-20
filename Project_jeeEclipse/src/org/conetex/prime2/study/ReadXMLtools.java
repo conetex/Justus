@@ -54,15 +54,27 @@ public class ReadXMLtools {
 		return null;
 	}
 	
-	public static boolean isType(String name){
+	public static boolean isType(Node n){
+		String name = n.getNodeName();
 		if( name.equals(Symbol.COMPLEX) || name.equals(Symbol.FUNCTION) ) {
 			return true;
 		}
 		return false;
 	}
 	
-	public static boolean isValue(String name){
-		return ! isType(name);
+	public static boolean isIdentifier(Node n){
+		String name = n.getNodeName();
+		if( name.equals(Symbol.IDENTIFIER) ) {
+			return true;
+		}
+		return false;
+	}	
+	
+	public static boolean isValue(Node n){
+		return n.getNodeType() == Node.ELEMENT_NODE && !isType(n) && !isIdentifier(n);
 	}
 	
+	public static String getRootType(Node n) {
+		return ReadXMLtools.getAttribute(n, Symbol.TYPE_NAME);
+	}
 }

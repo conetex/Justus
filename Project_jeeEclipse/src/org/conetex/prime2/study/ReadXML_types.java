@@ -71,8 +71,7 @@ public class ReadXML_types {
 			NodeList children = node.getChildNodes();
 			for(int i = 0; i < children.getLength(); i++){
 				Node c = children.item(i);
-				String name = c.getNodeName();
-				if( ReadXMLtools.isType(name) ) {
+				if( ReadXMLtools.isType(c) ) {
 					Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);
 					if(complexType != null){
 						re.add(complexType);			
@@ -81,7 +80,12 @@ public class ReadXML_types {
 				}
 			}
 		};
-		recursive.function.run(n, null);
+		Complex complexTypeRoot = createComplexType(n, null, unformedComplexTypes, referringComplexTypeNames);
+		if(complexTypeRoot != null){
+			re.add(complexTypeRoot);			
+			recursive.function.run(n, null);
+		}		
+		//recursive.function.run(n, null);
 		
 		/*
 		if(unformedComplexTypes.size() > 0){
@@ -131,7 +135,7 @@ System.out.println("createComplex " + typeName);
 			Node c = children.item(i);
 			if(c.getNodeType() == Node.ELEMENT_NODE){ 
 				Identifier<?> id = null;
-				if( (c.getNodeName() == Symbol.IDENTIFIER) ){ 
+				if( ReadXMLtools.isIdentifier(c) ){ 
 					String idTypeName = ReadXMLtools.getAttribute(c, Symbol.IDENTIFIER_TYPE);
 					String idName = ReadXMLtools.getAttribute(c, Symbol.IDENTIFIER_NAME);
 					if(idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)){

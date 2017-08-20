@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
 
 public class ReadXML2 {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid {
 
 		FileInputStream is = new FileInputStream( "input01.xml" );
 
@@ -51,13 +51,20 @@ public class ReadXML2 {
 				
 		NodeList children = document.getChildNodes();			
 		for(int i = 0; i < children.getLength(); i++){	
-			Node c = children.item(i);
+			Node r = children.item(i);
 			short typOfNode = children.item(i).getNodeType();
 			if(typOfNode == Node.ELEMENT_NODE){
 				if(complexTyps == null){
-					complexTyps = ReadXML_types.createComplexTypes(c);
+					complexTyps = ReadXML_types.createComplexTypes(r);
+System.out.println("process " + r.getNodeName());
 					if(complexTyps != null){
-						values = createValues(c);
+						Complex complexTypeRoot = Complex.getInstance(ReadXMLtools.getRootType(r));
+						values = createValues(r, complexTypeRoot);		
+						Value<?>[] theValues = new Value<?>[ values.size() ];
+						values.toArray( theValues );
+						Value<Value<?>[]> v = complexTypeRoot.createValue();
+						v.set(theValues);
+System.out.println("success " + r.getNodeName());						
 					}
 				}
 				else{
@@ -68,35 +75,23 @@ public class ReadXML2 {
 		
 	}
 	
-	public static List<Value<?>> createValues(Node n){
-		List<Value<?>> values = new LinkedList<Value<?>>();		
-		
-		NodeList children = n.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++){
-			Node c = children.item(i);
-System.out.println("createValues " + c.getNodeName());
-			String name = c.getNodeName();
-			if( ReadXMLtools.isValue(name) ){
-				
-				String valueType = ReadXMLtools.getAttribute(n, Symbol.VALUE_TYPE);
-				if( valueType != null ){
-					Complex type = Complex.getInstance(valueType);
-					Value<?> v = createValue( c, type);
-					if(v != null){
-						values.add( v );
-					}					
-				}				
-
-			}				
-		}		
-		
-		return values;
+	public static List<Value<?>> createValues(Node c){
+		String valueType = ReadXMLtools.getAttribute(c, Symbol.VALUE_TYPE);
+		if( valueType != null ){
+			Complex type = Complex.getInstance(valueType);
+			return createValues(c, type);					
+		}
+		else {
+			
+		}
+		return null;
 	}
 	
 	public static List<Value<?>> createValues(Node n, Complex type){
 		String name = n.getNodeName();
 		if(type == null){
 			System.err.println("can not recognize type of " + name);
+			return null;
 		}
 		
 		List<Value<?>> values = new LinkedList<Value<?>>();		
@@ -104,9 +99,8 @@ System.out.println("createValues " + c.getNodeName());
 		NodeList children = n.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
+			if( ReadXMLtools.isValue(c) ){
 System.out.println("createValues " + c.getNodeName());
-			String cname = c.getNodeName();
-			if( ReadXMLtools.isValue(cname) ){
 				Value<?> v = createValue( c, type);
 				if(v != null){
 					values.add( v );
