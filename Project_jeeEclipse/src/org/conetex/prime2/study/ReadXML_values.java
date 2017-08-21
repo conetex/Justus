@@ -19,6 +19,7 @@ import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifie
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullIdentifierException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
+import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
@@ -36,7 +37,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class ReadXML2 {
+public class ReadXML_values {
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid {
 
@@ -59,7 +60,7 @@ public class ReadXML2 {
 System.out.println("process " + r.getNodeName());
 					if(complexTyps != null){
 						Complex complexTypeRoot = Complex.getInstance(ReadXMLtools.getRootType(r));
-						values = createValues(r, complexTypeRoot);		
+						values = ReadXML_values.createValues(r, complexTypeRoot);		
 						Value<?>[] theValues = new Value<?>[ values.size() ];
 						values.toArray( theValues );
 						Value<Value<?>[]> v = complexTypeRoot.createValue();
@@ -75,17 +76,7 @@ System.out.println("success " + r.getNodeName());
 		
 	}
 	
-	public static List<Value<?>> createValues(Node c){
-		String valueType = ReadXMLtools.getAttribute(c, Symbol.VALUE_TYPE);
-		if( valueType != null ){
-			Complex type = Complex.getInstance(valueType);
-			return createValues(c, type);					
-		}
-		else {
-			
-		}
-		return null;
-	}
+
 	
 	public static List<Value<?>> createValues(Node n, Complex type){
 		String name = n.getNodeName();
@@ -115,16 +106,25 @@ System.out.println("createValues " + c.getNodeName());
 	public static Value<?> createValue(Node n, Complex parentTyp){
 		
 		// + " (local: " + n.getLocalName() + ")";
-		String name = n.getNodeName();
-
+		
+		String name = null;
+		
+		if(ReadXMLtools.isIdentifier(n)){
+			name = ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME);
+		}
+		else{
+			name = n.getNodeName();
+		}
+		
 	    Identifier<?> id = parentTyp.getSubIdentifier(name); //
 	    if(id == null){
 	    	System.err.println("can not identify " + name);
 	    	return null;
 	    }
 	    
-		if( id.getType().getClass() == Complex.class ){
-			List<Value<?>> subvalues = createValues(n, (Complex) id.getType());
+	    AbstractType<?> type = id.getType();
+		if( type.getClass() == Complex.class ){
+			List<Value<?>> subvalues = createValues(n, (Complex) type);
 			Value<?>[] theValues = new Value<?>[ subvalues.size() ];
 			subvalues.toArray( theValues );		
 			return ( (Identifier<Value<?>[]>)id ).createValue(theValues);

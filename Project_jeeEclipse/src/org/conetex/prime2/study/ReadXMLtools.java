@@ -54,7 +54,14 @@ public class ReadXMLtools {
 		return null;
 	}
 	
+	public static String getRootType(Node n) {
+		return ReadXMLtools.getAttribute(n, Symbol.TYPE_NAME);
+	}
+	
 	public static boolean isType(Node n){
+		if(n.getNodeType() != Node.ELEMENT_NODE){
+			return false;
+		}
 		String name = n.getNodeName();
 		if( name.equals(Symbol.COMPLEX) || name.equals(Symbol.FUNCTION) ) {
 			return true;
@@ -63,6 +70,9 @@ public class ReadXMLtools {
 	}
 	
 	public static boolean isIdentifier(Node n){
+		if(n.getNodeType() != Node.ELEMENT_NODE){
+			return false;
+		}
 		String name = n.getNodeName();
 		if( name.equals(Symbol.IDENTIFIER) ) {
 			return true;
@@ -70,11 +80,50 @@ public class ReadXMLtools {
 		return false;
 	}	
 	
-	public static boolean isValue(Node n){
-		return n.getNodeType() == Node.ELEMENT_NODE && !isType(n) && !isIdentifier(n);
-	}
+	public static boolean isFunction(Node n) {
+		if(n.getNodeType() != Node.ELEMENT_NODE){
+			return false;
+		}		
+		String name = n.getNodeName();
+		if(    name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS)
+			|| name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)
+			|| name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) || name.equals(Symbol.NOT) 
+			|| name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY)
+		  ) {
+			return true;
+		}
+		return false;
+	}	
 	
-	public static String getRootType(Node n) {
-		return ReadXMLtools.getAttribute(n, Symbol.TYPE_NAME);
+	public static boolean isValue(Node n){
+		if(n.getNodeType() != Node.ELEMENT_NODE){
+			return false;
+		}
+		String name = n.getNodeName();
+		if( name.equals(Symbol.IDENTIFIER) ) {
+			String valueNode = ReadXMLtools.getNodeValue(n);
+			if(valueNode == null){
+				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
+				return false;
+			}
+			else{
+				//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
+				return true;
+			}
+		}
+		else{
+			if( isType(n) || isFunction(n) ){
+				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
+				return false;
+			}
+			else{
+				//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
+				return true;				
+			}
+				
+		}
 	}
+
+
+
 }

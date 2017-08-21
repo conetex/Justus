@@ -138,14 +138,19 @@ System.out.println("createComplex " + typeName);
 				if( ReadXMLtools.isIdentifier(c) ){ 
 					String idTypeName = ReadXMLtools.getAttribute(c, Symbol.IDENTIFIER_TYPE);
 					String idName = ReadXMLtools.getAttribute(c, Symbol.IDENTIFIER_NAME);
-					if(idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)){
-						// Simple
-						id = Primitive.createIdentifier( idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()) );	
+					if(idTypeName == null){
+						System.err.println("can not get Type of " + c.getNodeName() + " " + idName );
 					}
 					else{
-						// Complex
-						referringComplexTypeNames.add(idTypeName);
-						id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );						
+						if(idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)){
+							// Simple
+							id = Primitive.createIdentifier( idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()) );	
+						}
+						else{
+							// Complex
+							referringComplexTypeNames.add(idTypeName);
+							id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );						
+						}
 					}
 				}
 				else if(c.getNodeName() == Symbol.FUNCTION){ 
