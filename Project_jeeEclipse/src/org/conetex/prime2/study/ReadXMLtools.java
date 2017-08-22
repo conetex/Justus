@@ -115,7 +115,11 @@ System.out.println("isType N " + name + " - " + ReadXMLtools.getAttribute(n, Sym
 			}
 		}
 		else{
-			if( isType(n) || isFunction(n) ){
+			if( name.equals(Symbol.FUNCTION) ){
+				//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
+				return true;
+			}
+			else if( isType(n) || isFunction(n) ){
 				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
 				return false;
 			}

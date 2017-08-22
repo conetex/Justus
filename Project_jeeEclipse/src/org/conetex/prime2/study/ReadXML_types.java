@@ -161,7 +161,7 @@ System.out.println("createComplexType " + typeName);
 					// Complex
 					String idTypeName = ReadXMLtools.getAttribute(c, Symbol.FUNCTION_NAME);
 					String idName = ReadXMLtools.getAttribute(c, Symbol.FUNCTION_NAME);
-					//referringComplexTypeNames.add(idTypeName);// TODO BUG !!!
+					referringComplexTypeNames.add(idTypeName);// TODO BUG !!!
 					id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );				
 				}
 				if(id != null){

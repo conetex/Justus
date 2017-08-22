@@ -107,13 +107,13 @@ System.out.println("createValues " + c.getNodeName());
 		
 		// + " (local: " + n.getLocalName() + ")";
 		
-		String name = null;
+		String name = n.getNodeName();
 		
-		if(ReadXMLtools.isIdentifier(n)){
+		if( ReadXMLtools.isIdentifier(n) ){
 			name = ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME);
 		}
-		else{
-			name = n.getNodeName();
+		else if ( name.equals(Symbol.FUNCTION) ){
+			name = ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME);
 		}
 		
 	    Identifier<?> id = parentTyp.getSubIdentifier(name); //
