@@ -145,16 +145,20 @@ System.out.println("ReadXML_func " + r.getNodeName());
 						 name.equals(Symbol.SMALLER) || name.equals(Symbol.EQUAL) || name.equals(Symbol.GREATER) || name.equals(Symbol.ISNULL) ) {
 									Accessible<Boolean> x = //createBoolExpression( super.node );
 									//ReadXML.createAccessible( super.node, c, Boolean.class );
-									createAccessible( n, parentTyp, Boolean.class );// TODO mach das zu number ...
+									createAccessible( n, parentTyp, Boolean.class );
 							return x;					
 				}
 				else if( name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY) ) {
 									Accessible<?> x = //createBoolExpression( super.node );
 									//ReadXML.createAccessible( super.node, c, Boolean.class );
-									createAccessible( n, parentTyp, Object.class );// TODO mach das zu number ...
+									createAccessible( n, parentTyp, Object.class );
 							return x;					
 				}				
-
+				else if( name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) ){
+					Accessible<?> x = //createBoolExpression( super.node );
+					ReadXML.createAccessible( n, parentTyp, Object.class );
+					return x;					
+				}
 				
 				
 		

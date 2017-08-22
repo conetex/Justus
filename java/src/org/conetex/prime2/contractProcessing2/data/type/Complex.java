@@ -284,7 +284,10 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 		}
 
 		@Override
-		public Value<Value<?>[]> createValue() {
+		//public Value<Value<?>[]> createValue() {
+		//	return Structure.create(this);
+		//}
+		public Structure createValue() {
 			return Structure.create(this);
 		}
 

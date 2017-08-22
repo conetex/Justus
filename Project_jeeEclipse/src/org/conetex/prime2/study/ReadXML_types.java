@@ -83,7 +83,7 @@ public class ReadXML_types {
 		Complex complexTypeRoot = createComplexType(n, null, unformedComplexTypes, referringComplexTypeNames);
 		if(complexTypeRoot != null){
 			re.add(complexTypeRoot);			
-			recursive.function.run(n, null);
+			recursive.function.run(n, null);// root == null
 		}		
 		//recursive.function.run(n, null);
 		
@@ -126,9 +126,13 @@ System.out.println("createComplexList referenced complex Type " + typeName);
 			return null;
 		}
 		if(parent != null){
-			typeName = parent.getName() + "." + typeName;
+			typeName = parent.getName() + "." + typeName;		
 		}
-System.out.println("createComplex " + typeName);		
+			
+System.out.println("createComplexType " + typeName);
+if( typeName.equals("foo") ){
+System.out.println("createComplexType " + typeName);			
+}
 		List<Identifier<?>> identifiers = new LinkedList<Identifier<?>>();
 		NodeList children = n.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
@@ -155,9 +159,9 @@ System.out.println("createComplex " + typeName);
 				}
 				else if(c.getNodeName() == Symbol.FUNCTION){ 
 					// Complex
-					String idTypeName = typeName + "." + ReadXMLtools.getAttribute(c, Symbol.FUNCTION_NAME);
+					String idTypeName = ReadXMLtools.getAttribute(c, Symbol.FUNCTION_NAME);
 					String idName = ReadXMLtools.getAttribute(c, Symbol.FUNCTION_NAME);
-					referringComplexTypeNames.add(idTypeName);
+					//referringComplexTypeNames.add(idTypeName);// TODO BUG !!!
 					id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );				
 				}
 				if(id != null){

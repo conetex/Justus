@@ -34,6 +34,20 @@
 		<aktiv>true</aktiv>       
 	</instance>		
 	
+	<function type='t:Int' name='foo'> <!-- // 40 -->
+		<element name="param" type='t:Int'>3</element>
+		<times>
+		    <Integer>2</Integer>	       
+		    <Integer>9</Integer>
+	    </times>
+	    <return> <!-- // 40 -->
+		    <times>
+			    <x>param</x>	      <!-- // TODO this does not work jet -->
+			    <Integer>8</Integer>	
+		    </times>             
+	    </return>		             
+    </function>
+	
 <!-- ASSIGNMENT OK -->
 	<element name="aAddress" type='t:MailAddress64'>12@32543.com</element>
 	<element name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</element>
