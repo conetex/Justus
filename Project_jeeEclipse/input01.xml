@@ -35,7 +35,7 @@
 	</instance>		
 	
 	<function type='t:Int' name='foo'> <!-- // 40 -->
-		<element name="param" type='t:Int'>3</element>
+		<element name="param" type='t:Int'>11</element>
 		<times>
 		    <Integer>2</Integer>	       
 		    <Integer>9</Integer>

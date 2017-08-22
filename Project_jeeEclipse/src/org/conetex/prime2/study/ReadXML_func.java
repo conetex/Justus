@@ -156,7 +156,7 @@ System.out.println("ReadXML_func " + r.getNodeName());
 				}				
 				else if( name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) ){
 					Accessible<?> x = //createBoolExpression( super.node );
-					ReadXML.createAccessible( n, parentTyp, Object.class );
+					createAccessible( n, parentTyp, Object.class );
 					return x;					
 				}
 				
