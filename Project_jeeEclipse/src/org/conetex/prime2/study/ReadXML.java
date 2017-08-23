@@ -781,7 +781,7 @@ public class ReadXML {
 		        Accessible<?>[] theSteps = new Accessible<?>[ steps.size() ];
 		     
 		        return (Accessible<RE>) Function.create(//data, 
-		        		steps.toArray( theSteps ) );
+		        		steps.toArray( theSteps ), null);
 			}	        
 	        
 	        return null;

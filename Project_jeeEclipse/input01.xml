@@ -2,51 +2,62 @@
 
 <contract name="contract4u" t="http://conetex.org/justus/baseTyps">
 	
+	<complexType name="root"> 
+	<element name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
 	<complexType name="credit">  
-		<element name="glaeubig" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<element name="schuldne" type="person" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<element name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<element name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
 		<element name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
 		<element name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
 	</complexType>	
 	<complexType name="person">  
 		<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<element name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
 		<complexType name="person">  
 			<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
 			<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		</complexType> 		 
-		<function name="tuWas">  
-			<element name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<function name="tuWas" type="contract4u.root.person.tuWas">  
+			<element name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+		    <return><a>nr</a></return>			        
 		</function>       
 	</complexType>	
+	</complexType>
 
-	<element name="instance" type="credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
+	<element name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
 	<instance>  
 		<glaeubig> 
 			<name>hobo</name>        
 			<mail>hobo@dida.de</mail>
+			<nr>111</nr>
 		</glaeubig> 
 		<schuldne> 
 			<name>biba</name>        
 			<mail>biba@dida.de</mail>
+			<nr>222</nr>
 		</schuldne>				       
 		<betrag>1024</betrag>
 		<aktiv>true</aktiv>       
 	</instance>		
-	
-	<function name='foo'> <!-- // 40 -->
+
+	<function name='foo' type="contract4u.foo"> 
 		<element name="param" type='t:Int'>11</element>
 		<times>
 		    <Integer>2</Integer>	       
 		    <Integer>9</Integer>
 	    </times>
-	    <return> <!-- // 40 -->
+	    <return>
 		    <times>
-			    <x>param</x>	      <!-- // TODO this does not work jet -->
+			    <x>param</x>	    
 			    <Integer>8</Integer>	
 		    </times>             
 	    </return>		             
     </function>
+    
+    <call function="foo" />
+    
+    <call object="instance.glaeubig" function="foo" />
 	
 <!-- ASSIGNMENT OK -->
 	<element name="aAddress" type='t:MailAddress64'>12@32543.com</element>

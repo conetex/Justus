@@ -64,10 +64,10 @@ public class ReadXMLtools {
 		}
 		String name = n.getNodeName();
 		if( name.equals(Symbol.COMPLEX) || name.equals(Symbol.FUNCTION) ) {
-System.out.println("isType Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );		
+//System.out.println("isType Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );		
 			return true;
 		}
-System.out.println("isType N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );		
+//System.out.println("isType N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );		
 		return false;
 	}
 	
@@ -91,7 +91,7 @@ System.out.println("isType N " + name + " - " + ReadXMLtools.getAttribute(n, Sym
 			|| name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)
 			|| name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) || name.equals(Symbol.NOT) 
 			|| name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY)
-			|| name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN)
+			|| name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL)
 		  ) {
 			return true;
 		}

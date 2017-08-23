@@ -71,11 +71,16 @@ System.out.println("ReadXML_func " + r.getNodeName());
 						values.toArray( theValues );
 						Structure v = complexTypeRoot.createValue();
 						v.set(theValues);
-						
+
 						List<Accessible<?>> functions = ReadXML_func.createFunctions(r, complexTypeRoot);
 						for(Accessible<?> f : functions){
 							Object re = f.getFrom(v);
-System.out.println("ReadXML_func function ==> " + re.toString());												
+if(re != null){							
+System.out.println("ReadXML_func function ==> " + re.toString());
+}
+else{
+System.out.println("ReadXML_func function ==> " + re);
+}
 						}
 System.out.println("ReadXML_func " + r.getNodeName());						
 					}
@@ -154,7 +159,7 @@ System.out.println("ReadXML_func " + r.getNodeName());
 									createAccessible( n, parentTyp, Object.class );
 							return x;					
 				}				
-				else if( name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) ){
+				else if( name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL) ){
 					Accessible<?> x = //createBoolExpression( super.node );
 					createAccessible( n, parentTyp, Object.class );
 					return x;					
@@ -392,7 +397,25 @@ System.out.println("ReadXML_func " + r.getNodeName());
 			//Class<?> expectedBaseTypExp = e.getBaseType();
 			return Return.create2(e);
 			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
+		}
+		else if( name.equals(Symbol.CALL) ) {	
+			String functionName = ReadXMLtools.getAttribute(n, Symbol.CALL_FUNCTION_NAME);
+			Accessible<RE> e = (Accessible<RE>) Function.getInstance(functionName);
+			//Class<?> expectedBaseTypExp = e.getBaseType();
+			return Return.create2(e);
+			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
 		}		
+		else if( name.equals(Symbol.FUNCTION) ) {
+			String functionName = ReadXMLtools.getAttribute(n, Symbol.FUNCTION_NAME);
+			String idTypeName = ReadXMLtools.getAttribute(n, Symbol.FUNCTION_TYP);
+			Complex complexType = Complex.getInstance(idTypeName);
+			if(complexType != null){
+				List<Accessible<?>> steps = ReadXML_func.createFunctions(n, complexType);
+				Accessible<?>[] theSteps = new Accessible<?>[ steps.size() ];
+			    return (Accessible<RE>) Function.create(//data, 
+			        		steps.toArray( theSteps ), functionName );				 
+			}
+		}
 		/*
 		else if( name.equals(Symbol.FUNCTION) ) {		
 			Map<Complex, List<FunctionBuilder>> complexTyps = new HashMap<Complex, List<FunctionBuilder>>();
