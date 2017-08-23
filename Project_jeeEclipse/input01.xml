@@ -3,6 +3,7 @@
 <contract name="contract4u" t="http://conetex.org/justus/baseTyps">
 	
 	<complexType name="root"> 
+	
 	<element name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
 	<complexType name="credit">  
 		<element name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
@@ -23,6 +24,7 @@
 		    <return><a>nr</a></return>			        
 		</function>       
 	</complexType>	
+	
 	</complexType>
 
 	<element name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  

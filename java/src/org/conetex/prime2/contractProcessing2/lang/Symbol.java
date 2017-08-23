@@ -40,12 +40,12 @@ public class Symbol {
 
 	// control function
 	public static final String RETURN = "return";
-
+	public static final String CALL = "call";
+	public static final String CALL_FUNCTION_NAME = "function";
+	
 	
 	public static final String VALUE = "value";
-	
-
-	
+		
 	
 	
 	public static final String COMPLEX = "complexType";
@@ -55,6 +55,7 @@ public class Symbol {
 	
 	public static final String FUNCTION = "function";
 	public static final String FUNCTION_NAME = "name";
+	public static final String FUNCTION_TYP = "type";
 	
 	public static final String IDENTIFIER = "element";
 	public static final String IDENTIFIER_NAME = "name";
