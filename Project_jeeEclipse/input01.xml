@@ -77,8 +77,8 @@
  	<element name="sub">	         
 		<element name="aAddress" type='t:MailAddress64'>yy@yyy.com</element>
 		<element name="a2Addres" type='t:MailAddress64'>xx@xxx.com</element>		
-       <!--    <copy>
-             <source typ='MailAddress64'>sub.aAddress</source>
+       <!--<copy>
+            <source typ='MailAddress64'>sub.aAddress</source>
             <target typ='MailAddress64'>sub.a2Addres</target>
            </copy> -->
 	</element>	
