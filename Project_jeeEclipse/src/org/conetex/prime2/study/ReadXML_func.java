@@ -114,13 +114,25 @@ System.out.println("ReadXML_func " + r.getNodeName());
 		NodeList children = n.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
-			if( ReadXMLtools.isFunction(c) ){
-//System.out.println("createFunctions " + c.getNodeName());
+			if( ReadXMLtools.isFunction(c) ){ 
+				
+System.out.println("createFunctions " + c.getNodeName() + " - " + ReadXMLtools.getAttribute(c, Symbol.IDENTIFIER_NAME));
 				Accessible<?> v = createFunc( c, type);
 				if(v != null){
 					acc.add( v );
 				}				
-			}				
+			}
+			
+			String cname = n.getNodeName();
+		    Identifier<?> cid = type.getSubIdentifier(cname); //
+		    if(cid == null){
+		    	System.err.println("can not identify " + cname);
+		    	continue;
+		    }
+		    AbstractType<?> ctype = cid.getType();
+		    if( ctype.getClass() == Complex.class ){
+		    	createFunctions(c, (Complex) ctype);
+		    }
 		}		
 		
 		return acc;
