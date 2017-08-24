@@ -24,6 +24,7 @@ import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
@@ -60,10 +61,10 @@ public class ReadXML_values {
 System.out.println("process " + r.getNodeName());
 					if(complexTyps != null){
 						Complex complexTypeRoot = Complex.getInstance(ReadXMLtools.getRootType(r));
-						values = ReadXML_values.createValues(r, complexTypeRoot);		
+						values = ReadXML_values.createValues(r, complexTypeRoot, null);		
 						Value<?>[] theValues = new Value<?>[ values.size() ];
 						values.toArray( theValues );
-						Value<Value<?>[]> v = complexTypeRoot.createValue();
+						Value<Value<?>[]> v = complexTypeRoot.createValue(null);
 						v.set(theValues);
 System.out.println("success " + r.getNodeName());						
 					}
@@ -78,7 +79,7 @@ System.out.println("success " + r.getNodeName());
 	
 
 	
-	public static List<Value<?>> createValues(Node n, Complex type){
+	public static List<Value<?>> createValues(Node n, Complex type, Structure data){
 		String name = n.getNodeName();
 		if(type == null){
 			System.err.println("can not recognize type of " + name);
@@ -92,7 +93,7 @@ System.out.println("success " + r.getNodeName());
 			Node c = children.item(i);
 			if( ReadXMLtools.isValue(c) ){
 System.out.println("createValues " + c.getNodeName());
-				Value<?> v = createValue( c, type);
+				Value<?> v = createValue( c, type, data);
 				if(v != null){
 					values.add( v );
 				}
@@ -103,7 +104,7 @@ System.out.println("createValues " + c.getNodeName());
 	}
 	
 	
-	public static Value<?> createValue(Node n, Complex parentTyp){
+	public static Value<?> createValue(Node n, Complex parentTyp, Structure parentData){
 		
 		// + " (local: " + n.getLocalName() + ")";
 		
@@ -118,7 +119,7 @@ System.out.println("createValues " + c.getNodeName());
 		
 	    Identifier<?> id = parentTyp.getSubIdentifier(name); //
 	    if(id == null){
-	    	System.err.println("can not identify " + name);
+	    	System.err.println("createValue: can not identify " + name);
 	    	return null;
 	    }
 	    
@@ -127,12 +128,12 @@ System.out.println("createValues " + c.getNodeName());
 			List<Value<?>> subvalues = createValues(n, (Complex) type);
 			Value<?>[] theValues = new Value<?>[ subvalues.size() ];
 			subvalues.toArray( theValues );		
-			return ( (Identifier<Value<?>[]>)id ).createValue(theValues);
+			return ( (IdentifierComplex)id ).createValue(theValues, parentData);
 		}
 		else{
 			String valueNode = ReadXMLtools.getNodeValue(n);
 			if(valueNode != null){
-				return id.createValue(valueNode);
+				return ( (IdentifierPrimitive<?>)id ) .createValue(valueNode, parentData);
 			}
 		}
 		

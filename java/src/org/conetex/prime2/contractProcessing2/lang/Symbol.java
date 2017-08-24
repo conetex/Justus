@@ -42,6 +42,7 @@ public class Symbol {
 	public static final String RETURN = "return";
 	public static final String CALL = "call";
 	public static final String CALL_FUNCTION_NAME = "function";
+	public static final String CALL_OBJECT = "object";
 	
 	
 	public static final String VALUE = "value";
@@ -50,8 +51,9 @@ public class Symbol {
 	
 	public static final String COMPLEX = "complexType";
 	public static final String SIMPLE_TYPE_NS = "t:";
-
 	public static final String TYPE_NAME = "name";
+	public static final String TYPE_SEPERATOR = ".";
+	
 	
 	public static final String FUNCTION = "function";
 	public static final String FUNCTION_NAME = "name";

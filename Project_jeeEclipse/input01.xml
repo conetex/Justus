@@ -33,11 +33,17 @@
 			<name>hobo</name>        
 			<mail>hobo@dida.de</mail>
 			<nr>111</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>
 		</glaeubig> 
 		<schuldne> 
 			<name>biba</name>        
 			<mail>biba@dida.de</mail>
 			<nr>222</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>			
 		</schuldne>				       
 		<betrag>1024</betrag>
 		<aktiv>true</aktiv>       

@@ -24,6 +24,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
 import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
@@ -32,6 +33,7 @@ import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
+import org.conetex.prime2.contractProcessing2.lang.control.function.Call;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Function;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Return;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
@@ -76,10 +78,10 @@ System.out.println("ReadXML_func " + r.getNodeName());
 						for(Accessible<?> f : functions){
 							Object re = f.getFrom(v);
 if(re != null){							
-System.out.println("ReadXML_func function ==> " + re.toString());
+System.out.println("ReadXML_func function ==> " + f + " -> " + re.toString());
 }
 else{
-System.out.println("ReadXML_func function ==> " + re);
+System.out.println("ReadXML_func function ==> " + f + " -> " + re);
 }
 						}
 System.out.println("ReadXML_func " + r.getNodeName());						
@@ -123,16 +125,28 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + ReadXMLtools.g
 				}				
 			}
 			
-			String cname = n.getNodeName();
-		    Identifier<?> cid = type.getSubIdentifier(cname); //
-		    if(cid == null){
-		    	System.err.println("can not identify " + cname);
-		    	continue;
-		    }
-		    AbstractType<?> ctype = cid.getType();
-		    if( ctype.getClass() == Complex.class ){
-		    	createFunctions(c, (Complex) ctype);
-		    }
+			if( ReadXMLtools.isType(c) ){
+				String cname = ReadXMLtools.getAttribute(c, Symbol.TYPE_NAME);
+				/*
+			    Identifier<?> cid = type.getSubIdentifier(cname); //
+			    if(cid == null){
+			    	System.err.println("createFunctions: can not identify " + cname);
+			    	continue;
+			    }
+			    AbstractType<?> ctype = cid.getType();
+			    if( ctype.getClass() == Complex.class ){
+			    	createFunctions(c, (Complex) ctype);
+			    }
+			    */
+			    Complex ctype = Complex.getInstance(type.getName() + "." + cname);
+			    if(ctype == null){
+			    	System.err.println("createFunctions: can not identify " + type.getName() + "." + cname);
+			    	continue;
+			    }
+			    else{
+			    	createFunctions(c, ctype);
+			    }			    
+			}
 		}		
 		
 		return acc;
@@ -411,10 +425,13 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + ReadXMLtools.g
 			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
 		}
 		else if( name.equals(Symbol.CALL) ) {	
+			String functionObj = ReadXMLtools.getAttribute(n, Symbol.CALL_OBJECT);
+			AccessibleValueNew<Structure> re = AccessibleValueNew.create(functionObj, Structure.class);
+			
 			String functionName = ReadXMLtools.getAttribute(n, Symbol.CALL_FUNCTION_NAME);
 			Accessible<RE> e = (Accessible<RE>) Function.getInstance(functionName);
 			//Class<?> expectedBaseTypExp = e.getBaseType();
-			return Return.create2(e);
+			return Call.create2(e, re);
 			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
 		}		
 		else if( name.equals(Symbol.FUNCTION) ) {
@@ -462,7 +479,23 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + ReadXMLtools.g
 		//  REFERENCE
 		else{
 			System.out.println("get_id from " + name + " (" + ReadXMLtools.getNodeValue(n) + ")");
-			Identifier<?> id = parentTyp.getSubIdentifier( ReadXMLtools.getNodeValue(n) );
+			String typName = parentTyp.getName();
+			String idName =  ReadXMLtools.getNodeValue(n);
+			Complex pTyp = parentTyp;
+			Identifier<?> id = pTyp.getSubIdentifier( idName );
+			while( id == null ){
+				String[] names = Complex.splitRight(typName);
+			    if(names[0] == null){
+			    	break;
+			    }
+			    typName = names[0];
+		    	pTyp = Complex.getInstance( typName );
+		    	if(pTyp == null){
+		    		break;
+		    	}
+		    	id = pTyp.getSubIdentifier( idName );
+			}
+			
 			if( id != null){
 				AbstractType<?> t = id.getType();
 				Class<? extends Value<?>> clazzChild = t.getClazz();

@@ -13,6 +13,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
+import org.conetex.prime2.contractProcessing2.lang.Symbol;
 
 	public class Complex extends AbstractType<Value<?>[]> { // implements ValueFactory<Value<?>[]>
 		
@@ -105,17 +106,9 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 
 		
 		
+
 		
-		public Structure _createState() {
-			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
-			for(int i = 0; i < this.orderedIdentifier.length; i++){
-				vals[i] = this.orderedIdentifier[i].createValue();
-			}
-			//return new Structure(this, vals);
-			return Structure.create(this, vals);
-		}
-		
-		public Structure construct(Value<?>[] theValues) {
+		public Structure construct(Value<?>[] theValues, Structure theParent) {
 			if(theValues.length == 0){
 				// TODO Exception
 				return null;
@@ -125,14 +118,14 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 				return null;
 			}		
 			//return new Structure(this, theValues);
-			return Structure.create(this, theValues);
+			return Structure.create(this, theValues, theParent);
 		}
 		
-		public Structure construct(String[] theValues) {
+		public Structure construct(String[] theValues, Structure theParent) {
 			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
 			try {
 				for(int i = 0; i < this.orderedIdentifier.length; i++){
-					Value<?> re = this.orderedIdentifier[i].createValue();
+					Value<?> re = this.orderedIdentifier[i].createValue(theParent);
 					re.setConverted( theValues[i] );
 					vals[i] = re;
 				}
@@ -142,10 +135,10 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 				return null;
 			}			
 			//return new Structure(this, vals);
-			return Structure.create(this, vals);
+			return Structure.create(this, vals, theParent);
 		}
 		
-		public Structure construct(List<String> theValues) {
+		public Structure construct(List<String> theValues, Structure theParent) {
 			if(theValues.size() == 0){
 				// TODO Exception
 				return null;
@@ -157,7 +150,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
 			try {
 				for(int i = 0; i < this.orderedIdentifier.length; i++){
-					Value<?> re = this.orderedIdentifier[i].createValue();
+					Value<?> re = this.orderedIdentifier[i].createValue(theParent);
 					re.setConverted( theValues.get(i) );
 					vals[i] = re;
 				}
@@ -167,10 +160,9 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 				return null;
 			}			
 			//return new Structure(this, vals);
-			return Structure.create(this, vals);
+			return Structure.create(this, vals, theParent);
 		}		
 		
-				
 		public int getSubIdentifierIndex(String aName){
 			Integer i = this.index.get(aName);
 			if(i == null){
@@ -283,12 +275,12 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 			return Structure.class;
 		}
 
-		@Override
+		
 		//public Value<Value<?>[]> createValue() {
 		//	return Structure.create(this);
 		//}
-		public Structure createValue() {
-			return Structure.create(this);
+		public Structure createValue(Structure theParent) {//
+			return Structure.create(this, theParent);//, 
 		}
 
 		public static class ComplexWasInitializedExeption extends Exception{
@@ -302,5 +294,22 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 			private static final long serialVersionUID = 1L;			
 		}
 
+		
+		
+		public static String[] splitRight(String aName){
+			String[] re = new String[2];
+			if(aName == null){
+				return re;
+			}
+		    int i = aName.lastIndexOf(Symbol.TYPE_SEPERATOR);
+			if(i > -1 && i < aName.length()){
+				re[0] = aName.substring(0, i);
+		    	if(i + Symbol.TYPE_SEPERATOR.length() < aName.length()){
+		    		re[1] = aName.substring(i+Symbol.TYPE_SEPERATOR.length());
+		    	}
+		    }
+			return re;
+		}		
+		
 
 	}		

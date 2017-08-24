@@ -11,6 +11,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Int;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Lng;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.MailAddress64;
+import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
 public class Primitive<T> extends AbstractType<T> {
@@ -215,7 +216,7 @@ System.out.println("Primitive.createIdentifier " + attributeName + " " + typeNam
 		this.factory = theFactory;
 	}
 
-	@Override
+	
 	public Value<T> createValue() {
 		return this.factory.createValueImp();
 	}
