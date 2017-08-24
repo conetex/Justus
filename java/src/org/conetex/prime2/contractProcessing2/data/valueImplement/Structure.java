@@ -152,7 +152,11 @@ public class Structure implements Value<Value<?>[]>{
 				    		}
 						}
 				    }				
-					
+				    else {
+				    	if(this.parent != null) {
+				    		return this.parent.getValueNewNew(aName, clazz);
+				    	}
+				    }
 				}
 				return null;
 			}		
@@ -193,7 +197,12 @@ public class Structure implements Value<Value<?>[]>{
 				    			return subStructure.getValueNew(names[1], clazz);
 				    		}
 						}
-				    }				
+				    }
+				    else {
+				    	if(this.parent != null) {
+				    		return this.parent.getValueNew(aName, clazz);
+				    	}
+				    }
 					
 				}
 				return null;

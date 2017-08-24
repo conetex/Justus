@@ -25,6 +25,7 @@ public class AccessibleValue<T> implements Accessible<T> {
 	@Override
 	public T getFrom(Structure thisObject) {
 		Value<T> value = thisObject.getValueNew(this.path, this.clazz);
+		// TODO null value abfangen...
 		return value.get();
 	}
 
