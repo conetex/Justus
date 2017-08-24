@@ -14,7 +14,7 @@ public class Structure implements Value<Value<?>[]>{
 		
 		private Value<?>[] values;
 				
-		public static Structure create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent){
+		public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent){
 			if(theAttributeTuple != null && theValues != null){
 				return new Structure(theAttributeTuple, theValues, theParent);
 			}

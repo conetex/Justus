@@ -108,7 +108,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		
 
 		
-		public Structure construct(Value<?>[] theValues, Structure theParent) {
+		public Structure _construct(Value<?>[] theValues, Structure theParent) {
 			if(theValues.length == 0){
 				// TODO Exception
 				return null;
@@ -118,10 +118,10 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				return null;
 			}		
 			//return new Structure(this, theValues);
-			return Structure.create(this, theValues, theParent);
+			return Structure._create(this, theValues, theParent);
 		}
 		
-		public Structure construct(String[] theValues, Structure theParent) {
+		public Structure _construct(String[] theValues, Structure theParent) {
 			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
 			try {
 				for(int i = 0; i < this.orderedIdentifier.length; i++){
@@ -135,10 +135,10 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				return null;
 			}			
 			//return new Structure(this, vals);
-			return Structure.create(this, vals, theParent);
+			return Structure._create(this, vals, theParent);
 		}
 		
-		public Structure construct(List<String> theValues, Structure theParent) {
+		public Structure _construct(List<String> theValues, Structure theParent) {
 			if(theValues.size() == 0){
 				// TODO Exception
 				return null;
@@ -160,7 +160,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				return null;
 			}			
 			//return new Structure(this, vals);
-			return Structure.create(this, vals, theParent);
+			return Structure._create(this, vals, theParent);
 		}		
 		
 		public int getSubIdentifierIndex(String aName){

@@ -31,7 +31,7 @@ public abstract class AbstractType<T> {
 		return IdentifierPrimitive.<V> create(theName, thisObj);
 	}
 	
-	public static <V> Identifier<V> createIdentifier(Label theName, Complex thisObj)
+	public static Identifier<Value<?>[]> createIdentifier(Label theName, Complex thisObj)
 			throws NullLabelException, EmptyLabelException {
 		if (theName == null || theName.get() == null) {
 			throw new Identifier.NullLabelException();
