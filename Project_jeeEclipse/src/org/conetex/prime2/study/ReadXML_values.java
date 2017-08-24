@@ -19,6 +19,8 @@ import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifie
 import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullIdentifierException;
 import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
+import org.conetex.prime2.contractProcessing2.data.IdentifierComplex;
+import org.conetex.prime2.contractProcessing2.data.IdentifierPrimitive;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
@@ -31,7 +33,6 @@ import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
-import org.conetex.prime2.study.ReadXML.FunctionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -125,10 +126,17 @@ System.out.println("createValues " + c.getNodeName());
 	    
 	    AbstractType<?> type = id.getType();
 		if( type.getClass() == Complex.class ){
-			List<Value<?>> subvalues = createValues(n, (Complex) type);
+			Structure re = ( (IdentifierComplex)id ).createValue(parentData);
+			List<Value<?>> subvalues = createValues(n, (Complex) type, re);
 			Value<?>[] theValues = new Value<?>[ subvalues.size() ];
-			subvalues.toArray( theValues );		
-			return ( (IdentifierComplex)id ).createValue(theValues, parentData);
+			subvalues.toArray( theValues );	
+			try {
+				re.set(theValues);
+			} catch (Invalid e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return re;
 		}
 		else{
 			String valueNode = ReadXMLtools.getNodeValue(n);

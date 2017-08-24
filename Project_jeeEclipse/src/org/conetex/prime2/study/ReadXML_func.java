@@ -38,7 +38,6 @@ import org.conetex.prime2.contractProcessing2.lang.control.function.Function;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Return;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
-import org.conetex.prime2.study.ReadXML.FunctionBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -68,10 +67,10 @@ public class ReadXML_func {
 System.out.println("ReadXML_func " + r.getNodeName());
 					if(complexTyps != null){
 						Complex complexTypeRoot = Complex.getInstance(ReadXMLtools.getRootType(r));
-						List<Value<?>> values = ReadXML_values.createValues(r, complexTypeRoot);
+						Structure v = complexTypeRoot.createValue(null);
+						List<Value<?>> values = ReadXML_values.createValues(r, complexTypeRoot, v);
 						Value<?>[] theValues = new Value<?>[ values.size() ];
 						values.toArray( theValues );
-						Structure v = complexTypeRoot.createValue();
 						v.set(theValues);
 
 						List<Accessible<?>> functions = ReadXML_func.createFunctions(r, complexTypeRoot);
