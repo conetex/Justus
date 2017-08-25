@@ -121,6 +121,10 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			return Structure._create(this, theValues, theParent);
 		}
 		
+		public int getIdentifiersSize(){
+			return this.orderedIdentifier.length;
+		}
+		
 		public Structure _construct(String[] theValues, Structure theParent) {
 			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
 			try {

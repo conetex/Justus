@@ -62,11 +62,18 @@ public class ReadXML_values {
 System.out.println("process " + r.getNodeName());
 					if(complexTyps != null){
 						Complex complexTypeRoot = Complex.getInstance(ReadXMLtools.getRootType(r));
+						
+						//new
+						Structure re = complexTypeRoot.createValue(null);
+						ReadXML_values.createValues(r, complexTypeRoot, re);		
+						
+						/*
 						values = ReadXML_values.createValues(r, complexTypeRoot, null);		
 						Value<?>[] theValues = new Value<?>[ values.size() ];
 						values.toArray( theValues );
 						Value<Value<?>[]> v = complexTypeRoot.createValue(null);
 						v.set(theValues);
+						*/
 System.out.println("success " + r.getNodeName());						
 					}
 				}
@@ -87,21 +94,49 @@ System.out.println("success " + r.getNodeName());
 			return null;
 		}
 		
-		List<Value<?>> values = new LinkedList<Value<?>>();		
+		/* old
+		List<Value<?>> values = new LinkedList<Value<?>>();
+		*/		
 		
 		NodeList children = n.getChildNodes();
 		for(int i = 0; i < children.getLength(); i++){
 			Node c = children.item(i);
 			if( ReadXMLtools.isValue(c) ){
 System.out.println("createValues " + c.getNodeName());
-				Value<?> v = createValue( c, type, data);
+				Value<?> v = createValue( c, type, data );
 				if(v != null){
+					/* old
 					values.add( v );
+					*/
+					
+					// new
+					try {
+						data.set(c.getNodeName(), v);
+					} catch (Invalid e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			}				
 		}		
 		
+		/* old
+		Value<?>[] theValues = new Value<?>[ values.size() ];
+		values.toArray( theValues );	
+		try {
+			data.set(theValues);
+		} catch (Invalid e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		
 		return values;
+		*/
+		
+		//new
+		return null;
 	}
 	
 	
@@ -127,6 +162,11 @@ System.out.println("createValues " + c.getNodeName());
 	    AbstractType<?> type = id.getType();
 		if( type.getClass() == Complex.class ){
 			Structure re = ( (IdentifierComplex)id ).createValue(parentData);
+			
+			// new
+			createValues(n, (Complex) type, re);
+			
+			/* old
 			List<Value<?>> subvalues = createValues(n, (Complex) type, re);
 			Value<?>[] theValues = new Value<?>[ subvalues.size() ];
 			subvalues.toArray( theValues );	
@@ -136,6 +176,7 @@ System.out.println("createValues " + c.getNodeName());
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			*/
 			return re;
 		}
 		else{

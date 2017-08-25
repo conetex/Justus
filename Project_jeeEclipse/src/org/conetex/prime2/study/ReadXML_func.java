@@ -69,9 +69,11 @@ System.out.println("ReadXML_func " + r.getNodeName());
 						Complex complexTypeRoot = Complex.getInstance(ReadXMLtools.getRootType(r));
 						Structure v = complexTypeRoot.createValue(null);
 						List<Value<?>> values = ReadXML_values.createValues(r, complexTypeRoot, v);
+						/* old
 						Value<?>[] theValues = new Value<?>[ values.size() ];
 						values.toArray( theValues );
 						v.set(theValues);
+						*/
 
 						List<Accessible<?>> functions = ReadXML_func.createFunctions(r, complexTypeRoot);
 						for(Accessible<?> f : functions){

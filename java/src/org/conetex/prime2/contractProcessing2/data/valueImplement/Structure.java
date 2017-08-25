@@ -16,23 +16,30 @@ public class Structure implements Value<Value<?>[]>{
 				
 		public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent){
 			if(theAttributeTuple != null && theValues != null){
-				return new Structure(theAttributeTuple, theValues, theParent);
+				return null;//new Structure(theAttributeTuple, theValues, theParent);
 			}
 			return null;
 		}				
 
 		public static Structure create(final Complex theAttributeTuple, final Structure theParent){
 			if(theAttributeTuple != null){
-				return new Structure(theAttributeTuple, null, theParent);
+				return new Structure(theAttributeTuple, theParent);
 			}
 			return null;
 		}	
 		
+		/*
 		private Structure(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent){
 			this.type = theAttributeTuple;
 			this.values = theValues;
 			this.parent = theParent;
-		}	
+		}	*/
+		
+		private Structure(final Complex theAttributeTuple, final Structure theParent){
+			this.type = theAttributeTuple;
+			this.values = new Value<?>[ theAttributeTuple.getIdentifiersSize() ];
+			this.parent = theParent;
+		}		
 		
 		public static String[] split(String aName){
 			String[] re = new String[2];
@@ -259,6 +266,15 @@ public class Structure implements Value<Value<?>[]>{
 			return this.values;
 		}
 
+		public boolean set(String id, Value<?> value) throws Invalid {
+			int i = this.type.getSubIdentifierIndex(id);
+			if(i > -1 && i < this.values.length){
+				this.values[i] = value;
+				return true;
+			}
+			return false;					
+		}
+		
 		@Override
 		public Class<Value<?>[]> getBaseType() {
 			return null;
