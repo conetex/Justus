@@ -107,16 +107,7 @@ System.out.println("createValues " + c.getNodeName());
 				if(v != null){
 					/* old
 					values.add( v );
-					*/
-					
-					// new
-					try {
-						data.set(c.getNodeName(), v);
-					} catch (Invalid e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+					*/			
 				}
 			}				
 		}		
@@ -164,7 +155,13 @@ System.out.println("createValues " + c.getNodeName());
 			Structure re = ( (IdentifierComplex)id ).createValue(parentData);
 			
 			// new
-			createValues(n, (Complex) type, re);
+			createValues(n, (Complex)type, re);
+			try {
+				parentData.set(name, re);
+			} catch (Invalid e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			/* old
 			List<Value<?>> subvalues = createValues(n, (Complex) type, re);
@@ -177,12 +174,20 @@ System.out.println("createValues " + c.getNodeName());
 				e.printStackTrace();
 			}
 			*/
+			
 			return re;
 		}
 		else{
 			String valueNode = ReadXMLtools.getNodeValue(n);
 			if(valueNode != null){
-				return ( (IdentifierPrimitive<?>)id ) .createValue(valueNode, parentData);
+				Value<?> re = ( (IdentifierPrimitive<?>)id ) .createValue(valueNode, parentData);
+				try {
+					parentData.set(name, re);
+				} catch (Invalid e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return re;
 			}
 		}
 		
