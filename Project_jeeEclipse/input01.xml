@@ -49,7 +49,7 @@
 		<aktiv>true</aktiv>       
 	</instance>		
 
-	<call object="instance.glaeubig" function="tuWas" />
+	<call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" />
 	
 	<function name='foo' type="contract4u.foo"> 
 		<element name="param" type='t:Int'>11</element>
@@ -65,7 +65,7 @@
 	    </return>		             
     </function>
     
-    <call function="foo" />
+    <call function="foo" name="foo"  />
 	
 <!-- ASSIGNMENT OK -->
 	<element name="aAddress" type='t:MailAddress64'>12@32543.com</element>

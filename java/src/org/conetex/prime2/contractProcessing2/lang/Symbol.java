@@ -41,10 +41,11 @@ public class Symbol {
 	// control function
 	public static final String RETURN = "return";
 	public static final String CALL = "call";
-	public static final String CALL_FUNCTION_NAME = "function";
-	public static final String CALL_OBJECT = "object";
+	public static final String CALL_FUNCTION_NAME = "name";//"function";
+	public static final String CALL_OBJECT = "type";//"object";
 	
 	
+	public static final String NAME = "name";	
 	public static final String VALUE = "value";
 		
 	
