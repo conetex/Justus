@@ -48,8 +48,6 @@
 		<betrag>1024</betrag>
 		<aktiv>true</aktiv>       
 	</instance>		
-
-	<call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" />
 	
 	<function name='foo' type="contract4u.foo"> 
 		<element name="param" type='t:Int'>11</element>
@@ -65,131 +63,23 @@
 	    </return>		             
     </function>
     
-    <call function="foo" name="foo"  />
+    <call function="foo" name="foo" type='t:Int' />
+    
+    <!-- 
+    <element name="param" type='t:Int'>12</element>
+	<copy>
+	   <source typ='t:Int'>param</source>
+	   <target typ='t:Int'>contract4u.foo.param</target>
+	</copy>  
 	
-<!-- ASSIGNMENT OK -->
+    
+    
+	
 	<element name="aAddress" type='t:MailAddress64'>12@32543.com</element>
 	<element name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</element>
 	<copy>
 	   <source typ='MailAddress64'>aAddress</source>
 	   <target typ='MailAddress64'>a2Addres</target>
-	</copy>           
-	             
-	<copy>
-		<source typ='MailAddress64'>sub.aAddress</source>
-		<target typ='MailAddress64'>sub.a2Addres</target>
-	</copy>
-	             
- 	<element name="sub">	         
-		<element name="aAddress" type='t:MailAddress64'>yy@yyy.com</element>
-		<element name="a2Addres" type='t:MailAddress64'>xx@xxx.com</element>		
-       <!--<copy>
-            <source typ='MailAddress64'>sub.aAddress</source>
-            <target typ='MailAddress64'>sub.a2Addres</target>
-           </copy> -->
-	</element>	
-	
-<!-- MATH OK -->
-    <element name="ai" type='t:Int'>3</element>
-    <element name="bi" type='t:Int'>4</element>	             
-    <plus>                                          <!--  7 -->
-      <a>ai</a>	             
-      <b>bi</b>	             
-    </plus>
-
-	<minus>                                         <!-- -4 -->
-	    <a>ai</a>	             
-	    <plus>
-	      <a>ai</a>	             
-	      <b>bi</b>	             
-	    </plus>              
-    </minus> 	             
-
-    <remains>                                       <!--  4 -->
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times> 	             
-      <Integer>8</Integer>	             
-    </remains> 	             
-	             
-<!--  Comparsion / IsNull OK -->    
-    <smaller> 
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times> // 12 	             
-      <Integer>9</Integer>	                        <!-- false -->     
-    </smaller>  
-	             
-    <greater> 
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times><!--  12 	  -->            
-      <Integer>9</Integer>	                        <!-- true  -->       
-    </greater> 
-    <smaller> 
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times> <!--  12 	  -->            
-      <Integer>13</Integer>	                        <!-- true  -->      
-    </smaller> 
-	               
-    <greater> 
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times> <!--  12 	  -->            
-      <Integer>13</Integer>	                        <!-- false -->     
-    </greater>
-	             
-    <greater> 
-      <Integer>13</Integer>       
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times> <!--  12 	       -->       
-    </greater>	                                    <!-- true  -->
-	             
-    <greater> 
-      <Integer>11</Integer>       
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times> <!--  12 	             --> 
-    </greater>	                                    <!-- false -->           
-	             
-<!--  BOOL STUFF OK          -->
-    <element name="bTrue" type='t:Bool'>true</element>
-    <element name="bFalse" type='t:Bool'>false</element>	
-              
-    <and>                                           <!-- true  -->
-      <a>bTrue</a>	             
-	  <b>bTrue</b>	             
-	</and>
-	            	             
-	<and>                                           <!-- false -->
-	  <a>bTrue</a>	             
-	  <b>bFalse</b>	             
-	</and>	
-	            
-	<or>                                            <!-- true  -->
-	  <a>bTrue</a>	             
-	  <b>bFalse</b>	             
-	</or>	 
-	<and>                                           <!-- false -->
-	  <a>bFalse</a>	             
-	  <b>bFalse</b>	             
-	</and>
-	            
-	<not><and>                                      <!-- true  -->
-	  <a>bFalse</a>	             
-	  <or> 
-	    <a>bTrue</a>	             
-	    <b>bFalse</b>	             
-	  </or>	             
-	</and></not>	
-
+	</copy>  
+	-->
 </contract>

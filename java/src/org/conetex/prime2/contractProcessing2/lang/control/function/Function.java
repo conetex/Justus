@@ -58,10 +58,10 @@ public class Function<V extends Value<?>> implements Accessible<V>{
 
 	@Override
 	public V getFrom(Structure thisObject) {
-System.out.println("getFrom " + this.name);
+System.out.println("Function getFrom " + this.name);
 		Structure thisObjectB = (Structure) thisObject.getValue(this.name);
 		if(thisObjectB == null){
-System.err.println("Structure getFrom: no access to data for function " + this.name);			
+System.err.println("Function Structure getFrom: no access to data for function " + this.name);			
 			return null;
 		}
 		for(int i = 0; i < this.steps.length; i++){

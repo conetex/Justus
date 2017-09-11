@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<contract name="contract4u" t="http://conetex.org/justus/baseTyps">
+	
+	<complexType name="root"> 
+	
+	<element name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+	<complexType name="credit">  
+		<element name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<element name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<element name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<element name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
+	</complexType>	
+	<complexType name="person">  
+		<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<element name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<complexType name="person">  
+			<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+			<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		</complexType> 		 
+		<function name="tuWas" type="contract4u.root.person.tuWas">  
+			<element name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+		    <return><a>nr</a></return>			        
+		</function>       
+	</complexType>	
+	
+	</complexType>
+
+	<element name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
+	<instance>  
+		<glaeubig> 
+			<name>hobo</name>        
+			<mail>hobo@dida.de</mail>
+			<nr>111</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>
+		</glaeubig> 
+		<schuldne> 
+			<name>biba</name>        
+			<mail>biba@dida.de</mail>
+			<nr>222</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>			
+		</schuldne>				       
+		<betrag>1024</betrag>
+		<aktiv>true</aktiv>       
+	</instance>		
+
+	<call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" />
+	
+	<function name='foo' type="contract4u.foo"> 
+		<element name="param" type='t:Int'>11</element>
+		<times>
+		    <Integer>2</Integer>	       
+		    <Integer>9</Integer>
+	    </times>
+	    <return>
+		    <times>
+			    <x>param</x>	    
+			    <Integer>8</Integer>	
+		    </times>             
+	    </return>		             
+    </function>
+    
+    <element name="param" type='t:Int'>12</element>
+	<copy>
+	   <source typ='t:Int'>param</source>
+	   <target typ='t:Int'>contract4u.foo.param</target>
+	</copy>  
+	
+    
+    <call function="foo" name="foo"  />
+	
+<!-- ASSIGNMENT OK -->
+	<element name="aAddress" type='t:MailAddress64'>12@32543.com</element>
+	<element name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</element>
+	<copy>
+	   <source typ='MailAddress64'>aAddress</source>
+	   <target typ='MailAddress64'>a2Addres</target>
+	</copy>           
+	             
+	<copy>
+		<source typ='MailAddress64'>sub.aAddress</source>
+		<target typ='MailAddress64'>sub.a2Addres</target>
+	</copy>
+	             
+ 	<element name="sub">	         
+		<element name="aAddress" type='t:MailAddress64'>yy@yyy.com</element>
+		<element name="a2Addres" type='t:MailAddress64'>xx@xxx.com</element>		
+       <!--<copy>
+            <source typ='MailAddress64'>sub.aAddress</source>
+            <target typ='MailAddress64'>sub.a2Addres</target>
+           </copy> -->
+	</element>	
+	
+<!-- MATH OK -->
+    <element name="ai" type='t:Int'>3</element>
+    <element name="bi" type='t:Int'>4</element>	             
+    <plus>                                          <!--  7 -->
+      <a>ai</a>	             
+      <b>bi</b>	             
+    </plus>
+
+	<minus>                                         <!-- -4 -->
+	    <a>ai</a>	             
+	    <plus>
+	      <a>ai</a>	             
+	      <b>bi</b>	             
+	    </plus>              
+    </minus> 	             
+
+    <remains>                                       <!--  4 -->
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> 	             
+      <Integer>8</Integer>	             
+    </remains> 	             
+	             
+<!--  Comparsion / IsNull OK -->    
+    <smaller> 
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> // 12 	             
+      <Integer>9</Integer>	                        <!-- false -->     
+    </smaller>  
+	             
+    <greater> 
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times><!--  12 	  -->            
+      <Integer>9</Integer>	                        <!-- true  -->       
+    </greater> 
+    <smaller> 
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> <!--  12 	  -->            
+      <Integer>13</Integer>	                        <!-- true  -->      
+    </smaller> 
+	               
+    <greater> 
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> <!--  12 	  -->            
+      <Integer>13</Integer>	                        <!-- false -->     
+    </greater>
+	             
+    <greater> 
+      <Integer>13</Integer>       
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> <!--  12 	       -->       
+    </greater>	                                    <!-- true  -->
+	             
+    <greater> 
+      <Integer>11</Integer>       
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> <!--  12 	             --> 
+    </greater>	                                    <!-- false -->           
+	             
+<!--  BOOL STUFF OK          -->
+    <element name="bTrue" type='t:Bool'>true</element>
+    <element name="bFalse" type='t:Bool'>false</element>	
+              
+    <and>                                           <!-- true  -->
+      <a>bTrue</a>	             
+	  <b>bTrue</b>	             
+	</and>
+	            	             
+	<and>                                           <!-- false -->
+	  <a>bTrue</a>	             
+	  <b>bFalse</b>	             
+	</and>	
+	            
+	<or>                                            <!-- true  -->
+	  <a>bTrue</a>	             
+	  <b>bFalse</b>	             
+	</or>	 
+	<and>                                           <!-- false -->
+	  <a>bFalse</a>	             
+	  <b>bFalse</b>	             
+	</and>
+	            
+	<not><and>                                      <!-- true  -->
+	  <a>bFalse</a>	             
+	  <or> 
+	    <a>bTrue</a>	             
+	    <b>bFalse</b>	             
+	  </or>	             
+	</and></not>	
+
+</contract>

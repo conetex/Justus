@@ -281,7 +281,7 @@ System.out.println("createComplexType " + typeName);
 		for(SyntaxNode c : children){
 		//for(int i = 0; i < children.getLength(); i++){
 			//Node c = children.item(i);
-			if( c.isFunction() ){ 
+			if( c.isBuildInFunction() ){ 
 				
 System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttribute() );
 				Accessible<?> v = createFunction( c, type);

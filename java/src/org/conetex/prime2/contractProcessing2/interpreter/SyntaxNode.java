@@ -81,7 +81,7 @@ public class SyntaxNode {
 		return false;
 	}
 	
-	public boolean isFunction(){
+	public boolean isBuildInFunction(){
 		if(    this.name.equals(Symbol.PLUS) || this.name.equals(Symbol.MINUS) || this.name.equals(Symbol.TIMES) || this.name.equals(Symbol.DIVIDED_BY) || this.name.equals(Symbol.REMAINS)
 			|| this.name.equals(Symbol.SMALLER) || this.name.equals(Symbol.GREATER) || this.name.equals(Symbol.EQUAL)
 			|| this.name.equals(Symbol.AND) || this.name.equals(Symbol.OR) || this.name.equals(Symbol.XOR) || this.name.equals(Symbol.NOT) 
@@ -110,7 +110,7 @@ public class SyntaxNode {
 				//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
 				return true;
 			}
-			else if( this.isType() || this.isFunction() ){
+			else if( this.isType() || this.isBuildInFunction() ){
 				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
 				return false;
 			}
