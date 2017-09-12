@@ -3,7 +3,6 @@ package org.conetex.prime2.contractProcessing2.lang;
 public class Symbol {
 
 	// description of data
-		public static final String TYPE = "type";
 		
 		public static final String BOOL = "Boolean";
 		
@@ -46,23 +45,32 @@ public class Symbol {
 	
 	
 	public static final String NAME = "name";	
-	public static final String VALUE = "value";
-		
+	public static final String TYPE = "type";
 	
-	
-	public static final String COMPLEX = "complexType";
 	public static final String SIMPLE_TYPE_NS = "t:";
+
+	public static final String COMPLEX = "complexType";
+	public static final String ATTRIBUTE = "attribute";
+	public static final String VALUE = "value";
+	
+	public static final String FUNCTION = "function";		
+	
+	
+	
+	
+	
+	
+	
 	public static final String TYPE_NAME = "name";
 	public static final String TYPE_SEPERATOR = ".";
 	
 	
-	public static final String FUNCTION = "function";
+
 	public static final String FUNCTION_NAME = "name";
 	public static final String FUNCTION_TYP = "type";
 	
-	public static final String IDENTIFIER = "element";
-	public static final String IDENTIFIER_NAME = "name";
-	public static final String IDENTIFIER_TYPE = "type";
+	public static final String ATTRIBUTE_NAME = "name";
+	public static final String ATTRIBUTE_TYPE = "type";
 	
 	public static final String VALUE_TYPE = "type";
 	

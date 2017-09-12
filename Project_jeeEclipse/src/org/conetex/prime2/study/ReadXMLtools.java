@@ -13,9 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.conetex.prime2.contractProcessing2.data.Identifier;
-import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifierNameExeption;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullIdentifierException;
+import org.conetex.prime2.contractProcessing2.data.Attribute;
+import org.conetex.prime2.contractProcessing2.data.Attribute.DuplicateIdentifierNameExeption;
+import org.conetex.prime2.contractProcessing2.data.Attribute.NullIdentifierException;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
@@ -76,7 +76,7 @@ public class ReadXMLtools {
 			return false;
 		}
 		String name = n.getNodeName();
-		if( name.equals(Symbol.IDENTIFIER) ) {
+		if( name.equals(Symbol.ATTRIBUTE) ) {
 			return true;
 		}
 		return false;
@@ -103,7 +103,7 @@ public class ReadXMLtools {
 			return false;
 		}
 		String name = n.getNodeName();
-		if( name.equals(Symbol.IDENTIFIER) ) {
+		if( name.equals(Symbol.ATTRIBUTE) ) {
 			String valueNode = ReadXMLtools.getNodeValue(n);
 			if(valueNode == null){
 				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	

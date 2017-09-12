@@ -40,6 +40,9 @@ public class SetableValue<T> implements Setable<T> {
 	@Override
 	public T setTo(Structure thisObject, T newValue) throws Invalid {
 		Value<T> value = thisObject.getValue(this.path, this.valueClazz);
+		if(value == null){
+			return null;
+		}
 		T valueOld = value.get();
 		value.set(newValue);
 		value = thisObject.getValue(this.path, this.valueClazz);//TODO delete this. was just 4 debug

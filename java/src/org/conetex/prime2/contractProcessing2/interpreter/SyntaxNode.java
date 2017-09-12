@@ -1,5 +1,6 @@
 package org.conetex.prime2.contractProcessing2.interpreter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
@@ -9,9 +10,9 @@ import org.w3c.dom.NodeList;
 
 public class SyntaxNode {
 	
-	private String name;
+	private String tag;
 	
-	private String nameAttribute;
+	private String name;
 	
 	private String value;
 	
@@ -23,7 +24,7 @@ public class SyntaxNode {
 		if(theName == null || theName.length() == 0){
 			return null;
 		}
-		return new SyntaxNode(theName, theNameAttribute, theValue, theType, null);
+		return new SyntaxNode(theName, theNameAttribute, theValue, theType, new LinkedList<SyntaxNode>());
 	}
 	
 	public static SyntaxNode create(String theName, String theNameAttribute, String theValue, String theType, List<SyntaxNode> theChildren){
@@ -37,8 +38,8 @@ public class SyntaxNode {
 	}
 	
 	private SyntaxNode(String theName, String theNameAttribute, String theValue, String theType, List<SyntaxNode> theChildren){
-		this.name = theName;
-		this.nameAttribute = theNameAttribute;
+		this.tag = theName;
+		this.name = theNameAttribute;
 		this.value = theValue;
 		this.type = theType;
 		this.children = theChildren;
@@ -47,24 +48,24 @@ public class SyntaxNode {
 
 	
 	
-	public String getNodeName(){
+	public String getTag(){
+		return this.tag;
+	}
+	
+	public String getName(){
 		return this.name;
 	}
 	
-	public String getNameAttribute(){
-		return this.nameAttribute;
-	}
-	
-	public String getNodeValue(){
+	public String getValue(){
 		return this.value;
 	}
 	
-	public String getNodeType(){
+	public String getType(){
 		return this.type;
 	}
 	
 	public boolean isType(){
-		if( this.name.equals(Symbol.COMPLEX) || this.name.equals(Symbol.FUNCTION) ) {
+		if( this.tag.equals(Symbol.COMPLEX) || this.tag.equals(Symbol.FUNCTION) ) {
 //System.out.println("isType Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );		
 			return true;
 		}
@@ -75,18 +76,18 @@ public class SyntaxNode {
 	
 	
 	public boolean isIdentifier(){
-		if( this.name.equals(Symbol.IDENTIFIER) ) {
+		if( this.tag.equals(Symbol.ATTRIBUTE) || this.tag.equals(Symbol.VALUE) ) {
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean isBuildInFunction(){
-		if(    this.name.equals(Symbol.PLUS) || this.name.equals(Symbol.MINUS) || this.name.equals(Symbol.TIMES) || this.name.equals(Symbol.DIVIDED_BY) || this.name.equals(Symbol.REMAINS)
-			|| this.name.equals(Symbol.SMALLER) || this.name.equals(Symbol.GREATER) || this.name.equals(Symbol.EQUAL)
-			|| this.name.equals(Symbol.AND) || this.name.equals(Symbol.OR) || this.name.equals(Symbol.XOR) || this.name.equals(Symbol.NOT) 
-			|| this.name.equals(Symbol.REFERENCE) || this.name.equals(Symbol.COPY)
-			|| this.name.equals(Symbol.FUNCTION) || this.name.equals(Symbol.RETURN) || this.name.equals(Symbol.CALL)
+		if(    this.tag.equals(Symbol.PLUS) || this.tag.equals(Symbol.MINUS) || this.tag.equals(Symbol.TIMES) || this.tag.equals(Symbol.DIVIDED_BY) || this.tag.equals(Symbol.REMAINS)
+			|| this.tag.equals(Symbol.SMALLER) || this.tag.equals(Symbol.GREATER) || this.tag.equals(Symbol.EQUAL)
+			|| this.tag.equals(Symbol.AND) || this.tag.equals(Symbol.OR) || this.tag.equals(Symbol.XOR) || this.tag.equals(Symbol.NOT) 
+			|| this.tag.equals(Symbol.REFERENCE) || this.tag.equals(Symbol.COPY)
+			|| this.tag.equals(Symbol.FUNCTION) || this.tag.equals(Symbol.RETURN) || this.tag.equals(Symbol.CALL)
 		  ) {
 			return true;
 		}
@@ -94,7 +95,15 @@ public class SyntaxNode {
 	}
 	
 	public boolean isValue(){
-		if( this.name.equals(Symbol.IDENTIFIER) ) {
+if(this.name != null && this.name.equals("ai") ){
+	int x = 2;
+	int y = x+2;
+}
+		if( this.tag.equals(Symbol.VALUE) ){
+			//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
+			return true;
+		}
+		/*else if( this.tag.equals(Symbol.IDENTIFIER) ) {
 			String valueNode = this.value;
 			if(valueNode == null){
 				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
@@ -104,13 +113,13 @@ public class SyntaxNode {
 				//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
 				return true;
 			}
-		}
+		}*/
 		else{
-			if( this.name.equals(Symbol.FUNCTION) ){
+			if( this.tag.equals(Symbol.FUNCTION) ){
 				//System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
 				return true;
 			}
-			else if( this.isType() || this.isBuildInFunction() ){
+			else if( this.tag.equals(Symbol.ATTRIBUTE) || this.isType() || this.isBuildInFunction() ){
 				//System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );	
 				return false;
 			}

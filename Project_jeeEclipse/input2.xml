@@ -4,30 +4,30 @@
 	
 	<complexType name="root"> 
 	
-	<element name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+	<attribute name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
 	<complexType name="credit">  
-		<element name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<element name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<element name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<element name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<attribute name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<attribute name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
 	</complexType>	
 	<complexType name="person">  
-		<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<element name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
 		<complexType name="person">  
-			<element name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-			<element name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
+			<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+			<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		</complexType> 		 
 		<function name="tuWas" type="contract4u.root.person.tuWas">  
-			<element name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
 		    <return><a>nr</a></return>			        
 		</function>       
 	</complexType>	
 	
 	</complexType>
 
-	<element name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
+	<attribute name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
 	<instance>  
 		<glaeubig> 
 			<name>hobo</name>        
@@ -49,10 +49,12 @@
 		<aktiv>true</aktiv>       
 	</instance>		
 
-	<call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" />
+	<call type="instance.glaeubig" name="tuWas" />
+	<!-- <call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" /> -->
 	
-	<function name='foo' type="contract4u.foo"> 
-		<element name="param" type='t:Int'>11</element>
+<!-- FUNCTION OK -->	
+ 	<function name='foo' type="contract4u.foo"> 
+		<value name="param" type='t:Int'>11</value>
 		<times>
 		    <Integer>2</Integer>	       
 		    <Integer>9</Integer>
@@ -65,40 +67,38 @@
 	    </return>		             
     </function>
     
-    <element name="param" type='t:Int'>12</element>
+    <value name="param" type='t:Int'>12</value>	
 	<copy>
-	   <source typ='t:Int'>param</source>
-	   <target typ='t:Int'>contract4u.foo.param</target>
-	</copy>  
-	
-    
-    <call function="foo" name="foo"  />
+	   <target typ='MailAddress64'>foo.param</target>
+	   <source typ='MailAddress64'>param</source>
+	</copy>   
+    <call name="foo" type='contract4u' />
 	
 <!-- ASSIGNMENT OK -->
-	<element name="aAddress" type='t:MailAddress64'>12@32543.com</element>
-	<element name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</element>
+	<value name="aAddress" type='t:MailAddress64'>12@32543.com</value>
+	<value name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</value>
 	<copy>
-	   <source typ='MailAddress64'>aAddress</source>
 	   <target typ='MailAddress64'>a2Addres</target>
+	   <source typ='MailAddress64'>aAddress</source>
 	</copy>           
 	             
-	<copy>
-		<source typ='MailAddress64'>sub.aAddress</source>
+	<copy><!-- geht nich -->
 		<target typ='MailAddress64'>sub.a2Addres</target>
+		<source typ='MailAddress64'>sub.aAddress</source>
 	</copy>
 	             
- 	<element name="sub">	         
-		<element name="aAddress" type='t:MailAddress64'>yy@yyy.com</element>
-		<element name="a2Addres" type='t:MailAddress64'>xx@xxx.com</element>		
+ 	<attribute name="sub">	         
+		<attribute name="aAddress" type='t:MailAddress64'>yy@yyy.com</attribute>
+		<attribute name="a2Addres" type='t:MailAddress64'>xx@xxx.com</attribute>		
        <!--<copy>
             <source typ='MailAddress64'>sub.aAddress</source>
             <target typ='MailAddress64'>sub.a2Addres</target>
            </copy> -->
-	</element>	
+	</attribute>	
 	
 <!-- MATH OK -->
-    <element name="ai" type='t:Int'>3</element>
-    <element name="bi" type='t:Int'>4</element>	             
+    <value name="ai" type='t:Int'>3</value>
+    <value name="bi" type='t:Int'>4</value>	             
     <plus>                                          <!--  7 -->
       <a>ai</a>	             
       <b>bi</b>	             
@@ -120,7 +120,16 @@
       <Integer>8</Integer>	             
     </remains> 	             
 	             
-<!--  Comparsion / IsNull OK -->    
+<!--  Comparsion / IsNull OK -->
+
+    <greater> 
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times><!--  12 	  -->            
+      <Integer>9</Integer>	                        <!-- true  -->       
+    </greater> 
+        
     <smaller> 
       <times> 
         <a>ai</a>	             
@@ -129,13 +138,6 @@
       <Integer>9</Integer>	                        <!-- false -->     
     </smaller>  
 	             
-    <greater> 
-      <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
-      </times><!--  12 	  -->            
-      <Integer>9</Integer>	                        <!-- true  -->       
-    </greater> 
     <smaller> 
       <times> 
         <a>ai</a>	             
@@ -169,9 +171,10 @@
     </greater>	                                    <!-- false -->           
 	             
 <!--  BOOL STUFF OK          -->
-    <element name="bTrue" type='t:Bool'>true</element>
-    <element name="bFalse" type='t:Bool'>false</element>	
-              
+
+    <value name="bTrue" type='t:Bool'>true</value>
+    <value name="bFalse" type='t:Bool'>false</value>
+                  
     <and>                                           <!-- true  -->
       <a>bTrue</a>	             
 	  <b>bTrue</b>	             

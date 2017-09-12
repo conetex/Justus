@@ -37,7 +37,7 @@ public class Structure implements Value<Value<?>[]>{
 		
 		private Structure(final Complex theAttributeTuple, final Structure theParent){
 			this.type = theAttributeTuple;
-			this.values = new Value<?>[ theAttributeTuple.getIdentifiersSize() ];
+			this.values = new Value<?>[ theAttributeTuple.getAttributesSize() ];
 			this.parent = theParent;
 		}		
 		
@@ -58,7 +58,10 @@ public class Structure implements Value<Value<?>[]>{
 				
 		public <V extends Value<?>> V getValue (String aName, Class<V> c){
 			// TODO do xpath syntax. access parent objects ???
-			int idIndex = this.type.getSubIdentifierIndex(aName);
+			if(this.type.getName().equals(aName)){
+				return (V)this;
+			}
+			int idIndex = this.type.getSubAttributeIndex(aName);
 			if( idIndex > -1 ){
 				return getValue( idIndex, c );
 			}
@@ -83,7 +86,7 @@ public class Structure implements Value<Value<?>[]>{
 				String[] names = Structure.split(aName);
 			    if(names[0] != null){
 					if(names[1] != null){
-						idIndex = this.type.getSubIdentifierIndex( names[0] );
+						idIndex = this.type.getSubAttributeIndex( names[0] );
 			    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
 			    		// sollte das vernünftig gemeldet werden!!!
 			    		Structure subStructure = getValue(idIndex, Structure.class);
@@ -124,7 +127,10 @@ public class Structure implements Value<Value<?>[]>{
 		public <R extends Value<?>> R getValueNewNew(String aName, Class<R> clazz) {
 		//public <V extends Value<?>> V getValue (String aName, Class<V> c){
 				// TODO do xpath syntax. access parent objects ???
-				int idIndex = this.type.getSubIdentifierIndex(aName);
+			if(this.type.getName().equals(aName)){
+				return (R)this;
+			}
+				int idIndex = this.type.getSubAttributeIndex(aName);
 				if( idIndex > -1 ){
 					// TODO check this cast
 					return (R) getValue( idIndex );
@@ -150,7 +156,7 @@ public class Structure implements Value<Value<?>[]>{
 					String[] names = Structure.split(aName);
 				    if(names[0] != null){
 						if(names[1] != null){
-							idIndex = this.type.getSubIdentifierIndex( names[0] );
+							idIndex = this.type.getSubAttributeIndex( names[0] );
 				    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
 				    		// sollte das vernünftig gemeldet werden!!!
 				    		Structure subStructure = getValue(idIndex, Structure.class);
@@ -171,7 +177,7 @@ public class Structure implements Value<Value<?>[]>{
 		public <R> Value<R> getValueNew(String aName, Class<R> clazz) {
 		//public <V extends Value<?>> V getValue (String aName, Class<V> c){
 				// TODO do xpath syntax. access parent objects ???
-				int idIndex = this.type.getSubIdentifierIndex(aName);
+				int idIndex = this.type.getSubAttributeIndex(aName);
 				if( idIndex > -1 ){
 					return getValueNew( idIndex, clazz );
 				}
@@ -196,7 +202,7 @@ public class Structure implements Value<Value<?>[]>{
 					String[] names = Structure.split(aName);
 				    if(names[0] != null){
 						if(names[1] != null){
-							idIndex = this.type.getSubIdentifierIndex( names[0] );
+							idIndex = this.type.getSubAttributeIndex( names[0] );
 				    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
 				    		// sollte das vernünftig gemeldet werden!!!
 				    		Structure subStructure = getValue(idIndex, Structure.class);
@@ -267,7 +273,7 @@ public class Structure implements Value<Value<?>[]>{
 		}
 
 		public boolean set(String id, Value<?> value) throws Invalid {
-			int i = this.type.getSubIdentifierIndex(id);
+			int i = this.type.getSubAttributeIndex(id);
 			if(i > -1 && i < this.values.length){
 				this.values[i] = value;
 				return true;

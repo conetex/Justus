@@ -8,7 +8,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public abstract class Identifier<T> {
+public abstract class Attribute<T> {
 
 	public static class NullLabelException extends Exception {
 		private static final long serialVersionUID = 1L;

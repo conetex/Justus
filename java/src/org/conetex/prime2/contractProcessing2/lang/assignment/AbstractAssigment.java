@@ -24,8 +24,8 @@ public abstract class AbstractAssigment<T> implements Accessible<T>{//Computable
 	private Accessible<T> source;
 	
 	protected AbstractAssigment(Setable<T> trg, Accessible<T> src){
-		this.source = src;
 		this.target = trg;
+		this.source = src;
 	}
 
 	public abstract boolean doCopy();

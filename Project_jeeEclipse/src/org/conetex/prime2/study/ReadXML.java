@@ -13,9 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.conetex.prime2.contractProcessing2.data.Identifier;
+import org.conetex.prime2.contractProcessing2.data.Attribute;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifierNameExeption;
+import org.conetex.prime2.contractProcessing2.data.Attribute.DuplicateIdentifierNameExeption;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
@@ -49,7 +49,7 @@ public class ReadXML {
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid {
 
-		FileInputStream is = new FileInputStream( "input01.xml" );
+		FileInputStream is = new FileInputStream( "input2.xml" );
 
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

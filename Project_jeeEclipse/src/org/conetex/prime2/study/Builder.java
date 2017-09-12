@@ -15,12 +15,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.conetex.prime2.contractProcessing2.data.Identifier;
-import org.conetex.prime2.contractProcessing2.data.IdentifierComplex;
-import org.conetex.prime2.contractProcessing2.data.IdentifierPrimitive;
+import org.conetex.prime2.contractProcessing2.data.Attribute;
+import org.conetex.prime2.contractProcessing2.data.AttributeComplex;
+import org.conetex.prime2.contractProcessing2.data.AttributePrimitive;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Identifier.DuplicateIdentifierNameExeption;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullIdentifierException;
+import org.conetex.prime2.contractProcessing2.data.Attribute.DuplicateIdentifierNameExeption;
+import org.conetex.prime2.contractProcessing2.data.Attribute.NullIdentifierException;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
@@ -60,9 +60,9 @@ public class Builder {
 	public static List<Complex> create(SyntaxNode r2) throws ParserConfigurationException, SAXException, IOException, Invalid {
 
 		List<Complex> complexTyps = TypBuilder.createComplexTypes(r2);
-System.out.println("Builder " + r2.getNodeName());
+System.out.println("Builder " + r2.getTag());
 		if(complexTyps != null){
-			Complex complexTypeRoot = Complex.getInstance( r2.getNameAttribute() );
+			Complex complexTypeRoot = Complex.getInstance( r2.getName() );
 			Structure v = complexTypeRoot.createValue(null);
 			List<Value<?>> values = ValBuilder.createValues(r2, complexTypeRoot, v);
 			/* old
@@ -71,8 +71,24 @@ System.out.println("Builder " + r2.getNodeName());
 			v.set(theValues);
 			*/
 
+			
+	
+			
+			
+			
+			
+			
 						List<Accessible<?>> functions = FunBuilder.createFunctions(r2, complexTypeRoot);
+						
+						Accessible<?>[] theSteps = new Accessible<?>[ functions.size() ];
+						Accessible<?> main = (Accessible<?>) Function.create(//data, 
+								functions.toArray( theSteps ), complexTypeRoot.getName() ); // "contract4u"
+						main.getFrom(v);
+/*						
 						for(Accessible<?> f : functions){
+							if(f instanceof Function<?>){
+								//continue;
+							}
 							Object re = f.getFrom(v);
 							if(re != null){							
 System.out.println("Builder function ==> " + f + " -> " + re.toString());
@@ -81,7 +97,8 @@ else{
 System.out.println("Builder function ==> " + f + " -> " + re);
 }							
 						}
-System.out.println("Builder " + r2.getNodeName());						
+System.out.println("Builder " + r2.getNodeName());
+*/
 		}
 		
 		return complexTyps;
@@ -154,7 +171,7 @@ System.out.println("createComplexList referenced complex Type " + typeName);
 	}
 	
 	private static Complex createComplexType(SyntaxNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> referringComplexTypeNames){
-		String typeName = n.getNameAttribute();
+		String typeName = n.getName();
 		if(typeName == null){
 			// TODO Exception
 			System.err.println("no typeName for complex");			
@@ -168,35 +185,35 @@ System.out.println("createComplexType " + typeName);
 if( typeName.endsWith("contract4u") ){
 System.out.println("createComplexType " + typeName);			
 }
-		List<Identifier<?>> identifiers = new LinkedList<Identifier<?>>();
+		List<Attribute<?>> identifiers = new LinkedList<Attribute<?>>();
 		for(SyntaxNode c : n.getChildNodes()){
 			String idTypeName = null;
 			String idName = null;				
-			Identifier<?> id = null;
+			Attribute<?> id = null;
 			if( c.isIdentifier() ){ 
-				idTypeName = c.getNodeType();
-				idName = c.getNameAttribute();
+				idTypeName = c.getType();
+				idName = c.getName();
 				if(idTypeName == null){
-					System.err.println("can not get Type of " + c.getNodeName() + " " + idName );
+					System.err.println("can not get Type of " + c.getTag() + " " + idName );
 				}
 				else{
 					if(idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)){
 						// Simple
-						id = Primitive.createIdentifier( idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()) );	
+						id = Primitive.createAttribute( idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()) );	
 					}
 					else{
 						// Complex
 						//referringComplexTypeNames.add(idTypeName);
-						id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );						
+						id = Complex.createAttribute( idName, idTypeName, unformedComplexTypes );						
 					}
 				}
 			}
-			else if(c.getNodeName() == Symbol.FUNCTION){ 
+			else if(c.getTag() == Symbol.FUNCTION){ 
 				// Complex
-				idTypeName = c.getNodeType();
-				idName = c.getNameAttribute();
+				idTypeName = c.getType();
+				idName = c.getName();
 				//referringComplexTypeNames.add(typeName + "." + idTypeName);// TODO BUG !!!
-				id = Complex.createIdentifier( idName, idTypeName, unformedComplexTypes );				
+				id = Complex.createAttribute( idName, idTypeName, unformedComplexTypes );				
 			}
 			else{
 				continue;
@@ -209,7 +226,7 @@ System.out.println("createComplexType " + typeName);
 				System.err.println("createComplexType can not create Identifier " + idName + " (" + idTypeName + ")");
 			}
 		}		
-		Identifier<?>[] theOrderedIdentifiers = new Identifier<?>[ identifiers.size() ];
+		Attribute<?>[] theOrderedIdentifiers = new Attribute<?>[ identifiers.size() ];
 		identifiers.toArray( theOrderedIdentifiers );
 		
 		// TODO doppelte definitionen abfangen ...
@@ -217,7 +234,7 @@ System.out.println("createComplexType " + typeName);
 		if(complexType == null){
 			try {
 				complexType = Complex.createInit(typeName, theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen elemente enthalten, sonst gibts keinen typ
-			} catch (DuplicateIdentifierNameExeption | Identifier.NullIdentifierException e) {
+			} catch (DuplicateIdentifierNameExeption | Attribute.NullIdentifierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -269,7 +286,7 @@ System.out.println("createComplexType " + typeName);
 	}
 	
 	public static List<Accessible<?>> createFunctions(SyntaxNode n, Complex type){
-		String name = n.getNodeName();
+		String name = n.getTag();
 		if(type == null){
 			System.err.println("can not recognize type of " + name);
 			return null;
@@ -283,7 +300,7 @@ System.out.println("createComplexType " + typeName);
 			//Node c = children.item(i);
 			if( c.isBuildInFunction() ){ 
 				
-System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttribute() );
+System.out.println("createFunctions " + c.getTag() + " - " + c.getName() );
 				Accessible<?> v = createFunction( c, type);
 				if(v != null){
 					acc.add( v );
@@ -291,7 +308,7 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 			}
 			
 			if( c.isType() ){
-				String cname = c.getNameAttribute();// ReadXMLtools.getAttribute(c, Symbol.TYPE_NAME);
+				String cname = c.getName();// ReadXMLtools.getAttribute(c, Symbol.TYPE_NAME);
 				/*
 			    Identifier<?> cid = type.getSubIdentifier(cname); //
 			    if(cid == null){
@@ -322,7 +339,7 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 			){
 		
 				
-				String name = n.getNodeName();
+				String name = n.getTag();
 
 
 				if( name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS) ) {
@@ -338,9 +355,7 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 							return x;					
 				}
 				else if( name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY) ) {
-									Accessible<?> x = //createBoolExpression( super.node );
-									//ReadXML.createAccessible( super.node, c, Boolean.class );
-									createFunctionAccessible( n, parentTyp, Object.class );
+							Accessible<?> x = createFunctionAccessible( n, parentTyp, Object.class );
 							return x;					
 				}				
 				else if( name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL) ){
@@ -360,20 +375,20 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 	
 	public static <RE> Accessible<RE> createFunctionAccessible(SyntaxNode n, Complex parentTyp, Class<RE> expectedBaseTyp){
 		
-		String name = n.getNodeName();
+		String name = n.getTag();
 		
 		// ASSIGNMENT
 		if( name.equals("copy") || name.equals("ref") ) {	
 		   //createAssignment(name, n, parentTyp);
 			SyntaxNode c0 = n.getChildElementByIndex(0);
-			System.out.println(c0.getNodeValue());
-			Identifier<RE> id0 = parentTyp.getSubIdentifier( c0.getNodeValue() );// TODO geht nich
+			System.out.println(c0.getValue());
+			Attribute<RE> id0 = parentTyp.getSubAttribute( c0.getValue() );// TODO geht nich
 
 			SyntaxNode c1 = n.getChildElementByIndex(1);
-			System.out.println(c1.getNodeValue());
-			Identifier<RE> id1 = parentTyp.<RE>getSubIdentifier( c1.getNodeValue() );
+			System.out.println(c1.getValue());
+			Attribute<RE> id1 = parentTyp.<RE>getSubAttribute( c1.getValue() );
 			
-			String c0DataType = c0.getNodeType();
+			String c0DataType = c0.getType();
 			if( c0DataType != null ){
 				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht zum typ des referenzierten Feld passt ...
 				//Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
@@ -395,7 +410,7 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 			
 			// TODO hier reicht eigentlich gleicher base-typ !!!
 			if(c0Class != null && c1Class != null && c0Class == c1Class){
-				String path0 = c0.getNodeValue();
+				String path0 = c0.getValue();
 				SetableValue<RE> trg = SetableValue.<RE>create(path0, c0Class);
 				
 				Primitive<RE> pri1 = Primitive.getInstance( c1Class );
@@ -460,19 +475,19 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 		
 		// VARIABLE
 		else if( name.equals(Symbol.BOOL) ) {	
-			return (AccessibleConstant<RE>) AccessibleConstant.<Boolean>create2(Boolean.class, n.getNodeValue());
+			return (AccessibleConstant<RE>) AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
 		}
 		else if( name.equals(Symbol.BINT) ) {	
-			return (AccessibleConstant<RE>) AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getNodeValue());
+			return (AccessibleConstant<RE>) AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
 		}
 		else if( name.equals(Symbol.INT) ) {	
-			return (AccessibleConstant<RE>) AccessibleConstant.<Integer>create2(Integer.class, n.getNodeValue());
+			return (AccessibleConstant<RE>) AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
 		}
 		else if( name.equals(Symbol.LNG) ) {	
-			return (AccessibleConstant<RE>) AccessibleConstant.<Long>create2(Long.class, n.getNodeValue());
+			return (AccessibleConstant<RE>) AccessibleConstant.<Long>create2(Long.class, n.getValue());
 		}
 		else if( name.equals(Symbol.STR) ) {	
-			return (AccessibleConstant<RE>) AccessibleConstant.<String>create2(String.class, n.getNodeValue());
+			return (AccessibleConstant<RE>) AccessibleConstant.<String>create2(String.class, n.getValue());
 		}
 
 		/*else if( name.equals(Symbol.CONST) ) {	
@@ -576,24 +591,26 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
 		}
 		else if( name.equals(Symbol.CALL) ) {	
-			String functionObj = n.getNodeType();
+			String functionObj = n.getType();//
 			AccessibleValueNew<Structure> re = AccessibleValueNew.create(functionObj, Structure.class);
 			
-			String functionName = n.getNameAttribute();
+			String functionName = n.getName();
 			Accessible<RE> e = (Accessible<RE>) Function.getInstance(functionName);
 			//Class<?> expectedBaseTypExp = e.getBaseType();
 			return Call.create2(e, re);
 			//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
 		}		
 		else if( name.equals(Symbol.FUNCTION) ) {
-			String functionName = n.getNameAttribute();
-			String idTypeName = n.getNodeType();
+			String functionName = n.getName();
+			String idTypeName = n.getType();
 			Complex complexType = Complex.getInstance(idTypeName);
 			if(complexType != null){
 				List<Accessible<?>> steps = createFunctions(n, complexType);
 				Accessible<?>[] theSteps = new Accessible<?>[ steps.size() ];
-			    return (Accessible<RE>) Function.create(//data, 
-			        		steps.toArray( theSteps ), functionName );				 
+			    //return (Accessible<RE>) 
+			    		Function.create(//data, 
+			        		steps.toArray( theSteps ), functionName );
+			    return null; // das ist wichtig. wir wollen functions nur per call aufrufen!
 			}
 		}
 		/*
@@ -629,11 +646,11 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 		
 		//  REFERENCE
 		else{
-			System.out.println("get_id from " + name + " (" + n.getNodeValue() + ")");
+			System.out.println("get_id from " + name + " (" + n.getValue() + ")");
 			String typName = parentTyp.getName();
-			String idName =  n.getNodeValue();
+			String idName =  n.getValue();
 			Complex pTyp = parentTyp;
-			Identifier<?> id = pTyp.getSubIdentifier( idName );
+			Attribute<?> id = pTyp.getSubAttribute( idName );
 			while( id == null ){
 				String[] names = Complex.splitRight(typName);
 			    if(names[0] == null){
@@ -644,7 +661,7 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 		    	if(pTyp == null){
 		    		break;
 		    	}
-		    	id = pTyp.getSubIdentifier( idName );
+		    	id = pTyp.getSubAttribute( idName );
 			}
 			
 			if( id != null){
@@ -653,17 +670,17 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 				Primitive<?> pri = Primitive.getInstance( clazzChild );
 				Class<?> baseType = pri.getBaseType();
 				if( expectedBaseTyp.isAssignableFrom(baseType) ){ // TODO dann sollte noch Long Int implementieren ...
-					String path = n.getNodeValue();
+					String path = n.getValue();
 					//AccessibleValueNew<RE> re = AccessibleValueNew.create(path, expectedBaseTyp);			
 					AccessibleValue<RE> re = (AccessibleValue<RE>) AccessibleValue.create(path, baseType);
 					return re;				
 				}
 				else{
-					System.out.println("ERR: can not reference '" + n.getNodeValue() + "'");
+					System.out.println("ERR: can not reference '" + n.getValue() + "'");
 				}
 			}
 			else{
-				System.out.println("ERR: can not find '" + n.getNodeValue() + "'");
+				System.out.println("ERR: can not find '" + n.getValue() + "'");
 			}
 		}
 		return null;
@@ -675,7 +692,7 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 	
 	public static class ValBuilder {
 		public static List<Value<?>> createValues(SyntaxNode n, Complex type, Structure data){
-			String name = n.getNodeName();
+			String name = n.getTag();
 			if(type == null){
 				System.err.println("can not recognize type of " + name);
 				return null;
@@ -686,8 +703,9 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 			*/		
 			
 			for(SyntaxNode c : n.getChildNodes()){
+
 				if( c.isValue() ){
-	System.out.println("createValues " + c.getNodeName());
+	System.out.println("createValues " + c.getTag());
 					Value<?> v = createValue( c, type, data );
 					if(v != null){
 						/* old
@@ -720,24 +738,23 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 			
 			// + " (local: " + n.getLocalName() + ")";
 			
-			String name = n.getNodeName();
+			String name = n.getTag();
 			
 			if( n.isIdentifier() ){
-				name =  n.getNameAttribute();
+				name =  n.getName();
 			}
 			else if ( name.equals(Symbol.FUNCTION) ){
-				name =  n.getNameAttribute();
+				name =  n.getName();
 			}
 			
-		    Identifier<?> id = parentTyp.getSubIdentifier(name); //
+		    Attribute<?> id = parentTyp.getSubAttribute(name); //
 		    if(id == null){
 		    	System.err.println("createValue: can not identify " + name);
 		    	return null;
 		    }
-		    
 		    AbstractType<?> type = id.getType();
 			if( type.getClass() == Complex.class ){
-				Structure re = ( (IdentifierComplex)id ).createValue(parentData);
+				Structure re = ( (AttributeComplex)id ).createValue(parentData);
 				
 				// new
 				createValues(n, (Complex)type, re);
@@ -763,9 +780,10 @@ System.out.println("createFunctions " + c.getNodeName() + " - " + c.getNameAttri
 				return re;
 			}
 			else{
-				String valueNode = n.getNodeValue();
+				String valueNode = n.getValue();
+System.out.println("createValue " + name + " " + valueNode);
 				if(valueNode != null){
-					Value<?> re = ( (IdentifierPrimitive<?>)id ) .createValue(valueNode, parentData);
+					Value<?> re = ( (AttributePrimitive<?>)id ) .createValue(valueNode, parentData);
 					try {
 						parentData.set(name, re);
 					} catch (Invalid e) {

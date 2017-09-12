@@ -41,12 +41,16 @@ public class Call<V>  implements Accessible<V>{ // V extends Value<?>
 	
 	@Override
 	public V getFrom(Structure thisObject) {
+		
 		Structure obj = this.reference.getFrom(thisObject);
 		if(obj == null){
 			System.err.println("Call getFrom ERROR" );
 			return null;
 		}
 		return this.function.getFrom(obj);
+		
+		
+		//return this.function.getFrom(thisObject);
 	}
 
 	@Override

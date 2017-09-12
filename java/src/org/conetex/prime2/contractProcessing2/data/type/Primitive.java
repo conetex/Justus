@@ -1,9 +1,9 @@
 package org.conetex.prime2.contractProcessing2.data.type;
 
-import org.conetex.prime2.contractProcessing2.data.Identifier;
+import org.conetex.prime2.contractProcessing2.data.Attribute;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
+import org.conetex.prime2.contractProcessing2.data.Attribute.EmptyLabelException;
+import org.conetex.prime2.contractProcessing2.data.Attribute.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.ASCII8;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Base64_256;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Bool;
@@ -168,7 +168,7 @@ public class Primitive<T> extends AbstractType<T> {
 		return null;
 	}
 
-	public static <T> Identifier<T> createIdentifier(String attributeName, String typeName){
+	public static <T> Attribute<T> createAttribute(String attributeName, String typeName){
 		// SimpleType
 		if(typeName == null || typeName.length() == 0){
 			// TODO exception
@@ -192,9 +192,9 @@ public class Primitive<T> extends AbstractType<T> {
 			e.printStackTrace();
 			return null;
 		}
-		Identifier<T> re = null;
+		Attribute<T> re = null;
 		try {
-			re = simpleType.createIdentifier( str );
+			re = simpleType.createAttribute( str );
 		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -222,8 +222,8 @@ System.out.println("Primitive.createIdentifier " + attributeName + " " + typeNam
 	}
 
 	@Override
-	public Identifier<T> createIdentifier(Label theName)
-			throws Identifier.NullLabelException, Identifier.EmptyLabelException {
+	public Attribute<T> createAttribute(Label theName)
+			throws Attribute.NullLabelException, Attribute.EmptyLabelException {
 		/*
 		 * if(theName == null || theName.get() == null){ throw new
 		 * Identifier.NullLabelException(); } if(theName.get().length() < 1){
@@ -248,7 +248,7 @@ System.out.println("Primitive.createIdentifier " + attributeName + " " + typeNam
 	}	
 	
 	@Override
-	public <U> Identifier<U> getSubIdentifier(String aName) {
+	public <U> Attribute<U> getSubAttribute(String aName) {
 		return null;
 	}
 

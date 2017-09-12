@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.conetex.prime2.contractProcessing2.data.Identifier;
+import org.conetex.prime2.contractProcessing2.data.Attribute;
 import org.conetex.prime2.contractProcessing2.data.Value;
-import org.conetex.prime2.contractProcessing2.data.Identifier.EmptyLabelException;
-import org.conetex.prime2.contractProcessing2.data.Identifier.NullLabelException;
+import org.conetex.prime2.contractProcessing2.data.Attribute.EmptyLabelException;
+import org.conetex.prime2.contractProcessing2.data.Attribute.NullLabelException;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Label;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
@@ -33,7 +33,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		
 		private final Map<String, Integer> index;
 		
-		private Identifier<?>[] orderedIdentifier;// TODO kann das nicht doch final werden?
+		private Attribute<?>[] orderedAttributes;// TODO kann das nicht doch final werden?
 		 
 		private String name;
 		
@@ -41,7 +41,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			return this.name;
 		}
 
-		private static Complex createImpl(final String theName, final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers) {
+		private static Complex createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
 			if(theIndex != null && theOrderedIdentifiers != null){
 				return new Complex(theName, theIndex, theOrderedIdentifiers);
 			}
@@ -50,11 +50,11 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		
 		public static Complex create(final String theName) {
 			Map<String, Integer> index = new HashMap<String, Integer>();
-			Identifier<?>[] idents = new Identifier<?>[0];
+			Attribute<?>[] idents = new Attribute<?>[0];
 			return Complex.createImpl(theName, index, idents);
 		}
 		
-		public static Complex createInit(String typeName, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException, DublicateComplexException{
+		public static Complex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers) throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException, DublicateComplexException{
 			if(theOrderedIdentifiers.length == 0){
 				return null;
 			}
@@ -69,14 +69,14 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			return re;
 		}			
 				
-		private static void buildIndex(Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException{
+		private static void buildIndex(Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException{
 			for(int i = 0; i < theOrderedIdentifiers.length; i++){
 				if(theOrderedIdentifiers[i] == null){
-					throw new Identifier.NullIdentifierException();
+					throw new Attribute.NullIdentifierException();
 				}				
 				String label = theOrderedIdentifiers[i].getLabel().get();
 				if(theIndex.containsKey(label)){
-					throw new Identifier.DuplicateIdentifierNameExeption(label);
+					throw new Attribute.DuplicateIdentifierNameExeption(label);
 				}
 				theIndex.put(label, i);
 			}
@@ -85,20 +85,20 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		
 		
 		
-		private Complex(final String theName, final Map<String, Integer> theIndex, final Identifier<?>[] theOrderedIdentifiers){
+		private Complex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers){
 			this.name = theName;
 			this.index = theIndex;
-			this.orderedIdentifier = theOrderedIdentifiers;			
+			this.orderedAttributes = theOrderedIdentifiers;			
 		}
 		
-		public void init(String typeName, final Identifier<?>[] theOrderedIdentifiers) throws Identifier.DuplicateIdentifierNameExeption, Identifier.NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException{
-			if(this.index.size() > 0 || this.orderedIdentifier.length > 0){
+		public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers) throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException{
+			if(this.index.size() > 0 || this.orderedAttributes.length > 0){
 				throw new ComplexWasInitializedExeption();
 			}
 			if(Complex.instances.containsKey(typeName)){
 				throw new DublicateComplexException(typeName);
 			}
-			this.orderedIdentifier = theOrderedIdentifiers;
+			this.orderedAttributes = theOrderedIdentifiers;
 			buildIndex(this.index, theOrderedIdentifiers);
 			Complex.instances.put(typeName, this);
 		}
@@ -113,7 +113,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				// TODO Exception
 				return null;
 			}			
-			if(theValues.length != this.orderedIdentifier.length){
+			if(theValues.length != this.orderedAttributes.length){
 				// TODO Exception
 				return null;
 			}		
@@ -121,15 +121,15 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			return Structure._create(this, theValues, theParent);
 		}
 		
-		public int getIdentifiersSize(){
-			return this.orderedIdentifier.length;
+		public int getAttributesSize(){
+			return this.orderedAttributes.length;
 		}
 		
 		public Structure _construct(String[] theValues, Structure theParent) {
-			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
+			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
 			try {
-				for(int i = 0; i < this.orderedIdentifier.length; i++){
-					Value<?> re = this.orderedIdentifier[i].createValue(theParent);
+				for(int i = 0; i < this.orderedAttributes.length; i++){
+					Value<?> re = this.orderedAttributes[i].createValue(theParent);
 					re.setConverted( theValues[i] );
 					vals[i] = re;
 				}
@@ -147,14 +147,14 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				// TODO Exception
 				return null;
 			}			
-			if(theValues.size() != this.orderedIdentifier.length){
+			if(theValues.size() != this.orderedAttributes.length){
 				// TODO Exception
 				return null;
 			}
-			Value<?>[] vals = new Value<?>[ this.orderedIdentifier.length ];
+			Value<?>[] vals = new Value<?>[ this.orderedAttributes.length ];
 			try {
-				for(int i = 0; i < this.orderedIdentifier.length; i++){
-					Value<?> re = this.orderedIdentifier[i].createValue(theParent);
+				for(int i = 0; i < this.orderedAttributes.length; i++){
+					Value<?> re = this.orderedAttributes[i].createValue(theParent);
 					re.setConverted( theValues.get(i) );
 					vals[i] = re;
 				}
@@ -167,7 +167,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			return Structure._create(this, vals, theParent);
 		}		
 		
-		public int getSubIdentifierIndex(String aName){
+		public int getSubAttributeIndex(String aName){
 			Integer i = this.index.get(aName);
 			if(i == null){
 				return -1;
@@ -176,15 +176,15 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		}
 		
 		@SuppressWarnings("unchecked")
-		public <V> Identifier<V> getSubIdentifier(String aName){
+		public <V> Attribute<V> getSubAttribute(String aName){
 			Integer i = this.index.get(aName);
 			if(i != null){
-				if(i < 0 || i >= this.orderedIdentifier.length){
+				if(i < 0 || i >= this.orderedAttributes.length){
 					// TODO i < this.orderedAttributes.length darf auf keinen fall vorkommen! hier bitte schwere Exception werfen!
 					return null;
 				}
 				// TODO typ-check !!!
-				return (Identifier<V>)this.orderedIdentifier[i];
+				return (Attribute<V>)this.orderedAttributes[i];
 			}
 			else{
 				
@@ -194,14 +194,14 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			    		
 						i = this.index.get( names[0] );
 						if(i != null){
-							if(i < 0 || i >= this.orderedIdentifier.length){
+							if(i < 0 || i >= this.orderedAttributes.length){
 								// TODO i < this.orderedAttributes.length darf auf keinen fall vorkommen! hier bitte schwere Exception werfen!
 								return null;
 							}
 							
-				    		AbstractType<?> dt = this.orderedIdentifier[i].getType();
+				    		AbstractType<?> dt = this.orderedAttributes[i].getType();
 				    		if(dt != null){
-				    			return dt.getSubIdentifier( names[1] );
+				    			return dt.getSubAttribute( names[1] );
 				    		}
 							
 						}				    		
@@ -221,7 +221,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		
 		
 	
-		public Identifier<Value<?>[]> createComplexAttribute(String name){
+		public Attribute<Value<?>[]> createComplexAttribute(String name){
 			//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
 			
 			Label str = new Label(); 
@@ -232,9 +232,9 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				e.printStackTrace();
 				return null;
 			}
-			Identifier<Value<?>[]> attribute = null;
+			Attribute<Value<?>[]> attribute = null;
 			try {
-				attribute = this.createIdentifier( str );
+				attribute = this.createAttribute( str );
 			} catch (NullLabelException | EmptyLabelException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -245,7 +245,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 			
 		}	
 		
-		public static Identifier<?> createIdentifier(String attributeName, String typeName, Map<String, Complex> unformedComplexTypes){
+		public static Attribute<?> createAttribute(String attributeName, String typeName, Map<String, Complex> unformedComplexTypes){
 			// ComplexType
 			if(typeName == null || typeName.length() == 0){
 				// TODO exception
@@ -263,15 +263,15 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 					unformedComplexTypes.put(typeName, c);
 				}				
 			}
-			Identifier<Value<?>[]> re = c.createComplexAttribute(attributeName);
+			Attribute<Value<?>[]> re = c.createComplexAttribute(attributeName);
 	System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
 			return re;
 		}		
 
 		@Override
-		public Identifier<Value<?>[]> createIdentifier(Label theName)
+		public Attribute<Value<?>[]> createAttribute(Label theName)
 				throws NullLabelException, EmptyLabelException {
-			return AbstractType.<Value<?>[]>createIdentifier(theName, this);
+			return AbstractType.<Value<?>[]>createAttribute(theName, this);
 		}
 
 		@Override

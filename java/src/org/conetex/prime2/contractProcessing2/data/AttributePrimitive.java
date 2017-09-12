@@ -7,11 +7,11 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class IdentifierPrimitive<T> extends Identifier<T>{
+public class AttributePrimitive<T> extends Attribute<T>{
 
-	public static <V> IdentifierPrimitive<V> create(Label theLabel, Primitive<V> theType) {
+	public static <V> AttributePrimitive<V> create(Label theLabel, Primitive<V> theType) {
 		if (theLabel != null && theType != null) {
-			return new IdentifierPrimitive<V>(theLabel, theType);
+			return new AttributePrimitive<V>(theLabel, theType);
 		}
 		return null;
 	}
@@ -26,7 +26,7 @@ public class IdentifierPrimitive<T> extends Identifier<T>{
 	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
 	 * this.label = theLabel; this.factory = theFactory; }
 	 */
-	private IdentifierPrimitive(Label theLabel, Primitive<T> theType) {
+	private AttributePrimitive(Label theLabel, Primitive<T> theType) {
 		this.label = theLabel;
 		// this.factory = theFactory;
 		this.type = theType;

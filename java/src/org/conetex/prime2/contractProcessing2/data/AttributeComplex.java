@@ -7,11 +7,11 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class IdentifierComplex extends Identifier<Value<?>[]>{
+public class AttributeComplex extends Attribute<Value<?>[]>{
 
-	public static IdentifierComplex create(Label theLabel, Complex theType) {
+	public static AttributeComplex create(Label theLabel, Complex theType) {
 		if (theLabel != null && theType != null) {
-			return new IdentifierComplex(theLabel, theType);
+			return new AttributeComplex(theLabel, theType);
 		}
 		return null;
 	}
@@ -26,7 +26,7 @@ public class IdentifierComplex extends Identifier<Value<?>[]>{
 	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
 	 * this.label = theLabel; this.factory = theFactory; }
 	 */
-	private IdentifierComplex(Label theLabel, Complex theType) {
+	private AttributeComplex(Label theLabel, Complex theType) {
 		this.label = theLabel;
 		// this.factory = theFactory;
 		this.type = theType;
