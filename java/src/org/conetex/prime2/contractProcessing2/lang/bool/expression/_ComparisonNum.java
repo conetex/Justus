@@ -5,7 +5,7 @@ import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 
-public class ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
+public class _ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
@@ -25,31 +25,31 @@ public class ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
 	}
 	*/
 	
-	public static ComparisonNum create(Accessible<Number> theA, Accessible<Number> theB, String operation){
+	public static _ComparisonNum create(Accessible<Number> theA, Accessible<Number> theB, String operation){
 		Class c = theA.getBaseType();
 		if(theA == null || theB == null){
 			return null;
 		}
 		if( operation.equals(Symbol.SMALLER) ) {
-			return create(theA, theB, ComparisonNum.SMALLER );
+			return create(theA, theB, _ComparisonNum.SMALLER );
 		}
 		if( operation.equals(Symbol.EQUAL) ) {
-			return create(theA, theB, ComparisonNum.EQUAL );
+			return create(theA, theB, _ComparisonNum.EQUAL );
 		}
 		if( operation.equals(Symbol.GREATER) ) {
-			return create(theA, theB, ComparisonNum.GREATER );
+			return create(theA, theB, _ComparisonNum.GREATER );
 		}
 		return null;
 	}
 	
-	public static ComparisonNum create(Accessible<Number> theA, Accessible<Number> theB, int operation){
+	public static _ComparisonNum create(Accessible<Number> theA, Accessible<Number> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
-		if(operation < ComparisonNum.SMALLER || operation > ComparisonNum.GREATER){
+		if(operation < _ComparisonNum.SMALLER || operation > _ComparisonNum.GREATER){
 			return null;
 		}		
-		return new ComparisonNum(theA, theB, operation);
+		return new _ComparisonNum(theA, theB, operation);
 	}	
 
 
@@ -57,7 +57,7 @@ public class ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
 	private int operator;
 	
 	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
-	private ComparisonNum(Accessible<Number> a, Accessible<Number> b, int theOperation){
+	private _ComparisonNum(Accessible<Number> a, Accessible<Number> b, int theOperation){
 		super(a, b);
 		this.operator = theOperation;
 	}
@@ -75,7 +75,7 @@ public class ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
 		Number aN = super.getA().getFrom(thisObject);
 		Number bN = super.getB().getFrom(thisObject);
 		if( aN == null ){
-			if( bN == null && this.operator == ComparisonNum.EQUAL ){
+			if( bN == null && this.operator == _ComparisonNum.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -86,19 +86,19 @@ public class ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
 		
 		Integer a = aN.intValue();
 		Integer b = bN.intValue();		
-		if( this.operator == ComparisonNum.GREATER ){
+		if( this.operator == _ComparisonNum.GREATER ){
 			if(a.compareTo(b) > 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-		if( this.operator == ComparisonNum.SMALLER ){
+		if( this.operator == _ComparisonNum.SMALLER ){
 			if(a.compareTo(b) < 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-        if( this.operator == ComparisonNum.EQUAL ){
+        if( this.operator == _ComparisonNum.EQUAL ){
 			if(a.compareTo(b) == 0){
 				return Boolean.TRUE; 
 			}

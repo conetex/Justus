@@ -32,7 +32,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
-import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression._ComparisonNum;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Call;

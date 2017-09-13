@@ -14,6 +14,10 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 	public static final int EQUAL = 0;
 	public static final int GREATER = 1;
 	
+	public static Accessible<Boolean> createNew2(Accessible<?> a2, Accessible<?> b2, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	public static Accessible<Boolean> createNew(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String name) {
 		return create(theA, theB, name);
@@ -48,9 +52,9 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 			
 	private int operator;
 	
-	private Accessible<? extends Number> a;
+	private Accessible<?> a;
 	
-	private Accessible<? extends Number> b;
+	private Accessible<?> b;
 	
 	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
 	private ComparisonNum2(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation){
@@ -69,63 +73,67 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 
 	@Override
 	public Boolean getFrom(Structure thisObject) {
-		Number aN = this.a.getFrom(thisObject);
-		Number bN = this.b.getFrom(thisObject);
-		if( aN == null ){
-			if( bN == null && this.operator == ComparisonNum2.EQUAL ){
+		Object aO = this.a.getFrom(thisObject);
+		Object bO = this.b.getFrom(thisObject);
+		if( aO == null ){
+			if( bO == null && this.operator == ComparisonNum2.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
 		}
-		if( bN == null ){
+		if( bO == null ){
 			return null;
 		}	
-		
-		if(aN.getClass() == BigInteger.class ){
-			if(bN.getClass() == BigInteger.class ){
-				BigInteger a = (BigInteger) aN;
-				BigInteger b = (BigInteger) bN;
-				return comp(a, b);
-			}
-			else{
-				BigInteger a = (BigInteger) aN;
-				BigInteger b = (BigInteger.valueOf(bN.longValue()));
-				return comp(a, b);
-			}
-		}
-		else{
-			if(bN.getClass() == BigInteger.class ){
-				BigInteger a = (BigInteger.valueOf(aN.longValue()));
-				BigInteger b = (BigInteger) bN;
-				return comp(a, b);
-			}
-			else{
-				if(aN.getClass() == Long.class ){
-					if(bN.getClass() == Long.class ){
-						Long a = (Long) aN;
-						Long b = (Long) bN;
-						return comp(a, b);
-					}
-					else{
-						Long a = (Long) aN;
-						Long b = bN.longValue();
-						return comp(a, b);
-					}
+		if( aO instanceof Number ){
+			Number aN = (Number)aO;
+			Number bN = (Integer)bO;
+			if(aN.getClass() == BigInteger.class ){
+				if(bN instanceof BigInteger){
+					BigInteger a = (BigInteger)aN;
+					BigInteger b = (BigInteger)bN;
+					return comp(a, b);
 				}
 				else{
-					if(bN.getClass() == Long.class ){
-						Long a = aN.longValue();
-						Long b = (Long) bN;
-						return comp(a, b);
+					BigInteger a = (BigInteger)aN;
+					BigInteger b = (BigInteger.valueOf(bN.longValue()));
+					return comp(a, b);
+				}
+			}
+			else{
+				if(bN.getClass() == BigInteger.class ){
+					BigInteger a = (BigInteger.valueOf(aN.longValue()));
+					BigInteger b = (BigInteger)bN;
+					return comp(a, b);
+				}
+				else{
+					if(aN.getClass() == Long.class ){
+						if(bN.getClass() == Long.class ){
+							Long a = (Long)aN;
+							Long b = (Long)bN;
+							return comp(a, b);
+						}
+						else{
+							Long a = (Long)aN;
+							Long b = bN.longValue();
+							return comp(a, b);
+						}
 					}
 					else{
-						int a = aN.intValue();
-						int b = bN.intValue();
-						return comp(a, b);
-					}			
-				}				
-			}			
+						if(bN.getClass() == Long.class ){
+							Long a = aN.longValue();
+							Long b = (Long)bN;
+							return comp(a, b);
+						}
+						else{
+							int a = aN.intValue();
+							int b = bN.intValue();
+							return comp(a, b);
+						}			
+					}				
+				}			
+			}
 		}
+		return null;
 		
 	}
 
@@ -161,6 +169,8 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 	public Class<Boolean> getBaseType() {
 		return Boolean.class;
 	}
+
+
 
 
 

@@ -39,6 +39,7 @@ import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum2;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Call;
@@ -766,9 +767,11 @@ System.out.println("createComplexType " + typeName);
 				if(a != null && b != null){
 					Class<?> baseTypA = a.getBaseType();
 					Class<?> baseTypB = b.getBaseType();
-					if(.typen checken..)
-					Accessible<Boolean> re = ComparisonNum2.createNew(a, b, name);
-					ComparisonStr
+					if( Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypA) ) {
+						Accessible<Boolean> re = ComparisonNum2.createNew2(a, b, name);
+						return re;
+					}
+					//ComparisonStr
 					return re;
 				}				
 				
