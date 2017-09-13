@@ -4,6 +4,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
+import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 
 public class Comparison<T extends Comparable<T>> extends Pair<T> implements Accessible<Boolean>{
 	
@@ -12,17 +13,31 @@ public class Comparison<T extends Comparable<T>> extends Pair<T> implements Acce
 	public static final int GREATER = 1;
 	
 	/*
-	public static <V extends Number & Comparable<V>> Comparison<V> createSmaller(Accessible<V> theA, Accessible<V> theB){
-		return Comparison.<V>create(theA, theB, Comparison.SMALLER);
+	public static Accessible<Boolean> createNew(Accessible<?> a, Accessible<?> b, String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	public static <V extends Number & Comparable<V>> Comparison<V> createEqual(Accessible<V> theA, Accessible<V> theB){
-		return Comparison.<V>create(theA, theB, Comparison.GREATER);
-	}
-	
-	public static <V extends Number & Comparable<V>> Comparison<V> createGreater(Accessible<V> theA, Accessible<V> theB){
-		return Comparison.<V>create(theA, theB, Comparison.GREATER);
-	}
+	public static <IA extends Number, IB extends Number> ElementaryArithmetic2<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB, String operation ){
+		if(theA == null || theB == null){
+			return null;
+		}
+		if( operation.equals(Symbol.PLUS) ) {
+			return createNew(theA, theB, ElementaryArithmetic2.PLUS );
+		}
+		if( operation.equals(Symbol.MINUS) ) {
+			return createNew(theA, theB, ElementaryArithmetic2.MINUS );
+		}
+		if( operation.equals(Symbol.TIMES) ) {
+			return createNew(theA, theB, ElementaryArithmetic2.TIMES );
+		}
+		if( operation.equals(Symbol.DIVIDED_BY) ) {
+			return createNew(theA, theB, ElementaryArithmetic2.DIVIDED_BY );
+		}
+		if( operation.equals(Symbol.REMAINS) ) {
+			return createNew(theA, theB, ElementaryArithmetic2.REMAINS );
+		}		
+		return null;
+	}	
 	*/
 	
 	public static <V extends Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, String operation){
@@ -138,6 +153,7 @@ public class Comparison<T extends Comparable<T>> extends Pair<T> implements Acce
 	public Class<Boolean> getBaseType() {
 		return Boolean.class;
 	}
+
 
 
 	

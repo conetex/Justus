@@ -93,7 +93,7 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 		return new ElementaryArithmetic<AI, AO>(theA, theB, resultTyp, operation);
 	}
 	
-	private static <AI extends Number> Class<AI> getBiggest(Class<AI> a, Class<AI> b){
+	public static <AI extends Number> Class<AI> getBiggest(Class<AI> a, Class<AI> b){
 		Class<?>[] classes = {
 				  BigInteger.class
 				, Long.class

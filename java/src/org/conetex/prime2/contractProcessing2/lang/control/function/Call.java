@@ -13,14 +13,24 @@ public class Call<V>  implements Accessible<V>{ // V extends Value<?>
 
 	public static <SV> Call<SV> create2(Accessible<SV> theFunction, AccessibleValueNew<Structure> theReference){
 		// TODO drop this
-		if(theFunction == null || theReference == null){
+		if(theFunction == null){
+			System.err.println("theFunction is null");
 			return null;
 		}
+		if(theReference == null){
+			System.err.println("theReference is null");
+			return null;
+		}		
 		return new Call<SV>(theFunction, theReference);
 	}
 	
 	public static <SV extends Value<?>> Call<SV> create(Accessible<SV> theFunction, AccessibleValueNew<Structure> theReference){
-		if(theFunction == null || theReference == null){
+		if(theFunction == null){
+			System.err.println("theFunction is null");
+			return null;
+		}
+		if(theReference == null){
+			System.err.println("theReference is null");
 			return null;
 		}
 		return new Call<SV>(theFunction, theReference);

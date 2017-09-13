@@ -2,7 +2,124 @@
 
 <contract name="contract4u" t="http://conetex.org/justus/baseTyps">
 	
-	<attribute name="ai" type='t:Int'>3</attribute>
-	<value name="ai2" type='t:Int'>3</value>
+	<complexType name="root"> 
 	
+	<attribute name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+	<complexType name="credit">  
+		<attribute name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<attribute name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
+	</complexType>	
+	<complexType name="person">  
+		<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<complexType name="person">  
+			<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+			<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		</complexType> 		 
+		<function name="tuWas" type="contract4u.root.person.tuWas">  
+			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+		    <return><a>nr</a></return>			        
+		</function>       
+	</complexType>	
+	
+	</complexType>
+
+	<attribute name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
+	<instance>  
+		<glaeubig> 
+			<name>hobo</name>        
+			<mail>hobo@dida.de</mail>
+			<nr>111</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>
+		</glaeubig> 
+		<schuldne> 
+			<name>biba</name>        
+			<mail>biba@dida.de</mail>
+			<nr>222</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>			
+		</schuldne>				       
+		<betrag>1024</betrag>
+		<aktiv>true</aktiv>       
+	</instance>		
+
+	<call type="instance.glaeubig" name="tuWas" />
+	<!-- <call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" /> -->
+	
+<!-- FUNCTION OK -->	
+ 	<function name='foo' type="contract4u.foo"> 
+		<value name="param" type='t:Int'>11</value>
+		<times>
+		    <Integer>2</Integer>	       
+		    <Integer>9</Integer>
+	    </times>
+	    <return>
+		    <times>
+			    <x>param</x>	    
+			    <Integer>8</Integer>	
+		    </times>             
+	    </return>		             
+    </function>
+    
+    <value name="param" type='t:Int'>12</value>	
+	<copy>
+	   <target typ='MailAddress64'>foo.param</target>
+	   <source typ='MailAddress64'>param</source>
+	</copy>   
+    <call name="foo" type='contract4u' />
+	
+<!-- ASSIGNMENT OK -->
+	<value name="aAddress" type='t:MailAddress64'>12@32543.com</value>
+	<value name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</value>
+	<copy>
+	   <target typ='MailAddress64'>a2Addres</target>
+	   <source typ='MailAddress64'>aAddress</source>
+	</copy>           
+	             
+	<copy><!-- geht nich -->
+		<target typ='MailAddress64'>sub.a2Addres</target>
+		<source typ='MailAddress64'>sub.aAddress</source>
+	</copy>
+	             
+ 	<attribute name="sub">	         
+		<attribute name="aAddress" type='t:MailAddress64'>yy@yyy.com</attribute>
+		<attribute name="a2Addres" type='t:MailAddress64'>xx@xxx.com</attribute>		
+       <!--<copy>
+            <source typ='MailAddress64'>sub.aAddress</source>
+            <target typ='MailAddress64'>sub.a2Addres</target>
+           </copy> -->
+	</attribute>	
+	
+<!-- MATH OK -->
+    <value name="ai" type='t:Int'>3</value>
+    <value name="bi" type='t:Int'>4</value>	             
+    <plus>                                          <!--  7 -->
+      <a>ai</a>	             
+      <b>bi</b>	             
+    </plus>
+
+	<minus>                                         <!-- -4 -->
+	    <a>ai</a>	             
+	    <plus>
+	      <a>ai</a>	             
+	      <b>bi</b>	             
+	    </plus>              
+    </minus> 	             
+
+    <remains>                                       <!--  4 -->
+      <times> 
+        <a>ai</a>	             
+        <b>bi</b>	             
+      </times> 	             
+      <Integer>8</Integer>	             
+    </remains> 	             
+	             
+	
+
 </contract>

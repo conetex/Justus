@@ -13,6 +13,14 @@ public class AccessibleValue<T> implements Accessible<T> {
 		return new AccessibleValue<T>(thePath, theClass);
 	}
 
+	public static <T extends Number> AccessibleValue<T> createNum(String thePath, Class<T> theClass) {
+		if (thePath == null) {
+			System.err.println("thePath is null");
+			return null;
+		}
+		return new AccessibleValue<T>(thePath, theClass);
+	}
+	
 	private String path;
 
 	private final Class<T> clazz;
