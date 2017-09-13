@@ -12,4 +12,6 @@ public interface Accessible<T> {//accessible
 		
     public Class<T> getBaseType();
     
+    public Accessible<T> as(Class<?> baseType);
+    public <T> Accessible<? extends T> as2(Class<T> baseType);
 }

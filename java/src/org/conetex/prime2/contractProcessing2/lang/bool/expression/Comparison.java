@@ -154,6 +154,18 @@ public class Comparison<T extends Comparable<T>> extends Pair<T> implements Acce
 		return Boolean.class;
 	}
 
+	@Override
+	public Accessible<Boolean> as(Class<?> baseType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> Accessible<T> as2(Class<T> baseType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 	

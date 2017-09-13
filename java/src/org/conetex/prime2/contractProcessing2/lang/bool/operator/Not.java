@@ -3,9 +3,10 @@ package org.conetex.prime2.contractProcessing2.lang.bool.operator;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 
 //Unary operation
-public class Not implements Accessible<Boolean>{
+public class Not extends AccessibleAbstract<Boolean>{
 
 	public static Not create(Accessible<Boolean> theSub){
 		if(theSub == null){

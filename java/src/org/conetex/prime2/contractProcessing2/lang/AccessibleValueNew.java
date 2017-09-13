@@ -4,7 +4,7 @@ import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class AccessibleValueNew<T extends Value<?>> implements Accessible<T> {
+public class AccessibleValueNew<T extends Value<?>> extends AccessibleAbstract<T> {
 
 	public static <T extends Value<?>> AccessibleValueNew<T> create(String thePath, Class<T> theClass) {
 		if (thePath == null) {

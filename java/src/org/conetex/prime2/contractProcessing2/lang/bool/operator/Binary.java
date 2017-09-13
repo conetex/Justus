@@ -74,6 +74,22 @@ public abstract class Binary extends Pair<Boolean> implements Accessible<Boolean
 		return this.getFrom(thisObject);
 	}
 
+	@Override
+	public Accessible<Boolean> as(Class<?> baseType) {
+		if(baseType == this.getBaseType()){
+			return this;
+		}
+		return null;
+	}
+	
+	@Override
+	public <T> Accessible<T> as2(Class<T> baseType) {
+		if(baseType == this.getBaseType()){
+			return (Accessible<T>) this;
+		}
+		return null;
+	}
+	
 	/*
 	@Override
 	public boolean compute(Structure thisObject) {

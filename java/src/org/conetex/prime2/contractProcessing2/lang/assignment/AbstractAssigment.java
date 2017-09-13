@@ -3,6 +3,7 @@ package org.conetex.prime2.contractProcessing2.lang.assignment;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Setable;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
 /*
@@ -17,7 +18,7 @@ public interface Accessible<T> {//accessible
 }
 */
 
-public abstract class AbstractAssigment<T> implements Accessible<T>{//Computable{// extends ComputablePair<T>{
+public abstract class AbstractAssigment<T> extends AccessibleAbstract<T>{//Computable{// extends ComputablePair<T>{
 
 	private Setable<T> target;
 

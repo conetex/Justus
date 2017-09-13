@@ -38,8 +38,8 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.Comparison;
-import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNum2;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonStr;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Call;
@@ -355,11 +355,11 @@ System.out.println("createComplexType " + typeName);
 							 name.equals(Symbol.SMALLER) || name.equals(Symbol.EQUAL) || name.equals(Symbol.GREATER) || name.equals(Symbol.ISNULL) ) {
 										Accessible<Boolean> x = //createBoolExpression( super.node );
 										//ReadXML.createAccessible( super.node, c, Boolean.class );
-										createFunctionAccessible( n, parentTyp, Boolean.class );
+										createFunctionAccessibleBool( n, parentTyp );
 								return x;					
 					}
 					else if( name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY) ) {
-								Accessible<?> x = createFunctionAccessible( n, parentTyp, Object.class );
+								Accessible<?> x = createFunctionAccessibleObj( n, parentTyp );
 								return x;					
 					}				
 					else if( name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL) ){
@@ -376,7 +376,7 @@ System.out.println("createComplexType " + typeName);
 			
 		}
 	
-		public static <RE> Accessible<RE> createFunctionAccessible(SyntaxNode n, Complex parentTyp, Class<RE> expectedBaseTyp){
+		public static <RE> Accessible<RE> _createFunctionAccessible(SyntaxNode n, Complex parentTyp, Class<RE> expectedBaseTyp){
 			
 			String name = n.getTag();
 			
@@ -418,7 +418,7 @@ System.out.println("createComplexType " + typeName);
 					
 					Primitive<RE> pri1 = Primitive.getInstance( c1Class );
 					Class<RE> baseType1 = pri1.getBaseType();	
-					Accessible<RE> src = createFunctionAccessible(c1, parentTyp, baseType1);
+					Accessible<RE> src = _createFunctionAccessible(c1, parentTyp, baseType1);
 					if(src != null && trg != null){
 						if(name.equals(Symbol.COPY)){
 							return Copy.<RE>create(trg, src);					
@@ -521,6 +521,7 @@ System.out.println("createComplexType " + typeName);
 			}*/
 			
 			// COMPARISON
+			/*
 			else if( name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL) ){	
 				Accessible<?> a = createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, Comparable.class );
 				if(a != null){
@@ -564,16 +565,17 @@ System.out.println("createComplexType " + typeName);
 					}
 				}
 			}
+			*/
 			// BOOL
 			else if( name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) ) {	
-				Accessible<Boolean> a = createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, Boolean.class );
-				Accessible<Boolean> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, Boolean.class );
+				Accessible<Boolean> a = _createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, Boolean.class );
+				Accessible<Boolean> b = _createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, Boolean.class );
 				if(a != null && b != null){
 					return (Accessible<RE>)Binary.<RE>create(a, b, name);
 				}
 			}
 			else if( name.equals(Symbol.NOT) ) {			
-				Accessible<Boolean> sub = createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, Boolean.class );
+				Accessible<Boolean> sub = _createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, Boolean.class );
 				if(sub != null){
 					return (Accessible<RE>) Not.create(sub);
 				}
@@ -584,7 +586,7 @@ System.out.println("createComplexType " + typeName);
 			}
 			// CONTROL FUNCTION
 			else if( name.equals(Symbol.RETURN) ) {			
-				Accessible<RE> e = createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, expectedBaseTyp );
+				Accessible<RE> e = _createFunctionAccessible( n.getChildElementByIndex(0), parentTyp, expectedBaseTyp );
 				//Class<?> expectedBaseTypExp = e.getBaseType();
 				return Return.create2(e);
 				//return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
@@ -765,56 +767,8 @@ System.out.println("createComplexType " + typeName);
 				Accessible<?> b = createFunctionAccessibleObj( n.getChildElementByIndex(1), parentTyp );
 				// TODO check 4 other childs! only 2 are alowed
 				if(a != null && b != null){
-					Class<?> baseTypA = a.getBaseType();
-					Class<?> baseTypB = b.getBaseType();
-					if( Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypA) ) {
-						Accessible<Boolean> re = ComparisonNum2.createNew2(a, b, name);
-						return re;
-					}
-					//ComparisonStr
+					Accessible<Boolean> re = createComparison(a, b, name);
 					return re;
-				}				
-				
-				
-				if(a != null){
-					Class<?> expectedBaseTypB = a.getBaseType();
-					if(expectedBaseTypB == BigInteger.class){
-						Accessible<BigInteger> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, BigInteger.class );
-						if(b != null){
-							Accessible<Boolean> re = Comparison.create( (Accessible<BigInteger>)a, b, name );
-							return re;
-						}			
-					}
-					else if(expectedBaseTypB == Long.class){
-						Accessible<Long> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, Long.class );
-						if(b != null){
-							return Comparison.create( (Accessible<Long>)a, b, name );
-						}			
-					}
-					else if(expectedBaseTypB == Integer.class){
-						Accessible<Integer> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, Integer.class );
-						if(b != null){
-							return Comparison.create( (Accessible<Integer>)a, b, name );
-						}				
-					}
-					else if(expectedBaseTypB == Byte.class){
-						Accessible<Byte> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, Byte.class );
-						if(b != null){
-							return Comparison.create( (Accessible<Byte>)a, b, name );
-						}				
-					}				
-					else if(expectedBaseTypB == Number.class){
-						Accessible<Number> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, Number.class );
-						if(b != null){
-							return ComparisonNum.create( (Accessible<Number>)a, b, name );
-						}				
-					}				
-					else if(expectedBaseTypB == String.class){
-						Accessible<String> b = createFunctionAccessible( n.getChildElementByIndex(1), parentTyp, String.class );
-						if(b != null){
-							return Comparison.create( (Accessible<String>)a, b, name );
-						}				
-					}
 				}
 			}			
 			// BOOL
@@ -978,7 +932,26 @@ System.out.println("get_id from " + name + " (" + n.getValue() + ")");
 
 		}		
 		
-		
+		public static Accessible<Boolean> createComparison(Accessible<?> a, Accessible<?> b, String name) {
+			Class<?> baseTypA = a.getBaseType();
+			Class<?> baseTypB = b.getBaseType();
+			if( Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypB) ) {
+				Accessible<? extends Number> theA = a.<Number>as2(Number.class);
+				Accessible<? extends Number> theB = b.<Number>as2(Number.class);
+				return ComparisonNum2.create(theA, theB, name);
+			}
+			if( Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypB) ) {
+				Accessible<? extends Number> theA = (Accessible<? extends Number>) a;
+				Accessible<? extends Number> theB = (Accessible<? extends Number>) b;
+				return ComparisonNum2.create(theA, theB, name);
+			}			
+			else if( baseTypA == String.class && baseTypB == String.class ) {
+				Accessible<String> theA = (Accessible<String>) a;
+				Accessible<String> theB = (Accessible<String>) b;
+				return ComparisonStr.create(theA, theB, name);
+			}			
+			return null;
+		}		
 		
 	}
 

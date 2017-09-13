@@ -8,8 +8,9 @@ import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 
-public class Function<V extends Value<?>> implements Accessible<V>{
+public class Function<V extends Value<?>> extends AccessibleAbstract<V>{
 
 	private static Map<String, Function<?>> instances = new HashMap<String, Function<?>>();
 	

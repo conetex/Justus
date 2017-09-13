@@ -6,7 +6,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class SetableValue<T> implements Setable<T> {
+public class SetableValue<T> extends AccessibleAbstract<T> implements Setable<T> {
 
 	public static <T> SetableValue<T> create2(String thePath, Class<? extends Value<T>> theClass, Class<T> clazz) {
 		if (thePath == null) {

@@ -2,8 +2,9 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 
-public class IsNull implements Accessible<Boolean>{
+public class IsNull extends AccessibleAbstract<Boolean>{
 
 	public static IsNull create(Accessible<?> theSub){
 		if(theSub == null){

@@ -4,18 +4,19 @@ import java.math.BigInteger;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 
-public class ComparisonStr implements Accessible<Boolean>{
+public class ComparisonStr extends AccessibleAbstract<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
 	public static final int GREATER = 1;
 	
 	
-	public static Accessible<Boolean> createNew(Accessible<String> theA, Accessible<String> theB, String name) {
+	public static Accessible<Boolean> _createNew(Accessible<String> theA, Accessible<String> theB, String name) {
 		return create(theA, theB, name);
 	}
 	

@@ -13,7 +13,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class AccessibleConstant<T> implements Accessible<T> {
+public class AccessibleConstant<T> extends AccessibleAbstract<T> {
 
 	
 	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value){

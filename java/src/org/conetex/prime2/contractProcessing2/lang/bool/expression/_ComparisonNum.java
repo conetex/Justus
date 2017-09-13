@@ -117,6 +117,18 @@ public class _ComparisonNum extends Pair<Number> implements Accessible<Boolean>{
 		return Boolean.class;
 	}
 
+	@Override
+	public Accessible<Boolean> as(Class<?> baseType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> Accessible<T> as2(Class<T> baseType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	
 }

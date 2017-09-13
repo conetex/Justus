@@ -8,8 +8,9 @@ import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 
-public class FunctionNew<V> implements Accessible<V>{
+public class FunctionNew<V> extends AccessibleAbstract<V>{
 	
 	private static Map<String, FunctionNew<? extends Number>> instancesNum = new HashMap<String, FunctionNew<? extends Number>>();
 	private static Map<String, FunctionNew<Boolean>> instancesBoolean = new HashMap<String, FunctionNew<Boolean>>();

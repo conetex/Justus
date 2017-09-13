@@ -4,11 +4,12 @@ import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 
-public class Return<V>  implements Accessible<V>{ // V extends Value<?>
+public class Return<V> extends AccessibleAbstract<V>{ // V extends Value<?>
 
 	public static <SV> Return<SV> create2(Accessible<SV> theExpression){
 		// TODO drop this

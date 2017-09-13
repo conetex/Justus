@@ -4,12 +4,13 @@ import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
 
-public class Call<V>  implements Accessible<V>{ // V extends Value<?>
+public class Call<V> extends AccessibleAbstract<V>{ // V extends Value<?>
 
 	public static <SV> Call<SV> create2(Accessible<SV> theFunction, AccessibleValueNew<Structure> theReference){
 		// TODO drop this
@@ -71,8 +72,9 @@ public class Call<V>  implements Accessible<V>{ // V extends Value<?>
 
 	@Override
 	public Class<V> getBaseType() {
-		// TODO V ist oft noch java typ. das sollte sich jetzt nach Value ändern. Hier ist es schon so: V extends Value<?>
-		return null;
+		return this.function.getBaseType();
 	}
+
+
 
 }

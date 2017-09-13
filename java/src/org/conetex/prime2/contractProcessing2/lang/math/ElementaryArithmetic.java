@@ -227,4 +227,16 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 		return this.resultTyp;
 	}
 
+	@Override
+	public Accessible<O> as(Class<?> baseType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> Accessible<T> as2(Class<T> baseType) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

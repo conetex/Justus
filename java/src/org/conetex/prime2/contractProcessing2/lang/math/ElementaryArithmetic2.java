@@ -7,8 +7,9 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 
-public class ElementaryArithmetic2<Ia extends Number, Ib extends Number, R extends Number> implements Accessible<R>{
+public class ElementaryArithmetic2<Ia extends Number, Ib extends Number, R extends Number> extends AccessibleAbstract<R>{
 	
 	public static final int PLUS = 0;         // Addition
 	public static final int MINUS = 1;        // Subtraction 

@@ -4,22 +4,18 @@ import java.math.BigInteger;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
+import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 
-public class ComparisonNum2 implements Accessible<Boolean>{
+public class ComparisonNum2 extends AccessibleAbstract<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
 	public static final int GREATER = 1;
 	
-	public static Accessible<Boolean> createNew2(Accessible<?> a2, Accessible<?> b2, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public static Accessible<Boolean> createNew(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String name) {
+	public static Accessible<Boolean> _createNew(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String name) {
 		return create(theA, theB, name);
 	}
 	
@@ -52,9 +48,9 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 			
 	private int operator;
 	
-	private Accessible<?> a;
+	private Accessible<? extends Number> a;
 	
-	private Accessible<?> b;
+	private Accessible<? extends Number> b;
 	
 	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
 	private ComparisonNum2(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation){
@@ -73,20 +69,18 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 
 	@Override
 	public Boolean getFrom(Structure thisObject) {
-		Object aO = this.a.getFrom(thisObject);
-		Object bO = this.b.getFrom(thisObject);
-		if( aO == null ){
-			if( bO == null && this.operator == ComparisonNum2.EQUAL ){
+		Number aN = this.a.getFrom(thisObject);
+		Number bN = this.b.getFrom(thisObject);
+		if( aN == null ){
+			if( bN == null && this.operator == ComparisonNum2.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
 		}
-		if( bO == null ){
+		if( bN == null ){
 			return null;
 		}	
-		if( aO instanceof Number ){
-			Number aN = (Number)aO;
-			Number bN = (Integer)bO;
+
 			if(aN.getClass() == BigInteger.class ){
 				if(bN instanceof BigInteger){
 					BigInteger a = (BigInteger)aN;
@@ -132,8 +126,6 @@ public class ComparisonNum2 implements Accessible<Boolean>{
 					}				
 				}			
 			}
-		}
-		return null;
 		
 	}
 
