@@ -15,7 +15,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inco
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 
-	public class Complex extends AbstractType<Value<?>[]> { // implements ValueFactory<Value<?>[]>
+	public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[]>
 		
 		private static Map<String, Complex> instances = new HashMap<String, Complex>();
 		
@@ -221,7 +221,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		
 		
 	
-		public Attribute<Value<?>[]> createComplexAttribute(String name){
+		public Attribute<Structure> createComplexAttribute(String name){
 			//PrimitiveDataType<Structure> simpleType = PrimitiveDataType.getInstance( Value.Implementation.Struct.class.getSimpleName() );
 			
 			Label str = new Label(); 
@@ -232,7 +232,7 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 				e.printStackTrace();
 				return null;
 			}
-			Attribute<Value<?>[]> attribute = null;
+			Attribute<Structure> attribute = null;
 			try {
 				attribute = this.createAttribute( str );
 			} catch (NullLabelException | EmptyLabelException e1) {
@@ -263,19 +263,28 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 					unformedComplexTypes.put(typeName, c);
 				}				
 			}
-			Attribute<Value<?>[]> re = c.createComplexAttribute(attributeName);
+			Attribute<Structure> re = c.createComplexAttribute(attributeName);
 	System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
 			return re;
 		}		
 
-		@Override
-		public Attribute<Value<?>[]> createAttribute(Label theName)
+		public Attribute<Value<?>[]> _createAttribute2(Label theName)
 				throws NullLabelException, EmptyLabelException {
-			return AbstractType.<Value<?>[]>createAttribute(theName, this);
+			return null;//AbstractType.<Value<?>[]>createAttribute(theName, this);
 		}
 
+		public Attribute<Structure> createAttribute(Label theName)
+				throws NullLabelException, EmptyLabelException {
+			return AbstractType.<Structure>createAttribute(theName, this);
+		}
+
+		
+		public Class<? extends Value<Value<?>[]>> _getClazz2() {
+			return null;//Structure.class;
+		}
+		
 		@Override
-		public Class<? extends Value<Value<?>[]>> getClazz() {
+		public Class<? extends Value<Structure>> getClazz() {
 			return Structure.class;
 		}
 
@@ -313,7 +322,9 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 		    	}
 		    }
 			return re;
-		}		
+		}
+
+		
 		
 
 	}		

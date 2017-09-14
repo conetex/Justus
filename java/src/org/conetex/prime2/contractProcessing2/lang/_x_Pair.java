@@ -8,14 +8,14 @@ public interface Computable {
 } 
 */
 
-public abstract class Pair<T>{// implements Computable{
+public abstract class _x_Pair<T>{// implements Computable{
 
 	private Accessible<T> a;
 	
 	private Accessible<T> b;
 
 	//protected ComputablePair(Accessible<T> theA, Accessible<T> theB){
-	protected Pair(Accessible<T> theA, Accessible<T> theB){
+	protected _x_Pair(Accessible<T> theA, Accessible<T> theB){
 		this.a = theA;
 		this.b = theB;
 	}

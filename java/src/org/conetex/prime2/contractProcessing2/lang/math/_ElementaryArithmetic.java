@@ -4,11 +4,11 @@ import java.math.BigInteger;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.Pair;
+import org.conetex.prime2.contractProcessing2.lang._x_Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implements Accessible<O>{
+public class _ElementaryArithmetic<I extends Number, O> extends _x_Pair<I> implements Accessible<O>{
 	
 	public static final int PLUS = 0;         // Addition
 	public static final int MINUS = 1;        // Subtraction 
@@ -16,31 +16,31 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 	public static final int DIVIDED_BY = 3;   // Division 
 	public static final int REMAINS = 4;      // Remainder 
 	
-	public static <AI extends Number, AO> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, String operation, Class<AO> resultTyp ){
+	public static <AI extends Number, AO> _ElementaryArithmetic<AI, AO> _create(Accessible<AI> theA, Accessible<AI> theB, String operation, Class<AO> resultTyp ){
 		if(theA == null || theB == null){
 			return null;
 		}
 		if( operation.equals(Symbol.PLUS) ) {
-			return create(theA, theB, ElementaryArithmetic.PLUS, resultTyp );
+			return _create(theA, theB, _ElementaryArithmetic.PLUS, resultTyp );
 		}
 		if( operation.equals(Symbol.MINUS) ) {
-			return create(theA, theB, ElementaryArithmetic.MINUS, resultTyp );
+			return _create(theA, theB, _ElementaryArithmetic.MINUS, resultTyp );
 		}
 		if( operation.equals(Symbol.TIMES) ) {
-			return create(theA, theB, ElementaryArithmetic.TIMES, resultTyp );
+			return _create(theA, theB, _ElementaryArithmetic.TIMES, resultTyp );
 		}
 		if( operation.equals(Symbol.DIVIDED_BY) ) {
-			return create(theA, theB, ElementaryArithmetic.DIVIDED_BY, resultTyp );
+			return _create(theA, theB, _ElementaryArithmetic.DIVIDED_BY, resultTyp );
 		}
 		if( operation.equals(Symbol.REMAINS) ) {
-			return create(theA, theB, ElementaryArithmetic.REMAINS, resultTyp );
+			return _create(theA, theB, _ElementaryArithmetic.REMAINS, resultTyp );
 		}		
 		return null;
 	}
 	
-	public static <AI extends Number, AO> ElementaryArithmetic<AI, AO> create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
+	public static <AI extends Number, AO> _ElementaryArithmetic<AI, AO> _create(Accessible<AI> theA, Accessible<AI> theB, int operation, Class<AO> resultTyp ){
 
-		if(operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS){
+		if(operation < _ElementaryArithmetic.PLUS || operation > _ElementaryArithmetic.REMAINS){
 			return null;
 		}
 		
@@ -73,16 +73,16 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 		
 		else if(resultTyp == Number.class){
 			if(     inputTyp == BigInteger.class){
-				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, BigInteger>(theA, theB, BigInteger.class, operation);
+				return (_ElementaryArithmetic<AI, AO>) new _ElementaryArithmetic<AI, BigInteger>(theA, theB, BigInteger.class, operation);
 			}
 			else if(inputTyp == Long.class){
-				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, Long>(theA, theB, Long.class, operation);
+				return (_ElementaryArithmetic<AI, AO>) new _ElementaryArithmetic<AI, Long>(theA, theB, Long.class, operation);
 			}
 			else if(inputTyp == Integer.class){
-				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, Integer>(theA, theB, Integer.class, operation);
+				return (_ElementaryArithmetic<AI, AO>) new _ElementaryArithmetic<AI, Integer>(theA, theB, Integer.class, operation);
 			}
 			else if(inputTyp == Byte.class){
-				return (ElementaryArithmetic<AI, AO>) new ElementaryArithmetic<AI, Byte>(theA, theB, Byte.class, operation);
+				return (_ElementaryArithmetic<AI, AO>) new _ElementaryArithmetic<AI, Byte>(theA, theB, Byte.class, operation);
 			}			
 			else {
 				// TODO Error unknown Typ
@@ -90,7 +90,7 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 			}	
 		}	
 		
-		return new ElementaryArithmetic<AI, AO>(theA, theB, resultTyp, operation);
+		return new _ElementaryArithmetic<AI, AO>(theA, theB, resultTyp, operation);
 	}
 	
 	public static <AI extends Number> Class<AI> getBiggest(Class<AI> a, Class<AI> b){
@@ -123,45 +123,45 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 	
 	private Class<O> resultTyp;
 	
-	private ElementaryArithmetic(Accessible<I> theA, Accessible<I> theB, Class<O> theResultTyp, int theOperation){
+	private _ElementaryArithmetic(Accessible<I> theA, Accessible<I> theB, Class<O> theResultTyp, int theOperation){
 		super(theA, theB);
 		this.operator = theOperation;
 		this.resultTyp = theResultTyp;
 	}
 
 	private Integer calcInt(int a, int b) throws ArithmeticException {
-		if(this.operator == ElementaryArithmetic.PLUS){
+		if(this.operator == _ElementaryArithmetic.PLUS){
 			return Math.addExact( a, b ) ;				
 		}
-		else if(this.operator == ElementaryArithmetic.MINUS){
+		else if(this.operator == _ElementaryArithmetic.MINUS){
 			return Math.subtractExact( a, b );				
 		}
-		else if(this.operator == ElementaryArithmetic.TIMES){
+		else if(this.operator == _ElementaryArithmetic.TIMES){
 			return Math.multiplyExact( a, b );				
 		}
-		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
+		else if(this.operator == _ElementaryArithmetic.DIVIDED_BY){
 			return a / b;				
 		}
-		else if(this.operator == ElementaryArithmetic.REMAINS){
+		else if(this.operator == _ElementaryArithmetic.REMAINS){
 			return a % b;				
 		}
 		return null;
 	}
 	
 	private Long calcLong(long a, long b) throws ArithmeticException {
-		if(this.operator == ElementaryArithmetic.PLUS){
+		if(this.operator == _ElementaryArithmetic.PLUS){
 			return Math.addExact( a, b );				
 		}
-		else if(this.operator == ElementaryArithmetic.MINUS){
+		else if(this.operator == _ElementaryArithmetic.MINUS){
 			return Math.subtractExact( a, b );				
 		}
-		else if(this.operator == ElementaryArithmetic.TIMES){
+		else if(this.operator == _ElementaryArithmetic.TIMES){
 			return Math.multiplyExact( a, b );				
 		}
-		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
+		else if(this.operator == _ElementaryArithmetic.DIVIDED_BY){
 			return a / b;				
 		}
-		else if(this.operator == ElementaryArithmetic.REMAINS){
+		else if(this.operator == _ElementaryArithmetic.REMAINS){
 			return a % b;				
 		}
 		return null;
@@ -172,19 +172,19 @@ public class ElementaryArithmetic<I extends Number, O> extends Pair<I> implement
 	}
 	
 	private BigInteger calcBigInt(BigInteger a, BigInteger b) throws ArithmeticException {
-		if(this.operator == ElementaryArithmetic.PLUS){
+		if(this.operator == _ElementaryArithmetic.PLUS){
 			return a.add(b);				
 		}
-		else if(this.operator == ElementaryArithmetic.MINUS){
+		else if(this.operator == _ElementaryArithmetic.MINUS){
 			return a.subtract(b);				
 		}
-		else if(this.operator == ElementaryArithmetic.TIMES){
+		else if(this.operator == _ElementaryArithmetic.TIMES){
 			return a.multiply(b);				
 		}
-		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
+		else if(this.operator == _ElementaryArithmetic.DIVIDED_BY){
 			return a.divide(b);				
 		}
-		else if(this.operator == ElementaryArithmetic.REMAINS){
+		else if(this.operator == _ElementaryArithmetic.REMAINS){
 			return a.remainder(b);				
 		}
 		return null;

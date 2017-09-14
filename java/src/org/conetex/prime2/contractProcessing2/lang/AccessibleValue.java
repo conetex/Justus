@@ -32,6 +32,9 @@ public class AccessibleValue<T> extends AccessibleAbstract<T> {
 
 	@Override
 	public T getFrom(Structure thisObject) {
+		
+		//return thisObject.getValueNewNew(this.path, this.clazz);
+		
 		Value<T> value = thisObject.getValueNew(this.path, this.clazz);
 		if(value == null){
 			return null;
@@ -65,7 +68,5 @@ public class AccessibleValue<T> extends AccessibleAbstract<T> {
 	public Class<T> getBaseType() {
 		return this.clazz;
 	}
-
-
 
 }

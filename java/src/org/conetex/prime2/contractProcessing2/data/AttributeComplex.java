@@ -7,7 +7,7 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class AttributeComplex extends Attribute<Value<?>[]>{
+public class AttributeComplex extends Attribute<Structure>{//Attribute<Value<?>[]>
 
 	public static AttributeComplex create(Label theLabel, Complex theType) {
 		if (theLabel != null && theType != null) {
@@ -33,7 +33,7 @@ public class AttributeComplex extends Attribute<Value<?>[]>{
 	}
 
 	@Override
-	public AbstractType<Value<?>[]> getType(){
+	public AbstractType<Structure> getType(){
 		return this.type;
 	}
 	

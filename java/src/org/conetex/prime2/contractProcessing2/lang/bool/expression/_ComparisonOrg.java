@@ -2,11 +2,11 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
-import org.conetex.prime2.contractProcessing2.lang.Pair;
-import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
+import org.conetex.prime2.contractProcessing2.lang._x_Pair;
+import org.conetex.prime2.contractProcessing2.lang.math._ElementaryArithmetic;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public class ComparisonOrg<T extends Number & Comparable<T>> extends Pair<T> implements Accessible<Boolean>{
+public class _ComparisonOrg<T extends Number & Comparable<T>> extends _x_Pair<T> implements Accessible<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
@@ -26,19 +26,19 @@ public class ComparisonOrg<T extends Number & Comparable<T>> extends Pair<T> imp
 	}
 	*/
 	
-	public static <V extends Number & Comparable<V>> ComparisonOrg<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
+	public static <V extends Number & Comparable<V>> _ComparisonOrg<V> _create(Accessible<V> theA, Accessible<V> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
-		if(operation < ComparisonOrg.SMALLER || operation > ComparisonOrg.GREATER){
+		if(operation < _ComparisonOrg.SMALLER || operation > _ComparisonOrg.GREATER){
 			return null;
 		}		
-		return new ComparisonOrg<V>(theA, theB, operation);
+		return new _ComparisonOrg<V>(theA, theB, operation);
 	}
 			
 	private int operator;
 	
-	private ComparisonOrg(Accessible<T> theA, Accessible<T> theB, int theOperation){
+	private _ComparisonOrg(Accessible<T> theA, Accessible<T> theB, int theOperation){
 		super(theA, theB);
 		this.operator = theOperation;
 	}
@@ -48,7 +48,7 @@ public class ComparisonOrg<T extends Number & Comparable<T>> extends Pair<T> imp
 		T a = super.getA().getFrom(thisObject);
 		T b = super.getB().getFrom(thisObject);
 		if( a == null ){
-			if( b == null && this.operator == ComparisonOrg.EQUAL ){
+			if( b == null && this.operator == _ComparisonOrg.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -57,13 +57,13 @@ public class ComparisonOrg<T extends Number & Comparable<T>> extends Pair<T> imp
 			return null;
 		}	
 		
-		if( this.operator == ComparisonOrg.GREATER && a.compareTo(b) > 0  ){
+		if( this.operator == _ComparisonOrg.GREATER && a.compareTo(b) > 0  ){
 			return Boolean.TRUE; 
 		}
-		if( this.operator == ComparisonOrg.SMALLER && a.compareTo(b) < 0  ){
+		if( this.operator == _ComparisonOrg.SMALLER && a.compareTo(b) < 0  ){
 			return Boolean.TRUE; 
 		}
-        if( this.operator == ComparisonOrg.EQUAL   && a.compareTo(b) == 0 ){
+        if( this.operator == _ComparisonOrg.EQUAL   && a.compareTo(b) == 0 ){
         	return Boolean.TRUE; 
 		}		
 		return Boolean.FALSE;

@@ -13,8 +13,11 @@ import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 public class FunctionNew<V> extends AccessibleAbstract<V>{
 	
 	private static Map<String, FunctionNew<? extends Number>> instancesNum = new HashMap<String, FunctionNew<? extends Number>>();
+	
 	private static Map<String, FunctionNew<Boolean>> instancesBoolean = new HashMap<String, FunctionNew<Boolean>>();
 
+	private static Map<String, FunctionNew<? extends Object>> instancesObject = new HashMap<String, FunctionNew<? extends Object>>();
+	
 	public static Accessible<Boolean> getInstanceBool(String name) {
 		FunctionNew<Boolean> f = instancesBoolean.get(name);
 		if(f == null){
@@ -30,6 +33,14 @@ public class FunctionNew<V> extends AccessibleAbstract<V>{
 		}
 		return f;
 	}	
+	
+	public static Accessible<? extends Object> getInstanceObject(String name) {
+		FunctionNew<? extends Object> f = instancesObject.get(name);
+		if(f == null){
+			return null;
+		}
+		return f;
+	}
 	
 	public static Accessible<?> getInstance(String name) {
 		FunctionNew<?> f = instancesNum.get(name);
@@ -54,6 +65,42 @@ public class FunctionNew<V> extends AccessibleAbstract<V>{
 		}
 		FunctionNew<SV> re = new FunctionNew<SV>(theSteps, theName);
 		FunctionNew.instancesNum.put(theName, re);
+		return re;
+	}	
+	
+	public static FunctionNew<Boolean> createBool( Accessible<?>[] theSteps, String theName){
+		if(theSteps == null){
+			System.err.println("theSteps is null");
+			return null;
+		}
+		if(theName == null || theName.length() < 1){
+			System.err.println("theName is null");
+			return null;
+		}		
+		if(FunctionNew.instancesBoolean.containsKey(theName)){
+			System.err.println("duplicate function " + theName);
+			return null;
+		}
+		FunctionNew<Boolean> re = new FunctionNew<Boolean>(theSteps, theName);
+		FunctionNew.instancesObject.put(theName, re);
+		return re;
+	}	
+	
+	public static <SV extends Object> FunctionNew<SV> createObj( Accessible<?>[] theSteps, String theName){
+		if(theSteps == null){
+			System.err.println("theSteps is null");
+			return null;
+		}
+		if(theName == null || theName.length() < 1){
+			System.err.println("theName is null");
+			return null;
+		}		
+		if(FunctionNew.instancesObject.containsKey(theName)){
+			System.err.println("duplicate function " + theName);
+			return null;
+		}
+		FunctionNew<SV> re = new FunctionNew<SV>(theSteps, theName);
+		FunctionNew.instancesObject.put(theName, re);
 		return re;
 	}	
 	

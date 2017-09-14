@@ -7,7 +7,7 @@ import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
-import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
+import org.conetex.prime2.contractProcessing2.lang.math._ElementaryArithmetic;
 
 public class Return<V> extends AccessibleAbstract<V>{ // V extends Value<?>
 

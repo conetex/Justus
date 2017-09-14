@@ -6,21 +6,21 @@ import org.conetex.prime2.contractProcessing2.lang._x_Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 
-public abstract class Binary implements Accessible<Boolean> {
+public abstract class _BinaryOrg extends _x_Pair<Boolean> implements Accessible<Boolean> {
 
-	public static <RE> Accessible<RE> _create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB, String operation, Class<RE> re) {
+	public static <RE> Accessible<RE> create(Accessible<Boolean> theA, Accessible<Boolean> theB, String operation, Class<RE> re) {
 		if(re == Boolean.class){
 			return (Accessible<RE>) create(theA, theB, operation);
 		}
 		return null;
 	}
 	
-	public static Binary create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB, String operation) {
+	public static _BinaryOrg create(Accessible<Boolean> theA, Accessible<Boolean> theB, String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
 		if (operation.equals(Symbol.AND)) {
-			return new Binary(theA, theB) {
+			return new _BinaryOrg(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean a, Boolean b) {
 					if (a && b) {
@@ -30,7 +30,7 @@ public abstract class Binary implements Accessible<Boolean> {
 				}
 			};
 		} else if (operation.equals(Symbol.OR)) {
-			return new Binary(theA, theB) {
+			return new _BinaryOrg(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean a, Boolean b) {
 					if (a || b) {
@@ -40,7 +40,7 @@ public abstract class Binary implements Accessible<Boolean> {
 				}
 			};
 		} else if (operation.equals(Symbol.XOR)) {
-			return new Binary(theA, theB) {
+			return new _BinaryOrg(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean a, Boolean b) {
 					if (a ^ b) {
@@ -53,21 +53,16 @@ public abstract class Binary implements Accessible<Boolean> {
 		return null;
 	}
 
-	private Accessible<? extends Boolean> a;
-	
-	private Accessible<? extends Boolean> b;
-	
-	private Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
-		this.a = theA;
-		this.b = theB;
+	private _BinaryOrg(Accessible<Boolean> theA, Accessible<Boolean> theB) {
+		super(theA, theB);
 	}
 
 	protected abstract Boolean calc(Boolean a, Boolean b);
 
 	@Override
 	public Boolean getFrom(Structure thisObject) {
-		Boolean a = this.a.getFrom(thisObject);
-		Boolean b = this.b.getFrom(thisObject);
+		Boolean a = super.getA().getFrom(thisObject);
+		Boolean b = super.getB().getFrom(thisObject);
 		if (a == null || b == null) {
 			return null;
 		}

@@ -21,7 +21,7 @@
 		</complexType> 		 
 		<function name="tuWas" type="contract4u.root.person.tuWas">  
 			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
-		    <return><a>nr</a></return>			        
+		    <return><ref>nr</ref></return>			        
 		</function>       
 	</complexType>	
 	
@@ -61,7 +61,7 @@
 	    </times>
 	    <return>
 		    <times>
-			    <x>param</x>	    
+			    <ref>param</ref>	    
 			    <Integer>8</Integer>	
 		    </times>             
 	    </return>		             
@@ -69,8 +69,8 @@
     
     <value name="param" type='t:Int'>12</value>	
 	<copy>
-	   <target typ='MailAddress64'>foo.param</target>
-	   <source typ='MailAddress64'>param</source>
+	   <ref name="target" typ='MailAddress64'>foo.param</ref>
+	   <ref name="source" typ='MailAddress64'>param</ref>
 	</copy>   
     <call name="foo" type='contract4u' />
 	
@@ -78,13 +78,13 @@
 	<value name="aAddress" type='t:MailAddress64'>12@32543.com</value>
 	<value name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</value>
 	<copy>
-	   <target typ='MailAddress64'>a2Addres</target>
-	   <source typ='MailAddress64'>aAddress</source>
+	   <ref name="target" typ='MailAddress64'>a2Addres</ref>
+	   <ref name="src" typ='MailAddress64'>aAddress</ref>
 	</copy>           
 	             
 	<copy><!-- geht nich -->
-		<target typ='MailAddress64'>sub.a2Addres</target>
-		<source typ='MailAddress64'>sub.aAddress</source>
+		<ref typ='MailAddress64'>sub.a2Addres</ref>
+		<ref typ='MailAddress64'>sub.aAddress</ref>
 	</copy>
 	             
  	<attribute name="sub">	         
@@ -100,22 +100,22 @@
     <value name="ai" type='t:Int'>3</value>
     <value name="bi" type='t:Int'>4</value>	             
     <plus>                                          <!--  7 -->
-      <a>ai</a>	             
-      <b>bi</b>	             
+      <ref>ai</ref>	             
+      <ref>bi</ref>	             
     </plus>
 
 	<minus>                                         <!-- -4 -->
-	    <a>ai</a>	             
+	    <ref>ai</ref>	             
 	    <plus>
-	      <a>ai</a>	             
-	      <b>bi</b>	             
+	      <ref>ai</ref>	             
+	      <ref>bi</ref>	             
 	    </plus>              
     </minus> 	             
 
     <remains>                                       <!--  4 -->
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times> 	             
       <Integer>8</Integer>	             
     </remains> 	             
@@ -124,32 +124,32 @@
 
     <greater> 
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times><!--  12 	  -->            
       <Integer>9</Integer>	                        <!-- true  -->       
     </greater> 
         
     <smaller> 
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times> // 12 	             
       <Integer>9</Integer>	                        <!-- false -->     
     </smaller>  
 	             
     <smaller> 
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times> <!--  12 	  -->            
       <Integer>13</Integer>	                        <!-- true  -->      
     </smaller> 
 	               
     <greater> 
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times> <!--  12 	  -->            
       <Integer>13</Integer>	                        <!-- false -->     
     </greater>
@@ -157,16 +157,16 @@
     <greater> 
       <Integer>13</Integer>       
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times> <!--  12 	       -->       
     </greater>	                                    <!-- true  -->
 	             
     <greater> 
       <Integer>11</Integer>       
       <times> 
-        <a>ai</a>	             
-        <b>bi</b>	             
+        <ref>ai</ref>	             
+        <ref>bi</ref>	             
       </times> <!--  12 	             --> 
     </greater>	                                    <!-- false -->           
 	             
@@ -176,29 +176,29 @@
     <value name="bFalse" type='t:Bool'>false</value>
                   
     <and>                                           <!-- true  -->
-      <a>bTrue</a>	             
-	  <b>bTrue</b>	             
+      <ref>bTrue</ref>	             
+	  <ref>bTrue</ref>	             
 	</and>
 	            	             
 	<and>                                           <!-- false -->
-	  <a>bTrue</a>	             
-	  <b>bFalse</b>	             
+	  <ref>bTrue</ref>	             
+	  <ref>bFalse</ref>	             
 	</and>	
 	            
 	<or>                                            <!-- true  -->
-	  <a>bTrue</a>	             
-	  <b>bFalse</b>	             
+	  <ref>bTrue</ref>	             
+	  <ref>bFalse</ref>	             
 	</or>	 
 	<and>                                           <!-- false -->
-	  <a>bFalse</a>	             
-	  <b>bFalse</b>	             
+	  <ref>bFalse</ref>	             
+	  <ref>bFalse</ref>	             
 	</and>
 	            
 	<not><and>                                      <!-- true  -->
-	  <a>bFalse</a>	             
+	  <ref>bFalse</ref>	             
 	  <or> 
-	    <a>bTrue</a>	             
-	    <b>bFalse</b>	             
+	    <ref>bTrue</ref>	             
+	    <ref>bFalse</ref>	             
 	  </or>	             
 	</and></not>	
 

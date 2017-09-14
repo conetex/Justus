@@ -10,24 +10,24 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 
-public class Function<V extends Value<?>> extends AccessibleAbstract<V>{
+public class _Function<V extends Value<?>> extends AccessibleAbstract<V>{
 
-	private static Map<String, Function<?>> instances = new HashMap<String, Function<?>>();
+	private static Map<String, _Function<?>> instances = new HashMap<String, _Function<?>>();
 	
-	public static Function<?> getInstance(String name){
+	public static _Function<?> _getInstance(String name){
 		return instances.get(name);
 	}
 	
-	public static <SV extends Value<?>> Function<SV> create( Accessible<?>[] theSteps, String theName){
+	public static <SV extends Value<?>> _Function<SV> _create( Accessible<?>[] theSteps, String theName){
 		if(theSteps == null || theName == null || theName.length() < 1){
 			return null;
 		}
-		if(Function.instances.containsKey(theName)){
+		if(_Function.instances.containsKey(theName)){
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		Function<SV> re = new Function<SV>(theSteps, theName);
-		Function.instances.put(theName, re);
+		_Function<SV> re = new _Function<SV>(theSteps, theName);
+		_Function.instances.put(theName, re);
 		return re;
 	}
 	/*
@@ -50,7 +50,7 @@ public class Function<V extends Value<?>> extends AccessibleAbstract<V>{
 	
 	private Accessible<?>[] steps;
 	
-	private Function(//Structure theData, 
+	private _Function(//Structure theData, 
 			Accessible<?>[] theSteps, String theName){
 		//this.data = theData;
 		this.steps = theSteps;

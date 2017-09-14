@@ -1,4 +1,4 @@
-package org.conetex.prime2.study;
+package org.conetex.prime2.contractProcessing2.interpreter.build;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,22 +8,28 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.conetex.prime2.contractProcessing2.data.Attribute;
+import org.conetex.prime2.contractProcessing2.data.AttributeComplex;
+import org.conetex.prime2.contractProcessing2.data.AttributePrimitive;
 import org.conetex.prime2.contractProcessing2.data.Value;
 import org.conetex.prime2.contractProcessing2.data.Attribute.DuplicateIdentifierNameExeption;
+import org.conetex.prime2.contractProcessing2.data.Attribute.NullIdentifierException;
 import org.conetex.prime2.contractProcessing2.data.type.AbstractType;
 import org.conetex.prime2.contractProcessing2.data.type.Complex;
 import org.conetex.prime2.contractProcessing2.data.type.Primitive;
+import org.conetex.prime2.contractProcessing2.data.type.Complex.ComplexWasInitializedExeption;
 import org.conetex.prime2.contractProcessing2.data.type.Complex.DublicateComplexException;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 import org.conetex.prime2.contractProcessing2.interpreter.SyntaxNode;
-import org.conetex.prime2.contractProcessing2.interpreter.build.BuildMain;
+import org.conetex.prime2.contractProcessing2.interpreter.build.functions.Functions;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleConstant;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
@@ -33,80 +39,72 @@ import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Copy;
 import org.conetex.prime2.contractProcessing2.lang.assignment.Reference;
 import org.conetex.prime2.contractProcessing2.lang.bool.expression._Comparison;
-import org.conetex.prime2.contractProcessing2.lang.bool.expression._ComparisonNum;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonNumber;
+import org.conetex.prime2.contractProcessing2.lang.bool.expression.ComparisonString;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Binary;
 import org.conetex.prime2.contractProcessing2.lang.bool.operator.Not;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Call;
 import org.conetex.prime2.contractProcessing2.lang.control.function._Function;
+import org.conetex.prime2.contractProcessing2.lang.control.function.FunctionNew;
 import org.conetex.prime2.contractProcessing2.lang.control.function.Return;
 import org.conetex.prime2.contractProcessing2.lang.math._ElementaryArithmetic;
+import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 import org.conetex.prime2.contractProcessing2.runtime.Program;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class ReadXML {
+public class BuildMain {
+	
+	public static List<Complex> create(SyntaxNode r2) throws ParserConfigurationException, SAXException, IOException, Invalid {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid {
+		List<Complex> complexTyps = Types.createComplexTypes(r2);
+System.out.println("Builder " + r2.getTag());
+		if(complexTyps != null){
+			Complex complexTypeRoot = Complex.getInstance( r2.getName() );
+			Structure v = complexTypeRoot.createValue(null);
+			List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
+			/* old
+			Value<?>[] theValues = new Value<?>[ values.size() ];
+			values.toArray( theValues );
+			v.set(theValues);
+			*/
 
-		FileInputStream is = new FileInputStream( "input2.xml" );
-
-		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-		Document document = documentBuilder.parse( is );
-
-		List<Complex> complexTyps = null;
-		//List<Value<?>> values = null; 
-		//List<Accessible<?>> functions = null; 		
-		
-		NodeList children = document.getChildNodes();			
-		for(int i = 0; i < children.getLength(); i++){	
-			Node r = children.item(i);
-			short typOfNode = children.item(i).getNodeType();
-			if(typOfNode == Node.ELEMENT_NODE){
-				if(complexTyps == null){
-					SyntaxNode r2 = createSyntaxNode(r);
-					complexTyps = BuildMain.create(r2);
-				}
-				else{
-					System.err.println("more than one root element! can not proceed!");
-				}
-			}
+			
+	
+			
+			
+			
+			
+			
+						List<Accessible<?>> functions = Functions.createFunctions(r2, complexTypeRoot);
+						
+						Accessible<?>[] theSteps = new Accessible<?>[ functions.size() ];
+						Accessible<?> main = FunctionNew.createObj(//data, 
+								functions.toArray( theSteps ), complexTypeRoot.getName() ); // "contract4u"
+						main.getFrom(v);
+/*						
+						for(Accessible<?> f : functions){
+							if(f instanceof Function<?>){
+								//continue;
+							}
+							Object re = f.getFrom(v);
+							if(re != null){							
+System.out.println("Builder function ==> " + f + " -> " + re.toString());
+}
+else{
+System.out.println("Builder function ==> " + f + " -> " + re);
+}							
+						}
+System.out.println("Builder " + r2.getNodeName());
+*/
 		}
+		
+		return complexTyps;
 		
 	}	
 	
-	public static SyntaxNode createSyntaxNode(Node n){
-		
-		short typOfNode = n.getNodeType();
-		if(typOfNode != Node.ELEMENT_NODE){	
-			return null;
-		}
-		
-		String name = n.getNodeName();
-		String nameAttr = ReadXMLtools.getAttribute(n, Symbol.NAME);
-		String value = ReadXMLtools.getNodeValue(n);
-		String type = ReadXMLtools.getAttribute(n, Symbol.TYPE);
-		List<SyntaxNode> children = new ArrayList<SyntaxNode>();
-		
-		NodeList xmlChildren = n.getChildNodes();
-		for(int i = 0; i < xmlChildren.getLength(); i++){
-			Node c = xmlChildren.item(i);
-			SyntaxNode child = createSyntaxNode(c);
-			if(child != null){
-				children.add(child);
-			}
-		}
-		
-		if(children.size() > 0){
-			return SyntaxNode.create(name, nameAttr, value, type, children);			
-		}
-		else{
-			return SyntaxNode.create(name, nameAttr, value, type);
-		}
-		
-	}	
-	
+
 	
 }

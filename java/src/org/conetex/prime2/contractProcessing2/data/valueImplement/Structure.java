@@ -6,7 +6,7 @@ import org.conetex.prime2.contractProcessing2.data.type.Primitive;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inconvertible;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Invalid;
 
-public class Structure implements Value<Value<?>[]>{
+public class Structure implements Value<Structure>{//{ Value<Value<?>[]>
 		
 		private final Complex type;
 		
@@ -118,8 +118,12 @@ public class Structure implements Value<Value<?>[]>{
 		private <R> Value<R> getValueNew (int i, Class<R> c){
 			Value<?> v = getValue(i);
 			if( v != null ){
-				// TODO check this cast
-				return (Value<R>) v;
+				if( v.getBaseType() == c ){
+					return (Value<R>) v;					
+				}
+				else{
+					System.err.println("Cast not possible: " + c + " != " + v.getBaseType());				
+				}
 			}
 			return null;
 		}		
@@ -130,96 +134,105 @@ public class Structure implements Value<Value<?>[]>{
 			if(this.type.getName().equals(aName)){
 				return (R)this;
 			}
-				int idIndex = this.type.getSubAttributeIndex(aName);
-				if( idIndex > -1 ){
-					// TODO check this cast
-					return (R) getValue( idIndex );
-				}
-				else{
-					/*
-				    int i = aName.indexOf(Label.NAME_SEPERATOR);
-					if(i > -1 && i < aName.length()){
-						String nameOfSubStructure = aName.substring(0, i);
-				    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
-				    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
-				    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
-				    		if(subStructure != null){
-				    			Structure s = subStructure.get();
-				    			if(s != null){
-				    				aName = aName.substring(i+Label.NAME_SEPERATOR.length());
-				    				return s.getValue(aName, c);
-				    			}
-				    		}
-				    	}
-				    }
-				    */
-					String[] names = Structure.split(aName);
-				    if(names[0] != null){
-						if(names[1] != null){
-							idIndex = this.type.getSubAttributeIndex( names[0] );
-				    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
-				    		// sollte das vernünftig gemeldet werden!!!
-				    		Structure subStructure = getValue(idIndex, Structure.class);
-				    		if(subStructure != null){
-				    			return subStructure.getValueNewNew(names[1], clazz);
-				    		}
-						}
-				    }				
-				    else {
-				    	if(this.parent != null) {
-				    		return this.parent.getValueNewNew(aName, clazz);
-				    	}
-				    }
-				}
-				return null;
-			}		
+			int idIndex = this.type.getSubAttributeIndex(aName);
+			if( idIndex > -1 ){
+				// TODO check this cast
+				return (R) getValue( idIndex );
+			}
+			else{
+				/*
+			    int i = aName.indexOf(Label.NAME_SEPERATOR);
+				if(i > -1 && i < aName.length()){
+					String nameOfSubStructure = aName.substring(0, i);
+			    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
+			    		if(subStructure != null){
+			    			Structure s = subStructure.get();
+			    			if(s != null){
+			    				aName = aName.substring(i+Label.NAME_SEPERATOR.length());
+			    				return s.getValue(aName, c);
+			    			}
+			    		}
+			    	}
+			    }
+			    */
+				String[] names = Structure.split(aName);
+			    if(names[0] != null){
+					if(names[1] != null){
+						idIndex = this.type.getSubAttributeIndex( names[0] );
+			    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
+			    		// sollte das vernünftig gemeldet werden!!!
+			    		Structure subStructure = getValue(idIndex, Structure.class);
+			    		if(subStructure != null){
+			    			return subStructure.getValueNewNew(names[1], clazz);
+			    		}
+					}
+			    }				
+			    else {
+			    	if(this.parent != null) {
+			    		return this.parent.getValueNewNew(aName, clazz);
+			    	}
+			    }
+			}
+			return null;
+		}		
 		
 		public <R> Value<R> getValueNew(String aName, Class<R> clazz) {
 		//public <V extends Value<?>> V getValue (String aName, Class<V> c){
 				// TODO do xpath syntax. access parent objects ???
-				int idIndex = this.type.getSubAttributeIndex(aName);
-				if( idIndex > -1 ){
-					return getValueNew( idIndex, clazz );
+			if(this.type.getName().equals(aName)){
+				if(clazz == Structure.class ){
+					return (Value<R>)this;
 				}
 				else{
-					/*
-				    int i = aName.indexOf(Label.NAME_SEPERATOR);
-					if(i > -1 && i < aName.length()){
-						String nameOfSubStructure = aName.substring(0, i);
-				    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
-				    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
-				    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
-				    		if(subStructure != null){
-				    			Structure s = subStructure.get();
-				    			if(s != null){
-				    				aName = aName.substring(i+Label.NAME_SEPERATOR.length());
-				    				return s.getValue(aName, c);
-				    			}
-				    		}
-				    	}
-				    }
-				    */
-					String[] names = Structure.split(aName);
-				    if(names[0] != null){
-						if(names[1] != null){
-							idIndex = this.type.getSubAttributeIndex( names[0] );
-				    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
-				    		// sollte das vernünftig gemeldet werden!!!
-				    		Structure subStructure = getValue(idIndex, Structure.class);
-				    		if(subStructure != null){
-				    			return subStructure.getValueNew(names[1], clazz);
-				    		}
-						}
-				    }
-				    else {
-				    	if(this.parent != null) {
-				    		return this.parent.getValueNew(aName, clazz);
-				    	}
-				    }
-					
+					System.err.println("Cast not possible: " + clazz + " != " + this.getClass());	
+					return null;
 				}
-				return null;
-			}		
+			}
+			int idIndex = this.type.getSubAttributeIndex(aName);
+			if( idIndex > -1 ){
+				return getValueNew( idIndex, clazz );
+			}
+			else{
+				/*
+			    int i = aName.indexOf(Label.NAME_SEPERATOR);
+				if(i > -1 && i < aName.length()){
+					String nameOfSubStructure = aName.substring(0, i);
+			    	if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			    		attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			    		Value.Interface<Structure> subStructure = getValue(attributeIdx, Struct.class);
+			    		if(subStructure != null){
+			    			Structure s = subStructure.get();
+			    			if(s != null){
+			    				aName = aName.substring(i+Label.NAME_SEPERATOR.length());
+			    				return s.getValue(aName, c);
+			    			}
+			    		}
+			    	}
+			    }
+			    */
+				String[] names = Structure.split(aName);
+			    if(names[0] != null){
+					if(names[1] != null){
+						idIndex = this.type.getSubAttributeIndex( names[0] );
+			    		// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern was anderes...
+			    		// sollte das vernünftig gemeldet werden!!!
+			    		Structure subStructure = getValue(idIndex, Structure.class);
+			    		if(subStructure != null){
+			    			return subStructure.getValueNew(names[1], clazz);
+			    		}
+					}
+			    }
+			    else {
+			    	if(this.parent != null) {
+			    		return this.parent.getValueNew(aName, clazz);
+			    	}
+			    }
+				
+			}
+			return null;
+		}		
 		
 		
 		private Value<?> getValue (int i){
@@ -229,30 +242,11 @@ public class Structure implements Value<Value<?>[]>{
 			return null;
 		}
 		
-		@Override
-		public Value<?>[] setConverted(String value) throws Inconvertible, Invalid {
-			throw new Inconvertible("can not create Structure from String!");
-		}
 
-		@Override
-		public Value<?>[] get() {
-			if(this.values == null){
-				return null;
-			}
-			return this.values;
-		}
 
-		// @Override
-		public Value<?>[] copy() throws Invalid {
-			if(this.values == null){
-				return null;
-			}			
-			Value<?>[] theValues = new Value<?>[ this.values.length ];
-			for(int i = 0; i < theValues.length; i++){
-				theValues[i] = clone(this.values[i]);
-			}
-			return theValues;
-		}
+
+
+
 
 		private static <T> Value<T> clone(Value<T> src) throws Invalid{
 			Primitive<T> type = Primitive.<T>getInstance(src.getClass());
@@ -263,14 +257,7 @@ public class Structure implements Value<Value<?>[]>{
 		}		
 		
 		
-		@Override
-		public Value<?>[] set(Value<?>[] svalues) throws Invalid {
-			// TODO typcheck ...
-			if(this.values == null || this.values.length == svalues.length){
-				this.values = svalues;
-			}
-			return this.values;
-		}
+
 
 		public boolean set(String id, Value<?> value) throws Invalid {
 			int i = this.type.getSubAttributeIndex(id);
@@ -281,10 +268,88 @@ public class Structure implements Value<Value<?>[]>{
 			return false;					
 		}
 		
-		@Override
-		public Class<Value<?>[]> getBaseType() {
-			return null;
+		public Class<Value<?>[]> getBaseType2() {
+			Class<Value<?>[]> re = (Class<Value<?>[]>) this.values.getClass(); // TODO SHIT 
+			return re;
+			//return (Class<Value<?>[]>) Value<Object>[].class;
+			
+			
+			//return Value<?>[].class;// Structure.class; // TODO SCHEIße
 		}
+		
+		
+		public Value<?>[] get2() {
+			if(this.values == null){
+				return null;
+			}
+			return this.values;
+		}		
+
+		@Override
+		public Structure get() {
+			return this;
+		}
+
+
+		
+		public Value<?>[] copy2() throws Invalid {
+			if(this.values == null){
+				return null;
+			}			
+			Value<?>[] theValues = new Value<?>[ this.values.length ];
+			for(int i = 0; i < theValues.length; i++){
+				theValues[i] = clone(this.values[i]);
+			}
+			return theValues;
+		}
+		
+		@Override
+		public Structure copy() throws Invalid {
+			if(this.values == null){
+				return null;
+			}			
+			Value<?>[] theValues = new Value<?>[ this.values.length ];
+			for(int i = 0; i < theValues.length; i++){
+				theValues[i] = clone(this.values[i]);
+			}
+			
+			Structure StructureNew = new Structure(this.type, this.parent);
+			StructureNew.values = theValues;
+			return StructureNew;
+		}
+
+		public Value<?>[] set2(Value<?>[] svalues) throws Invalid {
+			// TODO typcheck ...
+			if(this.values == null || this.values.length == svalues.length){
+				this.values = svalues;
+			}
+			return this.values;
+		}		
+		
+		@Override
+		public Structure set(Structure other) throws Invalid {
+			// TODO typcheck ...
+			if(this.values == null || this.values.length == other.values.length){
+				this.values = other.values;
+			}
+			return this;
+		}
+
+		public Value<?>[] setConverted2(String value) throws Inconvertible, Invalid {
+			throw new Inconvertible("can not create Structure from String!");
+		}
+		
+		@Override
+		public Structure setConverted(String value) throws Inconvertible, Invalid {
+			throw new Inconvertible("can not create Structure from String!");
+		}
+
+		@Override
+		public Class<Structure> getBaseType() {
+			return Structure.class;
+		}
+
+
 
 
 		

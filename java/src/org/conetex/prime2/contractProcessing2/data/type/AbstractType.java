@@ -31,7 +31,18 @@ public abstract class AbstractType<T> {
 		return AttributePrimitive.<V> create(theName, thisObj);
 	}
 	
-	public static Attribute<Value<?>[]> createAttribute(Label theName, Complex thisObj)
+	public static Attribute<Value<?>[]> _createAttribute2(Label theName, Complex thisObj)
+			throws NullLabelException, EmptyLabelException {
+		if (theName == null || theName.get() == null) {
+			throw new Attribute.NullLabelException();
+		}
+		if (theName.get().length() < 1) {
+			throw new Attribute.EmptyLabelException();
+		}
+		return null;//AttributeComplex.create(theName, thisObj);
+	}
+	
+	public static Attribute<Structure> createAttribute(Label theName, Complex thisObj)
 			throws NullLabelException, EmptyLabelException {
 		if (theName == null || theName.get() == null) {
 			throw new Attribute.NullLabelException();
@@ -40,6 +51,5 @@ public abstract class AbstractType<T> {
 			throw new Attribute.EmptyLabelException();
 		}
 		return AttributeComplex.create(theName, thisObj);
-	}
-	
+	}	
 }

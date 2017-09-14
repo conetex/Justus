@@ -2,11 +2,11 @@ package org.conetex.prime2.contractProcessing2.lang.bool.expression;
 
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
-import org.conetex.prime2.contractProcessing2.lang.Pair;
+import org.conetex.prime2.contractProcessing2.lang._x_Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 
-public class Comparison<T extends Comparable<T>> extends Pair<T> implements Accessible<Boolean>{
+public class _Comparison<T extends Comparable<T>> extends _x_Pair<T> implements Accessible<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
@@ -40,62 +40,62 @@ public class Comparison<T extends Comparable<T>> extends Pair<T> implements Acce
 	}	
 	*/
 	
-	public static <V extends Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, String operation){
+	public static <V extends Comparable<V>> _Comparison<V> _create(Accessible<V> theA, Accessible<V> theB, String operation){
 		if(theA == null || theB == null){
 			return null;
 		}
 		if( operation.equals(Symbol.SMALLER) ) {
-			return create(theA, theB, Comparison.SMALLER );
+			return _create(theA, theB, _Comparison.SMALLER );
 		}
 		if( operation.equals(Symbol.EQUAL) ) {
-			return create(theA, theB, Comparison.EQUAL );
+			return _create(theA, theB, _Comparison.EQUAL );
 		}
 		if( operation.equals(Symbol.GREATER) ) {
-			return create(theA, theB, Comparison.GREATER );
+			return _create(theA, theB, _Comparison.GREATER );
 		}
 		return null;
 	}
 	
-	public static <V extends Comparable<V>> Comparison<V> create(Accessible<V> theA, Accessible<V> theB, int operation){
+	public static <V extends Comparable<V>> _Comparison<V> _create(Accessible<V> theA, Accessible<V> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
-		if(operation < Comparison.SMALLER || operation > Comparison.GREATER){
+		if(operation < _Comparison.SMALLER || operation > _Comparison.GREATER){
 			return null;
 		}		
-		return new Comparison<V>(theA, theB, operation);
+		return new _Comparison<V>(theA, theB, operation);
 	}	
 
-	public static <V extends Comparable<V>> Comparison<V> createXX(Accessible<V> a, Accessible<V> b, String operation){
+	public static <V extends Comparable<V>> _Comparison<V> _createXX(Accessible<V> a, Accessible<V> b, String operation){
 		if(a == null || b == null){
 			return null;
 		}
 		if( operation.equals(Symbol.SMALLER) ) {
-			return createXX(a, b, Comparison.SMALLER );
+			return _createXX(a, b, _Comparison.SMALLER );
 		}
 		if( operation.equals(Symbol.EQUAL) ) {
-			return createXX(a, b, Comparison.EQUAL );
+			return _createXX(a, b, _Comparison.EQUAL );
 		}
 		if( operation.equals(Symbol.GREATER) ) {
-			return createXX(a, b, Comparison.GREATER );
+			return _createXX(a, b, _Comparison.GREATER );
 		}
 		return null;
 	}
 
-	public static <V extends Comparable<V>> Comparison<V> createXX(Accessible<V> a, Accessible<V> b, int operation){
+	public static <V extends Comparable<V>> _Comparison<V> _createXX(Accessible<V> a, Accessible<V> b, int operation){
 		if(a == null || b == null){
 			return null;
 		}
-		if(operation < Comparison.SMALLER || operation > Comparison.GREATER){
+		if(operation < _Comparison.SMALLER || operation > _Comparison.GREATER){
 			return null;
 		}		
-		return new Comparison<V>(a, b, operation);
+		return new _Comparison<V>(a, b, operation);
 	}
 			
 	private int operator;
 	
 	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
-	private Comparison(Accessible<T> a, Accessible<T> b, int theOperation){
+	private _Comparison(Accessible<T> a, Accessible<T> b, int theOperation){
 		super(a, b);
 		this.operator = theOperation;
 	}
@@ -113,7 +113,7 @@ public class Comparison<T extends Comparable<T>> extends Pair<T> implements Acce
 		T a = super.getA().getFrom(thisObject);
 		T b = super.getB().getFrom(thisObject);
 		if( a == null ){
-			if( b == null && this.operator == Comparison.EQUAL ){
+			if( b == null && this.operator == _Comparison.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -122,19 +122,19 @@ public class Comparison<T extends Comparable<T>> extends Pair<T> implements Acce
 			return null;
 		}	
 		
-		if( this.operator == Comparison.GREATER ){
+		if( this.operator == _Comparison.GREATER ){
 			if(a.compareTo(b) > 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-		if( this.operator == Comparison.SMALLER ){
+		if( this.operator == _Comparison.SMALLER ){
 			if(a.compareTo(b) < 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-        if( this.operator == Comparison.EQUAL ){
+        if( this.operator == _Comparison.EQUAL ){
 			if(a.compareTo(b) == 0){
 				return Boolean.TRUE; 
 			}

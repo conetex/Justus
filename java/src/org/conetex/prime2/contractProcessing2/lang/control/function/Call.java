@@ -6,13 +6,13 @@ import org.conetex.prime2.contractProcessing2.data.valueImplement.exception.Inva
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleValue;
-import org.conetex.prime2.contractProcessing2.lang.AccessibleValueNew;
+import org.conetex.prime2.contractProcessing2.lang._AccessibleValueNew;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
-import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic;
+import org.conetex.prime2.contractProcessing2.lang.math._ElementaryArithmetic;
 
 public class Call<V> extends AccessibleAbstract<V>{ // V extends Value<?>
 
-	public static <SV> Call<SV> create2(Accessible<SV> theFunction, AccessibleValueNew<Structure> theReference){
+	public static <SV> Call<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference){
 		// TODO drop this
 		if(theFunction == null){
 			System.err.println("theFunction is null");
@@ -25,27 +25,15 @@ public class Call<V> extends AccessibleAbstract<V>{ // V extends Value<?>
 		return new Call<SV>(theFunction, theReference);
 	}
 	
-	public static <SV extends Value<?>> Call<SV> create(Accessible<SV> theFunction, AccessibleValueNew<Structure> theReference){
-		if(theFunction == null){
-			System.err.println("theFunction is null");
-			return null;
-		}
-		if(theReference == null){
-			System.err.println("theReference is null");
-			return null;
-		}
-		return new Call<SV>(theFunction, theReference);
-	}	
-	
 	private Accessible<V> function;
 	
-	private AccessibleValueNew<Structure> reference;
+	private AccessibleValue<Structure> reference;
 	
 	public String toString(){
 		return "call function " + this.function;
 	}	
 	
-	private Call(Accessible<V> theExpression, AccessibleValueNew<Structure> theReference){
+	private Call(Accessible<V> theExpression, AccessibleValue<Structure> theReference){
 		this.function = theExpression;
 		this.reference = theReference;
 	}	

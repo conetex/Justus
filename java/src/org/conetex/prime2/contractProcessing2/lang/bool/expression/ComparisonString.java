@@ -5,11 +5,11 @@ import java.math.BigInteger;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
-import org.conetex.prime2.contractProcessing2.lang.Pair;
+import org.conetex.prime2.contractProcessing2.lang._x_Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 
-public class ComparisonStr extends AccessibleAbstract<Boolean>{
+public class ComparisonString extends AccessibleAbstract<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
@@ -20,30 +20,30 @@ public class ComparisonStr extends AccessibleAbstract<Boolean>{
 		return create(theA, theB, name);
 	}
 	
-	public static ComparisonStr create(Accessible<String> theA, Accessible<String> theB, String operation){
+	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, String operation){
 		if(theA == null || theB == null){
 			return null;
 		}
 		if( operation.equals(Symbol.SMALLER) ) {
-			return create(theA, theB, ComparisonStr.SMALLER );
+			return create(theA, theB, ComparisonString.SMALLER );
 		}
 		if( operation.equals(Symbol.EQUAL) ) {
-			return create(theA, theB, ComparisonStr.EQUAL );
+			return create(theA, theB, ComparisonString.EQUAL );
 		}
 		if( operation.equals(Symbol.GREATER) ) {
-			return create(theA, theB, ComparisonStr.GREATER );
+			return create(theA, theB, ComparisonString.GREATER );
 		}
 		return null;
 	}
 	
-	public static ComparisonStr create(Accessible<String> theA, Accessible<String> theB, int operation){
+	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
-		if(operation < ComparisonStr.SMALLER || operation > ComparisonStr.GREATER){
+		if(operation < ComparisonString.SMALLER || operation > ComparisonString.GREATER){
 			return null;
 		}		
-		return new ComparisonStr(theA, theB, operation);
+		return new ComparisonString(theA, theB, operation);
 	}	
 
 			
@@ -54,7 +54,7 @@ public class ComparisonStr extends AccessibleAbstract<Boolean>{
 	private Accessible<String> b;
 	
 	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
-	private ComparisonStr(Accessible<String> theA, Accessible<String> theB, int theOperation){
+	private ComparisonString(Accessible<String> theA, Accessible<String> theB, int theOperation){
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
@@ -73,7 +73,7 @@ public class ComparisonStr extends AccessibleAbstract<Boolean>{
 		String aN = this.a.getFrom(thisObject);
 		String bN = this.b.getFrom(thisObject);
 		if( aN == null ){
-			if( bN == null && this.operator == ComparisonStr.EQUAL ){
+			if( bN == null && this.operator == ComparisonString.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -86,19 +86,19 @@ public class ComparisonStr extends AccessibleAbstract<Boolean>{
 	}
 
 	private <T extends Comparable<T>> Boolean comp(T a, T b) {
-		if( this.operator == ComparisonStr.GREATER ){
+		if( this.operator == ComparisonString.GREATER ){
 			if(a.compareTo(b) > 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-		if( this.operator == ComparisonStr.SMALLER ){
+		if( this.operator == ComparisonString.SMALLER ){
 			if(a.compareTo(b) < 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-        if( this.operator == ComparisonStr.EQUAL ){
+        if( this.operator == ComparisonString.EQUAL ){
 			if(a.compareTo(b) == 0){
 				return Boolean.TRUE; 
 			}

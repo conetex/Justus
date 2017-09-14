@@ -5,44 +5,40 @@ import java.math.BigInteger;
 import org.conetex.prime2.contractProcessing2.data.valueImplement.Structure;
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.AccessibleAbstract;
-import org.conetex.prime2.contractProcessing2.lang.Pair;
+import org.conetex.prime2.contractProcessing2.lang._x_Pair;
 import org.conetex.prime2.contractProcessing2.lang.Symbol;
 import org.conetex.prime2.contractProcessing2.lang.math.ElementaryArithmetic2;
 
-public class ComparisonNum2 extends AccessibleAbstract<Boolean>{
+public class ComparisonNumber extends AccessibleAbstract<Boolean>{
 	
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
 	public static final int GREATER = 1;
 	
-	public static Accessible<Boolean> _createNew(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String name) {
-		return create(theA, theB, name);
-	}
-	
-	public static ComparisonNum2 create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String operation){
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String operation){
 		if(theA == null || theB == null){
 			return null;
 		}
 		if( operation.equals(Symbol.SMALLER) ) {
-			return create(theA, theB, ComparisonNum2.SMALLER );
+			return create(theA, theB, ComparisonNumber.SMALLER );
 		}
 		if( operation.equals(Symbol.EQUAL) ) {
-			return create(theA, theB, ComparisonNum2.EQUAL );
+			return create(theA, theB, ComparisonNumber.EQUAL );
 		}
 		if( operation.equals(Symbol.GREATER) ) {
-			return create(theA, theB, ComparisonNum2.GREATER );
+			return create(theA, theB, ComparisonNumber.GREATER );
 		}
 		return null;
 	}
 	
-	public static ComparisonNum2 create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int operation){
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int operation){
 		if(theA == null || theB == null){
 			return null;
 		}
-		if(operation < ComparisonNum2.SMALLER || operation > ComparisonNum2.GREATER){
+		if(operation < ComparisonNumber.SMALLER || operation > ComparisonNumber.GREATER){
 			return null;
 		}		
-		return new ComparisonNum2(theA, theB, operation);
+		return new ComparisonNumber(theA, theB, operation);
 	}	
 
 			
@@ -53,7 +49,7 @@ public class ComparisonNum2 extends AccessibleAbstract<Boolean>{
 	private Accessible<? extends Number> b;
 	
 	//private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
-	private ComparisonNum2(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation){
+	private ComparisonNumber(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation){
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
@@ -72,7 +68,7 @@ public class ComparisonNum2 extends AccessibleAbstract<Boolean>{
 		Number aN = this.a.getFrom(thisObject);
 		Number bN = this.b.getFrom(thisObject);
 		if( aN == null ){
-			if( bN == null && this.operator == ComparisonNum2.EQUAL ){
+			if( bN == null && this.operator == ComparisonNumber.EQUAL ){
 				return Boolean.TRUE;
 			}
 			return null;
@@ -130,19 +126,19 @@ public class ComparisonNum2 extends AccessibleAbstract<Boolean>{
 	}
 
 	private <T extends Comparable<T>> Boolean comp(T a, T b) {
-		if( this.operator == ComparisonNum2.GREATER ){
+		if( this.operator == ComparisonNumber.GREATER ){
 			if(a.compareTo(b) > 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-		if( this.operator == ComparisonNum2.SMALLER ){
+		if( this.operator == ComparisonNumber.SMALLER ){
 			if(a.compareTo(b) < 0){
 				return Boolean.TRUE; 
 			}
 			return Boolean.FALSE;
 		}
-        if( this.operator == ComparisonNum2.EQUAL ){
+        if( this.operator == ComparisonNumber.EQUAL ){
 			if(a.compareTo(b) == 0){
 				return Boolean.TRUE; 
 			}

@@ -2,10 +2,21 @@ package org.conetex.prime2.contractProcessing2.lang.assignment;
 
 import org.conetex.prime2.contractProcessing2.lang.Accessible;
 import org.conetex.prime2.contractProcessing2.lang.Setable;
+import org.conetex.prime2.contractProcessing2.lang.SetableValue;
 
 public class Copy<T> extends AbstractAssigment<T>{
 
-	public static <T> Copy<T> create(Setable<T> trg, Accessible<T> src){
+	public static <S, T> Copy<T> create(SetableValue<T> trg, Accessible<S> src) {
+		if(src == null || trg == null){
+			return null;
+		}
+		if(trg.getBaseType() == src.getBaseType()){
+			return new Copy<T>(trg, (Accessible<T>) src);
+		}
+		return null;
+	}	
+	
+	public static <T> Copy<T> _create(Setable<T> trg, Accessible<T> src){
 		if(src == null || trg == null){
 			return null;
 		}
@@ -20,5 +31,7 @@ public class Copy<T> extends AbstractAssigment<T>{
 	public boolean doCopy() {
 		return true;
 	}
+
+
 
 }
