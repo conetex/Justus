@@ -4,7 +4,7 @@ import com.conetex.contract.data.Value;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 
-public class AccessibleValue<T> extends AccessibleAbstract<T> {
+public class AccessibleValue<T> extends Accessible<T> {
 
 	public static <T> AccessibleValue<T> create(String thePath, Class<T> theClass) {
 		if (thePath == null) {
@@ -43,13 +43,14 @@ public class AccessibleValue<T> extends AccessibleAbstract<T> {
 	}
 
 	/*
-	 * @Override public void setTo(Structure thisObject, T newValue) throws Invalid
-	 * { Value<T> value = thisObject.getValueNew(this.path, this.clazz);
+	 * @Override public void setTo(Structure thisObject, T newValue) throws
+	 * Invalid { Value<T> value = thisObject.getValueNew(this.path, this.clazz);
 	 * value.set(newValue); }
 	 * 
 	 * public void transSet(Structure thisObject, String newValue) throws
-	 * Inconvertible, Invalid { Value<T> value = thisObject.getValueNew(this.path,
-	 * this.clazz); value.setConverted(newValue); }
+	 * Inconvertible, Invalid { Value<T> value =
+	 * thisObject.getValueNew(this.path, this.clazz);
+	 * value.setConverted(newValue); }
 	 */
 
 	@Override

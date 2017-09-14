@@ -14,7 +14,6 @@ import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
 import com.conetex.contract.lang.SetableValue;
@@ -42,14 +41,14 @@ public class Functions {
 		public abstract Accessible<?> build(Complex d);
 	}
 
-	public static List<AccessibleAbstract<?>> createFunctions(SyntaxNode n, Complex type) {
+	public static List<Accessible<?>> createFunctions(SyntaxNode n, Complex type) {
 		String name = n.getTag();
 		if (type == null) {
 			System.err.println("can not recognize type of " + name);
 			return null;
 		}
 
-		List<AccessibleAbstract<?>> acc = new LinkedList<AccessibleAbstract<?>>();
+		List<Accessible<?>> acc = new LinkedList<Accessible<?>>();
 
 		List<SyntaxNode> children = n.getChildNodes();
 		for (SyntaxNode c : children) {
@@ -58,19 +57,21 @@ public class Functions {
 			if (c.isBuildInFunction()) {
 
 				System.out.println("createFunctions " + c.getTag() + " - " + c.getName());
-				AccessibleAbstract<?> v = createFunction(c, type);
+				Accessible<?> v = createFunction(c, type);
 				if (v != null) {
 					acc.add(v);
 				}
 			}
 
 			if (c.isType()) {
-				String cname = c.getName();// ReadXMLtools.getAttribute(c, Symbol.TYPE_NAME);
+				String cname = c.getName();// ReadXMLtools.getAttribute(c,
+											// Symbol.TYPE_NAME);
 				/*
-				 * Identifier<?> cid = type.getSubIdentifier(cname); // if(cid == null){
-				 * System.err.println("createFunctions: can not identify " + cname); continue; }
-				 * AbstractType<?> ctype = cid.getType(); if( ctype.getClass() == Complex.class
-				 * ){ createFunctions(c, (Complex) ctype); }
+				 * Identifier<?> cid = type.getSubIdentifier(cname); // if(cid
+				 * == null){ System.err.println(
+				 * "createFunctions: can not identify " + cname); continue; }
+				 * AbstractType<?> ctype = cid.getType(); if( ctype.getClass()
+				 * == Complex.class ){ createFunctions(c, (Complex) ctype); }
 				 */
 				Complex ctype = Complex.getInstance(type.getName() + "." + cname);
 				if (ctype == null) {
@@ -85,34 +86,40 @@ public class Functions {
 		return acc;
 	}
 
-	public static AccessibleAbstract<?> createFunction(SyntaxNode n, Complex parentTyp// , List<FunctionBuilder>
-																				// functionBuilders//, List<Value<?>>
-																				// values, Map<Complex,
-																				// List<FunctionBuilder>> complexTyps
+	public static Accessible<?> createFunction(SyntaxNode n, Complex parentTyp// ,
+																				// List<FunctionBuilder>
+																				// functionBuilders//,
+																				// List<Value<?>>
+																				// values,
+																				// Map<Complex,
+																				// List<FunctionBuilder>>
+																				// complexTyps
 	) {
 
 		String name = n.getTag();
 
 		if (name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES)
 				|| name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS)) {
-			AccessibleAbstract<? extends Number> x = // createNumExpression( super.node, theClass );
-					// createFunctionAccessible( n, parentTyp, Integer.class );// TODO mach das zu
-					// number ...
-					createFunctionAccessibleNum(n, parentTyp);
+			Accessible<? extends Number> x = // createNumExpression( super.node,
+												// theClass );
+			// createFunctionAccessible( n, parentTyp, Integer.class );// TODO
+			// mach das zu
+			// number ...
+			createFunctionAccessibleNum(n, parentTyp);
 			return x;
 		} else if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)
 				|| name.equals(Symbol.NOT) || name.equals(Symbol.SMALLER) || name.equals(Symbol.EQUAL)
 				|| name.equals(Symbol.GREATER) || name.equals(Symbol.ISNULL)) {
-			AccessibleAbstract<Boolean> x = // createBoolExpression( super.node );
-					// ReadXML.createAccessible( super.node, c, Boolean.class );
-					createFunctionAccessibleBool(n, parentTyp);
+			Accessible<Boolean> x = // createBoolExpression( super.node );
+			// ReadXML.createAccessible( super.node, c, Boolean.class );
+			createFunctionAccessibleBool(n, parentTyp);
 			return x;
 		} else if (name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY)) {
-			AccessibleAbstract<?> x = createFunctionAccessibleObj(n, parentTyp);
+			Accessible<?> x = createFunctionAccessibleObj(n, parentTyp);
 			return x;
 		} else if (name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL)) {
-			AccessibleAbstract<?> x = // createBoolExpression( super.node );
-					createFunctionAccessibleObj(n, parentTyp);
+			Accessible<?> x = // createBoolExpression( super.node );
+			createFunctionAccessibleObj(n, parentTyp);
 			return x;
 		}
 
@@ -120,7 +127,7 @@ public class Functions {
 
 	}
 
-	public static AccessibleAbstract<?> createFunctionAccessibleObj(SyntaxNode n, Complex parentTyp) {
+	public static Accessible<?> createFunctionAccessibleObj(SyntaxNode n, Complex parentTyp) {
 
 		String name = n.getTag();
 
@@ -131,35 +138,38 @@ public class Functions {
 		}
 		// VARIABLE
 		else if (name.equals(Symbol.BINT)) {
-			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
+			return AccessibleConstant.<BigInteger> create2(BigInteger.class, n.getValue());
 		} else if (name.equals(Symbol.INT)) {
-			return AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
+			return AccessibleConstant.<Integer> create2(Integer.class, n.getValue());
 		} else if (name.equals(Symbol.LNG)) {
-			return AccessibleConstant.<Long>create2(Long.class, n.getValue());
+			return AccessibleConstant.<Long> create2(Long.class, n.getValue());
 		}
 		// CONTROL FUNCTION
 		else if (name.equals(Symbol.RETURN)) {
-			AccessibleAbstract<?> e = createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
+			Accessible<?> e = createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
 			return Return.create(e);
 		} else if (name.equals(Symbol.CALL)) {
 			String functionObj = n.getType();//
 			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
 
 			String functionName = n.getName();
-			AccessibleAbstract<?> e = Function.getInstance(functionName);
+			Accessible<?> e = Function.getInstance(functionName);
 			// Class<?> expectedBaseTypExp = e.getBaseType();
 			return Call.create(e, re);
-			// return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp );
+			// return ReadXML.createAccessible( e, parentTyp, expectedBaseTypExp
+			// );
 		} else if (name.equals(Symbol.FUNCTION)) {
 			String functionName = n.getName();
 			String idTypeName = n.getType();
 			Complex complexType = Complex.getInstance(idTypeName);
 			if (complexType != null) {
-				List<AccessibleAbstract<?>> steps = createFunctions(n, complexType);
-				AccessibleAbstract<?>[] theSteps = new AccessibleAbstract<?>[steps.size()];
-				// TODO hier return typ checken und Bool / Obj creator aufrufen...
+				List<Accessible<?>> steps = createFunctions(n, complexType);
+				Accessible<?>[] theSteps = new Accessible<?>[steps.size()];
+				// TODO hier return typ checken und Bool / Obj creator
+				// aufrufen...
 				Function.createNum(steps.toArray(theSteps), functionName);
-				return null; // das ist wichtig. wir wollen functions nur per call aufrufen!
+				return null; // das ist wichtig. wir wollen functions nur per
+								// call aufrufen!
 			}
 		}
 		// ASSIGNMENT
@@ -167,7 +177,9 @@ public class Functions {
 			// createAssignment(name, n, parentTyp);
 			SyntaxNode c0 = n.getChildElementByIndex(0);
 			System.out.println(c0.getValue());
-			Attribute<?> id0 = parentTyp.getSubAttribute(c0.getValue());// TODO geht nich
+			Attribute<?> id0 = parentTyp.getSubAttribute(c0.getValue());// TODO
+																		// geht
+																		// nich
 
 			SyntaxNode c1 = n.getChildElementByIndex(1);
 			System.out.println(c1.getValue());
@@ -175,13 +187,16 @@ public class Functions {
 
 			String c0DataType = c0.getType();
 			if (c0DataType != null) {
-				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung erzeugen, wenns nicht
+				// TODO nicht nötig das auszulesen! Sollte aber ne Warnung
+				// erzeugen, wenns nicht
 				// zum typ des referenzierten Feld passt ...
-				// Class<Value<Object>> c0ClassX = Primitive.getClass(c0DataType);
+				// Class<Value<Object>> c0ClassX =
+				// Primitive.getClass(c0DataType);
 				Class<?> c0ClassX = Primitive.getClass(c0DataType);
 			}
 
-			// TODO: der teil hier könnte ausgelagert werden nach AbstractAssigment
+			// TODO: der teil hier könnte ausgelagert werden nach
+			// AbstractAssigment
 
 			Class<? extends Value<?>> c0Class = null;
 			if (id0 != null) {
@@ -201,10 +216,12 @@ public class Functions {
 
 				Primitive<?> pri1 = Primitive.getInstance(c1Class);
 				Class<?> baseType1 = pri1.getBaseType();
-				AccessibleAbstract<?> src = createFunctionAccessibleObj(c1, parentTyp);
+				Accessible<?> src = createFunctionAccessibleObj(c1, parentTyp);
 				if (src != null && trg != null) {
 					if (name.equals(Symbol.COPY)) {
-						return Copy.create(trg, src);// TODO dahinter liegt ein Cast! das geht schöner...
+						return Copy.create(trg, src);// TODO dahinter liegt ein
+														// Cast! das geht
+														// schöner...
 					}
 					if (name.equals(Symbol.REFERENCE)) {
 						return Reference.create(trg, src);
@@ -224,48 +241,50 @@ public class Functions {
 		return null;
 	}
 
-	public static AccessibleAbstract<? extends Number> createFunctionAccessibleNum(SyntaxNode n, Complex parentTyp) {
+	public static Accessible<? extends Number> createFunctionAccessibleNum(SyntaxNode n, Complex parentTyp) {
 
 		String name = n.getTag();
 
 		// MATH
 		if (name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES)
 				|| name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS)) {
-			AccessibleAbstract<? extends Number> a = createFunctionAccessibleNum(n.getChildElementByIndex(0), parentTyp);
-			AccessibleAbstract<? extends Number> b = createFunctionAccessibleNum(n.getChildElementByIndex(1), parentTyp);
+			Accessible<? extends Number> a = createFunctionAccessibleNum(n.getChildElementByIndex(0), parentTyp);
+			Accessible<? extends Number> b = createFunctionAccessibleNum(n.getChildElementByIndex(1), parentTyp);
 			// TODO check 4 other childs! only 2 are alowed
 			if (a != null && b != null) {
-				AccessibleAbstract<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
+				Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
 				return re;
 			}
 		}
 		// VARIABLE
 		else if (name.equals(Symbol.BINT)) {
-			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
+			return AccessibleConstant.<BigInteger> create2(BigInteger.class, n.getValue());
 		} else if (name.equals(Symbol.INT)) {
-			return AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
+			return AccessibleConstant.<Integer> create2(Integer.class, n.getValue());
 		} else if (name.equals(Symbol.LNG)) {
-			return AccessibleConstant.<Long>create2(Long.class, n.getValue());
+			return AccessibleConstant.<Long> create2(Long.class, n.getValue());
 		}
 		// CONTROL FUNCTION
 		/*
-		 * else if( name.equals(Symbol.FUNCTION) ) { String functionName = n.getName();
-		 * String idTypeName = n.getType(); Complex complexType =
-		 * Complex.getInstance(idTypeName); if(complexType != null){ List<Accessible<?>>
-		 * steps = createFunctions(n, complexType); Accessible<?>[] theSteps = new
-		 * Accessible<?>[ steps.size() ]; FunctionNew.createNum( steps.toArray( theSteps
-		 * ), functionName ); return null; // das ist wichtig. wir wollen functions nur
-		 * per call aufrufen! } } else if( name.equals(Symbol.RETURN) ) { Accessible<?
-		 * extends Number> e = createFunctionAccessibleNum( n.getChildElementByIndex(0),
-		 * parentTyp ); return Return.create(e); }
+		 * else if( name.equals(Symbol.FUNCTION) ) { String functionName =
+		 * n.getName(); String idTypeName = n.getType(); Complex complexType =
+		 * Complex.getInstance(idTypeName); if(complexType != null){
+		 * List<Accessible<?>> steps = createFunctions(n, complexType);
+		 * Accessible<?>[] theSteps = new Accessible<?>[ steps.size() ];
+		 * FunctionNew.createNum( steps.toArray( theSteps ), functionName );
+		 * return null; // das ist wichtig. wir wollen functions nur per call
+		 * aufrufen! } } else if( name.equals(Symbol.RETURN) ) { Accessible<?
+		 * extends Number> e = createFunctionAccessibleNum(
+		 * n.getChildElementByIndex(0), parentTyp ); return Return.create(e); }
 		 */
 		else if (name.equals(Symbol.CALL)) {
 			String functionObj = n.getType();//
 			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
-			// TODO wozu das hier? müsste das nicht von createValue angelegt worden sein?
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
 			// TODO Exception FunktionsDaten nicht da...
 			String functionName = n.getName();
-			AccessibleAbstract<? extends Number> e = Function.getInstanceNum(functionName);
+			Accessible<? extends Number> e = Function.getInstanceNum(functionName);
 			// TODO Exception Funktion nicht da...
 			return Call.create(e, re);
 		}
@@ -277,28 +296,28 @@ public class Functions {
 		return null;
 	}
 
-	public static AccessibleAbstract<Boolean> createFunctionAccessibleBool(SyntaxNode n, Complex parentTyp) {
+	public static Accessible<Boolean> createFunctionAccessibleBool(SyntaxNode n, Complex parentTyp) {
 
 		String name = n.getTag();
 		// COMPARISON
 		if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
-			AccessibleAbstract<?> a = createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
-			AccessibleAbstract<?> b = createFunctionAccessibleObj(n.getChildElementByIndex(1), parentTyp);
+			Accessible<?> a = createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
+			Accessible<?> b = createFunctionAccessibleObj(n.getChildElementByIndex(1), parentTyp);
 			// TODO check 4 other childs! only 2 are alowed
 			if (a != null && b != null) {
-				AccessibleAbstract<Boolean> re = createComparison(a, b, name);
+				Accessible<Boolean> re = createComparison(a, b, name);
 				return re;
 			}
 		}
 		// BOOL
 		else if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
-			AccessibleAbstract<Boolean> a = createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
-			AccessibleAbstract<Boolean> b = createFunctionAccessibleBool(n.getChildElementByIndex(1), parentTyp);
+			Accessible<Boolean> a = createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
+			Accessible<Boolean> b = createFunctionAccessibleBool(n.getChildElementByIndex(1), parentTyp);
 			if (a != null && b != null) {
 				return Binary.create(a, b, name);
 			}
 		} else if (name.equals(Symbol.NOT)) {
-			AccessibleAbstract<Boolean> sub = createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
+			Accessible<Boolean> sub = createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
 			if (sub != null) {
 				return Not.create(sub);
 			}
@@ -308,16 +327,17 @@ public class Functions {
 		}
 		// VARIABLE
 		else if (name.equals(Symbol.BOOL)) {
-			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
+			return AccessibleConstant.<Boolean> create2(Boolean.class, n.getValue());
 		}
 		// CONTROL FUNCTION
 		else if (name.equals(Symbol.CALL)) {
 			String functionObj = n.getType();//
 			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
-			// TODO wozu das hier? müsste das nicht von createValue angelegt worden sein?
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
 			// TODO Exception FunktionsDaten nicht da...
 			String functionName = n.getName();
-			AccessibleAbstract<Boolean> e = Function.getInstanceBool(functionName);
+			Accessible<Boolean> e = Function.getInstanceBool(functionName);
 			// TODO Exception Funktion nicht da...
 			return Call.create(e, re);
 		}
@@ -329,7 +349,7 @@ public class Functions {
 		return null;
 	}
 
-	public static AccessibleAbstract<?> createFunctionRefObj(SyntaxNode n, Complex parentTyp) {
+	public static Accessible<?> createFunctionRefObj(SyntaxNode n, Complex parentTyp) {
 		String name = n.getTag();
 		System.out.println("get_id from " + name + " (" + n.getValue() + ")");
 		Attribute<?> id = getID(n, parentTyp);
@@ -349,7 +369,7 @@ public class Functions {
 		return null;
 	}
 
-	public static AccessibleAbstract<Boolean> createFunctionRefBool(SyntaxNode n, Complex parentTyp) {
+	public static Accessible<Boolean> createFunctionRefBool(SyntaxNode n, Complex parentTyp) {
 		String name = n.getTag();
 		System.out.println("get_id from " + name + " (" + n.getValue() + ")");
 		Attribute<?> id = getID(n, parentTyp);
@@ -371,7 +391,7 @@ public class Functions {
 		return null;
 	}
 
-	public static AccessibleAbstract<? extends Number> createFunctionRefNum(SyntaxNode n, Complex parentTyp) {
+	public static Accessible<? extends Number> createFunctionRefNum(SyntaxNode n, Complex parentTyp) {
 		String name = n.getTag();
 		System.out.println("get_id from " + name + " (" + n.getValue() + ")");
 		Attribute<?> id = getID(n, parentTyp);
@@ -438,21 +458,21 @@ public class Functions {
 
 	}
 
-	public static AccessibleAbstract<Boolean> createComparison(AccessibleAbstract<?> a, AccessibleAbstract<?> b, String name) {
+	public static Accessible<Boolean> createComparison(Accessible<?> a, Accessible<?> b, String name) {
 		Class<?> baseTypA = a.getBaseType();
 		Class<?> baseTypB = b.getBaseType();
 		if (Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypB)) {
-			AccessibleAbstract<? extends Number> theA = a.<Number>as(Number.class);
-			AccessibleAbstract<? extends Number> theB = b.<Number>as(Number.class);
+			Accessible<? extends Number> theA = a.<Number> as(Number.class);
+			Accessible<? extends Number> theB = b.<Number> as(Number.class);
 			return ComparisonNumber.create(theA, theB, name);
 		}
 		if (Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypB)) {
-			AccessibleAbstract<? extends Number> theA = (AccessibleAbstract<? extends Number>) a;
-			AccessibleAbstract<? extends Number> theB = (AccessibleAbstract<? extends Number>) b;
+			Accessible<? extends Number> theA = (Accessible<? extends Number>) a;
+			Accessible<? extends Number> theB = (Accessible<? extends Number>) b;
 			return ComparisonNumber.create(theA, theB, name);
 		} else if (baseTypA == String.class && baseTypB == String.class) {
-			AccessibleAbstract<String> theA = (AccessibleAbstract<String>) a;
-			AccessibleAbstract<String> theB = (AccessibleAbstract<String>) b;
+			Accessible<String> theA = (Accessible<String>) a;
+			Accessible<String> theB = (Accessible<String>) b;
 			return ComparisonString.create(theA, theB, name);
 		}
 		return null;

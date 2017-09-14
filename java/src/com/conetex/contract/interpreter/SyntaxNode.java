@@ -62,11 +62,13 @@ public class SyntaxNode {
 
 	public boolean isType() {
 		if (this.tag.equals(Symbol.COMPLEX) || this.tag.equals(Symbol.FUNCTION)) {
-			// System.out.println("isType Y " + name + " - " + ReadXMLtools.getAttribute(n,
+			// System.out.println("isType Y " + name + " - " +
+			// ReadXMLtools.getAttribute(n,
 			// Symbol.IDENTIFIER_NAME) );
 			return true;
 		}
-		// System.out.println("isType N " + name + " - " + ReadXMLtools.getAttribute(n,
+		// System.out.println("isType N " + name + " - " +
+		// ReadXMLtools.getAttribute(n,
 		// Symbol.IDENTIFIER_NAME) );
 		return false;
 	}
@@ -92,28 +94,33 @@ public class SyntaxNode {
 
 	public boolean isValue() {
 		if (this.tag.equals(Symbol.VALUE)) {
-			// System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n,
+			// System.out.println("isValue Y " + name + " - " +
+			// ReadXMLtools.getAttribute(n,
 			// Symbol.IDENTIFIER_NAME) );
 			return true;
 		}
 		/*
 		 * else if( this.tag.equals(Symbol.IDENTIFIER) ) { String valueNode =
-		 * this.value; if(valueNode == null){ //System.out.println("isValue N " + name +
-		 * " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) ); return false;
-		 * } else{ //System.out.println("isValue Y " + name + " - " +
-		 * ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) ); return true; } }
+		 * this.value; if(valueNode == null){ //System.out.println("isValue N "
+		 * + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME)
+		 * ); return false; } else{ //System.out.println("isValue Y " + name +
+		 * " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );
+		 * return true; } }
 		 */
 		else {
 			if (this.tag.equals(Symbol.FUNCTION)) {
-				// System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n,
+				// System.out.println("isValue Y " + name + " - " +
+				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );
 				return true;
 			} else if (this.tag.equals(Symbol.ATTRIBUTE) || this.isType() || this.isBuildInFunction()) {
-				// System.out.println("isValue N " + name + " - " + ReadXMLtools.getAttribute(n,
+				// System.out.println("isValue N " + name + " - " +
+				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );
 				return false;
 			} else {
-				// System.out.println("isValue Y " + name + " - " + ReadXMLtools.getAttribute(n,
+				// System.out.println("isValue Y " + name + " - " +
+				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );
 				return true;
 			}

@@ -4,16 +4,15 @@ import java.math.BigInteger;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.Symbol;
 
-public class ComparisonNumber extends AccessibleAbstract<Boolean> {
+public class ComparisonNumber extends Accessible<Boolean> {
 
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
 	public static final int GREATER = 1;
 
-	public static ComparisonNumber create(AccessibleAbstract<? extends Number> theA, AccessibleAbstract<? extends Number> theB,
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB,
 			String operation) {
 		if (theA == null || theB == null) {
 			return null;
@@ -30,7 +29,7 @@ public class ComparisonNumber extends AccessibleAbstract<Boolean> {
 		return null;
 	}
 
-	public static ComparisonNumber create(AccessibleAbstract<? extends Number> theA, AccessibleAbstract<? extends Number> theB,
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB,
 			int operation) {
 		if (theA == null || theB == null) {
 			return null;
@@ -43,22 +42,25 @@ public class ComparisonNumber extends AccessibleAbstract<Boolean> {
 
 	private int operator;
 
-	private AccessibleAbstract<? extends Number> a;
+	private Accessible<? extends Number> a;
 
-	private AccessibleAbstract<? extends Number> b;
+	private Accessible<? extends Number> b;
 
-	// private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
-	private ComparisonNumber(AccessibleAbstract<? extends Number> theA, AccessibleAbstract<? extends Number> theB, int theOperation) {
+	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
+	// theOperation){
+	private ComparisonNumber(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation) {
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
 	}
 
-	// public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
+	// public Comparison(Accessible<Comparable<?>> theA,
+	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
-	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA,
+	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
+	 * this.operator = theOperation; }
 	 */
 
 	@Override

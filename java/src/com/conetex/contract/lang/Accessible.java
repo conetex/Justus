@@ -3,7 +3,7 @@ package com.conetex.contract.lang;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 
-public abstract class AccessibleAbstract<T> {//implements Accessible<T> {
+public abstract class Accessible<T> {// implements Accessible<T> {
 
 	public abstract T getFrom(Structure thisObject);
 
@@ -11,16 +11,16 @@ public abstract class AccessibleAbstract<T> {//implements Accessible<T> {
 
 	public abstract Class<T> getBaseType();
 
-	public final AccessibleAbstract<T> _is(Class<?> baseType) {
+	public final Accessible<T> _is(Class<?> baseType) {
 		if (baseType == this.getBaseType()) {
 			return this;
 		}
 		return null;
 	}
 
-	public final <X> AccessibleAbstract<X> as(Class<X> baseType) {
+	public final <X> Accessible<X> as(Class<X> baseType) {
 		if (baseType.isAssignableFrom(this.getBaseType())) {
-			return (AccessibleAbstract<X>) this;
+			return (Accessible<X>) this;
 		}
 		return null;
 	}

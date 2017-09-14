@@ -2,14 +2,12 @@ package com.conetex.contract.lang.bool.operator;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.Symbol;
 
-public abstract class Binary extends AccessibleAbstract<Boolean> {//implements Accessible<Boolean> 
+public abstract class Binary extends Accessible<Boolean> {// implements
+															// Accessible<Boolean>
 
-
-
-	public static Binary create(AccessibleAbstract<? extends Boolean> theA, AccessibleAbstract<? extends Boolean> theB,
+	public static Binary create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB,
 			String operation) {
 		if (theA == null || theB == null) {
 			return null;
@@ -48,11 +46,11 @@ public abstract class Binary extends AccessibleAbstract<Boolean> {//implements A
 		return null;
 	}
 
-	private AccessibleAbstract<? extends Boolean> a;
+	private Accessible<? extends Boolean> a;
 
-	private AccessibleAbstract<? extends Boolean> b;
+	private Accessible<? extends Boolean> b;
 
-	private Binary(AccessibleAbstract<? extends Boolean> theA, AccessibleAbstract<? extends Boolean> theB) {
+	private Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
 		this.a = theA;
 		this.b = theB;
 	}
@@ -75,9 +73,9 @@ public abstract class Binary extends AccessibleAbstract<Boolean> {//implements A
 	}
 
 	/*
-	 * @Override public boolean compute(Structure thisObject) { getFrom(thisObject);
-	 * // TODO compute ist nur fürs debuggen ... ansonsten // ist das ja sinnlos
-	 * hier! return true; }
+	 * @Override public boolean compute(Structure thisObject) {
+	 * getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten
+	 * // ist das ja sinnlos hier! return true; }
 	 */
 
 	@Override

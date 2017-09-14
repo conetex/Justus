@@ -6,7 +6,6 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
 import com.conetex.contract.lang.Symbol;
@@ -20,21 +19,22 @@ public class Factory {
 
 	Builder<Boolean, ?> boolRef = new Builder<Boolean, Object>() {
 		@Override
-		public AccessibleAbstract<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
 			return Functions.createFunctionRefBool(n, parentTyp);
 		}
 	};
 
 	Builder<Boolean, ?> boolCall = new Builder<Boolean, Object>() {
 		@Override
-		public AccessibleAbstract<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
 			// CONTROL FUNCTION
 			String functionObj = n.getType();//
 			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
-			// TODO wozu das hier? müsste das nicht von createValue angelegt worden sein?
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
 			// TODO Exception FunktionsDaten nicht da...
 			String functionName = n.getName();
-			AccessibleAbstract<Boolean> e = Function.getInstanceBool(functionName);
+			Accessible<Boolean> e = Function.getInstanceBool(functionName);
 			// TODO Exception Funktion nicht da...
 			return Call.create(e, re);
 		}
@@ -42,15 +42,15 @@ public class Factory {
 
 	Builder<Boolean, Boolean> boolConst = new Builder<Boolean, Boolean>() {
 		@Override
-		public AccessibleAbstract<Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
 			// BOOL
-			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
+			return AccessibleConstant.<Boolean> create2(Boolean.class, n.getValue());
 		}
 	};
 
 	Builder<Boolean, Boolean> boolNullCheck = new Builder<Boolean, Boolean>() {
 		@Override
-		public AccessibleAbstract<Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
 			// BOOL
 			String name = n.getTag();
 			if (name.equals(Symbol.ISNULL)) {
@@ -63,17 +63,17 @@ public class Factory {
 
 	Builder<Boolean, Boolean> boolExpression = new Builder<Boolean, Boolean>() {
 		@Override
-		public AccessibleAbstract<Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
 			// BOOL
 			String name = n.getTag();
 			if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
-				AccessibleAbstract<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-				AccessibleAbstract<? extends Boolean> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+				Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+				Accessible<? extends Boolean> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
 				if (a != null && b != null) {
 					return Binary.create(a, b, name);
 				}
 			} else if (name.equals(Symbol.NOT)) {
-				AccessibleAbstract<Boolean> sub = Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0),
+				Accessible<Boolean> sub = Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0),
 						parentTyp);
 				if (sub != null) {
 					return Not.create(sub);
@@ -85,15 +85,15 @@ public class Factory {
 
 	Builder<Boolean, Object> boolComparsion = new Builder<Boolean, Object>() {
 		@Override
-		public AccessibleAbstract<Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
 			// COMPARISON
 			String name = n.getTag();
 			if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
-				AccessibleAbstract<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-				AccessibleAbstract<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+				Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+				Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
 				// TODO check 4 other childs! only 2 are alowed
 				if (a != null && b != null) {
-					AccessibleAbstract<Boolean> re = Functions.createComparison(a, b, name);
+					Accessible<Boolean> re = Functions.createComparison(a, b, name);
 					return re;
 				}
 			}
@@ -103,14 +103,14 @@ public class Factory {
 
 	Builder<Number, ?> numberRef = new Builder<Number, Object>() {
 		@Override
-		public AccessibleAbstract<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
 			return Functions.createFunctionRefNum(n, parentTyp);
 		}
 	};
 
 	Builder<Number, ?> numberCall = new Builder<Number, Object>() {
 		@Override
-		public AccessibleAbstract<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
 			// CONTROL FUNCTION
 			String functionObj = n.getType();//
 			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
@@ -118,7 +118,7 @@ public class Factory {
 			// worden sein?
 			// TODO Exception FunktionsDaten nicht da...
 			String functionName = n.getName();
-			AccessibleAbstract<? extends Number> e = Function.getInstanceNum(functionName);
+			Accessible<? extends Number> e = Function.getInstanceNum(functionName);
 			// TODO Exception Funktion nicht da...
 			return Call.create(e, re);
 		}
@@ -126,15 +126,15 @@ public class Factory {
 
 	Builder<Number, ?> numberConst = new Builder<Number, Object>() {
 		@Override
-		public AccessibleAbstract<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
 			// VARIABLE
 			String name = n.getTag();
 			if (name.equals(Symbol.BINT)) {
-				return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
+				return AccessibleConstant.<BigInteger> create2(BigInteger.class, n.getValue());
 			} else if (name.equals(Symbol.INT)) {
-				return AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
+				return AccessibleConstant.<Integer> create2(Integer.class, n.getValue());
 			} else if (name.equals(Symbol.LNG)) {
-				return AccessibleConstant.<Long>create2(Long.class, n.getValue());
+				return AccessibleConstant.<Long> create2(Long.class, n.getValue());
 			}
 			return null;
 		}
@@ -142,14 +142,14 @@ public class Factory {
 
 	Builder<Number, Number> numberExpession = new Builder<Number, Number>() {
 		@Override
-		public AccessibleAbstract<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
 			// MATH
 			String name = n.getTag();
-			AccessibleAbstract<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-			AccessibleAbstract<? extends Number> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+			Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+			Accessible<? extends Number> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
 			// TODO check 4 other childs! only 2 are alowed
 			if (a != null && b != null) {
-				AccessibleAbstract<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
+				Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
 				return re;
 			}
 			return null;

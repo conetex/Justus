@@ -1,20 +1,20 @@
 package com.conetex.contract.lang.bool.expression;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.AccessibleAbstract;
+import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.Symbol;
 
-public class ComparisonString extends AccessibleAbstract<Boolean> {
+public class ComparisonString extends Accessible<Boolean> {
 
 	public static final int SMALLER = -1;
 	public static final int EQUAL = 0;
 	public static final int GREATER = 1;
 
-	public static AccessibleAbstract<Boolean> _createNew(AccessibleAbstract<String> theA, AccessibleAbstract<String> theB, String name) {
+	public static Accessible<Boolean> _createNew(Accessible<String> theA, Accessible<String> theB, String name) {
 		return create(theA, theB, name);
 	}
 
-	public static ComparisonString create(AccessibleAbstract<String> theA, AccessibleAbstract<String> theB, String operation) {
+	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -30,7 +30,7 @@ public class ComparisonString extends AccessibleAbstract<Boolean> {
 		return null;
 	}
 
-	public static ComparisonString create(AccessibleAbstract<String> theA, AccessibleAbstract<String> theB, int operation) {
+	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -42,22 +42,25 @@ public class ComparisonString extends AccessibleAbstract<Boolean> {
 
 	private int operator;
 
-	private AccessibleAbstract<String> a;
+	private Accessible<String> a;
 
-	private AccessibleAbstract<String> b;
+	private Accessible<String> b;
 
-	// private Comparison(Accessible<T> theA, Accessible<T> theB, int theOperation){
-	private ComparisonString(AccessibleAbstract<String> theA, AccessibleAbstract<String> theB, int theOperation) {
+	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
+	// theOperation){
+	private ComparisonString(Accessible<String> theA, Accessible<String> theB, int theOperation) {
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
 	}
 
-	// public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
+	// public Comparison(Accessible<Comparable<?>> theA,
+	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
-	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA,
+	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
+	 * this.operator = theOperation; }
 	 */
 
 	@Override

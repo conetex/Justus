@@ -1,11 +1,11 @@
 package com.conetex.contract.data.type;
 
 import com.conetex.contract.data.Attribute;
+import com.conetex.contract.data.Attribute.EmptyLabelException;
+import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.AttributeComplex;
 import com.conetex.contract.data.AttributePrimitive;
 import com.conetex.contract.data.Value;
-import com.conetex.contract.data.Attribute.EmptyLabelException;
-import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Structure;
 
@@ -27,7 +27,7 @@ public abstract class AbstractType<T> {
 		if (theName.get().length() < 1) {
 			throw new Attribute.EmptyLabelException();
 		}
-		return AttributePrimitive.<V>create(theName, thisObj);
+		return AttributePrimitive.<V> create(theName, thisObj);
 	}
 
 	public static Attribute<Value<?>[]> _createAttribute2(Label theName, Complex thisObj)

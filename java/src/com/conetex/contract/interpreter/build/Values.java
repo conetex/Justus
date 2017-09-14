@@ -39,9 +39,10 @@ public class Values {
 		}
 
 		/*
-		 * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
-		 * theValues ); try { data.set(theValues); } catch (Invalid e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
+		 * old Value<?>[] theValues = new Value<?>[ values.size() ];
+		 * values.toArray( theValues ); try { data.set(theValues); } catch
+		 * (Invalid e) { // TODO Auto-generated catch block e.printStackTrace();
+		 * }
 		 * 
 		 * 
 		 * return values;
@@ -82,10 +83,11 @@ public class Values {
 			}
 
 			/*
-			 * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
-			 * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
-			 * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
-			 * Auto-generated catch block e.printStackTrace(); }
+			 * old List<Value<?>> subvalues = createValues(n, (Complex) type,
+			 * re); Value<?>[] theValues = new Value<?>[ subvalues.size() ];
+			 * subvalues.toArray( theValues ); try { re.set(theValues); } catch
+			 * (Invalid e) { // TODO Auto-generated catch block
+			 * e.printStackTrace(); }
 			 */
 
 			return re;

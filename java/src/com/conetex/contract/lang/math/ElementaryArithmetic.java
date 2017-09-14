@@ -5,11 +5,9 @@ import java.math.BigInteger;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.Symbol;
 
-public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number>
-		extends AccessibleAbstract<R> {
+public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R> {
 
 	public static final int PLUS = 0; // Addition
 	public static final int MINUS = 1; // Subtraction
@@ -17,87 +15,8 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 	public static final int DIVIDED_BY = 3; // Division
 	public static final int REMAINS = 4; // Remainder
 
-	public static <IA extends Number, IB extends Number, O extends Number> ElementaryArithmetic<IA, IB, O> createNewX(
-			AccessibleAbstract<IA> theA, AccessibleAbstract<IB> theB, String operation, Class<O> resultTyp) {
-		if (theA == null || theB == null) {
-			return null;
-		}
-		if (operation.equals(Symbol.PLUS)) {
-			return createNewX(theA, theB, ElementaryArithmetic.PLUS, resultTyp);
-		}
-		if (operation.equals(Symbol.MINUS)) {
-			return createNewX(theA, theB, ElementaryArithmetic.MINUS, resultTyp);
-		}
-		if (operation.equals(Symbol.TIMES)) {
-			return createNewX(theA, theB, ElementaryArithmetic.TIMES, resultTyp);
-		}
-		if (operation.equals(Symbol.DIVIDED_BY)) {
-			return createNewX(theA, theB, ElementaryArithmetic.DIVIDED_BY, resultTyp);
-		}
-		if (operation.equals(Symbol.REMAINS)) {
-			return createNewX(theA, theB, ElementaryArithmetic.REMAINS, resultTyp);
-		}
-		return null;
-	}
-
-	public static <IA extends Number, IB extends Number, O extends Number> ElementaryArithmetic<IA, IB, O> createNewX(
-			AccessibleAbstract<IA> theA, AccessibleAbstract<IB> theB, int operation, Class<O> resultTyp) {
-		if (operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS) {
-			return null;
-		}
-
-		if (theA == null || theB == null) {
-			return null;
-		}
-		Class<IA> inputTypA = theA.getBaseType();
-		Class<IB> inputTypB = theB.getBaseType();
-		Class<? extends Number> inputTyp = getBiggest(inputTypA, inputTypB);
-		if (inputTyp == null) {
-			// TODO Error unknown Typ
-			return null;
-		}
-
-		if (resultTyp == Long.class) {
-			if (inputTyp == BigInteger.class) {
-				// TODO Error Typ to big
-				return null;
-			}
-		} else if (resultTyp == Integer.class) {
-			if (inputTyp == BigInteger.class || inputTyp == Long.class) {
-				// TODO Error Typ to big
-				return null;
-			}
-		} else if (resultTyp == Byte.class) {
-			if (inputTyp == BigInteger.class || inputTyp == Long.class || inputTyp == Integer.class) {
-				// TODO Error Typ to big
-				return null;
-			}
-		}
-
-		else if (resultTyp == Number.class) {
-			if (inputTyp == BigInteger.class) {
-				return (ElementaryArithmetic<IA, IB, O>) new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB,
-						BigInteger.class, operation);
-			} else if (inputTyp == Long.class) {
-				return (ElementaryArithmetic<IA, IB, O>) new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class,
-						operation);
-			} else if (inputTyp == Integer.class) {
-				return (ElementaryArithmetic<IA, IB, O>) new ElementaryArithmetic<IA, IB, Integer>(theA, theB,
-						Integer.class, operation);
-			} else if (inputTyp == Byte.class) {
-				return (ElementaryArithmetic<IA, IB, O>) new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class,
-						operation);
-			} else {
-				// TODO Error unknown Typ
-				return null;
-			}
-		}
-
-		return new ElementaryArithmetic<IA, IB, O>(theA, theB, resultTyp, operation);
-	}
-
 	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(
-			AccessibleAbstract<IA> theA, AccessibleAbstract<IB> theB, String operation) {
+			Accessible<IA> theA, Accessible<IB> theB, String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -120,7 +39,7 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 	}
 
 	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(
-			AccessibleAbstract<IA> theA, AccessibleAbstract<IB> theB, int operation) {
+			Accessible<IA> theA, Accessible<IB> theB, int operation) {
 		if (operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS) {
 			return null;
 		}
@@ -175,11 +94,11 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 
 	private Class<R> resultTyp;
 
-	private AccessibleAbstract<Ia> a;
+	private Accessible<Ia> a;
 
-	private AccessibleAbstract<Ib> b;
+	private Accessible<Ib> b;
 
-	private ElementaryArithmetic(AccessibleAbstract<Ia> theA, AccessibleAbstract<Ib> theB, Class<R> theResultTyp, int theOperation) {
+	private ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;

@@ -2,21 +2,20 @@ package com.conetex.contract.lang.bool.operator;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 
 //Unary operation
-public class Not extends AccessibleAbstract<Boolean> {
+public class Not extends Accessible<Boolean> {
 
-	public static Not create(AccessibleAbstract<Boolean> theSub) {
+	public static Not create(Accessible<Boolean> theSub) {
 		if (theSub == null) {
 			return null;
 		}
 		return new Not(theSub);
 	}
 
-	private AccessibleAbstract<Boolean> sub;
+	private Accessible<Boolean> sub;
 
-	private Not(AccessibleAbstract<Boolean> theSub) {
+	private Not(Accessible<Boolean> theSub) {
 		this.sub = theSub;
 	}
 

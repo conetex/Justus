@@ -11,9 +11,9 @@ import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Attribute.DuplicateIdentifierNameExeption;
 import com.conetex.contract.data.Attribute.NullIdentifierException;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.type.Complex.ComplexWasInitializedExeption;
 import com.conetex.contract.data.type.Complex.DublicateComplexException;
+import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Symbol;
 
@@ -121,7 +121,8 @@ public class Types {
 				// Complex
 				idTypeName = c.getType();
 				idName = c.getName();
-				// referringComplexTypeNames.add(typeName + "." + idTypeName);// TODO BUG !!!
+				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
+				// TODO BUG !!!
 				id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
 			} else {
 				continue;
@@ -140,9 +141,15 @@ public class Types {
 		Complex complexType = unformedComplexTypes.get(typeName);
 		if (complexType == null) {
 			try {
-				complexType = Complex.createInit(typeName, theOrderedIdentifiers); // TODO theOrderedIdentifiers müssen
-																					// elemente enthalten, sonst gibts
-																					// keinen typ
+				complexType = Complex.createInit(typeName, theOrderedIdentifiers); // TODO
+																					// theOrderedIdentifiers
+																					// müssen
+																					// elemente
+																					// enthalten,
+																					// sonst
+																					// gibts
+																					// keinen
+																					// typ
 			} catch (DuplicateIdentifierNameExeption | Attribute.NullIdentifierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

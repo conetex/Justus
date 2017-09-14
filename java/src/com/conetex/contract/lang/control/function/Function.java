@@ -6,9 +6,8 @@ import java.util.Map;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 
-public class Function<V> extends AccessibleAbstract<V> {
+public class Function<V> extends Accessible<V> {
 
 	private static Map<String, Function<? extends Number>> instancesNum = new HashMap<String, Function<? extends Number>>();
 
@@ -16,7 +15,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 
 	private static Map<String, Function<? extends Object>> instancesObject = new HashMap<String, Function<? extends Object>>();
 
-	public static AccessibleAbstract<Boolean> getInstanceBool(String name) {
+	public static Accessible<Boolean> getInstanceBool(String name) {
 		Function<Boolean> f = instancesBoolean.get(name);
 		if (f == null) {
 			return null;
@@ -24,7 +23,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return f;
 	}
 
-	public static AccessibleAbstract<? extends Number> getInstanceNum(String name) {
+	public static Accessible<? extends Number> getInstanceNum(String name) {
 		Function<? extends Number> f = instancesNum.get(name);
 		if (f == null) {
 			return null;
@@ -32,7 +31,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return f;
 	}
 
-	public static AccessibleAbstract<? extends Object> getInstanceObject(String name) {
+	public static Accessible<? extends Object> getInstanceObject(String name) {
 		Function<? extends Object> f = instancesObject.get(name);
 		if (f == null) {
 			return null;
@@ -40,7 +39,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return f;
 	}
 
-	public static AccessibleAbstract<?> getInstance(String name) {
+	public static Accessible<?> getInstance(String name) {
 		Function<?> f = instancesNum.get(name);
 		if (f == null) {
 			f = instancesBoolean.get(name);
@@ -49,7 +48,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return f;
 	}
 
-	public static <SV extends Number> Function<SV> createNum(AccessibleAbstract<?>[] theSteps, String theName) {
+	public static <SV extends Number> Function<SV> createNum(Accessible<?>[] theSteps, String theName) {
 		if (theSteps == null) {
 			System.err.println("theSteps is null");
 			return null;
@@ -67,7 +66,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return re;
 	}
 
-	public static Function<Boolean> createBool(AccessibleAbstract<?>[] theSteps, String theName) {
+	public static Function<Boolean> createBool(Accessible<?>[] theSteps, String theName) {
 		if (theSteps == null) {
 			System.err.println("theSteps is null");
 			return null;
@@ -85,7 +84,7 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return re;
 	}
 
-	public static <SV extends Object> Function<SV> createObj(AccessibleAbstract<?>[] theSteps, String theName) {
+	public static <SV extends Object> Function<SV> createObj(Accessible<?>[] theSteps, String theName) {
 		if (theSteps == null) {
 			System.err.println("theSteps is null");
 			return null;
@@ -104,9 +103,9 @@ public class Function<V> extends AccessibleAbstract<V> {
 	}
 
 	/*
-	 * public static <SV extends Value<?>> Function<SV> create(Structure theData,
-	 * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return
-	 * null; } return new Function<SV>(theData, theSteps); }
+	 * public static <SV extends Value<?>> Function<SV> create(Structure
+	 * theData, Accessible<?>[] theSteps){ if(theData == null || theSteps ==
+	 * null){ return null; } return new Function<SV>(theData, theSteps); }
 	 */
 	// private Value<?>[] values;
 	// private String[] valueNames;
@@ -119,10 +118,10 @@ public class Function<V> extends AccessibleAbstract<V> {
 		return "function " + this.name;
 	}
 
-	private AccessibleAbstract<?>[] steps;
+	private Accessible<?>[] steps;
 
 	private Function(// Structure theData,
-			AccessibleAbstract<?>[] theSteps, String theName) {
+			Accessible<?>[] theSteps, String theName) {
 		// this.data = theData;
 		this.steps = theSteps;
 		this.name = theName;

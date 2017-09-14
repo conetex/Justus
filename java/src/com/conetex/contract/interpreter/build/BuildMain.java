@@ -14,7 +14,6 @@ import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.interpreter.build.functions.Functions;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.control.function.Function;
 
 public class BuildMain {
@@ -29,21 +28,22 @@ public class BuildMain {
 			Structure v = complexTypeRoot.createValue(null);
 			List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
 			/*
-			 * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
-			 * theValues ); v.set(theValues);
+			 * old Value<?>[] theValues = new Value<?>[ values.size() ];
+			 * values.toArray( theValues ); v.set(theValues);
 			 */
 
-			List<AccessibleAbstract<?>> functions = Functions.createFunctions(r2, complexTypeRoot);
+			List<Accessible<?>> functions = Functions.createFunctions(r2, complexTypeRoot);
 
-			AccessibleAbstract<?>[] theSteps = new AccessibleAbstract<?>[functions.size()];
-			AccessibleAbstract<?> main = Function.createObj(// data,
+			Accessible<?>[] theSteps = new Accessible<?>[functions.size()];
+			Accessible<?> main = Function.createObj(// data,
 					functions.toArray(theSteps), complexTypeRoot.getName()); // "contract4u"
 			main.getFrom(v);
 			/*
-			 * for(Accessible<?> f : functions){ if(f instanceof Function<?>){ //continue; }
-			 * Object re = f.getFrom(v); if(re != null){
-			 * System.out.println("Builder function ==> " + f + " -> " + re.toString()); }
-			 * else{ System.out.println("Builder function ==> " + f + " -> " + re); } }
+			 * for(Accessible<?> f : functions){ if(f instanceof Function<?>){
+			 * //continue; } Object re = f.getFrom(v); if(re != null){
+			 * System.out.println("Builder function ==> " + f + " -> " +
+			 * re.toString()); } else{ System.out.println(
+			 * "Builder function ==> " + f + " -> " + re); } }
 			 * System.out.println("Builder " + r2.getNodeName());
 			 */
 		}

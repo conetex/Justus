@@ -2,9 +2,8 @@ package com.conetex.contract.lang.bool.expression;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 
-public class IsNull extends AccessibleAbstract<Boolean> {
+public class IsNull extends Accessible<Boolean> {
 
 	public static IsNull create(Accessible<?> theSub) {
 		if (theSub == null) {

@@ -23,8 +23,8 @@ public class AttributePrimitive<T> extends Attribute<T> {
 	private final Primitive<T> type;
 
 	/*
-	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
-	 * theLabel; this.factory = theFactory; }
+	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
+	 * this.label = theLabel; this.factory = theFactory; }
 	 */
 	private AttributePrimitive(Label theLabel, Primitive<T> theType) {
 		this.label = theLabel;

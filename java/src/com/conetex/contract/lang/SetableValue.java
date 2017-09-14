@@ -6,7 +6,7 @@ import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Inconvertible;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 
-public class SetableValue<T> extends AccessibleAbstract<T> implements Setable<T> {
+public class SetableValue<T> extends Accessible<T> implements Setable<T> {
 
 	public static <T> SetableValue<T> create2(String thePath, Class<? extends Value<T>> theClass, Class<T> clazz) {
 		if (thePath == null) {
@@ -45,7 +45,9 @@ public class SetableValue<T> extends AccessibleAbstract<T> implements Setable<T>
 		}
 		T valueOld = value.get();
 		value.set(newValue);
-		value = thisObject.getValue(this.path, this.valueClazz);// TODO delete this. was just 4 debug
+		value = thisObject.getValue(this.path, this.valueClazz);// TODO delete
+																// this. was
+																// just 4 debug
 		System.out.println(valueOld + " setTo " + newValue + " -> " + value.get());
 		return newValue;
 	}
@@ -63,7 +65,11 @@ public class SetableValue<T> extends AccessibleAbstract<T> implements Setable<T>
 
 	@Override
 	public Class<T> getBaseType() {
-		Primitive<T> pri = Primitive.<T>getInstance(this.valueClazz);// TODO das muss getestet werden
+		Primitive<T> pri = Primitive.<T> getInstance(this.valueClazz);// TODO
+																		// das
+																		// muss
+																		// getestet
+																		// werden
 		if (pri == null) {
 			return null;
 		}

@@ -3,12 +3,11 @@ package com.conetex.contract.lang.control.function;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.AccessibleValue;
 
-public class Call<V> extends AccessibleAbstract<V> { // V extends Value<?>
+public class Call<V> extends Accessible<V> { // V extends Value<?>
 
-	public static <SV> Call<SV> create(AccessibleAbstract<SV> theFunction, AccessibleValue<Structure> theReference) {
+	public static <SV> Call<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference) {
 		// TODO drop this
 		if (theFunction == null) {
 			System.err.println("theFunction is null");
@@ -21,7 +20,7 @@ public class Call<V> extends AccessibleAbstract<V> { // V extends Value<?>
 		return new Call<SV>(theFunction, theReference);
 	}
 
-	private AccessibleAbstract<V> function;
+	private Accessible<V> function;
 
 	private AccessibleValue<Structure> reference;
 
@@ -30,7 +29,7 @@ public class Call<V> extends AccessibleAbstract<V> { // V extends Value<?>
 		return "call function " + this.function;
 	}
 
-	private Call(AccessibleAbstract<V> theExpression, AccessibleValue<Structure> theReference) {
+	private Call(Accessible<V> theExpression, AccessibleValue<Structure> theReference) {
 		this.function = theExpression;
 		this.reference = theReference;
 	}

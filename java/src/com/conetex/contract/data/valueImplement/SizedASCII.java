@@ -19,9 +19,11 @@ public abstract class SizedASCII implements Value<String> {
 			throw new Invalid("Input is longer than " + this.getMaxSize() + ": '" + aValue + "'");
 		}
 
-		// HINT: Take care adding allowed control chars. You have to adjust throwing
+		// HINT: Take care adding allowed control chars. You have to adjust
+		// throwing
 		// Exceptions.
-		// The throwing Exceptions searches for control chars, to provide detailed
+		// The throwing Exceptions searches for control chars, to provide
+		// detailed
 		// Information to the user.
 		// ascii:
 		// String chars = "\\p{ASCII}";
@@ -40,7 +42,9 @@ public abstract class SizedASCII implements Value<String> {
 		// !\"#\\$%&'\\(\\)\\*\\+,\\-\\./0-9:;<=>\\?@A-Z\\[\\\\\\]\\^_`a-z\\{\\|\\}~";
 		// // "\t !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~"
 
-		if (aValue.matches("[" + allowedChars + "]{1,}")) { // "[\\p{ASCII}]{0,}" "\\A\\p{ASCII}*\\z" "^[\\p{ASCII}]*$"
+		if (aValue.matches("[" + allowedChars + "]{1,}")) { // "[\\p{ASCII}]{0,}"
+															// "\\A\\p{ASCII}*\\z"
+															// "^[\\p{ASCII}]*$"
 			return true;
 		}
 
@@ -50,12 +54,21 @@ public abstract class SizedASCII implements Value<String> {
 		if (m.find()) {
 			noASCII = m.group(0);
 
-			Pattern ctrlCharPattern = Pattern.compile("[\\s]{1}"); // check for control chars (\s)
+			Pattern ctrlCharPattern = Pattern.compile("[\\s]{1}"); // check for
+																	// control
+																	// chars
+																	// (\s)
 			Matcher ctrlCharMatcher = ctrlCharPattern.matcher(noASCII);
 			if (ctrlCharMatcher.find()) {
 				// noASCII is a control char
-				ctrlCharPattern = Pattern.compile("([[^\\s][ ]]{0,})[\\s]{1}"); // search for control chars (\s), except
-																				// space (blank)
+				ctrlCharPattern = Pattern.compile("([[^\\s][ ]]{0,})[\\s]{1}"); // search
+																				// for
+																				// control
+																				// chars
+																				// (\s),
+																				// except
+																				// space
+																				// (blank)
 				ctrlCharMatcher = ctrlCharPattern.matcher(aValue);
 				if (ctrlCharMatcher.find()) {
 					// Locate the control char

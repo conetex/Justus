@@ -17,7 +17,8 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues,
 			final Structure theParent) {
 		if (theAttributeTuple != null && theValues != null) {
-			return null;// new Structure(theAttributeTuple, theValues, theParent);
+			return null;// new Structure(theAttributeTuple, theValues,
+						// theParent);
 		}
 		return null;
 	}
@@ -67,19 +68,21 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		} else {
 			/*
 			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0, i); if(i +
-			 * Label.NAME_SEPERATOR.length() < aName.length()){ attributeIdx =
-			 * this.type.getAttributeIndex( nameOfSubStructure ); Value.Interface<Structure>
-			 * subStructure = getValue(attributeIdx, Struct.class); if(subStructure !=
-			 * null){ Structure s = subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return s.getValue(aName,
-			 * c); } } } }
+			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
+			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
+			 * Struct.class); if(subStructure != null){ Structure s =
+			 * subStructure.get(); if(s != null){ aName =
+			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
+			 * s.getValue(aName, c); } } } }
 			 */
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
 				if (names[1] != null) {
 					idIndex = this.type.getSubAttributeIndex(names[0]);
-					// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern
+					// TODO wenn hier die typen nicht passen und keine structure
+					// da liegt, sondern
 					// was anderes...
 					// sollte das vernünftig gemeldet werden!!!
 					Structure subStructure = getValue(idIndex, Structure.class);
@@ -94,7 +97,8 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	public Value<?> getValue(String aName) {
-		return this.getValue(aName, Value.class);// TODO seltsam sieht das aus ...
+		return this.getValue(aName, Value.class);// TODO seltsam sieht das aus
+													// ...
 	}
 
 	@SuppressWarnings("unchecked")
@@ -132,19 +136,21 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		} else {
 			/*
 			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0, i); if(i +
-			 * Label.NAME_SEPERATOR.length() < aName.length()){ attributeIdx =
-			 * this.type.getAttributeIndex( nameOfSubStructure ); Value.Interface<Structure>
-			 * subStructure = getValue(attributeIdx, Struct.class); if(subStructure !=
-			 * null){ Structure s = subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return s.getValue(aName,
-			 * c); } } } }
+			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
+			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
+			 * Struct.class); if(subStructure != null){ Structure s =
+			 * subStructure.get(); if(s != null){ aName =
+			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
+			 * s.getValue(aName, c); } } } }
 			 */
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
 				if (names[1] != null) {
 					idIndex = this.type.getSubAttributeIndex(names[0]);
-					// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern
+					// TODO wenn hier die typen nicht passen und keine structure
+					// da liegt, sondern
 					// was anderes...
 					// sollte das vernünftig gemeldet werden!!!
 					Structure subStructure = getValue(idIndex, Structure.class);
@@ -178,19 +184,21 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		} else {
 			/*
 			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0, i); if(i +
-			 * Label.NAME_SEPERATOR.length() < aName.length()){ attributeIdx =
-			 * this.type.getAttributeIndex( nameOfSubStructure ); Value.Interface<Structure>
-			 * subStructure = getValue(attributeIdx, Struct.class); if(subStructure !=
-			 * null){ Structure s = subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return s.getValue(aName,
-			 * c); } } } }
+			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
+			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
+			 * Struct.class); if(subStructure != null){ Structure s =
+			 * subStructure.get(); if(s != null){ aName =
+			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
+			 * s.getValue(aName, c); } } } }
 			 */
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
 				if (names[1] != null) {
 					idIndex = this.type.getSubAttributeIndex(names[0]);
-					// TODO wenn hier die typen nicht passen und keine structure da liegt, sondern
+					// TODO wenn hier die typen nicht passen und keine structure
+					// da liegt, sondern
 					// was anderes...
 					// sollte das vernünftig gemeldet werden!!!
 					Structure subStructure = getValue(idIndex, Structure.class);
@@ -216,7 +224,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
-		Primitive<T> type = Primitive.<T>getInstance(src.getClass());
+		Primitive<T> type = Primitive.<T> getInstance(src.getClass());
 		Value<T> re = type.createValue();
 		T val = src.copy();
 		re.set(val); // throws the Exception

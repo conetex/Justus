@@ -3,7 +3,6 @@ package com.conetex.contract.lang.assignment;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleAbstract;
 import com.conetex.contract.lang.Setable;
 
 /*
@@ -18,13 +17,15 @@ public interface Accessible<T> {//accessible
 }
 */
 
-public abstract class AbstractAssigment<T> extends AccessibleAbstract<T> {// Computable{// extends ComputablePair<T>{
+public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
+																	// extends
+																	// ComputablePair<T>{
 
 	private Setable<T> target;
 
-	private AccessibleAbstract<T> source;
+	private Accessible<T> source;
 
-	protected AbstractAssigment(Setable<T> trg, AccessibleAbstract<T> src) {
+	protected AbstractAssigment(Setable<T> trg, Accessible<T> src) {
 		this.target = trg;
 		this.source = src;
 	}

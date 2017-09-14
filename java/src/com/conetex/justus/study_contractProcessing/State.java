@@ -63,11 +63,13 @@ public class State {
 		PrimitiveDataType<Complex, State>
 
 		simpleTypeChild = new PrimitiveDataType<Complex, State>(Complex.class, x);
-		// simpleTypeChild = new PrimitiveDataType< Complex , State> ( Complex.class ,
+		// simpleTypeChild = new PrimitiveDataType< Complex , State> (
+		// Complex.class ,
 		// new ValueFactory<State>() { public Complex createValue() { return new
 		// Complex() ; } } );
 		// new PrimitiveDataType< ASCII8 , String> ( ASCII8.class , new
-		// ValueFactory<String>(){ public ASCII8 createValue() { return new ASCII8() ; }
+		// ValueFactory<String>(){ public ASCII8 createValue() { return new
+		// ASCII8() ; }
 		// } )
 		Attribute<String> attributeChild = null;
 		try {
@@ -527,8 +529,8 @@ public class State {
 		private final PrimitiveDataType<? extends Value<T>, T> type;
 
 		/*
-		 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
-		 * theLabel; this.factory = theFactory; }
+		 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
+		 * this.label = theLabel; this.factory = theFactory; }
 		 */
 		private Attribute(ASCII8 theLabel, PrimitiveDataType<? extends Value<T>, T> theType) {
 			this.label = theLabel;
