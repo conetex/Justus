@@ -18,52 +18,54 @@ public interface Accessible<T> {//accessible
 */
 
 public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
-																	// extends
-																	// ComputablePair<T>{
+                                                                  // extends
+                                                                  // ComputablePair<T>{
 
-	private Setable<T> target;
+    private Setable<T> target;
 
-	private Accessible<T> source;
+    private Accessible<T> source;
 
-	protected AbstractAssigment(Setable<T> trg, Accessible<T> src) {
-		this.target = trg;
-		this.source = src;
-	}
+    protected AbstractAssigment(Setable<T> trg, Accessible<T> src) {
+        this.target = trg;
+        this.source = src;
+    }
 
-	public abstract boolean doCopy();
+    public abstract boolean doCopy();
 
-	@Override
-	public T getFrom(Structure thisObject) {
-		T value = null;
-		try {
+    @Override
+    public T getFrom(Structure thisObject) {
+        T value = null;
+        try {
 
-			if (this.doCopy()) {
-				value = this.source.copyFrom(thisObject);
-			} else {
-				value = this.source.getFrom(thisObject);
-			}
+            if (this.doCopy()) {
+                value = this.source.copyFrom(thisObject);
+            }
+            else {
+                value = this.source.getFrom(thisObject);
+            }
 
-			value = this.target.setTo(thisObject, value);
+            value = this.target.setTo(thisObject, value);
 
-		} catch (Invalid e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+        }
+        catch (Invalid e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
 
-		return value;
-	}
+        return value;
+    }
 
-	@Override
-	public T copyFrom(Structure thisObject) throws Invalid {
-		// TODO: das wird ja nur selten gebraucht...
-		return getFrom(thisObject);
-	}
+    @Override
+    public T copyFrom(Structure thisObject) throws Invalid {
+        // TODO: das wird ja nur selten gebraucht...
+        return getFrom(thisObject);
+    }
 
-	@Override
-	public Class<T> getBaseType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Class<T> getBaseType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

@@ -5,21 +5,21 @@ import com.conetex.contract.lang.SetableValue;
 
 public class Heap {
 
-	public static Heap create(Structure theRoot) {
-		if (theRoot != null) {
-			return new Heap(theRoot);
-		}
-		return null;
-	}
+    public static Heap create(Structure theRoot) {
+        if (theRoot != null) {
+            return new Heap(theRoot);
+        }
+        return null;
+    }
 
-	private final Structure root;
+    private final Structure root;
 
-	private Heap(Structure theRoot) {
-		this.root = theRoot;
-	}
+    private Heap(Structure theRoot) {
+        this.root = theRoot;
+    }
 
-	public SetableValue createRef(String referenceString) {
-		return null;
-	}
+    public SetableValue createRef(String referenceString) {
+        return null;
+    }
 
 }

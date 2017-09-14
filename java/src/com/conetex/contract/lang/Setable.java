@@ -5,6 +5,6 @@ import com.conetex.contract.data.valueImplement.exception.Invalid;
 
 public interface Setable<T> {
 
-	public T setTo(Structure thisObject, T value) throws Invalid;
+    public T setTo(Structure thisObject, T value) throws Invalid;
 
 }

@@ -18,38 +18,37 @@ import com.conetex.contract.lang.control.function.Function;
 
 public class BuildMain {
 
-	public static List<Complex> create(SyntaxNode r2)
-			throws ParserConfigurationException, SAXException, IOException, Invalid {
+    public static List<Complex> create(SyntaxNode r2)
+            throws ParserConfigurationException, SAXException, IOException, Invalid {
 
-		List<Complex> complexTyps = Types.createComplexTypes(r2);
-		System.out.println("Builder " + r2.getTag());
-		if (complexTyps != null) {
-			Complex complexTypeRoot = Complex.getInstance(r2.getName());
-			Structure v = complexTypeRoot.createValue(null);
-			List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
-			/*
-			 * old Value<?>[] theValues = new Value<?>[ values.size() ];
-			 * values.toArray( theValues ); v.set(theValues);
-			 */
+        List<Complex> complexTyps = Types.createComplexTypes(r2);
+        System.out.println("Builder " + r2.getTag());
+        if (complexTyps != null) {
+            Complex complexTypeRoot = Complex.getInstance(r2.getName());
+            Structure v = complexTypeRoot.createValue(null);
+            List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
+            /*
+             * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
+             * theValues ); v.set(theValues);
+             */
 
-			List<Accessible<?>> functions = Functions.createFunctions(r2, complexTypeRoot);
+            List<Accessible<?>> functions = Functions.createFunctions(r2, complexTypeRoot);
 
-			Accessible<?>[] theSteps = new Accessible<?>[functions.size()];
-			Accessible<?> main = Function.createObj(// data,
-					functions.toArray(theSteps), complexTypeRoot.getName()); // "contract4u"
-			main.getFrom(v);
-			/*
-			 * for(Accessible<?> f : functions){ if(f instanceof Function<?>){
-			 * //continue; } Object re = f.getFrom(v); if(re != null){
-			 * System.out.println("Builder function ==> " + f + " -> " +
-			 * re.toString()); } else{ System.out.println(
-			 * "Builder function ==> " + f + " -> " + re); } }
-			 * System.out.println("Builder " + r2.getNodeName());
-			 */
-		}
+            Accessible<?>[] theSteps = new Accessible<?>[functions.size()];
+            Accessible<?> main = Function.createObj(// data,
+                    functions.toArray(theSteps), complexTypeRoot.getName()); // "contract4u"
+            main.getFrom(v);
+            /*
+             * for(Accessible<?> f : functions){ if(f instanceof Function<?>){ //continue; }
+             * Object re = f.getFrom(v); if(re != null){
+             * System.out.println("Builder function ==> " + f + " -> " + re.toString()); }
+             * else{ System.out.println( "Builder function ==> " + f + " -> " + re); } }
+             * System.out.println("Builder " + r2.getNodeName());
+             */
+        }
 
-		return complexTyps;
+        return complexTyps;
 
-	}
+    }
 
 }

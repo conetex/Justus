@@ -14,100 +14,102 @@ import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Symbol;
 
 public class Values {
-	public static List<Value<?>> createValues(SyntaxNode n, Complex type, Structure data) {
-		String name = n.getTag();
-		if (type == null) {
-			System.err.println("can not recognize type of " + name);
-			return null;
-		}
+    public static List<Value<?>> createValues(SyntaxNode n, Complex type, Structure data) {
+        String name = n.getTag();
+        if (type == null) {
+            System.err.println("can not recognize type of " + name);
+            return null;
+        }
 
-		/*
-		 * old List<Value<?>> values = new LinkedList<Value<?>>();
-		 */
+        /*
+         * old List<Value<?>> values = new LinkedList<Value<?>>();
+         */
 
-		for (SyntaxNode c : n.getChildNodes()) {
+        for (SyntaxNode c : n.getChildNodes()) {
 
-			if (c.isValue()) {
-				System.out.println("createValues " + c.getTag());
-				Value<?> v = createValue(c, type, data);
-				if (v != null) {
-					/*
-					 * old values.add( v );
-					 */
-				}
-			}
-		}
+            if (c.isValue()) {
+                System.out.println("createValues " + c.getTag());
+                Value<?> v = createValue(c, type, data);
+                if (v != null) {
+                    /*
+                     * old values.add( v );
+                     */
+                }
+            }
+        }
 
-		/*
-		 * old Value<?>[] theValues = new Value<?>[ values.size() ];
-		 * values.toArray( theValues ); try { data.set(theValues); } catch
-		 * (Invalid e) { // TODO Auto-generated catch block e.printStackTrace();
-		 * }
-		 * 
-		 * 
-		 * return values;
-		 */
+        /*
+         * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
+         * theValues ); try { data.set(theValues); } catch (Invalid e) { // TODO
+         * Auto-generated catch block e.printStackTrace(); }
+         * 
+         * 
+         * return values;
+         */
 
-		// new
-		return null;
-	}
+        // new
+        return null;
+    }
 
-	public static Value<?> createValue(SyntaxNode n, Complex parentTyp, Structure parentData) {
+    public static Value<?> createValue(SyntaxNode n, Complex parentTyp, Structure parentData) {
 
-		// + " (local: " + n.getLocalName() + ")";
+        // + " (local: " + n.getLocalName() + ")";
 
-		String name = n.getTag();
+        String name = n.getTag();
 
-		if (n.isIdentifier()) {
-			name = n.getName();
-		} else if (name.equals(Symbol.FUNCTION)) {
-			name = n.getName();
-		}
+        if (n.isIdentifier()) {
+            name = n.getName();
+        }
+        else if (name.equals(Symbol.FUNCTION)) {
+            name = n.getName();
+        }
 
-		Attribute<?> id = parentTyp.getSubAttribute(name); //
-		if (id == null) {
-			System.err.println("createValue: can not identify " + name);
-			return null;
-		}
-		AbstractType<?> type = id.getType();
-		if (type.getClass() == Complex.class) {
-			Structure re = ((AttributeComplex) id).createValue(parentData);
+        Attribute<?> id = parentTyp.getSubAttribute(name); //
+        if (id == null) {
+            System.err.println("createValue: can not identify " + name);
+            return null;
+        }
+        AbstractType<?> type = id.getType();
+        if (type.getClass() == Complex.class) {
+            Structure re = ((AttributeComplex) id).createValue(parentData);
 
-			// new
-			createValues(n, (Complex) type, re);
-			try {
-				parentData.set(name, re);
-			} catch (Invalid e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            // new
+            createValues(n, (Complex) type, re);
+            try {
+                parentData.set(name, re);
+            }
+            catch (Invalid e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-			/*
-			 * old List<Value<?>> subvalues = createValues(n, (Complex) type,
-			 * re); Value<?>[] theValues = new Value<?>[ subvalues.size() ];
-			 * subvalues.toArray( theValues ); try { re.set(theValues); } catch
-			 * (Invalid e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
-			 */
+            /*
+             * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
+             * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
+             * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
+             * Auto-generated catch block e.printStackTrace(); }
+             */
 
-			return re;
-		} else {
-			String valueNode = n.getValue();
-			System.out.println("createValue " + name + " " + valueNode);
-			if (valueNode != null) {
-				Value<?> re = ((AttributePrimitive<?>) id).createValue(valueNode, parentData);
-				try {
-					parentData.set(name, re);
-				} catch (Invalid e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				return re;
-			}
-		}
+            return re;
+        }
+        else {
+            String valueNode = n.getValue();
+            System.out.println("createValue " + name + " " + valueNode);
+            if (valueNode != null) {
+                Value<?> re = ((AttributePrimitive<?>) id).createValue(valueNode, parentData);
+                try {
+                    parentData.set(name, re);
+                }
+                catch (Invalid e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return re;
+            }
+        }
 
-		return null;
+        return null;
 
-	}
+    }
 
 }
