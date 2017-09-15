@@ -1,49 +1,58 @@
-package com.conetex.contract.interpreter.build.functions;
+package com.conetex.contract.interpreter.build.functions.builder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Accessible;
 
-public abstract class Builder<T, S> {
+public abstract class Box<T, S> extends Abstract<T, S> {
 
-    private Map<String, Builder<? extends S, ?>> childBuilder = new HashMap<>();
+    private Map<String, Abstract<? extends S, ?>> childBuilder = new HashMap<>();
 
-    public void contains(String theOperationName, Builder<? extends S, ?> b) {
+    public final void contains(String theOperationName, Abstract<? extends S, ?> b) {
         this.childBuilder.put(theOperationName, b);
     }
 
-    public void contains(Builder<? extends S, ?> b) {
-        for (String s : b.builder.keySet()) {
+    public final void contains(Abstract<? extends S, ?> b) {
+        for (String s : b.keySet()) {
+        	if(this.childBuilder.containsKey(s)){
+        		System.err.println("duplicate " + s);
+        	}
             this.childBuilder.put(s, b);
         }
     }
+    
+    final Set<String> keySet(){
+    	return this.builder.keySet();
+    }    
 
-    public Accessible<? extends S> createChild(SyntaxNode n, Complex parentTyp) {
+    public final Accessible<? extends S> createChild(SyntaxNode n, Complex parentTyp) {
         String name = n.getTag();
-        Builder<? extends S, ?> s = this.childBuilder.get(name);
+        Abstract<? extends S, ?> s = this.childBuilder.get(name);
         if (s == null) {
             System.err.println("Child Operation " + name + " not found!");
             return null;
         }
+System.out.println("createChild " + name + " " + n.getName());
         return s.createThis(n, parentTyp);
     }
 
-    private Map<String, Builder<T, ?>> builder = new HashMap<>();
+    private Map<String, Abstract<T, ?>> builder = new HashMap<>();
 
-    public void means(String theOperationName, Builder<T, ?> b) {
+    public final void means(String theOperationName, Abstract<T, ?> b) {
         this.builder.put(theOperationName, b);
     }
 
-    public void means(String theOperationName) {
+    public final void means(String theOperationName) {
         this.builder.put(theOperationName, this);
     }
 
-    private Accessible<? extends T> createThis(SyntaxNode n, Complex parentTyp) {
+    final Accessible<? extends T> createThis(SyntaxNode n, Complex parentTyp) {
         String name = n.getTag();
-        Builder<T, ?> s = this.builder.get(name);
+        Abstract<T, ?> s = this.builder.get(name);
         if (s == null) {
             System.err.println("Operation " + name + " not found!");
             return null;

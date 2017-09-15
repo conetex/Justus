@@ -24,7 +24,7 @@ public class ReadXML {
 
 	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid {
 
-		FileInputStream is = new FileInputStream( "input2.xml" );
+		FileInputStream is = new FileInputStream( "input01.xml" );
 
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

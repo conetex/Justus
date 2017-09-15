@@ -14,6 +14,9 @@ public class Symbol {
 
     // assignment of data
     public static final String COPY      = "copy";
+    public static final String REFER     = "refer";
+    
+    // addressing of data
     public static final String REFERENCE = "ref";
 
     // boolean operators
@@ -40,6 +43,13 @@ public class Symbol {
     // control function
     public static final String RETURN             = "return";
     public static final String CALL               = "call";
+    
+    
+    
+    
+    
+    
+    
     public static final String CALL_FUNCTION_NAME = "name";  // "function";
     public static final String CALL_OBJECT        = "type";  // "object";
 

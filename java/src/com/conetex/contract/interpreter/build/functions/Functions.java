@@ -41,6 +41,7 @@ public class Functions {
         public abstract Accessible<?> build(Complex d);
     }
 
+    // 2tree
     public static List<Accessible<?>> createFunctions(SyntaxNode n, Complex type) {
         String name = n.getTag();
         if (type == null) {
@@ -86,6 +87,7 @@ public class Functions {
         return acc;
     }
 
+    // 2tree
     public static Accessible<?> createFunction(SyntaxNode n, Complex parentTyp// ,
                                                                               // List<FunctionBuilder>
                                                                               // functionBuilders//,
@@ -130,6 +132,7 @@ public class Functions {
 
     }
 
+    // 2tree
     public static Accessible<?> createFunctionAccessibleObj(SyntaxNode n, Complex parentTyp) {
 
         String name = n.getTag();
@@ -249,6 +252,7 @@ public class Functions {
         return null;
     }
 
+    // 2tree
     public static Accessible<? extends Number> createFunctionAccessibleNum(SyntaxNode n, Complex parentTyp) {
 
         String name = n.getTag();
@@ -305,6 +309,7 @@ public class Functions {
         return null;
     }
 
+    // 2tree
     public static Accessible<Boolean> createFunctionAccessibleBool(SyntaxNode n, Complex parentTyp) {
 
         String name = n.getTag();
