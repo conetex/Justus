@@ -179,7 +179,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     EmptyBox<Object> objRef = new EmptyBox<Object>("boolCall") {
         @Override
         public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
-            return null; //TODO implement Functions.createFunctionRefObj(n, parentTyp);
+            return Functions.createFunctionRefNum(n, parentTyp); //TODO implement Functions.createFunctionRefObj(n, parentTyp);
         }
     };
     
