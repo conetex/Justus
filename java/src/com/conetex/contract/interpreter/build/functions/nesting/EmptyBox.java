@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build.functions.builder;
+package com.conetex.contract.interpreter.build.functions.nesting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,10 @@ import com.conetex.contract.lang.Accessible;
 public abstract class EmptyBox<T> extends Abstract<T, Object> {
 
     private Map<String, EmptyBox<T>> builder = new HashMap<>();
+
+    public EmptyBox(String name) {
+        super(name);
+    }
 
     public final void means(String theOperationName, EmptyBox<T> b) {
         this.builder.put(theOperationName, b);

@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build.functions.builder;
+package com.conetex.contract.interpreter.build.functions.nesting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,10 @@ public abstract class Box<T, S> extends Abstract<T, S> {
 
     private Map<String, Abstract<? extends S, ?>> childBuilder = new HashMap<>();
 
+    public Box(String name) {
+        super(name);
+    }
+
     public final void contains(String theOperationName, Abstract<? extends S, ?> b) {
         this.childBuilder.put(theOperationName, b);
     }
@@ -19,7 +23,7 @@ public abstract class Box<T, S> extends Abstract<T, S> {
     public final void contains(Abstract<? extends S, ?> b) {
         for (String s : b.keySet()) {
         	if(this.childBuilder.containsKey(s)){
-        		System.err.println("duplicate " + s);
+        		System.err.println("duplicate inner operation '" + s + "' in " + this.getName());
         	}
             this.childBuilder.put(s, b);
         }
@@ -33,7 +37,7 @@ public abstract class Box<T, S> extends Abstract<T, S> {
         String name = n.getTag();
         Abstract<? extends S, ?> s = this.childBuilder.get(name);
         if (s == null) {
-            System.err.println("Child Operation " + name + " not found!");
+            System.err.println("inner Operation '" + name + "' not found in " + this.getName());
             return null;
         }
 System.out.println("createChild " + name + " " + n.getName());

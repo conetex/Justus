@@ -11,8 +11,8 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.interpreter.SyntaxNode;
-import com.conetex.contract.interpreter.build.functions.builder.Box;
-import com.conetex.contract.interpreter.build.functions.builder.EmptyBox;
+import com.conetex.contract.interpreter.build.functions.nesting.Box;
+import com.conetex.contract.interpreter.build.functions.nesting.EmptyBox;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
@@ -29,7 +29,7 @@ import com.conetex.contract.lang.math.ElementaryArithmetic;
 
 public class Factory {
 
-	Box<?, Object> complex = new Box<Object, Object>() {
+	Box<?, Object> complex = new Box<Object, Object>("complex") {
         @Override
         public Accessible<?> create(SyntaxNode n, Complex type) {
         	
@@ -58,13 +58,13 @@ public class Factory {
         }
 	};
 	
-    Box<?, Object> objFunction = new Box<Object, Object>() {
+    Box<?, Object> objFunction = new Box<Object, Object>("objFunction") {
         @Override
         public Accessible<?> create(SyntaxNode n, Complex type) {
         	
             String name = n.getTag();
             if (type == null) {
-                System.err.println("can not recognize type of " + name + " " + n.getName());
+               System.err.println("can not recognize type of " + name + " " + n.getName());
                 return null;
             }
 System.out.println("createFunction " + name + " " + n.getName());
@@ -90,21 +90,21 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     };	
     
     
-    Box<Number, ?> numberFunction = new Box<Number, Object>() {
+    Box<Number, ?> numberFunction = new Box<Number, Object>("numberFunction") {
 		@Override
 		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
             return null; //TODO implement
 		}
     };
     
-    Box<Boolean, ?> boolFunction = new Box<Boolean, Object>() {
+    Box<Boolean, ?> boolFunction = new Box<Boolean, Object>("boolFunction") {
 		@Override
 		public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
             return null; //TODO implement
 		}
     };	
     
-    Box<Object, Object> objReturn = new Box<Object, Object>() {
+    Box<Object, Object> objReturn = new Box<Object, Object>("objReturn") {
         @Override
         public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
         	Accessible<? extends Object> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
@@ -112,7 +112,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };      
     
-    Box<Number, Number> numberReturn = new Box<Number, Number>() {
+    Box<Number, Number> numberReturn = new Box<Number, Number>("numberReturn") {
         @Override
         public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
         	Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
@@ -120,7 +120,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };    
     
-    Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>() {
+    Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>("boolReturn") {
         @Override
         public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
         	Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
@@ -128,7 +128,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };    
     
-    EmptyBox<Object> objCall = new EmptyBox<Object>() {
+    EmptyBox<Object> objCall = new EmptyBox<Object>("objCall") {
         @Override
         public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
             // CONTROL FUNCTION
@@ -144,7 +144,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };
     
-    EmptyBox<Number> numberCall = new EmptyBox<Number>() {
+    EmptyBox<Number> numberCall = new EmptyBox<Number>("numberCall") {
         @Override
         public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
             // CONTROL FUNCTION
@@ -160,7 +160,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };
 	
-    EmptyBox<Boolean> boolCall = new EmptyBox<Boolean>() {
+    EmptyBox<Boolean> boolCall = new EmptyBox<Boolean>("boolCall") {
         @Override
         public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
             // CONTROL FUNCTION
@@ -176,28 +176,28 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };
     
-    EmptyBox<Object> objRef = new EmptyBox<Object>() {
+    EmptyBox<Object> objRef = new EmptyBox<Object>("boolCall") {
         @Override
         public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
             return null; //TODO implement Functions.createFunctionRefObj(n, parentTyp);
         }
     };
     
-    EmptyBox<Number> numberRef = new EmptyBox<Number>() {
+    EmptyBox<Number> numberRef = new EmptyBox<Number>("numberRef") {
         @Override
         public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
             return Functions.createFunctionRefNum(n, parentTyp);
         }
     };
     
-    EmptyBox<Boolean> boolRef = new EmptyBox<Boolean>() {
+    EmptyBox<Boolean> boolRef = new EmptyBox<Boolean>("boolRef") {
         @Override
         public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
             return Functions.createFunctionRefBool(n, parentTyp);
         }
     };
 
-    Box<Object, Object> objAssigment = new Box<Object, Object>() {
+    Box<Object, Object> objAssigment = new Box<Object, Object>("objAssigment") {
         @Override
         public Accessible<?> create(SyntaxNode n, Complex parentTyp) {
         	String name = n.getTag();
@@ -261,7 +261,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };
     
-    Box<Number, Number> numberAssigment = new Box<Number, Number>() {
+    Box<Number, Number> numberAssigment = new Box<Number, Number>("numberAssigment") {
 		@Override
 		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
 			// TODO Auto-generated method stub
@@ -269,7 +269,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 		}
     };
     
-    Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>() {
+    Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>("boolAssigment") {
 		@Override
 		public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
 			// TODO Auto-generated method stub
@@ -277,14 +277,14 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 		}
     };
     
-    EmptyBox<Object> objConst = new EmptyBox<Object>() {
+    EmptyBox<Object> objConst = new EmptyBox<Object>("objConst") {
         @Override
         public Accessible<Object> create(SyntaxNode n, Complex parentTyp) {
             return null; // TODO implement
         }
     };    
     
-    EmptyBox<Number> numberConst = new EmptyBox<Number>() {
+    EmptyBox<Number> numberConst = new EmptyBox<Number>("numberConst") {
         @Override
         public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
             // VARIABLE
@@ -302,7 +302,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };
     
-    EmptyBox<Boolean> boolConst = new EmptyBox<Boolean>() {
+    EmptyBox<Boolean> boolConst = new EmptyBox<Boolean>("boolConst") {
         @Override
         public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
             // BOOL
@@ -311,7 +311,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     };
 
 
-    Box<Number, Number> numberExpession = new Box<Number, Number>() {
+    Box<Number, Number> numberExpession = new Box<Number, Number>("numberExpession") {
         @Override
         public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
             // MATH
@@ -328,7 +328,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     };
 
 
-    Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>() {
+    Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>("boolExpression") {
         @Override
         public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
             // BOOL
@@ -351,7 +351,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };
 
-    Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>() {
+    Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>("boolComparsion") {
         @Override
         public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
             // COMPARISON
@@ -376,7 +376,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 
 
 
-    Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>() {
+    Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>("boolNullCheck") {
         @Override
         public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
             // BOOL
@@ -396,6 +396,8 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     public Accessible<?> build(SyntaxNode n, Complex type) {
 
+        objRef.means(Symbol.REFERENCE);
+        
         numberRef.means(Symbol.REFERENCE);
 
         numberCall.means(Symbol.CALL);
@@ -449,22 +451,13 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         boolExpression.contains(Symbol.ISNULL, boolNullCheck);
         boolExpression.contains(boolExpression);
 
+        objCall.means(Symbol.CALL);
+        
         objAssigment.means(Symbol.COPY);
         objAssigment.means(Symbol.REFER);
         objAssigment.contains(objCall);
-        objAssigment.contains(numberCall);         // TODO: contains nur obj ?       
-        objAssigment.contains(boolCall);        // TODO: contains nur obj ?
         objAssigment.contains(objRef);
-        objAssigment.contains(numberRef);          // TODO: contains nur obj ?      
-        objAssigment.contains(boolRef);        // TODO: contains nur obj ?
         objAssigment.contains(objConst);
-        objAssigment.contains(numberConst);          // TODO: contains nur obj ?      
-        objAssigment.contains(boolConst);            // TODO: contains nur obj ?    
-        objAssigment.contains(numberExpession);        // TODO: contains nur obj ?
-        objAssigment.contains(boolExpression);        // TODO: contains nur obj ?
-        objAssigment.contains(boolComparsion);        // TODO: contains nur obj ?
-        objAssigment.contains(boolNullCheck);        // TODO: contains nur obj ?
-        objAssigment.contains(boolConst);        // TODO: contains nur obj ?
 
         numberAssigment.means(Symbol.COPY);
         numberAssigment.means(Symbol.REFER);
@@ -481,9 +474,17 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         boolAssigment.contains(boolExpression);
         boolAssigment.contains(boolComparsion);
         boolAssigment.contains(boolNullCheck);
-        boolAssigment.contains(boolConst);
         
-        numberReturn.means(Symbol.RETURN);
+        
+        
+        objReturn.means(Symbol.RETURN);
+        objReturn.contains(numberExpession);    //TODO obj meint structure! also kein num...
+        objReturn.contains(objRef);   
+        objReturn.contains(objCall);   
+        objReturn.contains(objConst);   
+        
+        numberReturn.means(Symbol.RETURN);//TODO contains
+        
         boolReturn.means(Symbol.RETURN);        
         boolReturn.contains(boolExpression);   
         boolReturn.contains(boolComparsion);   
@@ -493,28 +494,25 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         boolReturn.contains(boolNullCheck);  
         
         objFunction.means(Symbol.FUNCTION);
+        //objFunction.means("contract");// this is the main function
         objFunction.contains(numberRef);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(boolCall);
-        objFunction.contains(numberCall);
-        objFunction.contains(objCall);
+        objFunction.contains(objCall);//TODO weitere calls eigentlich nur hinter Zuweisung
         objFunction.contains(numberExpession);//TODO eigentlich nur hinter Zuweisung
         objFunction.contains(boolExpression);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(numberReturn);
-        objFunction.contains(boolReturn);
+        objFunction.contains(objReturn);
         objFunction.contains(boolComparsion);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(objAssigment);
-        objFunction.contains(numberAssigment);
-        objFunction.contains(boolAssigment);
-        // MAIN:
-        objFunction.means("contract");
+        objFunction.contains(objAssigment);//TODO weitere zuweisungen müssen möglich sein ...
+        //objFunction.contains(numberAssigment);
+        //objFunction.contains(boolAssigment);
+        
         
         complex.means("complexType");
         complex.contains(objFunction);
         complex.contains(complex);
         
-        //return objFunction.create(n, type);
-        return complex.create(n, type);
-        
+        //
+        complex.create(n, type);
+        return objFunction.create(n, type);
         
     }
 
