@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build;
+package com.conetex.contract.interpreter;
 
 import java.util.List;
 
@@ -10,11 +10,10 @@ import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Symbol;
 
 public class Values {
-    public static List<Value<?>> createValues(SyntaxNode n, Complex type, Structure data) {
+    public static List<Value<?>> createValues(CodeNode n, Complex type, Structure data) {
         String name = n.getTag();
         if (type == null) {
             System.err.println("can not recognize type of " + name);
@@ -25,7 +24,7 @@ public class Values {
          * old List<Value<?>> values = new LinkedList<Value<?>>();
          */
 
-        for (SyntaxNode c : n.getChildNodes()) {
+        for (CodeNode c : n.getChildNodes()) {
 
             if (c.isValue()) {
                 System.out.println("createValues " + c.getTag());
@@ -51,7 +50,7 @@ public class Values {
         return null;
     }
 
-    public static Value<?> createValue(SyntaxNode n, Complex parentTyp, Structure parentData) {
+    public static Value<?> createValue(CodeNode n, Complex parentTyp, Structure parentData) {
 
         // + " (local: " + n.getLocalName() + ")";
 

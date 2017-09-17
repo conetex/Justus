@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build;
+package com.conetex.contract.interpreter;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,7 +14,6 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Complex.ComplexWasInitializedExeption;
 import com.conetex.contract.data.type.Complex.DublicateComplexException;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.interpreter.SyntaxNode;
 import com.conetex.contract.lang.Symbol;
 
 public class Types {
@@ -29,18 +28,18 @@ public class Types {
     }
 
     private static interface Run {
-        public void run(SyntaxNode node, Complex parent);
+        public void run(CodeNode node, Complex parent);
     }
 
-    public static List<Complex> createComplexTypes(SyntaxNode n) {
+    public static List<Complex> createComplexTypes(CodeNode n) {
         Complex.clearInstances();
         Map<String, Complex> unformedComplexTypes = new HashMap<>();
         Set<String> referringComplexTypeNames = new TreeSet<>();
         List<Complex> re = new LinkedList<>();
 
         Recursive<Run> recursive = new Recursive<>();
-        recursive.function = (SyntaxNode node, Complex parent) -> {
-            for (SyntaxNode c : node.getChildNodes()) {
+        recursive.function = (CodeNode node, Complex parent) -> {
+            for (CodeNode c : node.getChildNodes()) {
                 if (c.isType()) {
                     Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);
                     if (complexType != null) {
@@ -87,7 +86,7 @@ public class Types {
         return re;
     }
 
-    private static Complex createComplexType(SyntaxNode n, Complex parent, Map<String, Complex> unformedComplexTypes,
+    private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes,
             Set<String> referringComplexTypeNames) {
         String typeName = n.getName();
         if (typeName == null) {
@@ -104,7 +103,7 @@ public class Types {
             System.out.println("createComplexType " + typeName);
         }
         List<Attribute<?>> identifiers = new LinkedList<>();
-        for (SyntaxNode c : n.getChildNodes()) {
+        for (CodeNode c : n.getChildNodes()) {
             String idTypeName = null;
             String idName = null;
             Attribute<?> id = null;

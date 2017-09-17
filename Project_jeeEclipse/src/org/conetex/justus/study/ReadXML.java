@@ -16,8 +16,8 @@ import org.xml.sax.SAXException;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.SyntaxNode;
-import com.conetex.contract.interpreter.build.BuildMain;
+import com.conetex.contract.interpreter.BuildMain;
+import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.lang.Symbol;
 
 public class ReadXML {
@@ -40,7 +40,7 @@ public class ReadXML {
 			short typOfNode = children.item(i).getNodeType();
 			if(typOfNode == Node.ELEMENT_NODE){
 				if(complexTyps == null){
-					SyntaxNode r2 = createSyntaxNode(r);
+					CodeNode r2 = createSyntaxNode(r);
 					complexTyps = BuildMain.create(r2);
 				}
 				else{
@@ -51,7 +51,7 @@ public class ReadXML {
 		
 	}	
 	
-	public static SyntaxNode createSyntaxNode(Node n){
+	public static CodeNode createSyntaxNode(Node n){
 		
 		short typOfNode = n.getNodeType();
 		if(typOfNode != Node.ELEMENT_NODE){	
@@ -62,22 +62,22 @@ public class ReadXML {
 		String nameAttr = ReadXMLtools.getAttribute(n, Symbol.NAME);
 		String value = ReadXMLtools.getNodeValue(n);
 		String type = ReadXMLtools.getAttribute(n, Symbol.TYPE);
-		List<SyntaxNode> children = new ArrayList<SyntaxNode>();
+		List<CodeNode> children = new ArrayList<CodeNode>();
 		
 		NodeList xmlChildren = n.getChildNodes();
 		for(int i = 0; i < xmlChildren.getLength(); i++){
 			Node c = xmlChildren.item(i);
-			SyntaxNode child = createSyntaxNode(c);
+			CodeNode child = createSyntaxNode(c);
 			if(child != null){
 				children.add(child);
 			}
 		}
 		
 		if(children.size() > 0){
-			return SyntaxNode.create(name, nameAttr, value, type, children);			
+			return CodeNode.create(name, nameAttr, value, type, children);			
 		}
 		else{
-			return SyntaxNode.create(name, nameAttr, value, type);
+			return CodeNode.create(name, nameAttr, value, type);
 		}
 		
 	}	

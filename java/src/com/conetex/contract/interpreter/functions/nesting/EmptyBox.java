@@ -1,11 +1,11 @@
-package com.conetex.contract.interpreter.build.functions.nesting;
+package com.conetex.contract.interpreter.functions.nesting;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.interpreter.SyntaxNode;
+import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.lang.Accessible;
 
 public abstract class EmptyBox<T> extends Abstract<T, Object> {
@@ -24,7 +24,7 @@ public abstract class EmptyBox<T> extends Abstract<T, Object> {
         this.builder.put(theOperationName, this);
     }
 
-    final Accessible<? extends T> createThis(SyntaxNode n, Complex parentTyp) {
+    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         EmptyBox<T> s = this.builder.get(name);
         if (s == null) {
@@ -38,6 +38,6 @@ public abstract class EmptyBox<T> extends Abstract<T, Object> {
     	return this.builder.keySet();
     }
     
-    public abstract Accessible<? extends T> create(SyntaxNode n, Complex parentTyp);
+    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp);
 
 }

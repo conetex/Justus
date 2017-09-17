@@ -6,16 +6,16 @@ import com.conetex.contract.lang.Accessible;
 //Unary operation
 public class Not extends Accessible<Boolean> {
 
-    public static Not create(Accessible<Boolean> theSub) {
+    public static Not create(Accessible<? extends Boolean> theSub) {
         if (theSub == null) {
             return null;
         }
         return new Not(theSub);
     }
 
-    private Accessible<Boolean> sub;
+    private Accessible<? extends Boolean> sub;
 
-    private Not(Accessible<Boolean> theSub) {
+    private Not(Accessible<? extends Boolean> theSub) {
         this.sub = theSub;
     }
 

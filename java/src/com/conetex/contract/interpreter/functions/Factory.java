@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build.functions;
+package com.conetex.contract.interpreter.functions;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -10,9 +10,9 @@ import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.interpreter.SyntaxNode;
-import com.conetex.contract.interpreter.build.functions.nesting.Box;
-import com.conetex.contract.interpreter.build.functions.nesting.EmptyBox;
+import com.conetex.contract.interpreter.CodeNode;
+import com.conetex.contract.interpreter.functions.nesting.Box;
+import com.conetex.contract.interpreter.functions.nesting.EmptyBox;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
@@ -31,7 +31,7 @@ public class Factory {
 
 	Box<?, Object> complex = new Box<Object, Object>("complex") {
         @Override
-        public Accessible<?> create(SyntaxNode n, Complex type) {
+        public Accessible<?> create(CodeNode n, Complex type) {
         	
             String name = n.getTag();
             if (type == null) {
@@ -39,8 +39,8 @@ public class Factory {
                 return null;
             }
 
-            List<SyntaxNode> children = n.getChildNodes();
-            for (SyntaxNode c : children) {
+            List<CodeNode> children = n.getChildNodes();
+            for (CodeNode c : children) {
                 if (c.isType()) {
                     String cname = c.getName();
                     Complex ctype = Complex.getInstance(type.getName() + "." + cname);
@@ -60,7 +60,7 @@ public class Factory {
 	
     Box<?, Object> objFunction = new Box<Object, Object>("objFunction") {
         @Override
-        public Accessible<?> create(SyntaxNode n, Complex type) {
+        public Accessible<?> create(CodeNode n, Complex type) {
         	
             String name = n.getTag();
             if (type == null) {
@@ -70,8 +70,8 @@ public class Factory {
 System.out.println("createFunction " + name + " " + n.getName());
             List<Accessible<?>> steps = new LinkedList<Accessible<?>>();
 
-            List<SyntaxNode> children = n.getChildNodes();
-            for (SyntaxNode c : children) {
+            List<CodeNode> children = n.getChildNodes();
+            for (CodeNode c : children) {
                 if (c.isBuildInFunction() && ! c.getTag().equals(Symbol.FUNCTION) ) {
 System.out.println("createBuild " + c.getTag() + " - " + c.getName());
                     //Accessible<?> v = createFunction(c, type);
@@ -92,21 +92,21 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     Box<Number, ?> numberFunction = new Box<Number, Object>("numberFunction") {
 		@Override
-		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
             return null; //TODO implement
 		}
     };
     
     Box<Boolean, ?> boolFunction = new Box<Boolean, Object>("boolFunction") {
 		@Override
-		public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
             return null; //TODO implement
 		}
     };	
     
     Box<Object, Object> objReturn = new Box<Object, Object>("objReturn") {
         @Override
-        public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
         	Accessible<? extends Object> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -114,7 +114,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     Box<Number, Number> numberReturn = new Box<Number, Number>("numberReturn") {
         @Override
-        public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
         	Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -122,7 +122,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>("boolReturn") {
         @Override
-        public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
         	Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -130,7 +130,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     EmptyBox<Object> objCall = new EmptyBox<Object>("objCall") {
         @Override
-        public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
             // CONTROL FUNCTION
             String functionObj = n.getType();//
             AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
@@ -146,7 +146,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     EmptyBox<Number> numberCall = new EmptyBox<Number>("numberCall") {
         @Override
-        public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
             // CONTROL FUNCTION
             String functionObj = n.getType();//
             AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
@@ -162,7 +162,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 	
     EmptyBox<Boolean> boolCall = new EmptyBox<Boolean>("boolCall") {
         @Override
-        public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
             // CONTROL FUNCTION
             String functionObj = n.getType();//
             AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
@@ -178,36 +178,36 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     EmptyBox<Object> objRef = new EmptyBox<Object>("boolCall") {
         @Override
-        public Accessible<? extends Object> create(SyntaxNode n, Complex parentTyp) {
-            return Functions.createFunctionRefNum(n, parentTyp); //TODO implement Functions.createFunctionRefObj(n, parentTyp);
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
+            return Functions.createFunctionRefObj(n, parentTyp); //TODO implement Functions.createFunctionRefObj(n, parentTyp);
         }
     };
     
     EmptyBox<Number> numberRef = new EmptyBox<Number>("numberRef") {
         @Override
-        public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
             return Functions.createFunctionRefNum(n, parentTyp);
         }
     };
     
     EmptyBox<Boolean> boolRef = new EmptyBox<Boolean>("boolRef") {
         @Override
-        public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
             return Functions.createFunctionRefBool(n, parentTyp);
         }
     };
 
     Box<Object, Object> objAssigment = new Box<Object, Object>("objAssigment") {
         @Override
-        public Accessible<?> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<?> create(CodeNode n, Complex parentTyp) {
         	String name = n.getTag();
         	if (name.equals("copy") || name.equals("refer")) {
-                SyntaxNode c0 = n.getChildElementByIndex(0);
+                CodeNode c0 = n.getChildElementByIndex(0);
                 System.out.println(c0.getValue());
                 // TODO geht nich
                 Attribute<?> id0 = parentTyp.getSubAttribute(c0.getValue());
 
-                SyntaxNode c1 = n.getChildElementByIndex(1);
+                CodeNode c1 = n.getChildElementByIndex(1);
                 System.out.println(c1.getValue());
                 Attribute<?> id1 = parentTyp.getSubAttribute(c1.getValue());
 
@@ -263,7 +263,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     Box<Number, Number> numberAssigment = new Box<Number, Number>("numberAssigment") {
 		@Override
-		public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -271,7 +271,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>("boolAssigment") {
 		@Override
-		public Accessible<? extends Boolean> create(SyntaxNode n, Complex parentTyp) {
+		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -279,14 +279,14 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     EmptyBox<Object> objConst = new EmptyBox<Object>("objConst") {
         @Override
-        public Accessible<Object> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<Object> create(CodeNode n, Complex parentTyp) {
             return null; // TODO implement
         }
     };    
     
     EmptyBox<Number> numberConst = new EmptyBox<Number>("numberConst") {
         @Override
-        public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
             // VARIABLE
             String name = n.getTag();
             if (name.equals(Symbol.BINT)) {
@@ -304,7 +304,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
     
     EmptyBox<Boolean> boolConst = new EmptyBox<Boolean>("boolConst") {
         @Override
-        public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
             // BOOL
             return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
         }
@@ -313,7 +313,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 
     Box<Number, Number> numberExpession = new Box<Number, Number>("numberExpession") {
         @Override
-        public Accessible<? extends Number> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
             // MATH
             String name = n.getTag();
             Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
@@ -330,7 +330,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 
     Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>("boolExpression") {
         @Override
-        public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
             // BOOL
             String name = n.getTag();
             if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
@@ -341,8 +341,8 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
                 }
             }
             else if (name.equals(Symbol.NOT)) {
-                Accessible<Boolean> sub = Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0),
-                        parentTyp);
+                //Accessible<Boolean> sub = Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
+                Accessible<? extends Boolean> sub = this.createChild(n.getChildElementByIndex(0), parentTyp);
                 if (sub != null) {
                     return Not.create(sub);
                 }
@@ -353,7 +353,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 
     Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>("boolComparsion") {
         @Override
-        public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
             // COMPARISON
             String name = n.getTag();
             if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
@@ -378,7 +378,7 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
 
     Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>("boolNullCheck") {
         @Override
-        public Accessible<Boolean> create(SyntaxNode n, Complex parentTyp) {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
             // BOOL
             String name = n.getTag();
             if (name.equals(Symbol.ISNULL)) {
@@ -389,12 +389,12 @@ System.out.println("createBuild " + c.getTag() + " - " + c.getName());
         }
     };    
     
-    public static Accessible<?> sbuild(SyntaxNode n, Complex type) {
+    public static Accessible<?> sbuild(CodeNode n, Complex type) {
     	Factory x = new Factory();
     	return x.build(n, type);
     }
     
-    public Accessible<?> build(SyntaxNode n, Complex type) {
+    public Accessible<?> build(CodeNode n, Complex type) {
 
         objRef.means(Symbol.REFERENCE);
         

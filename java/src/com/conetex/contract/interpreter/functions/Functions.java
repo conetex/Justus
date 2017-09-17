@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build.functions;
+package com.conetex.contract.interpreter.functions;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
@@ -12,7 +12,7 @@ import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.interpreter.SyntaxNode;
+import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
@@ -42,7 +42,7 @@ public class Functions {
     }
 
     // 2tree
-    public static List<Accessible<?>> createFunctions(SyntaxNode n, Complex type) {
+    public static List<Accessible<?>> _createFunctions(CodeNode n, Complex type) {
         String name = n.getTag();
         if (type == null) {
             System.err.println("can not recognize type of " + name);
@@ -51,14 +51,14 @@ public class Functions {
 
         List<Accessible<?>> acc = new LinkedList<Accessible<?>>();
 
-        List<SyntaxNode> children = n.getChildNodes();
-        for (SyntaxNode c : children) {
+        List<CodeNode> children = n.getChildNodes();
+        for (CodeNode c : children) {
             // for(int i = 0; i < children.getLength(); i++){
             // Node c = children.item(i);
             if (c.isBuildInFunction()) {
 
                 System.out.println("createFunctions " + c.getTag() + " - " + c.getName());
-                Accessible<?> v = createFunction(c, type);
+                Accessible<?> v = _createFunction(c, type);
                 if (v != null) {
                     acc.add(v);
                 }
@@ -79,7 +79,7 @@ public class Functions {
                     continue;
                 }
                 else {
-                    createFunctions(c, ctype);
+                    _createFunctions(c, ctype);
                 }
             }
         }
@@ -88,7 +88,7 @@ public class Functions {
     }
 
     // 2tree
-    public static Accessible<?> createFunction(SyntaxNode n, Complex parentTyp// ,
+    public static Accessible<?> _createFunction(CodeNode n, Complex parentTyp// ,
                                                                               // List<FunctionBuilder>
                                                                               // functionBuilders//,
                                                                               // List<Value<?>>
@@ -107,7 +107,7 @@ public class Functions {
                     // createFunctionAccessible( n, parentTyp, Integer.class );// TODO
                     // mach das zu
                     // number ...
-                    createFunctionAccessibleNum(n, parentTyp);
+                    _createFunctionAccessibleNum(n, parentTyp);
             return x;
         }
         else if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR) || name.equals(Symbol.NOT)
@@ -115,16 +115,16 @@ public class Functions {
                 || name.equals(Symbol.ISNULL)) {
             Accessible<Boolean> x = // createBoolExpression( super.node );
                     // ReadXML.createAccessible( super.node, c, Boolean.class );
-                    createFunctionAccessibleBool(n, parentTyp);
+                    _createFunctionAccessibleBool(n, parentTyp);
             return x;
         }
         else if (name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY)) {
-            Accessible<?> x = createFunctionAccessibleObj(n, parentTyp);
+            Accessible<?> x = _createFunctionAccessibleObj(n, parentTyp);
             return x;
         }
         else if (name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL)) {
             Accessible<?> x = // createBoolExpression( super.node );
-                    createFunctionAccessibleObj(n, parentTyp);
+                    _createFunctionAccessibleObj(n, parentTyp);
             return x;
         }
 
@@ -133,14 +133,14 @@ public class Functions {
     }
 
     // 2tree
-    public static Accessible<?> createFunctionAccessibleObj(SyntaxNode n, Complex parentTyp) {
+    public static Accessible<?> _createFunctionAccessibleObj(CodeNode n, Complex parentTyp) {
 
         String name = n.getTag();
 
         // MATH
         if (name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES)
                 || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS)) {
-            return createFunctionAccessibleNum(n, parentTyp);
+            return _createFunctionAccessibleNum(n, parentTyp);
         }
         // VARIABLE
         else if (name.equals(Symbol.BINT)) {
@@ -154,7 +154,7 @@ public class Functions {
         }
         // CONTROL FUNCTION
         else if (name.equals(Symbol.RETURN)) {
-            Accessible<?> e = createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
+            Accessible<?> e = _createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
             return Return.create(e);
         }
         else if (name.equals(Symbol.CALL)) {
@@ -173,7 +173,7 @@ public class Functions {
             String idTypeName = n.getType();
             Complex complexType = Complex.getInstance(idTypeName);
             if (complexType != null) {
-                List<Accessible<?>> steps = createFunctions(n, complexType);
+                List<Accessible<?>> steps = _createFunctions(n, complexType);
                 Accessible<?>[] theSteps = new Accessible<?>[steps.size()];
                 // TODO hier return typ checken und Bool / Obj creator
                 // aufrufen...
@@ -185,13 +185,13 @@ public class Functions {
         // ASSIGNMENT
         else if (name.equals("copy") || name.equals("refer")) {
             // createAssignment(name, n, parentTyp);
-            SyntaxNode c0 = n.getChildElementByIndex(0);
+            CodeNode c0 = n.getChildElementByIndex(0);
             System.out.println(c0.getValue());
             Attribute<?> id0 = parentTyp.getSubAttribute(c0.getValue());// TODO
                                                                         // geht
                                                                         // nich
 
-            SyntaxNode c1 = n.getChildElementByIndex(1);
+            CodeNode c1 = n.getChildElementByIndex(1);
             System.out.println(c1.getValue());
             Attribute<?> id1 = parentTyp.getSubAttribute(c1.getValue());
 
@@ -226,7 +226,7 @@ public class Functions {
 
                 Primitive<?> pri1 = Primitive.getInstance(c1Class);
                 Class<?> baseType1 = pri1.getBaseType();
-                Accessible<?> src = createFunctionAccessibleObj(c1, parentTyp);
+                Accessible<?> src = _createFunctionAccessibleObj(c1, parentTyp);
                 if (src != null && trg != null) {
                     if (name.equals(Symbol.COPY)) {
                         return Copy.create(trg, src);// TODO dahinter liegt ein
@@ -253,15 +253,15 @@ public class Functions {
     }
 
     // 2tree
-    public static Accessible<? extends Number> createFunctionAccessibleNum(SyntaxNode n, Complex parentTyp) {
+    public static Accessible<? extends Number> _createFunctionAccessibleNum(CodeNode n, Complex parentTyp) {
 
         String name = n.getTag();
 
         // MATH
         if (name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES)
                 || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS)) {
-            Accessible<? extends Number> a = createFunctionAccessibleNum(n.getChildElementByIndex(0), parentTyp);
-            Accessible<? extends Number> b = createFunctionAccessibleNum(n.getChildElementByIndex(1), parentTyp);
+            Accessible<? extends Number> a = _createFunctionAccessibleNum(n.getChildElementByIndex(0), parentTyp);
+            Accessible<? extends Number> b = _createFunctionAccessibleNum(n.getChildElementByIndex(1), parentTyp);
             // TODO check 4 other childs! only 2 are alowed
             if (a != null && b != null) {
                 Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
@@ -310,13 +310,13 @@ public class Functions {
     }
 
     // 2tree
-    public static Accessible<Boolean> createFunctionAccessibleBool(SyntaxNode n, Complex parentTyp) {
+    public static Accessible<Boolean> _createFunctionAccessibleBool(CodeNode n, Complex parentTyp) {
 
         String name = n.getTag();
         // COMPARISON
         if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
-            Accessible<?> a = createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
-            Accessible<?> b = createFunctionAccessibleObj(n.getChildElementByIndex(1), parentTyp);
+            Accessible<?> a = _createFunctionAccessibleObj(n.getChildElementByIndex(0), parentTyp);
+            Accessible<?> b = _createFunctionAccessibleObj(n.getChildElementByIndex(1), parentTyp);
             // TODO check 4 other childs! only 2 are alowed
             if (a != null && b != null) {
                 Accessible<Boolean> re = createComparison(a, b, name);
@@ -325,14 +325,14 @@ public class Functions {
         }
         // BOOL
         else if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
-            Accessible<Boolean> a = createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
-            Accessible<Boolean> b = createFunctionAccessibleBool(n.getChildElementByIndex(1), parentTyp);
+            Accessible<Boolean> a = _createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
+            Accessible<Boolean> b = _createFunctionAccessibleBool(n.getChildElementByIndex(1), parentTyp);
             if (a != null && b != null) {
                 return Binary.create(a, b, name);
             }
         }
         else if (name.equals(Symbol.NOT)) {
-            Accessible<Boolean> sub = createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
+            Accessible<Boolean> sub = _createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
             if (sub != null) {
                 return Not.create(sub);
             }
@@ -365,7 +365,7 @@ public class Functions {
         return null;
     }
 
-    public static Accessible<?> createFunctionRefObj(SyntaxNode n, Complex parentTyp) {
+    public static Accessible<?> createFunctionRefObj(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         System.out.println("get_id from " + name + " (" + n.getValue() + ")");
         Attribute<?> id = getID(n, parentTyp);
@@ -387,7 +387,7 @@ public class Functions {
         return null;
     }
 
-    public static Accessible<Boolean> createFunctionRefBool(SyntaxNode n, Complex parentTyp) {
+    public static Accessible<Boolean> createFunctionRefBool(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         System.out.println("get_id from " + name + " (" + n.getValue() + ")");
         Attribute<?> id = getID(n, parentTyp);
@@ -412,7 +412,7 @@ public class Functions {
         return null;
     }
 
-    public static Accessible<? extends Number> createFunctionRefNum(SyntaxNode n, Complex parentTyp) {
+    public static Accessible<? extends Number> createFunctionRefNum(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         System.out.println("get_id from " + name + " (" + n.getValue() + ")");
         Attribute<?> id = getID(n, parentTyp);
@@ -460,7 +460,7 @@ public class Functions {
         return baseType;
     }
 
-    public static Attribute<?> getID(SyntaxNode n, Complex parentTyp) {
+    public static Attribute<?> getID(CodeNode n, Complex parentTyp) {
 
         String name = n.getTag();
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.conetex.contract.lang.Symbol;
 
-public class SyntaxNode {
+public class CodeNode {
 
     private String tag;
 
@@ -15,28 +15,28 @@ public class SyntaxNode {
 
     private String type;
 
-    private List<SyntaxNode> children;
+    private List<CodeNode> children;
 
-    public static SyntaxNode create(String theName, String theNameAttribute, String theValue, String theType) {
+    public static CodeNode create(String theName, String theNameAttribute, String theValue, String theType) {
         if (theName == null || theName.length() == 0) {
             return null;
         }
-        return new SyntaxNode(theName, theNameAttribute, theValue, theType, new LinkedList<SyntaxNode>());
+        return new CodeNode(theName, theNameAttribute, theValue, theType, new LinkedList<CodeNode>());
     }
 
-    public static SyntaxNode create(String theName, String theNameAttribute, String theValue, String theType,
-            List<SyntaxNode> theChildren) {
+    public static CodeNode create(String theName, String theNameAttribute, String theValue, String theType,
+            List<CodeNode> theChildren) {
         if (theName == null || theName.length() == 0) {
             return null;
         }
         if (theChildren == null || theChildren.size() == 0) {
             return null;
         }
-        return new SyntaxNode(theName, theNameAttribute, theValue, theType, theChildren);
+        return new CodeNode(theName, theNameAttribute, theValue, theType, theChildren);
     }
 
-    private SyntaxNode(String theName, String theNameAttribute, String theValue, String theType,
-            List<SyntaxNode> theChildren) {
+    private CodeNode(String theName, String theNameAttribute, String theValue, String theType,
+            List<CodeNode> theChildren) {
         this.tag = theName;
         this.name = theNameAttribute;
         this.value = theValue;
@@ -129,7 +129,7 @@ public class SyntaxNode {
         }
     }
 
-    public SyntaxNode getChildElementByIndex(int index) {
+    public CodeNode getChildElementByIndex(int index) {
         if (this.children == null) {
             return null;
         }
@@ -139,7 +139,7 @@ public class SyntaxNode {
         return null;
     }
 
-    public List<SyntaxNode> getChildNodes() {
+    public List<CodeNode> getChildNodes() {
         return this.children;
     }
 

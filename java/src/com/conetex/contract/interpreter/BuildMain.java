@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.build;
+package com.conetex.contract.interpreter;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,15 +11,14 @@ import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.SyntaxNode;
-import com.conetex.contract.interpreter.build.functions.Factory;
-import com.conetex.contract.interpreter.build.functions.Functions;
+import com.conetex.contract.interpreter.functions.Factory;
+import com.conetex.contract.interpreter.functions.Functions;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.control.function.Function;
 
 public class BuildMain {
 
-    public static List<Complex> create(SyntaxNode r2)
+    public static List<Complex> create(CodeNode r2)
             throws ParserConfigurationException, SAXException, IOException, Invalid {
 
         List<Complex> complexTyps = Types.createComplexTypes(r2);
