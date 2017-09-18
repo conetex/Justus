@@ -12,9 +12,7 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.functions.Factory;
-import com.conetex.contract.interpreter.functions.Functions;
 import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.control.function.Function;
 
 public class BuildMain {
 
@@ -29,12 +27,13 @@ public class BuildMain {
             List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
 
             /*
-            List<Accessible<?>> functions = Functions.createFunctions(r2, complexTypeRoot);
-            Accessible<?>[] theSteps = new Accessible<?>[functions.size()];
-            Accessible<?> main = Function.createObj(functions.toArray(theSteps), complexTypeRoot.getName());
-            main.getFrom(v);
-            */
-            
+             * List<Accessible<?>> functions = Functions.createFunctions(r2,
+             * complexTypeRoot); Accessible<?>[] theSteps = new
+             * Accessible<?>[functions.size()]; Accessible<?> main =
+             * Function.createObj(functions.toArray(theSteps), complexTypeRoot.getName());
+             * main.getFrom(v);
+             */
+
             Accessible<?> mainNEW = Factory.sbuild(r2, complexTypeRoot);
             mainNEW.getFrom(v);
 

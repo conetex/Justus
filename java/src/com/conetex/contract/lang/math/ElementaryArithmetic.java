@@ -49,7 +49,7 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
         }
         Class<IA> inputTypA = theA.getBaseType();
         Class<IB> inputTypB = theB.getBaseType();
-        Class<? extends Number> inputTyp = getBiggest(inputTypA, inputTypB);
+        Class<?> inputTyp = getBiggest(inputTypA, inputTypB);
         if (inputTyp == null) {
             // TODO Error unknown Typ
             return null;
@@ -74,7 +74,7 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 
     }
 
-    public static Class<? extends Number> getBiggest(Class<? extends Number> a, Class<? extends Number> b) {
+    public static Class<?> getBiggest(Class<?> a, Class<?> b) {
         Class<?>[] classes = { BigInteger.class, Long.class, Integer.class, Byte.class };
 
         for (int ai = 0; ai < classes.length; ai++) {
@@ -82,17 +82,17 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
                 for (int bi = 0; bi < classes.length; bi++) {
                     if (classes[bi] == b) {
                         if (ai < bi) {
-                            return a;
+                            return classes[ai];
                         }
                         else {
-                            return b;
+                            return classes[bi];
                         }
                     }
                 }
             }
         }
         // TODO: ERROR unknown typ
-        return a;
+        return null;
     }
 
     private int operator;

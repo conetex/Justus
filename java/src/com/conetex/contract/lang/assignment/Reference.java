@@ -2,11 +2,11 @@ package com.conetex.contract.lang.assignment;
 
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.Setable;
-import com.conetex.contract.lang.SetableValue;
+import com.conetex.contract.lang._SetableValueOLD;
 
 public class Reference<T> extends AbstractAssigment<T> {
 
-    public static <S, T> Reference<T> create(SetableValue<T> trg, Accessible<S> src) {
+    public static <S, T> Reference<T> _create(_SetableValueOLD<T> trg, Accessible<S> src) {
         if (src == null || trg == null) {
             return null;
         }
@@ -23,7 +23,7 @@ public class Reference<T> extends AbstractAssigment<T> {
         return new Reference<T>(trg, src);
     }
 
-    private Reference(Setable<T> trg, Accessible<T> src) {
+    Reference(Setable<T> trg, Accessible<T> src) {
         super(trg, src);
     }
 

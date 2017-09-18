@@ -14,11 +14,11 @@ public class Function<V> extends Accessible<V> {
     private static Map<String, Function<Boolean>> instancesBoolean = new HashMap<String, Function<Boolean>>();
 
     private static Map<String, Function<String>> instancesString = new HashMap<String, Function<String>>();
-    
+
     private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<String, Function<? extends Structure>>();
-    
+
     private static Map<String, Function<?>> instancesObject = new HashMap<String, Function<? extends Object>>();
-    
+
     public static Accessible<Boolean> getInstanceBool(String name) {
         Function<Boolean> f = instancesBoolean.get(name);
         if (f == null) {
@@ -42,7 +42,7 @@ public class Function<V> extends Accessible<V> {
         }
         return f;
     }
-    
+
     public static Accessible<? extends Object> getInstanceWhatEver(String name) {
         Function<? extends Number> fn = instancesNum.get(name);
         if (fn != null) {
@@ -150,7 +150,7 @@ public class Function<V> extends Accessible<V> {
         if (Function.instancesNum.containsKey(theName)) {
             System.err.println("duplicate function " + theName);
             return null;
-        }   
+        }
         if (Function.instancesObject.containsKey(theName)) {
             System.err.println("duplicate function " + theName);
             return null;
@@ -158,8 +158,8 @@ public class Function<V> extends Accessible<V> {
         Function<Object> re = new Function<Object>(theSteps, theName);
         Function.instancesObject.put(theName, re);
         return re;
-    }    
-    
+    }
+
     /*
      * public static <SV extends Value<?>> Function<SV> create(Structure theData,
      * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return

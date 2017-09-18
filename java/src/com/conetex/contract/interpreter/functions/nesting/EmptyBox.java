@@ -17,16 +17,16 @@ public abstract class EmptyBox<T> extends Abstract<T, Object> {
     }
 
     public final void means(String theOperationName, EmptyBox<T> b) {
-    	if(this.builder.containsKey(theOperationName)){
-    		System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
-    	} 
+        if (this.builder.containsKey(theOperationName)) {
+            System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
+        }
         this.builder.put(theOperationName, b);
     }
 
     public final void means(String theOperationName) {
         this.means(theOperationName, this);
     }
-    
+
     final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         EmptyBox<T> s = this.builder.get(name);
@@ -37,10 +37,10 @@ public abstract class EmptyBox<T> extends Abstract<T, Object> {
         return s.create(n, parentTyp);
     }
 
-    final Set<String> keySet(){
-    	return this.builder.keySet();
+    final Set<String> keySet() {
+        return this.builder.keySet();
     }
-    
+
     public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp);
 
 }

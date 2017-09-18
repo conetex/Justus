@@ -21,11 +21,11 @@ public class AccessibleValue<T> extends Accessible<T> {
         return new AccessibleValue<>(thePath, theClass);
     }
 
-    private String path;
+    protected String path;
 
-    private final Class<T> clazz;
+    protected final Class<T> clazz;
 
-    private AccessibleValue(String thePath, Class<T> theClass) {
+    protected AccessibleValue(String thePath, Class<T> theClass) {
         this.path = thePath;
         this.clazz = theClass;
     }
@@ -42,15 +42,19 @@ public class AccessibleValue<T> extends Accessible<T> {
         return value.get();
     }
 
-    /*
-     * @Override public void setTo(Structure thisObject, T newValue) throws Invalid
-     * { Value<T> value = thisObject.getValueNew(this.path, this.clazz);
-     * value.set(newValue); }
-     * 
-     * public void transSet(Structure thisObject, String newValue) throws
-     * Inconvertible, Invalid { Value<T> value = thisObject.getValueNew(this.path,
-     * this.clazz); value.setConverted(newValue); }
-     */
+    public T setTo(Structure thisObject, T newValue) throws Invalid {
+        Value<T> value = thisObject.getValueNew(this.path, this.clazz);
+        if (value == null) {
+            return null;
+        }
+        // just 4 debug:
+        // T valueOld = value.get();
+        return value.set(newValue);
+        // just 4 debug:
+        // value = thisObject.getValueNew(this.path, this.clazz);
+        // System.out.println(valueOld + " setTo " + newValue + " -> " + value.get());
+        // return newValue;
+    }
 
     @Override
     public T copyFrom(Structure thisObject) throws Invalid {

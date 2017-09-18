@@ -17,21 +17,21 @@ public abstract class Box<T, S> extends Abstract<T, S> {
     }
 
     public final void contains(String theOperationName, Abstract<? extends S, ?> b) {
-    	if(this.childBuilder.containsKey(theOperationName)){
-    		System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
-    	}
-        this.childBuilder.put(theOperationName, b);        
+        if (this.childBuilder.containsKey(theOperationName)) {
+            System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
+        }
+        this.childBuilder.put(theOperationName, b);
     }
-    
+
     public final void contains(Abstract<? extends S, ?> b) {
         for (String s : b.keySet()) {
             this.contains(s, b);
         }
     }
-    
-    final Set<String> keySet(){
-    	return this.builder.keySet();
-    }    
+
+    final Set<String> keySet() {
+        return this.builder.keySet();
+    }
 
     public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
@@ -40,23 +40,23 @@ public abstract class Box<T, S> extends Abstract<T, S> {
             System.err.println("inner Operation '" + name + "' not found in " + this.getName());
             return null;
         }
-System.out.println("createChild " + name + " " + n.getName());
+        System.out.println("createChild " + name + " " + n.getName());
         return s.createThis(n, parentTyp);
     }
 
     private Map<String, Abstract<T, ?>> builder = new HashMap<>();
 
     public final void means(String theOperationName, Abstract<T, ?> b) {
-    	if(this.builder.containsKey(theOperationName)){
-    		System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
-    	}    	
+        if (this.builder.containsKey(theOperationName)) {
+            System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
+        }
         this.builder.put(theOperationName, b);
     }
 
     public final void means(String theOperationName) {
         this.means(theOperationName, this);
     }
-    
+
     final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         Abstract<T, ?> s = this.builder.get(name);

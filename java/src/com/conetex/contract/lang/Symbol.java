@@ -13,9 +13,9 @@ public class Symbol {
     public static final String STR = "String";
 
     // assignment of data
-    public static final String COPY      = "copy";
-    public static final String REFER     = "refer";
-    
+    public static final String COPY  = "copy";
+    public static final String REFER = "refer";
+
     // addressing of data
     public static final String REFERENCE = "ref";
 
@@ -41,17 +41,11 @@ public class Symbol {
     public static final String REMAINS    = "remains";    // Remainder
 
     // control function
-    public static final String RETURN             = "return";
-    public static final String CALL               = "call";
-    
-    
-    
-    
-    
-    
-    
-    public static final String CALL_FUNCTION_NAME = "name";  // "function";
-    public static final String CALL_OBJECT        = "type";  // "object";
+    public static final String RETURN = "return";
+    public static final String CALL   = "call";
+
+    public static final String CALL_FUNCTION_NAME = "name"; // "function";
+    public static final String CALL_OBJECT        = "type"; // "object";
 
     public static final String NAME = "name";
     public static final String TYPE = "type";

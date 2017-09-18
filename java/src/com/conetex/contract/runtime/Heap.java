@@ -1,7 +1,7 @@
 package com.conetex.contract.runtime;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.SetableValue;
+import com.conetex.contract.lang._SetableValueOLD;
 
 public class Heap {
 
@@ -18,7 +18,7 @@ public class Heap {
         this.root = theRoot;
     }
 
-    public SetableValue createRef(String referenceString) {
+    public _SetableValueOLD createRef(String referenceString) {
         return null;
     }
 
