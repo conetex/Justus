@@ -26,4 +26,14 @@ public abstract class Abstract<T, S> {
 
     abstract Set<String> keySet();
 
+    public abstract void means(String theOperationName);
+    
+    public final void means(String[] theOperationNames) {
+    	for(String theOperationName : theOperationNames){
+    		this.means(theOperationName);
+    	}
+    }     
+    
+
+    
 }

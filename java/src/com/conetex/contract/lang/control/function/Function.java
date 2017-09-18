@@ -13,8 +13,12 @@ public class Function<V> extends Accessible<V> {
 
     private static Map<String, Function<Boolean>> instancesBoolean = new HashMap<String, Function<Boolean>>();
 
-    private static Map<String, Function<? extends Object>> instancesObject = new HashMap<String, Function<? extends Object>>();
-
+    private static Map<String, Function<String>> instancesString = new HashMap<String, Function<String>>();
+    
+    private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<String, Function<? extends Structure>>();
+    
+    private static Map<String, Function<?>> instancesObject = new HashMap<String, Function<? extends Object>>();
+    
     public static Accessible<Boolean> getInstanceBool(String name) {
         Function<Boolean> f = instancesBoolean.get(name);
         if (f == null) {
@@ -31,12 +35,32 @@ public class Function<V> extends Accessible<V> {
         return f;
     }
 
-    public static Accessible<? extends Object> getInstanceObject(String name) {
-        Function<? extends Object> f = instancesObject.get(name);
+    public static Accessible<? extends Structure> getInstanceStructure(String name) {
+        Function<? extends Structure> f = instancesStructure.get(name);
         if (f == null) {
             return null;
         }
         return f;
+    }
+    
+    public static Accessible<? extends Object> getInstanceWhatEver(String name) {
+        Function<? extends Number> fn = instancesNum.get(name);
+        if (fn != null) {
+            return fn;
+        }
+        Function<? extends Boolean> fb = instancesBoolean.get(name);
+        if (fb != null) {
+            return fb;
+        }
+        Function<? extends String> fs = instancesString.get(name);
+        if (fs != null) {
+            return fs;
+        }
+        Function<? extends Structure> fstruct = instancesStructure.get(name);
+        if (fstruct != null) {
+            return fstruct;
+        }
+        return null;
     }
 
     public static Accessible<?> getInstance(String name) {
@@ -80,11 +104,11 @@ public class Function<V> extends Accessible<V> {
             return null;
         }
         Function<Boolean> re = new Function<Boolean>(theSteps, theName);
-        Function.instancesObject.put(theName, re);
+        Function.instancesBoolean.put(theName, re);
         return re;
     }
 
-    public static <SV extends Object> Function<SV> createObj(Accessible<?>[] theSteps, String theName) {
+    public static <SV extends Structure> Function<SV> createStructure(Accessible<?>[] theSteps, String theName) {
         if (theSteps == null) {
             System.err.println("theSteps is null");
             return null;
@@ -93,15 +117,49 @@ public class Function<V> extends Accessible<V> {
             System.err.println("theName is null");
             return null;
         }
-        if (Function.instancesObject.containsKey(theName)) {
+        if (Function.instancesStructure.containsKey(theName)) {
             System.err.println("duplicate function " + theName);
             return null;
         }
         Function<SV> re = new Function<SV>(theSteps, theName);
-        Function.instancesObject.put(theName, re);
+        Function.instancesStructure.put(theName, re);
         return re;
     }
 
+    public static Function<Object> createWhatEver(Accessible<?>[] theSteps, String theName) {
+        if (theSteps == null) {
+            System.err.println("theSteps is null");
+            return null;
+        }
+        if (theName == null || theName.length() < 1) {
+            System.err.println("theName is null");
+            return null;
+        }
+        if (Function.instancesStructure.containsKey(theName)) {
+            System.err.println("duplicate function " + theName);
+            return null;
+        }
+        if (Function.instancesBoolean.containsKey(theName)) {
+            System.err.println("duplicate function " + theName);
+            return null;
+        }
+        if (Function.instancesString.containsKey(theName)) {
+            System.err.println("duplicate function " + theName);
+            return null;
+        }
+        if (Function.instancesNum.containsKey(theName)) {
+            System.err.println("duplicate function " + theName);
+            return null;
+        }   
+        if (Function.instancesObject.containsKey(theName)) {
+            System.err.println("duplicate function " + theName);
+            return null;
+        }
+        Function<Object> re = new Function<Object>(theSteps, theName);
+        Function.instancesObject.put(theName, re);
+        return re;
+    }    
+    
     /*
      * public static <SV extends Value<?>> Function<SV> create(Structure theData,
      * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return

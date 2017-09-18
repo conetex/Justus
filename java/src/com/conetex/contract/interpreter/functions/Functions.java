@@ -246,7 +246,7 @@ public class Functions {
         }
         // REFERENCE
         else if (name.equals(Symbol.REFERENCE)) {
-            return createFunctionRefObj(n, parentTyp);
+            return createFunctionRefStructure(n, parentTyp);
         }
 
         return null;
@@ -365,7 +365,7 @@ public class Functions {
         return null;
     }
 
-    public static Accessible<?> createFunctionRefObj(CodeNode n, Complex parentTyp) {
+    public static Accessible<Structure> createFunctionRefStructure(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         System.out.println("get_id from " + name + " (" + n.getValue() + ")");
         Attribute<?> id = getID(n, parentTyp);
@@ -377,7 +377,7 @@ public class Functions {
             }
             else {
                 String path = n.getValue();
-                AccessibleValue<?> re = AccessibleValue.create(path, baseType);
+                AccessibleValue<Structure> re = AccessibleValue.create(path, Structure.class);
                 return re;
             }
         }

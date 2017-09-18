@@ -11,6 +11,7 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.interpreter.CodeNode;
+import com.conetex.contract.interpreter.functions.nesting.Abstract;
 import com.conetex.contract.interpreter.functions.nesting.Box;
 import com.conetex.contract.interpreter.functions.nesting.EmptyBox;
 import com.conetex.contract.lang.Accessible;
@@ -29,491 +30,555 @@ import com.conetex.contract.lang.math.ElementaryArithmetic;
 
 public class Factory {
 
-	Box<?, Object> complex = new Box<Object, Object>("complex") {
-        @Override
-        public Accessible<?> create(CodeNode n, Complex type) {
-        	
-            String name = n.getTag();
-            if (type == null) {
-                System.err.println("can not recognize type of " + name);
-                return null;
-            }
+	Box<Structure, Object> complex = new Box<Structure, Object>("complex") {
+		@Override
+		public Accessible<Structure> create(CodeNode n, Complex type) {
 
-            List<CodeNode> children = n.getChildNodes();
-            for (CodeNode c : children) {
-                if (c.isType()) {
-                    String cname = c.getName();
-                    Complex ctype = Complex.getInstance(type.getName() + "." + cname);
-                    if (ctype == null) {
-                        System.err.println("createFunctions: can not identify " + type.getName() + "." + cname);
-                        continue;
-                    }
-                    else {
-                        //createFunctions(c, ctype);
-                    	this.createChild(c, ctype);
-                    }
-                }
-            }           
-            return null;
-        }
+			String name = n.getTag();
+			if (type == null) {
+				System.err.println("can not recognize type of " + name);
+				return null;
+			}
+
+			List<CodeNode> children = n.getChildNodes();
+			for (CodeNode c : children) {
+				if (c.isType()) {
+					String cname = c.getName();
+					Complex ctype = Complex.getInstance(type.getName() + "." + cname);
+					if (ctype == null) {
+						System.err.println("createFunctions: can not identify " + type.getName() + "." + cname);
+						continue;
+					} else {
+						// createFunctions(c, ctype);
+						this.createChild(c, ctype);
+					}
+				}
+			}
+			return null;
+		}
+	};
+
+	Box<Object, Object> whatEverFunction = new Box<Object, Object>("whatEverFunction") {
+		@Override
+		public Accessible<? extends Object> create(CodeNode n, Complex type) {
+			Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+			Accessible<? extends Object> main = Function.createWhatEver(theSteps, n.getName());
+			return main;
+		}
 	};
 	
-    Box<?, Object> objFunction = new Box<Object, Object>("objFunction") {
-        @Override
-        public Accessible<?> create(CodeNode n, Complex type) {
-        	
-            String name = n.getTag();
-            if (type == null) {
-               System.err.println("can not recognize type of " + name + " " + n.getName());
-                return null;
-            }
-System.out.println("createFunction " + name + " " + n.getName());
-            List<Accessible<?>> steps = new LinkedList<Accessible<?>>();
+	Box<Structure, Object> objFunction = new Box<Structure, Object>("objFunction") {
+		@Override
+		public Accessible<? extends Structure> create(CodeNode n, Complex type) {
+			Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+			Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
+			return main;
+		}
+	};
 
-            List<CodeNode> children = n.getChildNodes();
-            for (CodeNode c : children) {
-                if (c.isBuildInFunction() && ! c.getTag().equals(Symbol.FUNCTION) ) {
-System.out.println("createBuild " + c.getTag() + " - " + c.getName());
-                    //Accessible<?> v = createFunction(c, type);
-                    Accessible<?> v = this.createChild(c, type);
-                    if (v != null) {
-                    	steps.add(v);
-                    }
-                }
-            }
-        	
-        	//List<Accessible<?>> steps = Functions.createFunctions(n, parentTyp);
-            Accessible<?>[] theSteps = new Accessible<?>[steps.size()];
-            Accessible<?> main = Function.createObj(steps.toArray(theSteps), n.getName());            
-            return main;
-        }
-    };	
-    
-    
-    Box<Number, ?> numberFunction = new Box<Number, Object>("numberFunction") {
+	Box<Number, Object> numberFunction = new Box<Number, Object>("numberFunction") {
 		@Override
-		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
-            return null; //TODO implement
+		public Accessible<? extends Number> create(CodeNode n, Complex type) {
+			Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+			Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
+			return main;
 		}
-    };
-    
-    Box<Boolean, ?> boolFunction = new Box<Boolean, Object>("boolFunction") {
+	};
+
+	Box<Boolean, Object> boolFunction = new Box<Boolean, Object>("boolFunction") {
 		@Override
-		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
-            return null; //TODO implement
+		public Accessible<? extends Boolean> create(CodeNode n, Complex type) {
+			Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+			Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
+			return main;
 		}
-    };	
-    
-    Box<Object, Object> objReturn = new Box<Object, Object>("objReturn") {
-        @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
-        	Accessible<? extends Object> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-            return Return.create(a);
-        }
-    };      
-    
-    Box<Number, Number> numberReturn = new Box<Number, Number>("numberReturn") {
-        @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
-        	Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-            return Return.create(a);
-        }
-    };    
-    
-    Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>("boolReturn") {
-        @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
-        	Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-            return Return.create(a);
-        }
-    };    
-    
-    EmptyBox<Object> objCall = new EmptyBox<Object>("objCall") {
-        @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
-            // CONTROL FUNCTION
-            String functionObj = n.getType();//
-            AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
-            // TODO wozu das hier? müsste das nicht von createValue angelegt
-            // worden sein?
-            // TODO Exception FunktionsDaten nicht da...
-            String functionName = n.getName();
-            Accessible<? extends Object> e = Function.getInstanceObject(functionName);
-            // TODO Exception Funktion nicht da...
-            return e; // TODO implement: Call.create(e, re);
-        }
-    };
-    
-    EmptyBox<Number> numberCall = new EmptyBox<Number>("numberCall") {
-        @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
-            // CONTROL FUNCTION
-            String functionObj = n.getType();//
-            AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
-            // TODO wozu das hier? müsste das nicht von createValue angelegt
-            // worden sein?
-            // TODO Exception FunktionsDaten nicht da...
-            String functionName = n.getName();
-            Accessible<? extends Number> e = Function.getInstanceNum(functionName);
-            // TODO Exception Funktion nicht da...
-            return Call.create(e, re);
-        }
-    };
+	};
+
+	Box<Object, Object> whatEverReturn = new Box<Object, Object>("whatEverReturn") {
+		@Override
+		public Accessible<?> create(CodeNode n, Complex parentTyp) {
+			Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+			return Return.create(a);
+		}
+	};
 	
-    EmptyBox<Boolean> boolCall = new EmptyBox<Boolean>("boolCall") {
-        @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
-            // CONTROL FUNCTION
-            String functionObj = n.getType();//
-            AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
-            // TODO wozu das hier? müsste das nicht von createValue angelegt
-            // worden sein?
-            // TODO Exception FunktionsDaten nicht da...
-            String functionName = n.getName();
-            Accessible<Boolean> e = Function.getInstanceBool(functionName);
-            // TODO Exception Funktion nicht da...
-            return Call.create(e, re);
-        }
-    };
-    
-    EmptyBox<Object> objRef = new EmptyBox<Object>("boolCall") {
-        @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
-            return Functions.createFunctionRefObj(n, parentTyp); //TODO implement Functions.createFunctionRefObj(n, parentTyp);
-        }
-    };
-    
-    EmptyBox<Number> numberRef = new EmptyBox<Number>("numberRef") {
-        @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
-            return Functions.createFunctionRefNum(n, parentTyp);
-        }
-    };
-    
-    EmptyBox<Boolean> boolRef = new EmptyBox<Boolean>("boolRef") {
-        @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
-            return Functions.createFunctionRefBool(n, parentTyp);
-        }
-    };
+	Box<Structure, Structure> objReturn = new Box<Structure, Structure>("objReturn") {
+		@Override
+		public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) {
+			Accessible<? extends Structure> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+			return Return.create(a);
+		}
+	};
 
-    Box<Object, Object> objAssigment = new Box<Object, Object>("objAssigment") {
-        @Override
-        public Accessible<?> create(CodeNode n, Complex parentTyp) {
-        	String name = n.getTag();
-        	if (name.equals("copy") || name.equals("refer")) {
-                CodeNode c0 = n.getChildElementByIndex(0);
-                System.out.println(c0.getValue());
-                // TODO geht nich
-                Attribute<?> id0 = parentTyp.getSubAttribute(c0.getValue());
+	Box<Number, Number> numberReturn = new Box<Number, Number>("numberReturn") {
+		@Override
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
+			Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+			return Return.create(a);
+		}
+	};
 
-                CodeNode c1 = n.getChildElementByIndex(1);
-                System.out.println(c1.getValue());
-                Attribute<?> id1 = parentTyp.getSubAttribute(c1.getValue());
+	Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>("boolReturn") {
+		@Override
+		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
+			Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+			return Return.create(a);
+		}
+	};
 
-                String c0DataType = c0.getType();
-                if (c0DataType != null) {
-                    // TODO nicht nötig das auszulesen! Sollte aber ne Warnung
-                    Class<?> c0ClassX = Primitive.getClass(c0DataType);
-                }
+	EmptyBox<Object> whatEverCall = new EmptyBox<Object>("whatEverCall") {
+		@Override
+		public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
+			// CONTROL FUNCTION
+			String functionObj = n.getType();//
+			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
+			// TODO Exception FunktionsDaten nicht da...
+			String functionName = n.getName();
+			Accessible<? extends Object> e = Function.getInstanceWhatEver(functionName);
+			// TODO Exception Funktion nicht da...
+			return Call.create(e, re);
+		}
+	};
 
-                // TODO: der teil hier könnte ausgelagert werden nach
-                // AbstractAssigment
+	EmptyBox<Structure> objCall = new EmptyBox<Structure>("objCall") {
+		@Override
+		public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) {
+			// CONTROL FUNCTION
+			String functionObj = n.getType();//
+			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
+			// TODO Exception FunktionsDaten nicht da...
+			String functionName = n.getName();
+			Accessible<? extends Structure> e = Function.getInstanceStructure(functionName);
+			// TODO Exception Funktion nicht da...
+			return Call.create(e, re);
+		}
+	};
 
-                Class<? extends Value<?>> c0Class = null;
-                if (id0 != null) {
-                    AbstractType<?> t = id0.getType();
-                    c0Class = t.getClazz();
-                }
-                Class<? extends Value<?>> c1Class = null;
-                if (id1 != null) {
-                    AbstractType<?> t = id1.getType();
-                    c1Class = t.getClazz();
-                }
+	EmptyBox<Number> numberCall = new EmptyBox<Number>("numberCall") {
+		@Override
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
+			// CONTROL FUNCTION
+			String functionObj = n.getType();//
+			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
+			// TODO Exception FunktionsDaten nicht da...
+			String functionName = n.getName();
+			Accessible<? extends Number> e = Function.getInstanceNum(functionName);
+			// TODO Exception Funktion nicht da...
+			return Call.create(e, re);
+		}
+	};
 
-                // TODO hier reicht eigentlich gleicher base-typ !!!
-                if (c0Class != null && c1Class != null && c0Class == c1Class) {
-                    String path0 = c0.getValue();
-                    SetableValue<?> trg = SetableValue.create(path0, c0Class);
+	EmptyBox<Boolean> boolCall = new EmptyBox<Boolean>("boolCall") {
+		@Override
+		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
+			// CONTROL FUNCTION
+			String functionObj = n.getType();//
+			AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
+			// TODO wozu das hier? müsste das nicht von createValue angelegt
+			// worden sein?
+			// TODO Exception FunktionsDaten nicht da...
+			String functionName = n.getName();
+			Accessible<Boolean> e = Function.getInstanceBool(functionName);
+			// TODO Exception Funktion nicht da...
+			return Call.create(e, re);
+		}
+	};
 
-                    Primitive<?> pri1 = Primitive.getInstance(c1Class);
-                    Class<?> baseType1 = pri1.getBaseType();
-                    //Accessible<?> src = createFunctionAccessibleObj(c1, parentTyp);
-                    Accessible<?> src = this.createChild(c1, parentTyp);
-                    if (src != null && trg != null) {
-                        if (name.equals(Symbol.COPY)) {
-                            return Copy.create(trg, src);// TODO dahinter liegt ein
-                                                         // Cast! das geht
-                                                         // schöner...
-                        }
-                        if (name.equals(Symbol.REFER)) {
-                            return Reference.create(trg, src);
-                        }
-                    }
-                    return null;
-                }
-                else {
-                    // TODO: classes do not match
-                    return null;
-                }
-            }
+	EmptyBox<Structure> whatEverRef = new EmptyBox<Structure>("whatEverRef") {
+		@Override
+		public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) {
+			return Functions.createFunctionRefStructure(n, parentTyp); // TODO
+																		// implement
+																		// Functions.createFunctionRefObj(n,
+																		// parentTyp);
+		}
+	};
+	
+	EmptyBox<Structure> objRef = new EmptyBox<Structure>("objRef") {
+		@Override
+		public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) {
+			return Functions.createFunctionRefStructure(n, parentTyp); // TODO
+																		// implement
+																		// Functions.createFunctionRefObj(n,
+																		// parentTyp);
+		}
+	};
+
+	EmptyBox<Number> numberRef = new EmptyBox<Number>("numberRef") {
+		@Override
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
+			return Functions.createFunctionRefNum(n, parentTyp);
+		}
+	};
+
+	EmptyBox<Boolean> boolRef = new EmptyBox<Boolean>("boolRef") {
+		@Override
+		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
+			return Functions.createFunctionRefBool(n, parentTyp);
+		}
+	};
+
+	Box<Object, Object> objAssigment = new Box<Object, Object>("objAssigment") {
+		@Override
+		public Accessible<?> create(CodeNode n, Complex parentTyp) {
+			String name = n.getTag();
+			if (name.equals("copy") || name.equals("refer")) {
+				CodeNode c0 = n.getChildElementByIndex(0);
+				System.out.println(c0.getValue());
+				// TODO geht nich
+				Attribute<?> id0 = parentTyp.getSubAttribute(c0.getValue());
+
+				CodeNode c1 = n.getChildElementByIndex(1);
+				System.out.println(c1.getValue());
+				Attribute<?> id1 = parentTyp.getSubAttribute(c1.getValue());
+
+				String c0DataType = c0.getType();
+				if (c0DataType != null) {
+					// TODO nicht nötig das auszulesen! Sollte aber ne Warnung
+					Class<?> c0ClassX = Primitive.getClass(c0DataType);
+				}
+
+				// TODO: der teil hier könnte ausgelagert werden nach
+				// AbstractAssigment
+
+				Class<? extends Value<?>> c0Class = null;
+				if (id0 != null) {
+					AbstractType<?> t = id0.getType();
+					c0Class = t.getClazz();
+				}
+				Class<? extends Value<?>> c1Class = null;
+				if (id1 != null) {
+					AbstractType<?> t = id1.getType();
+					c1Class = t.getClazz();
+				}
+
+				// TODO hier reicht eigentlich gleicher base-typ !!!
+				if (c0Class != null && c1Class != null && c0Class == c1Class) {
+					String path0 = c0.getValue();
+					SetableValue<?> trg = SetableValue.create(path0, c0Class);
+
+					Primitive<?> pri1 = Primitive.getInstance(c1Class);
+					Class<?> baseType1 = pri1.getBaseType();
+					// Accessible<?> src = createFunctionAccessibleObj(c1,
+					// parentTyp);
+					Accessible<?> src = this.createChild(c1, parentTyp);
+					if (src != null && trg != null) {
+						if (name.equals(Symbol.COPY)) {
+							return Copy.create(trg, src);// TODO dahinter liegt
+															// ein
+															// Cast! das geht
+															// schöner...
+						}
+						if (name.equals(Symbol.REFER)) {
+							return Reference.create(trg, src);
+						}
+					}
+					return null;
+				} else {
+					// TODO: classes do not match
+					return null;
+				}
+			}
 			return null;
-        }
-    };
-    
-    Box<Number, Number> numberAssigment = new Box<Number, Number>("numberAssigment") {
+		}
+	};
+
+	Box<Number, Number> numberAssigment = new Box<Number, Number>("numberAssigment") {
 		@Override
 		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
 			// TODO Auto-generated method stub
 			return null;
 		}
-    };
-    
-    Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>("boolAssigment") {
+	};
+
+	Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>("boolAssigment") {
 		@Override
 		public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
 			// TODO Auto-generated method stub
 			return null;
 		}
-    };
-    
-    EmptyBox<Object> objConst = new EmptyBox<Object>("objConst") {
-        @Override
-        public Accessible<Object> create(CodeNode n, Complex parentTyp) {
-            return null; // TODO implement
-        }
-    };    
-    
-    EmptyBox<Number> numberConst = new EmptyBox<Number>("numberConst") {
-        @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
-            // VARIABLE
-            String name = n.getTag();
-            if (name.equals(Symbol.BINT)) {
-                return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
-            }
-            else if (name.equals(Symbol.INT)) {
-                return AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
-            }
-            else if (name.equals(Symbol.LNG)) {
-                return AccessibleConstant.<Long>create2(Long.class, n.getValue());
-            }
-            return null;
-        }
-    };
-    
-    EmptyBox<Boolean> boolConst = new EmptyBox<Boolean>("boolConst") {
-        @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
-            // BOOL
-            return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
-        }
-    };
+	};
+	
+	Box<Object, Object> whatEverAssigment = new Box<Object, Object>("whatEverAssigment") {
+		@Override
+		public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};	
 
+	EmptyBox<Structure> objConst = new EmptyBox<Structure>("objConst") {
+		@Override
+		public Accessible<Structure> create(CodeNode n, Complex parentTyp) {
+			return null; // TODO implement
+		}
+	};
+	
+	EmptyBox<Object> whatEverConst = new EmptyBox<Object>("whatEverConst") {
+		@Override
+		public Accessible<Object> create(CodeNode n, Complex parentTyp) {
+			return null; // TODO implement
+		}
+	};
+	
+	EmptyBox<Number> numberConst = new EmptyBox<Number>("numberConst") {
+		@Override
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
+			// VARIABLE
+			String name = n.getTag();
+			if (name.equals(Symbol.BINT)) {
+				return AccessibleConstant.<BigInteger> create2(BigInteger.class, n.getValue());
+			} else if (name.equals(Symbol.INT)) {
+				return AccessibleConstant.<Integer> create2(Integer.class, n.getValue());
+			} else if (name.equals(Symbol.LNG)) {
+				return AccessibleConstant.<Long> create2(Long.class, n.getValue());
+			}
+			return null;
+		}
+	};
 
-    Box<Number, Number> numberExpession = new Box<Number, Number>("numberExpession") {
-        @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
-            // MATH
-            String name = n.getTag();
-            Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-            Accessible<? extends Number> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
-            // TODO check 4 other childs! only 2 are alowed
-            if (a != null && b != null) {
-                Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
-                return re;
-            }
-            return null;
-        }
-    };
+	EmptyBox<Boolean> boolConst = new EmptyBox<Boolean>("boolConst") {
+		@Override
+		public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
+			// BOOL
+			return AccessibleConstant.<Boolean> create2(Boolean.class, n.getValue());
+		}
+	};
 
+	Box<Number, Number> numberExpession = new Box<Number, Number>("numberExpession") {
+		@Override
+		public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
+			// MATH
+			String name = n.getTag();
+			Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+			Accessible<? extends Number> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+			// TODO check 4 other childs! only 2 are alowed
+			if (a != null && b != null) {
+				Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
+				return re;
+			}
+			return null;
+		}
+	};
 
-    Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>("boolExpression") {
-        @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
-            // BOOL
-            String name = n.getTag();
-            if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
-                Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-                Accessible<? extends Boolean> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
-                if (a != null && b != null) {
-                    return Binary.create(a, b, name);
-                }
-            }
-            else if (name.equals(Symbol.NOT)) {
-                //Accessible<Boolean> sub = Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0), parentTyp);
-                Accessible<? extends Boolean> sub = this.createChild(n.getChildElementByIndex(0), parentTyp);
-                if (sub != null) {
-                    return Not.create(sub);
-                }
-            }
-            return null;
-        }
-    };
+	Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>("boolExpression") {
+		@Override
+		public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
+			// BOOL
+			String name = n.getTag();
+			if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
+				Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+				Accessible<? extends Boolean> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+				if (a != null && b != null) {
+					return Binary.create(a, b, name);
+				}
+			} else if (name.equals(Symbol.NOT)) {
+				// Accessible<Boolean> sub =
+				// Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0),
+				// parentTyp);
+				Accessible<? extends Boolean> sub = this.createChild(n.getChildElementByIndex(0), parentTyp);
+				if (sub != null) {
+					return Not.create(sub);
+				}
+			}
+			return null;
+		}
+	};
 
-    Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>("boolComparsion") {
-        @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
-            // COMPARISON
-            String name = n.getTag();
-            if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
-                Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-                Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
-                // TODO check 4 other childs! only 2 are alowed
-                if (a != null && b != null) {
-                    Accessible<Boolean> re = Functions.createComparison(a, b, name);
-                    return re;
-                }
-            }
-            return null;
-        }
-    };
+	Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>("boolComparsion") {
+		@Override
+		public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
+			// COMPARISON
+			String name = n.getTag();
+			if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
+				Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+				Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+				// TODO check 4 other childs! only 2 are alowed
+				if (a != null && b != null) {
+					Accessible<Boolean> re = Functions.createComparison(a, b, name);
+					return re;
+				}
+			}
+			return null;
+		}
+	};
 
+	Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>("boolNullCheck") {
+		@Override
+		public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
+			// BOOL
+			String name = n.getTag();
+			if (name.equals(Symbol.ISNULL)) {
+				// TODO
 
+			}
+			return null;
+		}
+	};
 
+	public static Accessible<?> sbuild(CodeNode n, Complex type) {
+		Factory x = new Factory();
+		return x.build(n, type);
+	}
 
+	public Accessible<?> build(CodeNode n, Complex type) {
 
+		objRef.means(Symbol.REFERENCE);
+		numberRef.means(Symbol.REFERENCE);
+		boolRef.means(Symbol.REFERENCE);
+		whatEverRef.means(Symbol.REFERENCE);
 
+		objCall.means(Symbol.CALL);
+		numberCall.means(Symbol.CALL);
+		boolCall.means(Symbol.CALL);
+		whatEverCall.means(Symbol.CALL);
 
+		numberConst.means(new String[] { Symbol.BINT, Symbol.INT, Symbol.LNG });
+		boolConst.means(Symbol.BOOL);
+		objConst.means("?"); // TODO objConst
 
-    Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>("boolNullCheck") {
-        @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) {
-            // BOOL
-            String name = n.getTag();
-            if (name.equals(Symbol.ISNULL)) {
-                // TODO
+		numberExpession.means(new String[] { Symbol.PLUS, Symbol.MINUS, Symbol.TIMES, Symbol.DIVIDED_BY, Symbol.REMAINS });
+		numberExpession.contains(numberExpession);
+		numberExpession.contains(numberConst);
+		numberExpession.contains(numberCall);
+		numberExpession.contains(numberRef);
 
-            }
-            return null;
-        }
-    };    
-    
-    public static Accessible<?> sbuild(CodeNode n, Complex type) {
-    	Factory x = new Factory();
-    	return x.build(n, type);
-    }
-    
-    public Accessible<?> build(CodeNode n, Complex type) {
+		boolComparsion.means(new String[] { Symbol.SMALLER, Symbol.GREATER, Symbol.EQUAL });
+		boolComparsion.contains(numberExpession);
+		boolComparsion.contains(numberConst);
+		boolComparsion.contains(numberCall);
+		boolComparsion.contains(numberRef);
 
-        objRef.means(Symbol.REFERENCE);
-        
-        numberRef.means(Symbol.REFERENCE);
+		boolNullCheck.means(Symbol.ISNULL);
 
-        numberCall.means(Symbol.CALL);
+		boolExpression.means(new String[] { Symbol.AND, Symbol.OR, Symbol.XOR, Symbol.NOT });
+		boolExpression.contains(boolComparsion);
+		boolExpression.contains(boolRef);
+		boolExpression.contains(boolCall);
+		boolExpression.contains(boolConst);
+		boolExpression.contains(boolNullCheck);
+		boolExpression.contains(boolExpression);
 
-        numberConst.means(Symbol.BINT);
-        numberConst.means(Symbol.INT);
-        numberConst.means(Symbol.LNG);
-        
-        numberExpession.means(Symbol.PLUS);
-        numberExpession.means(Symbol.MINUS);
-        numberExpession.means(Symbol.TIMES);
-        numberExpession.means(Symbol.DIVIDED_BY);
-        numberExpession.means(Symbol.REMAINS);
-        numberExpession.contains(numberExpession);
-        numberExpession.contains(Symbol.BINT, numberConst);
-        numberExpession.contains(Symbol.INT, numberConst);
-        numberExpession.contains(Symbol.LNG, numberConst);
-        numberExpession.contains(Symbol.CALL, numberCall);
-        numberExpession.contains(Symbol.REFERENCE, numberRef);
+		objAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
+		objAssigment.contains(objCall);
+		objAssigment.contains(objRef);
+		objAssigment.contains(objConst);
 
-        boolComparsion.means(Symbol.SMALLER);
-        boolComparsion.means(Symbol.GREATER);
-        boolComparsion.means(Symbol.EQUAL);
-        boolComparsion.contains(Symbol.PLUS, numberExpession);
-        boolComparsion.contains(Symbol.MINUS, numberExpession);
-        boolComparsion.contains(Symbol.TIMES, numberExpession);
-        boolComparsion.contains(Symbol.DIVIDED_BY, numberExpession);
-        boolComparsion.contains(Symbol.REMAINS, numberExpession);
-        boolComparsion.contains(Symbol.BINT, numberConst);
-        boolComparsion.contains(Symbol.INT, numberConst);
-        boolComparsion.contains(Symbol.LNG, numberConst);
-        boolComparsion.contains(Symbol.CALL, numberCall);
-        boolComparsion.contains(Symbol.REFERENCE, numberRef);
+		numberAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
+		numberAssigment.contains(numberCall);
+		numberAssigment.contains(numberRef);
+		numberAssigment.contains(numberConst);
+		numberAssigment.contains(numberExpession);
 
-        boolRef.means(Symbol.REFERENCE);
+		boolAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
+		boolAssigment.contains(boolCall);
+		boolAssigment.contains(boolRef);
+		boolAssigment.contains(boolConst);
+		boolAssigment.contains(boolExpression);
+		boolAssigment.contains(boolComparsion);
+		boolAssigment.contains(boolNullCheck);
 
-        boolCall.means(Symbol.CALL);
+		
+		whatEverReturn.means(Symbol.RETURN);
+		whatEverReturn.contains(whatEverCall);
+		whatEverReturn.contains(whatEverRef);
+		whatEverReturn.contains(whatEverConst);		
+		whatEverReturn.contains(numberExpession);	
+		whatEverReturn.contains(boolExpression);
+		whatEverReturn.contains(boolComparsion);
+		whatEverReturn.contains(boolNullCheck);		
+		
+		objReturn.means(Symbol.RETURN);
+		objReturn.contains(objCall);
+		objReturn.contains(objRef);
+		objReturn.contains(objConst);
+		// objReturn.contains(numberExpession); //TODO weg damit !!!
 
-        boolConst.means(Symbol.BOOL);
+		numberReturn.means(Symbol.RETURN);// TODO contains
+		numberReturn.contains(numberCall);
+		numberReturn.contains(numberRef);
+		numberReturn.contains(numberConst);
+		numberReturn.contains(numberExpession);
 
-        boolNullCheck.means(Symbol.ISNULL);
+		boolReturn.means(Symbol.RETURN);
+		boolReturn.contains(boolCall);
+		boolReturn.contains(boolRef);
+		boolReturn.contains(boolConst);
+		boolReturn.contains(boolExpression);
+		boolReturn.contains(boolComparsion);
+		boolReturn.contains(boolNullCheck);
 
-        boolExpression.means(Symbol.AND);
-        boolExpression.means(Symbol.OR);
-        boolExpression.means(Symbol.XOR);
-        boolExpression.means(Symbol.NOT);
-        boolExpression.contains(boolComparsion);
-        boolExpression.contains(Symbol.REFERENCE, boolRef);
-        boolExpression.contains(Symbol.CALL, boolCall);
-        boolExpression.contains(Symbol.BOOL, boolConst);
-        boolExpression.contains(Symbol.ISNULL, boolNullCheck);
-        boolExpression.contains(boolExpression);
+		
+		
+		whatEverFunction.means(Symbol.FUNCTION);
+		whatEverFunction.contains(whatEverAssigment);
+		whatEverFunction.contains(whatEverCall);
+		whatEverFunction.contains(whatEverReturn);
+		whatEverFunction.contains(numberExpession);// TODO eigentlich nur hinter Zuweisung
+		whatEverFunction.contains(boolExpression);// TODO eigentlich nur hinter Zuweisung
+		whatEverFunction.contains(boolComparsion);// TODO eigentlich nur hinter Zuweisung		
+		
+		objFunction.means(Symbol.FUNCTION);
+		// objFunction.means("contract");// this is the main function
+		objFunction.contains(whatEverCall);
+		objFunction.contains(numberRef);// TODO eigentlich nur hinter Zuweisung
+		objFunction.contains(numberExpession);// TODO eigentlich nur hinter Zuweisung
+		objFunction.contains(boolExpression);// TODO eigentlich nur hinter Zuweisung
+		objFunction.contains(boolComparsion);// TODO eigentlich nur hinter Zuweisung
+		objFunction.contains(whatEverAssigment);
+		objFunction.contains(objReturn);
 
-        objCall.means(Symbol.CALL);
-        
-        objAssigment.means(Symbol.COPY);
-        objAssigment.means(Symbol.REFER);
-        objAssigment.contains(objCall);
-        objAssigment.contains(objRef);
-        objAssigment.contains(objConst);
+		numberFunction.means(Symbol.FUNCTION);
+		numberFunction.contains(whatEverCall);
+		numberFunction.contains(whatEverAssigment);
+		numberFunction.contains(numberReturn);
 
-        numberAssigment.means(Symbol.COPY);
-        numberAssigment.means(Symbol.REFER);
-        numberAssigment.contains(numberCall);        
-        numberAssigment.contains(numberRef);        
-        numberAssigment.contains(numberConst);        
-        numberAssigment.contains(numberExpession);
-        
-        boolAssigment.means(Symbol.COPY);
-        boolAssigment.means(Symbol.REFER);        
-        boolAssigment.contains(boolCall);
-        boolAssigment.contains(boolRef);
-        boolAssigment.contains(boolConst);        
-        boolAssigment.contains(boolExpression);
-        boolAssigment.contains(boolComparsion);
-        boolAssigment.contains(boolNullCheck);
-        
-        
-        
-        objReturn.means(Symbol.RETURN);
-        objReturn.contains(numberExpession);    //TODO obj meint structure! also kein num...
-        objReturn.contains(objRef);   
-        objReturn.contains(objCall);   
-        objReturn.contains(objConst);   
-        
-        numberReturn.means(Symbol.RETURN);//TODO contains
-        
-        boolReturn.means(Symbol.RETURN);        
-        boolReturn.contains(boolExpression);   
-        boolReturn.contains(boolComparsion);   
-        boolReturn.contains(boolRef);   
-        boolReturn.contains(boolCall);   
-        boolReturn.contains(boolConst);   
-        boolReturn.contains(boolNullCheck);  
-        
-        objFunction.means(Symbol.FUNCTION);
-        //objFunction.means("contract");// this is the main function
-        objFunction.contains(numberRef);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(objCall);//TODO weitere calls eigentlich nur hinter Zuweisung
-        objFunction.contains(numberExpession);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(boolExpression);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(objReturn);
-        objFunction.contains(boolComparsion);//TODO eigentlich nur hinter Zuweisung
-        objFunction.contains(objAssigment);//TODO weitere zuweisungen müssen möglich sein ...
-        //objFunction.contains(numberAssigment);
-        //objFunction.contains(boolAssigment);
-        
-        
-        complex.means("complexType");
-        complex.contains(objFunction);
-        complex.contains(complex);
-        
-        //
-        complex.create(n, type);
-        return objFunction.create(n, type);
-        
-    }
+		boolFunction.means(Symbol.FUNCTION);
+		boolFunction.contains(whatEverCall);
+		boolFunction.contains(whatEverAssigment);
+		boolFunction.contains(boolReturn);
+
+		complex.means("complexType");
+		complex.contains(whatEverFunction);
+		complex.contains(complex);
+
+		//
+		complex.create(n, type);
+		return whatEverFunction.create(n, type);
+
+	}
+
+	public static Accessible<?>[] getFunctionSteps(CodeNode n, Complex type, Box box) {
+
+		String name = n.getTag();
+		if (type == null) {
+			System.err.println("can not recognize type of " + name + " " + n.getName());
+			return null;
+		}
+		System.out.println("createFunction " + name + " " + n.getName());
+		List<Accessible<?>> steps = new LinkedList<Accessible<?>>();
+
+		List<CodeNode> children = n.getChildNodes();
+		for (CodeNode c : children) {
+			if (c.isBuildInFunction() && !c.getTag().equals(Symbol.FUNCTION)) {
+				System.out.println("createBuild " + c.getTag() + " - " + c.getName());
+				// Accessible<?> v = createFunction(c, type);
+				Accessible<?> v = box.createChild(c, type);
+				if (v != null) {
+					steps.add(v);
+				}
+			}
+		}
+
+		// List<Accessible<?>> steps = Functions.createFunctions(n, parentTyp);
+		Accessible<?>[] theSteps = new Accessible<?>[steps.size()];
+		return steps.toArray(theSteps);
+	}
 
 }

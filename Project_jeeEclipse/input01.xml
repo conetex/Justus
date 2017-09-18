@@ -18,7 +18,11 @@
 		<complexType name="person">  
 			<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
 			<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		</complexType> 		      
+		</complexType> 		 
+		<function name="tuWas" type="contract4u.root.person.tuWas">  
+			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+		    <return><ref>nr</ref></return>			        
+		</function>       
 	</complexType>	
 	
 	</complexType>
@@ -29,135 +33,22 @@
 			<name>hobo</name>        
 			<mail>hobo@dida.de</mail>
 			<nr>111</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>
 		</glaeubig> 
 		<schuldne> 
 			<name>biba</name>        
 			<mail>biba@dida.de</mail>
-			<nr>222</nr>			
+			<nr>222</nr>
+			<tuWas>
+				<action>dummy</action>
+			</tuWas>			
 		</schuldne>				       
 		<betrag>1024</betrag>
 		<aktiv>true</aktiv>       
-	</instance>	
-	
-<!-- FUNCTION OK -->	
- 	<function name='foo' type="contract4u.foo"> 
-		<value name="param" type='t:Int'>11</value>
-		<times>
-		    <Integer>2</Integer>	       
-		    <Integer>9</Integer>
-	    </times>
-	    <return>
-		    <times>
-			    <ref>param</ref>	    
-			    <Integer>8</Integer>	
-		    </times>             
-	    </return>		             
-    </function>	
-		
-<!-- MATH OK -->
-    <value name="ai" type='t:Int'>3</value>
-    <value name="bi" type='t:Int'>4</value>	             
-    <plus>                                          <!--  7 -->
-      <ref>ai</ref>	             
-      <ref>bi</ref>	             
-    </plus>
+	</instance>		
 
-	<minus>                                         <!-- -4 -->
-	    <ref>ai</ref>	             
-	    <plus>
-	      <ref>ai</ref>	             
-	      <ref>bi</ref>	             
-	    </plus>              
-    </minus> 	             
-
-    <remains>                                       <!--  4 -->
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times> 	             
-      <Integer>8</Integer>	             
-    </remains> 	             
-	             
-<!--  Comparsion / IsNull OK -->
-
-    <greater> 
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times><!--  12 	  -->            
-      <Integer>9</Integer>	                        <!-- true  -->       
-    </greater> 
-        
-    <smaller> 
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times> // 12 	             
-      <Integer>9</Integer>	                        <!-- false -->     
-    </smaller>  
-	             
-    <smaller> 
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times> <!--  12 	  -->            
-      <Integer>13</Integer>	                        <!-- true  -->      
-    </smaller> 
-	               
-    <greater> 
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times> <!--  12 	  -->            
-      <Integer>13</Integer>	                        <!-- false -->     
-    </greater>
-	             
-    <greater> 
-      <Integer>13</Integer>       
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times> <!--  12 	       -->       
-    </greater>	                                    <!-- true  -->
-	             
-    <greater> 
-      <Integer>11</Integer>       
-      <times> 
-        <ref>ai</ref>	             
-        <ref>bi</ref>	             
-      </times> <!--  12 	             --> 
-    </greater>	                                    <!-- false -->           
-	             
-<!--  BOOL STUFF OK          -->
-
-    <value name="bTrue" type='t:Bool'>true</value>
-    <value name="bFalse" type='t:Bool'>false</value>
-                  
-    <and>                                           <!-- true  -->
-      <ref>bTrue</ref>	             
-	  <ref>bTrue</ref>	             
-	</and>
-	            	             
-	<and>                                           <!-- false -->
-	  <ref>bTrue</ref>	             
-	  <ref>bFalse</ref>	             
-	</and>	
-	            
-	<or>                                            <!-- true  -->
-	  <ref>bTrue</ref>	             
-	  <ref>bFalse</ref>	             
-	</or>	 
-	<and>                                           <!-- false -->
-	  <ref>bFalse</ref>	             
-	  <ref>bFalse</ref>	             
-	</and>
-	            
-	<not><and>                                      <!-- true  -->
-	  <ref>bFalse</ref>	             
-	  <or> 
-	    <ref>bTrue</ref>	             
-	    <ref>bFalse</ref>	             
-	  </or>	             
-	</and></not>	
+	<call type="instance.glaeubig" name="tuWas" />
 
 </contract>

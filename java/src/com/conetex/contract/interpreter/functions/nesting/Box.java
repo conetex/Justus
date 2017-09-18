@@ -17,15 +17,15 @@ public abstract class Box<T, S> extends Abstract<T, S> {
     }
 
     public final void contains(String theOperationName, Abstract<? extends S, ?> b) {
-        this.childBuilder.put(theOperationName, b);
+    	if(this.childBuilder.containsKey(theOperationName)){
+    		System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
+    	}
+        this.childBuilder.put(theOperationName, b);        
     }
-
+    
     public final void contains(Abstract<? extends S, ?> b) {
         for (String s : b.keySet()) {
-        	if(this.childBuilder.containsKey(s)){
-        		System.err.println("duplicate inner operation '" + s + "' in " + this.getName());
-        	}
-            this.childBuilder.put(s, b);
+            this.contains(s, b);
         }
     }
     
@@ -47,13 +47,16 @@ System.out.println("createChild " + name + " " + n.getName());
     private Map<String, Abstract<T, ?>> builder = new HashMap<>();
 
     public final void means(String theOperationName, Abstract<T, ?> b) {
+    	if(this.builder.containsKey(theOperationName)){
+    		System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
+    	}    	
         this.builder.put(theOperationName, b);
     }
 
     public final void means(String theOperationName) {
-        this.builder.put(theOperationName, this);
+        this.means(theOperationName, this);
     }
-
+    
     final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) {
         String name = n.getTag();
         Abstract<T, ?> s = this.builder.get(name);
