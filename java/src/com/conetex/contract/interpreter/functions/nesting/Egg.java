@@ -6,17 +6,19 @@ import java.util.Set;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.interpreter.CodeNode;
+import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
 import com.conetex.contract.lang.Accessible;
 
-public abstract class EmptyBox<T> extends Abstract<T, Object> {
+public abstract class Egg<T> extends Abstract<T, Object> {
 
-    private Map<String, EmptyBox<T>> builder = new HashMap<>();
+    private Map<String, Egg<T>> builder = new HashMap<>();
 
-    public EmptyBox(String name) {
+    public Egg(String name) {
         super(name);
     }
 
-    public final void means(String theOperationName, EmptyBox<T> b) {
+    public final void means(String theOperationName, Egg<T> b) {
         if (this.builder.containsKey(theOperationName)) {
             System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
         }
@@ -27,9 +29,9 @@ public abstract class EmptyBox<T> extends Abstract<T, Object> {
         this.means(theOperationName, this);
     }
 
-    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) {
+    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws FunctionNotFound, NoAccessToValue {
         String name = n.getTag();
-        EmptyBox<T> s = this.builder.get(name);
+        Egg<T> s = this.builder.get(name);
         if (s == null) {
             System.err.println("Operation " + name + " not found!");
             return null;
@@ -41,6 +43,6 @@ public abstract class EmptyBox<T> extends Abstract<T, Object> {
         return this.builder.keySet();
     }
 
-    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp);
+    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws FunctionNotFound, NoAccessToValue;
 
 }

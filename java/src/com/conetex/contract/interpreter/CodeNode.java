@@ -143,4 +143,11 @@ public class CodeNode {
         return this.children;
     }
 
+    public int getChildNodesSize() {
+        if (this.children == null) {
+            return 0;
+        }
+        return this.children.size();
+    }
+    
 }

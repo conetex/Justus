@@ -18,11 +18,14 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.BuildMain;
 import com.conetex.contract.interpreter.CodeNode;
+import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
 import com.conetex.contract.lang.Symbol;
 
 public class ReadXML {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid {
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid, UnexpectedSubOperation, FunctionNotFound, NoAccessToValue {
 
 		FileInputStream is = new FileInputStream("input2.xml");
 

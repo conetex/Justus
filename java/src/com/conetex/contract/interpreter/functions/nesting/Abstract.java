@@ -4,6 +4,12 @@ import java.util.Set;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.interpreter.CodeNode;
+import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
+import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
 import com.conetex.contract.lang.Accessible;
 
 public abstract class Abstract<T, S> {
@@ -18,9 +24,9 @@ public abstract class Abstract<T, S> {
         return name;
     }
 
-    abstract Accessible<? extends T> createThis(CodeNode n, Complex parentTyp);
+    abstract Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation;
 
-    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp);
+    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation;
 
     abstract Set<String> keySet();
 

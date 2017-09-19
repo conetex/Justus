@@ -6,6 +6,12 @@ import java.util.Set;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.interpreter.CodeNode;
+import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
+import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
 import com.conetex.contract.lang.Accessible;
 
 public abstract class Box<T, S> extends Abstract<T, S> {
@@ -33,7 +39,7 @@ public abstract class Box<T, S> extends Abstract<T, S> {
         return this.builder.keySet();
     }
 
-    public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp) {
+    public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
         String name = n.getTag();
         Abstract<? extends S, ?> s = this.childBuilder.get(name);
         if (s == null) {
@@ -57,7 +63,7 @@ public abstract class Box<T, S> extends Abstract<T, S> {
         this.means(theOperationName, this);
     }
 
-    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) {
+    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
         String name = n.getTag();
         Abstract<T, ?> s = this.builder.get(name);
         if (s == null) {
@@ -67,7 +73,7 @@ public abstract class Box<T, S> extends Abstract<T, S> {
         return s.create(n, parentTyp);
     }
 
-    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp);
+    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation;
 
     /*
      * private Map<String, Builder<?>> subBuildersObj = new HashMap<String,

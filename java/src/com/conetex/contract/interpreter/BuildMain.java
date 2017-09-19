@@ -12,12 +12,18 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.functions.Factory;
+import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
+import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
 import com.conetex.contract.lang.Accessible;
 
 public class BuildMain {
 
     public static List<Complex> create(CodeNode r2)
-            throws ParserConfigurationException, SAXException, IOException, Invalid {
+            throws ParserConfigurationException, SAXException, IOException, Invalid, UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
 
         List<Complex> complexTyps = Types.createComplexTypes(r2);
         System.out.println("Builder " + r2.getTag());
