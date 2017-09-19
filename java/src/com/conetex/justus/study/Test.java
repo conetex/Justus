@@ -5,7 +5,7 @@ public class Test {
     public static void main(String[] args) {
 
         Integer i = 10;
-        Long l = 10l;
+        Long l = 10L;
         Double d = 10.0;
 
         Number n = i;
