@@ -16,6 +16,7 @@ import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
 import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
@@ -375,7 +376,7 @@ public class Functions {
 
     Box<Object, Object> _objAssigment = new Box<Object, Object>("_objAssigment") {
         @Override
-        public Accessible<?> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<?> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             String name = n.getTag();
             if (name.equals("copy") || name.equals("refer")) {
                 CodeNode c0 = n.getChildElementByIndex(0);

@@ -10,6 +10,7 @@ import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
 import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
@@ -18,6 +19,7 @@ import com.conetex.contract.interpreter.functions.nesting.Egg;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
+import com.conetex.contract.lang.Setable;
 import com.conetex.contract.lang.SetableValue;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.assignment.Creator;
@@ -33,7 +35,7 @@ public class Factory {
 
     Box<Structure, Object> complex = new Box<Structure, Object>("complex") {
         @Override
-        public Accessible<Structure> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<Structure> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
 
             String name = n.getTag();
             if (type == null) {
@@ -62,7 +64,7 @@ public class Factory {
 
     Box<Object, Object> whatEverFunction = new Box<Object, Object>("whatEverFunction") {
         @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Object> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Object> main = Function.createWhatEver(theSteps, n.getName());
             return main;
@@ -71,7 +73,7 @@ public class Factory {
 
     Box<Structure, Object> objFunction = new Box<Structure, Object>("objFunction") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Structure> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
             return main;
@@ -80,7 +82,7 @@ public class Factory {
 
     Box<Number, Object> numberFunction = new Box<Number, Object>("numberFunction") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Number> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
             return main;
@@ -89,7 +91,7 @@ public class Factory {
 
     Box<Boolean, Object> boolFunction = new Box<Boolean, Object>("boolFunction") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
             return main;
@@ -98,7 +100,7 @@ public class Factory {
 
     Box<Object, Object> whatEverReturn = new Box<Object, Object>("whatEverReturn") {
         @Override
-        public Accessible<?> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<?> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -106,7 +108,7 @@ public class Factory {
 
     Box<Structure, Structure> objReturn = new Box<Structure, Structure>("objReturn") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<? extends Structure> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -114,7 +116,7 @@ public class Factory {
 
     Box<Number, Number> numberReturn = new Box<Number, Number>("numberReturn") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -122,7 +124,7 @@ public class Factory {
 
     Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>("boolReturn") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -224,137 +226,76 @@ public class Factory {
 
     Box<Structure, Structure> objAssigment = new Box<Structure, Structure>("objAssigment") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
         	CodeNode trgNode = n.getChildElementByIndex(0);
             SetableValue<Structure> trg = Functions.createFunctionSetableStructure(trgNode, parentTyp);
-        	if (trg == null) {
-        		throw new MissingSubOperation( "Target" );
-        	}
             CodeNode srcNode = n.getChildElementByIndex(1);
             Accessible<?> src = this.createChild(srcNode, parentTyp);
-        	if (src == null) {
-        		throw new MissingSubOperation( "Source" );
-        	}                        
-        	if(n.getChildNodesSize() > 2){
-        		CodeNode c = n.getChildElementByIndex(2);
-				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-        	};
-                Class<?> srcBaseType = src.getBaseType();
-                if (srcBaseType == Structure.class) {
-                	Complex trgComplexType = Complex.getInstance(trgNode.getType());
-                	if(trgComplexType == null){
-                		throw new UnknownComplexType( trgNode.getType() + "(" + trgNode.getTag() + " - " + trgNode.getName() + ")" );
-                	}
-                	Complex srcComplexType = Complex.getInstance(srcNode.getType()); 
-                	if(srcComplexType == null){
-                		throw new UnknownComplexType( srcNode.getType() + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")" );
-                	}  
-                	if(trgComplexType != srcComplexType){
-                		throw new TypesDoNotMatch( trgNode.getType() + "(" + trgNode.getTag() + " - " + trgNode.getName() + ")", 
-                				                   srcNode.getType() + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");
-                	}
-                }
-                else {
-                    return null;
-                }
-                return Creator.createFromQualifiedTrg(trg, src, n.getTag());
+            check2PartOperations(n, trg, src);   
+        	Class<?> srcBaseType = src.getBaseType();
+       		checkAssigmentStructBaseType(trgNode, srcNode, srcBaseType);
+            return Creator.createFromQualifiedTrg(trg, src, n.getTag());        		
         }
     };
 
     Box<Number, Number> numberAssigment = new Box<Number, Number>("numberAssigment") {
+
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
         	CodeNode trgNode = n.getChildElementByIndex(0);
         	SetableValue<Number> trg = Functions.createFunctionSetableNumber(trgNode, parentTyp);
-        	if (trg == null) {
-        		throw new MissingSubOperation( "Target" );
-        	}
         	CodeNode srcNode = n.getChildElementByIndex(1);
             Accessible<?> src = this.createChild(srcNode, parentTyp);
-        	if (src == null) {
-        		throw new MissingSubOperation( "Source" );
-        	}            
-        	if(n.getChildNodesSize() > 2){
-        		CodeNode c = n.getChildElementByIndex(2);
-				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-        	};            
-        	checkAssigmentNumBaseType(trgNode, trg, srcNode, src);
+            check2PartOperations(n, trg, src);              
+            Class<?> trgBaseType = trg.getBaseType();
+            Class<?> srcBaseType = src.getBaseType();
+            checkAssigmentNumBaseType(trgBaseType, srcBaseType, trgNode, srcNode);
             return Creator.createFromQualifiedTrg(trg, src, n.getTag());
         }
     };
     
-    private static Class<?> checkAssigmentNumBaseType(CodeNode trgNode, SetableValue<?> trg, CodeNode srcNode, Accessible<?> src) throws TypesDoNotMatch{
-        Class<?> trgBaseType = trg.getBaseType();
-        Class<?> srcBaseType = src.getBaseType();
-        Class<?> baseType;
-        if (trgBaseType == srcBaseType) {
-            baseType = trgBaseType;
-        }
-        else {
-            baseType = ElementaryArithmetic.getBiggest(trgBaseType, srcBaseType);
-            if (baseType == srcBaseType) {
-                // src is bigger than trg
-           		throw new TypesDoNotMatch( trgBaseType + "(" + trgNode.getTag() + " - " + trgNode.getName() + ") > " +
-           				                   srcBaseType + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");
-            }
-        }
-        return baseType;
-    }
-
+    
     Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>("boolAssigment") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
         	CodeNode trgNode = n.getChildElementByIndex(0);
         	SetableValue<Boolean> trg = Functions.createFunctionSetableBoolean(trgNode, parentTyp);
-        	if (trg == null) {
-        		throw new MissingSubOperation( "Target" );
-        	}
         	CodeNode srcNode = n.getChildElementByIndex(1);
         	Accessible<?> src = this.createChild(srcNode, parentTyp);
-        	if (src == null) {
-        		throw new MissingSubOperation( "Source" );
-        	}            
-        	if(n.getChildNodesSize() > 2){
-        		CodeNode c = n.getChildElementByIndex(2);
-				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-        	};            
-                Class<?> srcBaseType = src.getBaseType();
-                if (srcBaseType != Boolean.class) {
-               		throw new TypesDoNotMatch( srcBaseType + "(" + srcNode.getTag() + " - " + srcNode.getName() + ") is not Boolean");
-                }
-                return Creator.createFromQualifiedTrg(trg, src, n.getTag());
+        	check2PartOperations(n, trg, src);   
+        	checkAssigmentBoolBaseType(srcNode, src);
+            return Creator.createFromQualifiedTrg(trg, src, n.getTag());
         }
     };
 
     Box<Object, Object> whatEverAssigment = new Box<Object, Object>("whatEverAssigment") {
         @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
-            SetableValue<?> trg = Functions.createFunctionSetableWhatEver(n.getChildElementByIndex(0), parentTyp);
-        	if (trg == null) {
-        		throw new MissingSubOperation( "Target" );
-        	}
-            Accessible<?> src = this.createChild(n.getChildElementByIndex(1), parentTyp);
-        	if (src == null) {
-        		throw new MissingSubOperation( "Source" );
-        	}                        
-        	if(n.getChildNodesSize() > 2){
-        		CodeNode c = n.getChildElementByIndex(2);
-				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-        	};            
-                Class<?> trgBaseType = trg.getBaseType();
-                Class<?> srcBaseType = src.getBaseType();
-                Class<?> baseType;
-                if (trgBaseType == srcBaseType) {
-                    baseType = trgBaseType;
-                }
-                else {
-                    baseType = ElementaryArithmetic.getBiggest(trgBaseType, srcBaseType);
-                    if (baseType == srcBaseType) {
-                        // src is bigger than trg
-                        return null;
-                    }
-                }
-                return Creator.createFromUnqualified(trg, src, baseType, n.getTag());
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        	CodeNode trgNode = n.getChildElementByIndex(0);
+        	SetableValue<?> trg = Functions.createFunctionSetableWhatEver(trgNode, parentTyp);
+        	CodeNode srcNode = n.getChildElementByIndex(1);
+            Accessible<?> src = this.createChild(srcNode, parentTyp);
+
+            check2PartOperations(n, trg, src);            
+        	
+            Class<?> trgBaseType = trg.getBaseType();
+            Class<?> srcBaseType = src.getBaseType();
+            if( Number.class.isAssignableFrom(trgBaseType) ){
+            	// NUM
+                checkAssigmentNumBaseType(trgBaseType, srcBaseType, trgNode, srcNode);
+                return Creator.createFromUnqualified(trg, src, trgBaseType, n.getTag());
+            }
+            else if (trgBaseType == Boolean.class) {
+            	checkAssigmentBoolBaseType(srcNode, src);
+            	return Creator.createFromUnqualified(trg, src, Boolean.class, n.getTag());		
+            }                
+            else if (trgBaseType == Structure.class) {
+            	checkAssigmentStructBaseType(trgNode, srcNode, srcBaseType);
+            	return Creator.createFromUnqualified(trg, src, Structure.class, n.getTag());
+            }
+            else{
+            	throw new TypeNotDeterminated("target-Type: " + trgBaseType + ", source-Type: " + srcBaseType);
+            }
         }
     };
 
@@ -368,7 +309,7 @@ public class Factory {
 
     Egg<Object> whatEverConst = new Egg<Object>("whatEverConst") {
         @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) {
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws TypeNotDeterminated {
         	Accessible<? extends Number> reNu = try2CreateNumConst(n, parentTyp);
         	if(reNu != null){
         		return reNu;
@@ -380,8 +321,8 @@ public class Factory {
         	Accessible<Structure> reStructure = try2CreateStructureConst(n, parentTyp);    
         	if(reStructure != null){
         		return reStructure;
-        	}        	
-            return null; 
+        	}
+            throw new TypeNotDeterminated("const-Type: " + n.getName()); 
         }
     };
 
@@ -404,92 +345,65 @@ public class Factory {
 
     Box<Number, Number> numberExpession = new Box<Number, Number>("numberExpession") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             // MATH
             String name = n.getTag();
             Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             Accessible<? extends Number> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
-        	if(n.getChildNodesSize() > 2){
-        		CodeNode c = n.getChildElementByIndex(2);
-				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-        	};
-            if (a != null && b != null) {
-                Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
-                return re;
-            }
-            return null;
+           	check2PartOperations(n, a, b);
+            Accessible<? extends Number> re = ElementaryArithmetic.createNew(a, b, name);
+            return re;
         }
     };
 
     Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>("boolExpression") {
         @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             // BOOL
             String name = n.getTag();
-            if (name.equals(Symbol.AND) || name.equals(Symbol.OR) || name.equals(Symbol.XOR)) {
+            if (name.equals(Symbol.NOT)) {
+                Accessible<? extends Boolean> sub = this.createChild(n.getChildElementByIndex(0), parentTyp);
+                check1PartOperations(n, sub);
+                return Not.create(sub);
+            }
+            else{
                 Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
                 Accessible<? extends Boolean> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
-                if (a != null && b != null) {
-                    return Binary.create(a, b, name);
-                }
+                check2PartOperations(n, a, b);
+                return Binary.create(a, b, name);         	
             }
-            else if (name.equals(Symbol.NOT)) {
-                // Accessible<Boolean> sub =
-                // Functions.createFunctionAccessibleBool(n.getChildElementByIndex(0),
-                // parentTyp);
-                Accessible<? extends Boolean> sub = this.createChild(n.getChildElementByIndex(0), parentTyp);
-                if (sub != null) {
-                    return Not.create(sub);
-                }
-            }
-            return null;
         }
     };
 
     Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>("boolComparsion") {
         @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
             // COMPARISON
-            String name = n.getTag();
-            if (name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL)) {
-                Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-                Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
-            	if(n.getChildNodesSize() > 2){
-            		CodeNode c = n.getChildElementByIndex(2);
-    				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-            	};
-                if (a != null && b != null) {
-                    Accessible<Boolean> re = Functions.createComparison(a, b, name);
-                    return re;
-                }
-            }
-            return null;
+            Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+            Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
+            check2PartOperations(n, a, b);
+            return Functions.createComparison(a, b, n.getTag());
         }
     };
 
     Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>("boolNullCheck") {
         @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
-            String name = n.getTag();
-            if (name.equals(Symbol.ISNULL)) {
-            	Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
-            	if(n.getChildNodesSize() > 1){
-            		CodeNode c = n.getChildElementByIndex(1);
-					throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
-            	};
-            	IsNull re = IsNull.create(a);
-            	return re;
-            }
-            return null;
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        	Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
+        	if(n.getChildNodesSize() > 1){
+        		CodeNode c = n.getChildElementByIndex(1);
+				throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
+        	};
+        	return IsNull.create(a);
         }
     };
 
-    public static Accessible<?> sbuild(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+    public static Accessible<?> sbuild(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
         Factory x = new Factory();
         return x.build(n, type);
     }
 
-    public Accessible<?> build(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+    public Accessible<?> build(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
 
         objRef.means(Symbol.REFERENCE);
         numberRef.means(Symbol.REFERENCE);
@@ -612,7 +526,7 @@ public class Factory {
 
     }
 
-    public static Accessible<?>[] getFunctionSteps(CodeNode n, Complex type, Box box) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation {
+    public static Accessible<?>[] getFunctionSteps(CodeNode n, Complex type, Box box) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
 
         String name = n.getTag();
         if (type == null) {
@@ -668,5 +582,68 @@ public class Factory {
         }
         return null;
     }     
+
+    private static void check1PartOperations(CodeNode n, Accessible<?> a) throws MissingSubOperation, UnexpectedSubOperation{
+    	if (a == null) {
+    		throw new MissingSubOperation( "" );
+    	}
+    	if(n.getChildNodesSize() > 1){
+    		CodeNode c = n.getChildElementByIndex(1);
+			throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
+    	};    
+    }
+    
+    private static void check2PartOperations(CodeNode n, Accessible<?> trg, Accessible<?> src) throws MissingSubOperation, UnexpectedSubOperation{
+    	if (trg == null) {
+    		throw new MissingSubOperation( "" );
+    	}
+    	if (src == null) {
+    		throw new MissingSubOperation( "" );
+    	}            
+    	if(n.getChildNodesSize() > 2){
+    		CodeNode c = n.getChildElementByIndex(2);
+			throw new UnexpectedSubOperation( "Operation not allowed: " + c.getName() );
+    	};    
+    }
+    
+    private static void checkAssigmentStructBaseType(CodeNode trgNode, CodeNode srcNode, Class<?> srcBaseType) throws TypesDoNotMatch, UnknownComplexType{ 
+    	if (srcBaseType != Structure.class) {
+    		throw new TypesDoNotMatch(srcBaseType.toString(), Structure.class.toString());
+    	}
+    	
+    	Complex trgComplexType = Complex.getInstance(trgNode.getType());
+    	if(trgComplexType == null){
+    		throw new UnknownComplexType( trgNode.getType() + "(" + trgNode.getTag() + " - " + trgNode.getName() + ")" );
+    	}
+    	Complex srcComplexType = Complex.getInstance(srcNode.getType()); 
+    	if(srcComplexType == null){
+    		throw new UnknownComplexType( srcNode.getType() + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")" );
+    	}  
+    	if(trgComplexType != srcComplexType){
+    		throw new TypesDoNotMatch( trgNode.getType() + "(" + trgNode.getTag() + " - " + trgNode.getName() + ")", 
+    				                   srcNode.getType() + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");
+    	}
+    }
+    
+    private static void checkAssigmentNumBaseType(Class<?> trgBaseType, Class<?> srcBaseType, CodeNode trgNode, CodeNode srcNode ) throws TypesDoNotMatch {
+        Class<?> baseType;
+        if (trgBaseType == srcBaseType) {
+            baseType = trgBaseType;
+        }
+        else {
+            baseType = ElementaryArithmetic.getBiggest(trgBaseType, srcBaseType);
+            if (baseType == srcBaseType) {
+           		throw new TypesDoNotMatch( trgBaseType + "(" + trgNode.getTag() + " - " + trgNode.getName() + ") > " +
+                        srcBaseType + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");  
+            }
+        }
+    }
+
+    private static void checkAssigmentBoolBaseType(CodeNode srcNode, Accessible<?> src) throws TypesDoNotMatch{
+        Class<?> srcBaseType = src.getBaseType();
+        if (srcBaseType != Boolean.class) {
+       		throw new TypesDoNotMatch( srcBaseType + "(" + srcNode.getTag() + " - " + srcNode.getName() + ") is not Boolean");
+        }
+    }
     
 }
