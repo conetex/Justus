@@ -19,13 +19,17 @@ import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.BuildMain;
 import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
+import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
 import com.conetex.contract.lang.Symbol;
 
 public class ReadXML {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid, UnexpectedSubOperation, FunctionNotFound, NoAccessToValue {
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid, UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
 
 		FileInputStream is = new FileInputStream("input2.xml");
 
