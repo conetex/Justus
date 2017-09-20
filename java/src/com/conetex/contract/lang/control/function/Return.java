@@ -58,10 +58,7 @@ public class Return<V> extends Accessible<V> { // V extends Value<?>
 
     @Override
     public Class<V> getBaseType() {
-        // TODO V ist oft noch java typ. das sollte sich jetzt nach Value
-        // ändern. Hier
-        // ist es schon so: V extends Value<?>
-        return null;
+        return this.expression.getBaseType();
     }
 
 }

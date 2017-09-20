@@ -67,7 +67,7 @@ public abstract class Box<T, S> extends Abstract<T, S> {
     }
 
     final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
-        String name = n.getTag();
+        String name = n.getTag(); // TODO vielleicht so n.getType() + "=" + 
         Abstract<T, ?> s = this.builder.get(name);
         if (s == null) {
             System.err.println("Operation " + name + " not found!");

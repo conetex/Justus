@@ -17,7 +17,7 @@ public class Function<V> extends Accessible<V> {
 
     private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<String, Function<? extends Structure>>();
 
-    private static Map<String, Function<?>> instancesObject = new HashMap<String, Function<? extends Object>>();
+    private static Map<String, Function<?>> instancesVoid = new HashMap<String, Function<? extends Object>>();
 
     public static Accessible<Boolean> getInstanceBool(String name) {
         Function<Boolean> f = instancesBoolean.get(name);
@@ -43,7 +43,15 @@ public class Function<V> extends Accessible<V> {
         return f;
     }
 
-    public static Accessible<? extends Object> getInstanceWhatEver(String name) {
+    public static Accessible<? extends Object> getInstanceVoid(String name) {
+        Function<? extends Object> fn = instancesVoid.get(name);
+        if (fn != null) {
+            return fn;
+        }
+        return null;
+    }
+
+    public static Accessible<?> getInstance(String name) {
         Function<? extends Number> fn = instancesNum.get(name);
         if (fn != null) {
             return fn;
@@ -59,17 +67,12 @@ public class Function<V> extends Accessible<V> {
         Function<? extends Structure> fstruct = instancesStructure.get(name);
         if (fstruct != null) {
             return fstruct;
-        }
+        }        
+        Function<? extends Object> fvoid = instancesVoid.get(name);
+        if (fvoid != null) {
+            return fvoid;
+        } 
         return null;
-    }
-
-    public static Accessible<?> getInstance(String name) {
-        Function<?> f = instancesNum.get(name);
-        if (f == null) {
-            f = instancesBoolean.get(name);
-            ;
-        }
-        return f;
     }
 
     public static <SV extends Number> Function<SV> createNum(Accessible<?>[] theSteps, String theName) {
@@ -126,7 +129,7 @@ public class Function<V> extends Accessible<V> {
         return re;
     }
 
-    public static Function<Object> createWhatEver(Accessible<?>[] theSteps, String theName) {
+    public static Function<Object> createVoid(Accessible<?>[] theSteps, String theName) {
         if (theSteps == null) {
             System.err.println("theSteps is null");
             return null;
@@ -135,28 +138,12 @@ public class Function<V> extends Accessible<V> {
             System.err.println("theName is null");
             return null;
         }
-        if (Function.instancesStructure.containsKey(theName)) {
-            System.err.println("duplicate function " + theName);
-            return null;
-        }
-        if (Function.instancesBoolean.containsKey(theName)) {
-            System.err.println("duplicate function " + theName);
-            return null;
-        }
-        if (Function.instancesString.containsKey(theName)) {
-            System.err.println("duplicate function " + theName);
-            return null;
-        }
-        if (Function.instancesNum.containsKey(theName)) {
-            System.err.println("duplicate function " + theName);
-            return null;
-        }
-        if (Function.instancesObject.containsKey(theName)) {
+        if (Function.instancesVoid.containsKey(theName)) {
             System.err.println("duplicate function " + theName);
             return null;
         }
         Function<Object> re = new Function<Object>(theSteps, theName);
-        Function.instancesObject.put(theName, re);
+        Function.instancesVoid.put(theName, re);
         return re;
     }
 

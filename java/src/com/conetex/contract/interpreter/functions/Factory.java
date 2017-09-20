@@ -64,12 +64,17 @@ public class Factory {
         }
     };
 
-    Box<Object, Object> whatEverFunction = new Box<Object, Object>("whatEverFunction") {
+    Box<Object, Object> voidFunction = new Box<Object, Object>("voidFunction") {
         @Override
         public Accessible<? extends Object> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
-            Accessible<? extends Object> main = Function.createWhatEver(theSteps, n.getName());
-            return main;
+            Class<?> returntype = getReturnTyp(theSteps);
+            if(returntype == Object.class) {
+                Accessible<Object> main = Function.createVoid(theSteps, n.getName());
+                return main;
+            }                    
+            System.err.println("unknown return type " + returntype);
+            return null;
         }
     };
 
@@ -77,8 +82,13 @@ public class Factory {
         @Override
         public Accessible<? extends Structure> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
-            Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
-            return main;
+            Class<?> returntype = getReturnTyp(theSteps);
+            if(returntype == Structure.class) {
+                Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
+                return main;
+            }
+            System.err.println("unknown return type " + returntype);
+            return null;
         }
     };
 
@@ -86,8 +96,13 @@ public class Factory {
         @Override
         public Accessible<? extends Number> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
-            Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
-            return main;
+            Class<?> returntype = getReturnTyp(theSteps);
+            if(Number.class.isAssignableFrom(returntype)) {
+                Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
+                return main;
+            }
+            System.err.println("unknown return type " + returntype);
+            return null;            
         }
     };
 
@@ -95,11 +110,69 @@ public class Factory {
         @Override
         public Accessible<? extends Boolean> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
-            Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
-            return main;
+            Class<?> returntype = getReturnTyp(theSteps);
+            if(returntype == Boolean.class) {
+                Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
+                return main;
+            }
+            System.err.println("unknown return type " + returntype);
+            return null;
         }
     };
+    
+    public static Class<?> getReturnTyp(Accessible<?>[] theSteps){
+        Class<?> pre = null;
+        for(Accessible<?> a : theSteps) {
+            if(a instanceof Return) {
+                Class<?> c = a.getBaseType();
+                if(pre != null) {
+                    if(pre != c) {
+                        if(Number.class.isAssignableFrom(c)) {
+                           pre = ElementaryArithmetic.getBiggest(pre, c);
+                        }
+                        else {
+                           System.err.println("typen passen nich...");
+                        }
+                    } // else ok
+                }
+                pre = c;
+            }
+        }
+        if(pre == null) {
+            return Object.class;
+        }
+        return pre;
+    }
 
+    Box<Object, Object> whatEverFunction = new Box<Object, Object>("whatEverFunction") {
+        @Override
+        public Accessible<?> create(CodeNode n, Complex type) throws OperationInterpreterException {
+            Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+            Class<?> returntype = getReturnTyp(theSteps);
+            if(returntype == String.class) {
+                return null;                        
+            }
+            else if(returntype == Boolean.class) {
+                Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
+                return main;
+            }
+            else if(Number.class.isAssignableFrom(returntype)) {
+                Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
+                return main;
+            }
+            else if(returntype == Structure.class) {
+                Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
+                return main;
+            }        
+            else if(returntype == Object.class) {
+                Accessible<Object> main = Function.createVoid(theSteps, n.getName());
+                return main;
+            }                    
+            System.err.println("unknown return type " + returntype);
+            return null;
+        }
+    };    
+    
     Box<Object, Object> whatEverReturn = new Box<Object, Object>("whatEverReturn") {
         @Override
         public Accessible<?> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
@@ -132,7 +205,7 @@ public class Factory {
         }
     };
 
-    Egg<Object> whatEverCall = new Egg<Object>("whatEverCall") {
+    Egg<Object> voidCall = new Egg<Object>("voidCall") {
         @Override
         public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws FunctionNotFound, NoAccessToValue {
             String functionObj = n.getType();//
@@ -140,9 +213,25 @@ public class Factory {
             if(re == null){
             	throw new NoAccessToValue(n.getType());
             }
-            Accessible<? extends Object> e = Function.getInstanceWhatEver(n.getName());
+            Accessible<? extends Object> e = Function.getInstanceVoid(n.getName());
             if(e == null){
             	throw new FunctionNotFound(n.getName());
+            }
+            return Call.create(e, re);
+        }
+    };
+    
+    Egg<Object> whatEverCall = new Egg<Object>("whatEverCall") {
+        @Override
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws FunctionNotFound, NoAccessToValue {
+            String functionObj = n.getType();//
+            AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
+            if(re == null){
+                throw new NoAccessToValue(n.getType());
+            }
+            Accessible<? extends Object> e = Function.getInstance(n.getName());
+            if(e == null){
+                throw new FunctionNotFound(n.getName());
             }
             return Call.create(e, re);
         }
@@ -415,7 +504,7 @@ public class Factory {
         objCall.means(Symbol.CALL);
         numberCall.means(Symbol.CALL);
         boolCall.means(Symbol.CALL);
-        whatEverCall.means(Symbol.CALL);
+        voidCall.means(Symbol.CALL);
 
         numberConst.means(new String[] { Symbol.BINT, Symbol.INT, Symbol.LNG });
         boolConst.means(Symbol.BOOL);
@@ -464,7 +553,7 @@ public class Factory {
         boolAssigment.contains(boolNullCheck);
 
         whatEverReturn.means(Symbol.RETURN);
-        whatEverReturn.contains(whatEverCall);
+        //whatEverReturn.contains(whatEverCall);
         whatEverReturn.contains(whatEverRef);
         whatEverReturn.contains(whatEverConst);
         whatEverReturn.contains(numberExpession);
@@ -491,13 +580,12 @@ public class Factory {
         boolReturn.contains(boolComparsion);
         boolReturn.contains(boolNullCheck);
 
-        whatEverFunction.means(Symbol.FUNCTION);
-        whatEverFunction.contains(whatEverAssigment);
-        whatEverFunction.contains(whatEverCall);
-        whatEverFunction.contains(whatEverReturn);
-        whatEverFunction.contains(numberExpession);// TODO eigentlich nur hinter Zuweisung
-        whatEverFunction.contains(boolExpression);// TODO eigentlich nur hinter Zuweisung
-        whatEverFunction.contains(boolComparsion);// TODO eigentlich nur hinter Zuweisung
+        voidFunction.means(Symbol.FUNCTION);
+        voidFunction.contains(whatEverAssigment);
+        voidFunction.contains(whatEverCall);
+        voidFunction.contains(numberExpession);// TODO eigentlich nur hinter Zuweisung
+        voidFunction.contains(boolExpression);// TODO eigentlich nur hinter Zuweisung
+        voidFunction.contains(boolComparsion);// TODO eigentlich nur hinter Zuweisung
 
         objFunction.means(Symbol.FUNCTION);
         objFunction.contains(whatEverAssigment);
