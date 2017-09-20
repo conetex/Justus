@@ -3,6 +3,9 @@ package com.conetex.contract.lang;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.interpreter.functions.Functions;
+import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.functions.exception.UnknownType;
 
 public class AccessibleValue<T> extends Accessible<T> {
 
@@ -13,14 +16,14 @@ public class AccessibleValue<T> extends Accessible<T> {
         return new AccessibleValue<>(thePath, theClass);
     }
 
-    public static <T extends Number> AccessibleValue<T> createNum(String thePath, Class<T> theClass) {
+    public static <T extends Number> AccessibleValue<T> _createNum(String thePath, Class<T> theClass) {
         if (thePath == null) {
             System.err.println("thePath is null");
             return null;
         }
         return new AccessibleValue<>(thePath, theClass);
-    }
-
+    }    
+    
     protected String path;
 
     protected final Class<T> clazz;

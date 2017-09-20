@@ -8,7 +8,9 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
 import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
+import com.conetex.contract.interpreter.functions.exception.UnknownType;
 import com.conetex.contract.lang.Accessible;
 
 public abstract class Egg<T> extends Abstract<T, Object> {
@@ -30,7 +32,7 @@ public abstract class Egg<T> extends Abstract<T, Object> {
         this.means(theOperationName, this);
     }
 
-    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws FunctionNotFound, NoAccessToValue, TypeNotDeterminated {
+    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         String name = n.getTag();
         Egg<T> s = this.builder.get(name);
         if (s == null) {
@@ -44,6 +46,6 @@ public abstract class Egg<T> extends Abstract<T, Object> {
         return this.builder.keySet();
     }
 
-    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws FunctionNotFound, NoAccessToValue, TypeNotDeterminated;
+    public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException;
 
 }

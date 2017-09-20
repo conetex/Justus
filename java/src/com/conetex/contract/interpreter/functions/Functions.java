@@ -16,10 +16,13 @@ import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
 import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.functions.exception.UnknownAttribute;
 import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
+import com.conetex.contract.interpreter.functions.exception.UnknownType;
 import com.conetex.contract.interpreter.functions.nesting.Box;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.AccessibleConstant;
@@ -51,7 +54,7 @@ public class Functions {
     }
 
     // 2tree
-    public static List<Accessible<?>> _createFunctions(CodeNode n, Complex type) {
+    public static List<Accessible<?>> _createFunctions(CodeNode n, Complex type) throws OperationInterpreterException {
         String name = n.getTag();
         if (type == null) {
             System.err.println("can not recognize type of " + name);
@@ -105,7 +108,7 @@ public class Functions {
                                                                              // Map<Complex,
                                                                              // List<FunctionBuilder>>
                                                                              // complexTyps
-    ) {
+    ) throws OperationInterpreterException {
 
         String name = n.getTag();
 
@@ -142,7 +145,7 @@ public class Functions {
     }
 
     // 2tree
-    public static Accessible<?> _createFunctionAccessibleObj(CodeNode n, Complex parentTyp) {
+    public static Accessible<?> _createFunctionAccessibleObj(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
 
         String name = n.getTag();
 
@@ -255,14 +258,14 @@ public class Functions {
         }
         // REFERENCE
         else if (name.equals(Symbol.REFERENCE)) {
-            return createFunctionRefStructure(n, parentTyp);
+            return createFunctionRef(n, parentTyp, Structure.class);
         }
 
         return null;
     }
 
     // 2tree
-    public static Accessible<? extends Number> _createFunctionAccessibleNum(CodeNode n, Complex parentTyp) {
+    public static Accessible<? extends Number> _createFunctionAccessibleNum(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
 
         String name = n.getTag();
 
@@ -319,7 +322,7 @@ public class Functions {
     }
 
     // 2tree
-    public static Accessible<Boolean> _createFunctionAccessibleBool(CodeNode n, Complex parentTyp) {
+    public static Accessible<Boolean> _createFunctionAccessibleBool(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
 
         String name = n.getTag();
         // COMPARISON
@@ -368,7 +371,7 @@ public class Functions {
         }
         // REFERENCE
         else if (name.equals(Symbol.REFERENCE)) {
-            return createFunctionRefBool(n, parentTyp);
+            return createFunctionRef(n, parentTyp, Boolean.class);
         }
 
         return null;
@@ -376,7 +379,7 @@ public class Functions {
 
     Box<Object, Object> _objAssigment = new Box<Object, Object>("_objAssigment") {
         @Override
-        public Accessible<?> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<?> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             String name = n.getTag();
             if (name.equals("copy") || name.equals("refer")) {
                 CodeNode c0 = n.getChildElementByIndex(0);
@@ -440,196 +443,105 @@ public class Functions {
         }
     };
 
-    public static SetableValue<Boolean> createFunctionSetableBoolean(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else {
-                String path = n.getValue();
-                SetableValue<Boolean> re = SetableValue.create(path, Boolean.class);
-                return re;
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
+    public static <R> SetableValue<R> createFunctionSetable(CodeNode n, Complex parentTyp, Class<R> expected) throws OperationInterpreterException {
+        System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
+        checkBaseType(getID(n.getValue(), parentTyp), expected);
+        String path = n.getValue();
+        SetableValue<R> re = SetableValue.create(path, expected);
+        return re;
+    }
+    
+    public static <R> Accessible<R> createFunctionRef(CodeNode n, Complex parentTyp, Class<R> expected) throws OperationInterpreterException {
+        System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
+        checkBaseType(getID(n.getValue(), parentTyp), Structure.class);
+        String path = n.getValue();
+        AccessibleValue<R> re = AccessibleValue.create(path, expected);
+        return re;
+    } 
+
+
+    public static SetableValue<?> createFunctionSetableWhatEver(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+        System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
+        Class<?> baseType = getBaseType(getID(n.getValue(), parentTyp));
+        String path = n.getValue();
+        SetableValue<?> re = SetableValue.create(path, baseType);
+        return re;
     }
 
-    public static SetableValue<Structure> createFunctionSetableStructure(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else {
-                String path = n.getValue();
-                SetableValue<Structure> re = SetableValue.create(path, Structure.class);
-                return re;
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
+    public static Accessible<?> createFunctionRefWhatEver(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+        System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
+        Class<?> baseType = getBaseType(getID(n.getValue(), parentTyp));
+        String path = n.getValue();
+        AccessibleValue<?> re = AccessibleValue.create(path, baseType);
+        return re;
+    }    
+    
+
+
+    
+    public static SetableValue<? extends Number> createFunctionSetableNumber(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+        System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
+        Attribute<?> id = getID(n.getValue(), parentTyp);
+        Class<? extends Number> baseType = getConcretNumClass( getBaseType(id) );
+        SetableValue<? extends Number> re = SetableValue.create(n.getValue(), baseType);
+        return re;
+    }
+    
+    public static Accessible<? extends Number> createFunctionRefNum(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+        System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
+        Attribute<?> id = getID(n.getValue(), parentTyp);
+        Class<? extends Number> baseType = getConcretNumClass( getBaseType(id) );
+        AccessibleValue<? extends Number> re = AccessibleValue.create(n.getValue(), baseType);        
+        return re;
     }
 
-    public static SetableValue<Number> createFunctionSetableNumber(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else {
-                String path = n.getValue();
-                SetableValue<Number> re = SetableValue.create(path, Number.class);
-                return re;
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
+    public static void checkBaseTypeIsSubTypeOf(Class<?> baseType, Class<?> expected) throws TypesDoNotMatch, UnknownType {
+    	if(! expected.isAssignableFrom(baseType)){
+            //System.err.println("ERR: can not reference '" + n.getValue() + "' (" + baseType + ") as subtype of " + expected.toString());
+    		throw new TypesDoNotMatch(baseType.toString(), expected.toString());
+    	}
     }
-
-    public static SetableValue<?> createFunctionSetableWhatEver(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else {
-                String path = n.getValue();
-                SetableValue<?> re = SetableValue.create(path, baseType);
-                return re;
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
+    
+    public static Class<? extends Number> getConcretNumClass(Class<?> baseType) throws TypesDoNotMatch {
+    	if(baseType == Integer.class){
+    		return Integer.class;
+    	}
+    	if(baseType == BigInteger.class){
+    		return BigInteger.class;
+    	}
+    	if(baseType == Long.class){
+    		return Long.class;
+    	}    	
+    	if(baseType == Byte.class){
+    		return Byte.class;
+    	}
+   		throw new TypesDoNotMatch(baseType.toString(), Number.class.toString());    	
     }
-
-    public static Accessible<Structure> createFunctionRefStructure(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else {
-                String path = n.getValue();
-                AccessibleValue<Structure> re = AccessibleValue.create(path, Structure.class);
-                return re;
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
+    
+    public static void checkBaseType(Attribute<?> id, Class<?> expected) throws TypesDoNotMatch, UnknownType {
+    	Class<?> baseType = getBaseType(id);
+    	if(baseType != expected){
+//            System.err.println("ERR: can not reference '" + n.getValue() + "' (" + baseType + ") as " + expected.toString());
+    		throw new TypesDoNotMatch(baseType.toString(), expected.toString());
+    	}
     }
-
-    public static Accessible<Boolean> createFunctionRefBool(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else if (baseType == Boolean.class) {
-                String path = n.getValue();
-                AccessibleValue<Boolean> re = AccessibleValue.create(path, Boolean.class);
-                return re;
-            }
-            else {
-                System.err.println("ERR: can not reference '" + n.getValue() + "' (" + baseType + ") as Number");
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
-    }
-
-    public static Accessible<? extends Number> createFunctionRefNum(CodeNode n, Complex parentTyp) {
-        String name = n.getTag();
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
-        Attribute<?> id = getID(n, parentTyp);
-        if (id != null) {
-            Class<?> baseType = getBaseType(id);
-            if (baseType == null) {
-                System.err.println("ERR: can not get type of '" + n.getValue() + "'");
-                return null;
-            }
-            else if (baseType == Integer.class) {
-                String path = n.getValue();
-                AccessibleValue<Integer> re = AccessibleValue.createNum(path, Integer.class);
-                return re;
-            }
-            else if (baseType == Long.class) {
-                String path = n.getValue();
-                AccessibleValue<Long> re = AccessibleValue.createNum(path, Long.class);
-                return re;
-            }
-            else if (baseType == BigInteger.class) {
-                String path = n.getValue();
-                AccessibleValue<BigInteger> re = AccessibleValue.createNum(path, BigInteger.class);
-                return re;
-            }
-            else if (baseType == Byte.class) {
-                String path = n.getValue();
-                AccessibleValue<Byte> re = AccessibleValue.createNum(path, Byte.class);
-                return re;
-            }
-            else {
-                System.err.println("ERR: can not reference '" + n.getValue() + "' (" + baseType + ") as Number");
-            }
-        }
-        else {
-            System.err.println("ERR: can not find '" + n.getValue() + "'");
-        }
-        return null;
-    }
-
-    public static Class<?> getBaseType(Attribute<?> id) {
+    
+    public static Class<?> getBaseType(Attribute<?> id) throws UnknownType {
         AbstractType<?> t = id.getType();
         Class<? extends Value<?>> clazzChild = t.getClazz();
         Primitive<?> pri = Primitive.getInstance(clazzChild);
+        if(pri == null){
+        	//System.err.println("ERR: can not get type of '" + n.getValue() + "'");
+        	throw new UnknownType(clazzChild.toString());
+        }
         Class<?> baseType = pri.getBaseType();
         return baseType;
     }
 
-    public static Attribute<?> getID(CodeNode n, Complex parentTyp) {
+    public static Attribute<?> getID(String idName, Complex parentTyp) throws UnknownAttribute {
 
-        String name = n.getTag();
-
-        System.out.println("get_id from " + name + " (" + n.getValue() + ")");
+        //System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
         String typName = parentTyp.getName();
-        String idName = n.getValue();
         Complex pTyp = parentTyp;
         Attribute<?> id = pTyp.getSubAttribute(idName);
         while (id == null) {
@@ -643,6 +555,10 @@ public class Functions {
                 break;
             }
             id = pTyp.getSubAttribute(idName);
+        }
+        if(id == null){
+        	//System.err.println("ERR: can not find '" + idName + "'");
+        	throw new UnknownAttribute( idName );
         }
         return id;
 
@@ -669,10 +585,6 @@ public class Functions {
         return null;
     }
 
-    public static Accessible<? extends Structure> createFunctionRefWhatEver(CodeNode n, Complex parentTyp) {
-        // TODO Auto-generated method stub
-        here we go
-        return null;
-    }
+
 
 }

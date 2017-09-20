@@ -15,6 +15,7 @@ import com.conetex.contract.interpreter.functions.Factory;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
 import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
@@ -24,7 +25,8 @@ import com.conetex.contract.lang.Accessible;
 public class BuildMain {
 
     public static List<Complex> create(CodeNode r2)
-            throws ParserConfigurationException, SAXException, IOException, Invalid, UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+            throws Invalid //TODO wird das wirklich geworfen?
+            , OperationInterpreterException {
 
         List<Complex> complexTyps = Types.createComplexTypes(r2);
         System.out.println("Builder " + r2.getTag());

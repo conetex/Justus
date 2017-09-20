@@ -1,6 +1,6 @@
 package com.conetex.contract.interpreter.functions.exception;
 
-public class NoAccessToValue extends Exception {
+public class NoAccessToValue extends OperationInterpreterException {
 
     private static final long serialVersionUID = 1L;
 

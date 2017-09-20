@@ -1,6 +1,6 @@
 package com.conetex.contract.interpreter.functions.exception;
 
-public class FunctionNotFound extends Exception {
+public class FunctionNotFound extends OperationInterpreterException {
 
     private static final long serialVersionUID = 1L;
 

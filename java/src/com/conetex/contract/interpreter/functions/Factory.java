@@ -10,10 +10,12 @@ import com.conetex.contract.interpreter.CodeNode;
 import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
 import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
 import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
+import com.conetex.contract.interpreter.functions.exception.UnknownType;
 import com.conetex.contract.interpreter.functions.nesting.Box;
 import com.conetex.contract.interpreter.functions.nesting.Egg;
 import com.conetex.contract.lang.Accessible;
@@ -35,7 +37,7 @@ public class Factory {
 
     Box<Structure, Object> complex = new Box<Structure, Object>("complex") {
         @Override
-        public Accessible<Structure> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<Structure> create(CodeNode n, Complex type) throws OperationInterpreterException {
 
             String name = n.getTag();
             if (type == null) {
@@ -64,7 +66,7 @@ public class Factory {
 
     Box<Object, Object> whatEverFunction = new Box<Object, Object>("whatEverFunction") {
         @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Object> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Object> main = Function.createWhatEver(theSteps, n.getName());
             return main;
@@ -73,7 +75,7 @@ public class Factory {
 
     Box<Structure, Object> objFunction = new Box<Structure, Object>("objFunction") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Structure> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
             return main;
@@ -82,7 +84,7 @@ public class Factory {
 
     Box<Number, Object> numberFunction = new Box<Number, Object>("numberFunction") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Number> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
             return main;
@@ -91,7 +93,7 @@ public class Factory {
 
     Box<Boolean, Object> boolFunction = new Box<Boolean, Object>("boolFunction") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex type) throws OperationInterpreterException {
             Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
             Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
             return main;
@@ -100,7 +102,7 @@ public class Factory {
 
     Box<Object, Object> whatEverReturn = new Box<Object, Object>("whatEverReturn") {
         @Override
-        public Accessible<?> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<?> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -108,7 +110,7 @@ public class Factory {
 
     Box<Structure, Structure> objReturn = new Box<Structure, Structure>("objReturn") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             Accessible<? extends Structure> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -116,7 +118,7 @@ public class Factory {
 
     Box<Number, Number> numberReturn = new Box<Number, Number>("numberReturn") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -124,7 +126,7 @@ public class Factory {
 
     Box<Boolean, Boolean> boolReturn = new Box<Boolean, Boolean>("boolReturn") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             Accessible<? extends Boolean> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             return Return.create(a);
         }
@@ -196,39 +198,39 @@ public class Factory {
         }
     };
 
-    Egg<Structure> whatEverRef = new Egg<Structure>("whatEverRef") {
+    Egg<Object> whatEverRef = new Egg<Object>("whatEverRef") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) {
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             return Functions.createFunctionRefWhatEver(n, parentTyp); // parentTyp);
         }
     };
 
     Egg<Structure> objRef = new Egg<Structure>("objRef") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) {
-            return Functions.createFunctionRefStructure(n, parentTyp); // parentTyp);
+        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+            return Functions.createFunctionRef(n, parentTyp, Structure.class); // parentTyp);
         }
     };
 
     Egg<Number> numberRef = new Egg<Number>("numberRef") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             return Functions.createFunctionRefNum(n, parentTyp);
         }
     };
 
     Egg<Boolean> boolRef = new Egg<Boolean>("boolRef") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) {
-            return Functions.createFunctionRefBool(n, parentTyp);
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+            return Functions.createFunctionRef(n, parentTyp, Boolean.class);
         }
     };
 
     Box<Structure, Structure> objAssigment = new Box<Structure, Structure>("objAssigment") {
         @Override
-        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         	CodeNode trgNode = n.getChildElementByIndex(0);
-            SetableValue<Structure> trg = Functions.createFunctionSetableStructure(trgNode, parentTyp);
+            SetableValue<Structure> trg = Functions.createFunctionSetable(trgNode, parentTyp, Structure.class);
             CodeNode srcNode = n.getChildElementByIndex(1);
             Accessible<?> src = this.createChild(srcNode, parentTyp);
             check2PartOperations(n, trg, src);   
@@ -241,9 +243,9 @@ public class Factory {
     Box<Number, Number> numberAssigment = new Box<Number, Number>("numberAssigment") {
 
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         	CodeNode trgNode = n.getChildElementByIndex(0);
-        	SetableValue<Number> trg = Functions.createFunctionSetableNumber(trgNode, parentTyp);
+        	SetableValue<? extends Number> trg = Functions.createFunctionSetableNumber(trgNode, parentTyp);
         	CodeNode srcNode = n.getChildElementByIndex(1);
             Accessible<?> src = this.createChild(srcNode, parentTyp);
             check2PartOperations(n, trg, src);              
@@ -257,9 +259,9 @@ public class Factory {
     
     Box<Boolean, Boolean> boolAssigment = new Box<Boolean, Boolean>("boolAssigment") {
         @Override
-        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         	CodeNode trgNode = n.getChildElementByIndex(0);
-        	SetableValue<Boolean> trg = Functions.createFunctionSetableBoolean(trgNode, parentTyp);
+        	SetableValue<Boolean> trg = Functions.createFunctionSetable(trgNode, parentTyp, Boolean.class);
         	CodeNode srcNode = n.getChildElementByIndex(1);
         	Accessible<?> src = this.createChild(srcNode, parentTyp);
         	check2PartOperations(n, trg, src);   
@@ -270,7 +272,7 @@ public class Factory {
 
     Box<Object, Object> whatEverAssigment = new Box<Object, Object>("whatEverAssigment") {
         @Override
-        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         	CodeNode trgNode = n.getChildElementByIndex(0);
         	SetableValue<?> trg = Functions.createFunctionSetableWhatEver(trgNode, parentTyp);
         	CodeNode srcNode = n.getChildElementByIndex(1);
@@ -345,7 +347,7 @@ public class Factory {
 
     Box<Number, Number> numberExpession = new Box<Number, Number>("numberExpession") {
         @Override
-        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             // MATH
             String name = n.getTag();
             Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
@@ -358,7 +360,7 @@ public class Factory {
 
     Box<Boolean, Boolean> boolExpression = new Box<Boolean, Boolean>("boolExpression") {
         @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             // BOOL
             String name = n.getTag();
             if (name.equals(Symbol.NOT)) {
@@ -377,7 +379,7 @@ public class Factory {
 
     Box<Boolean, Object> boolComparsion = new Box<Boolean, Object>("boolComparsion") {
         @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
             // COMPARISON
             Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
             Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
@@ -388,7 +390,7 @@ public class Factory {
 
     Box<Boolean, ?> boolNullCheck = new Box<Boolean, Object>("boolNullCheck") {
         @Override
-        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+        public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         	Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
         	if(n.getChildNodesSize() > 1){
         		CodeNode c = n.getChildElementByIndex(1);
@@ -398,12 +400,12 @@ public class Factory {
         }
     };
 
-    public static Accessible<?> sbuild(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+    public static Accessible<?> sbuild(CodeNode n, Complex type) throws OperationInterpreterException {
         Factory x = new Factory();
         return x.build(n, type);
     }
 
-    public Accessible<?> build(CodeNode n, Complex type) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+    public Accessible<?> build(CodeNode n, Complex type) throws OperationInterpreterException {
 
         objRef.means(Symbol.REFERENCE);
         numberRef.means(Symbol.REFERENCE);
@@ -526,7 +528,7 @@ public class Factory {
 
     }
 
-    public static Accessible<?>[] getFunctionSteps(CodeNode n, Complex type, Box box) throws UnexpectedSubOperation, FunctionNotFound, NoAccessToValue, UnknownComplexType, TypesDoNotMatch, MissingSubOperation, TypeNotDeterminated {
+    public static Accessible<?>[] getFunctionSteps(CodeNode n, Complex type, Box box) throws OperationInterpreterException {
 
         String name = n.getTag();
         if (type == null) {

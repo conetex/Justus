@@ -1,6 +1,6 @@
 package com.conetex.contract.interpreter.functions.exception;
 
-public class TypeNotDeterminated extends Exception {
+public class TypeNotDeterminated extends OperationInterpreterException {
 
     private static final long serialVersionUID = 1L;
 
