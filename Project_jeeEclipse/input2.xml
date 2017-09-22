@@ -82,10 +82,10 @@
 	   <ref name="src" typ='MailAddress64'>aAddress</ref>
 	</copy>           
 	             
-	<copy><!-- geht nich -->
+	<!--<copy> geht nich 
 		<ref typ='MailAddress64'>sub.a2Addres</ref>
 		<ref typ='MailAddress64'>sub.aAddress</ref>
-	</copy>
+	</copy>-->
 	             
  	<attribute name="sub">	         
 		<attribute name="aAddress" type='t:MailAddress64'>yy@yyy.com</attribute>

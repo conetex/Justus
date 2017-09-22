@@ -443,9 +443,18 @@ public class Functions {
         }
     };
 
+    public static void _checkBaseType(Class<?> type, Class<?> expected) throws TypesDoNotMatch, UnknownType {
+    	//Class<?> type = getBaseType(id);
+    	if(type != expected){
+//            System.err.println("ERR: can not reference '" + n.getValue() + "' (" + baseType + ") as " + expected.toString());
+    		throw new TypesDoNotMatch(type.toString(), expected.toString());
+    	}
+    }    
+    
+    
     public static <R> SetableValue<R> createFunctionSetable(CodeNode n, Complex parentTyp, Class<R> expected) throws OperationInterpreterException {
         System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
-        checkBaseType(getID(n.getValue(), parentTyp), expected);
+        Factory.checkType(getBaseType( getID(n.getValue(), parentTyp) ), expected);
         String path = n.getValue();
         SetableValue<R> re = SetableValue.create(path, expected);
         return re;
@@ -453,12 +462,11 @@ public class Functions {
     
     public static <R> Accessible<R> createFunctionRef(CodeNode n, Complex parentTyp, Class<R> expected) throws OperationInterpreterException {
         System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
-        checkBaseType(getID(n.getValue(), parentTyp), Structure.class);
+        Factory.checkType(getBaseType( getID(n.getValue(), parentTyp) ), expected);
         String path = n.getValue();
         AccessibleValue<R> re = AccessibleValue.create(path, expected);
         return re;
     } 
-
 
     public static SetableValue<?> createFunctionSetableWhatEver(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         System.out.println("get_id from " + n.getTag() + " (" + n.getValue() + ")");
@@ -518,13 +526,7 @@ public class Functions {
    		throw new TypesDoNotMatch(baseType.toString(), Number.class.toString());    	
     }
     
-    public static void checkBaseType(Attribute<?> id, Class<?> expected) throws TypesDoNotMatch, UnknownType {
-    	Class<?> baseType = getBaseType(id);
-    	if(baseType != expected){
-//            System.err.println("ERR: can not reference '" + n.getValue() + "' (" + baseType + ") as " + expected.toString());
-    		throw new TypesDoNotMatch(baseType.toString(), expected.toString());
-    	}
-    }
+
     
     public static Class<?> getBaseType(Attribute<?> id) throws UnknownType {
         AbstractType<?> t = id.getType();

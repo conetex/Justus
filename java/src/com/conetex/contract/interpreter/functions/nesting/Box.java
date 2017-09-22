@@ -1,6 +1,7 @@
 package com.conetex.contract.interpreter.functions.nesting;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
 import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
 import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
 import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.functions.exception.OperationMeansNotCalled;
 import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
@@ -17,34 +19,38 @@ import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
 import com.conetex.contract.interpreter.functions.exception.UnknownType;
 import com.conetex.contract.lang.Accessible;
 
-public abstract class Box<T, S> extends Abstract<T, S> {
+public abstract class Box<T, S> extends Egg<T> {
 
-    private Map<String, Abstract<? extends S, ?>> childBuilder = new HashMap<>();
+    private Map<String, Egg<? extends S>> childBuilder = new HashMap<>();
 
     public Box(String name) {
         super(name);
     }
 
-    public final void contains(String theOperationName, Abstract<? extends S, ?> b) {
+    public final void contains(String theOperationName, Egg<? extends S> b) {
         if (this.childBuilder.containsKey(theOperationName)) {
             System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
         }
         this.childBuilder.put(theOperationName, b);
     }
 
-    public final void contains(Abstract<? extends S, ?> b) {
+    public final void contains(Egg<? extends S> b) throws OperationMeansNotCalled {
+    	Set<String> keySet = b.keySet();
+    	if(keySet.size() == 0){
+    		throw new OperationMeansNotCalled(b.getName());
+    	}
         for (String s : b.keySet()) {
             this.contains(s, b);
         }
     }
 
-    final Set<String> keySet() {
-        return this.builder.keySet();
+    final Set<String> _keySet() {
+        return this._builder.keySet();
     }
 
     public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         String name = n.getTag();
-        Abstract<? extends S, ?> s = this.childBuilder.get(name);
+        Egg<? extends S> s = this.childBuilder.get(name);
         if (s == null) {
             System.err.println("inner Operation '" + name + "' not found in " + this.getName());
             return null;
@@ -53,22 +59,22 @@ public abstract class Box<T, S> extends Abstract<T, S> {
         return s.createThis(n, parentTyp);
     }
 
-    private Map<String, Abstract<T, ?>> builder = new HashMap<>();
-
-    public final void means(String theOperationName, Abstract<T, ?> b) {
-        if (this.builder.containsKey(theOperationName)) {
+    private Map<String, _Abstract<T>> _builder = new HashMap<>();
+    
+    public final void _means(String theOperationName, _Abstract<T> b) {
+        if (this._builder.containsKey(theOperationName)) {
             System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
         }
-        this.builder.put(theOperationName, b);
+        this._builder.put(theOperationName, b);
     }
 
-    public final void means(String theOperationName) {
-        this.means(theOperationName, this);
+    public final void _means(String theOperationName) {
+        //this._means(theOperationName, this);
     }
 
-    final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+    final Accessible<? extends T> _createThis(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
         String name = n.getTag(); // TODO vielleicht so n.getType() + "=" + 
-        Abstract<T, ?> s = this.builder.get(name);
+        _Abstract<T> s = this._builder.get(name);
         if (s == null) {
             System.err.println("Operation " + name + " not found!");
             return null;
