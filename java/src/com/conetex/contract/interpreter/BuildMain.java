@@ -1,55 +1,42 @@
 package com.conetex.contract.interpreter;
 
-import java.io.IOException;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
 
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.functions.Factory;
-import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
-import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
-import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
 import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
-import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
-import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
-import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
-import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
 import com.conetex.contract.lang.Accessible;
 
 public class BuildMain {
 
-    public static List<Complex> create(CodeNode r2)
-            throws Invalid //TODO wird das wirklich geworfen?
-            , OperationInterpreterException {
+	public static List<Complex> create(CodeNode r2) throws Invalid // TODO wird das wirklich geworfen?
+			, OperationInterpreterException {
 
-        List<Complex> complexTyps = Types.createComplexTypes(r2);
-        System.out.println("Builder " + r2.getTag());
-        if (complexTyps != null) {
-            Complex complexTypeRoot = Complex.getInstance(r2.getName());
-            Structure v = complexTypeRoot.createValue(null);
-            List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
+		List<Complex> complexTyps = Types.createComplexTypes(r2);
+		System.out.println("Builder " + r2.getTag());
+		if (complexTyps != null) {
+			Complex complexTypeRoot = Complex.getInstance(r2.getName());
+			Structure v = complexTypeRoot.createValue(null);
+			List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
 
-            /*
-             * List<Accessible<?>> functions = Functions.createFunctions(r2,
-             * complexTypeRoot); Accessible<?>[] theSteps = new
-             * Accessible<?>[functions.size()]; Accessible<?> main =
-             * Function.createObj(functions.toArray(theSteps), complexTypeRoot.getName());
-             * main.getFrom(v);
-             */
+			/*
+			 * List<Accessible<?>> functions = Functions.createFunctions(r2,
+			 * complexTypeRoot); Accessible<?>[] theSteps = new
+			 * Accessible<?>[functions.size()]; Accessible<?> main =
+			 * Function.createObj(functions.toArray(theSteps), complexTypeRoot.getName());
+			 * main.getFrom(v);
+			 */
 
-            Accessible<?> mainNEW = Factory.sbuild(r2, complexTypeRoot);
-            mainNEW.getFrom(v);
+			Accessible<?> mainNEW = Factory.sbuild(r2, complexTypeRoot);
+			mainNEW.getFrom(v);
 
-        }
+		}
 
-        return complexTyps;
+		return complexTyps;
 
-    }
+	}
 
 }

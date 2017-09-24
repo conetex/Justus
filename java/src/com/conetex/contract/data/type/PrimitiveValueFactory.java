@@ -4,6 +4,6 @@ import com.conetex.contract.data.Value;
 
 public interface PrimitiveValueFactory<T> {
 
-    public Value<T> createValueImp();
+	public Value<T> createValueImp();
 
 }
