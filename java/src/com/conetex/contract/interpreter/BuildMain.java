@@ -2,7 +2,6 @@ package com.conetex.contract.interpreter;
 
 import java.util.List;
 
-import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
@@ -23,8 +22,8 @@ public class BuildMain {
 		if (complexTyps != null) {
 			Complex complexTypeRoot = Complex.getInstance(r2.getName());
 			Structure v = complexTypeRoot.createValue(null);
-			//List<Value<?>> values = 
-					Values.createValues(r2, complexTypeRoot, v);
+			// List<Value<?>> values =
+			Values.createValues(r2, complexTypeRoot, v);
 			Accessible<?> mainNEW = Factory.build(r2, complexTypeRoot);
 			mainNEW.getFrom(v);
 		}
