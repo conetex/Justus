@@ -39,7 +39,8 @@ public abstract class Box<T, S> extends Egg<T> {
 		return this._builder.keySet();
 	}
 
-	public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+	public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp)
+			throws OperationInterpreterException {
 		String name = n.getTag();
 		Egg<? extends S> s = this.childBuilder.get(name);
 		if (s == null) {
@@ -84,8 +85,8 @@ public abstract class Box<T, S> extends Egg<T> {
 	 * getBuilderStructure(String theOperationName){ return
 	 * this.subBuildersObj.get(theOperationName); } public Accessible<?>
 	 * createSuper(SyntaxNode n, Complex parentTyp){ String name = n.getTag();
-	 * Builder<?> s = this.getBuilderStructure(name); return s.create(n, parentTyp);
-	 * }
+	 * Builder<?> s = this.getBuilderStructure(name); return s.create(n,
+	 * parentTyp); }
 	 * 
 	 * 
 	 * 
@@ -93,36 +94,36 @@ public abstract class Box<T, S> extends Egg<T> {
 	 * HashMap<String, Builder<Boolean>>();
 	 * 
 	 * public void addBoolean(String theOperationName, Builder<Boolean> b){
-	 * this.subBuildersBoolean.put(theOperationName, b); } public Builder<Boolean>
-	 * getBuilderBoolean(String theOperationName){ return
-	 * this.subBuildersBoolean.get(theOperationName); } public Accessible<? extends
-	 * Boolean> createBoolean(SyntaxNode n, Complex parentTyp){ String name =
-	 * n.getTag(); Builder<Boolean> s = this.getBuilderBoolean(name); return
-	 * s.create(n, parentTyp); }
+	 * this.subBuildersBoolean.put(theOperationName, b); } public
+	 * Builder<Boolean> getBuilderBoolean(String theOperationName){ return
+	 * this.subBuildersBoolean.get(theOperationName); } public Accessible<?
+	 * extends Boolean> createBoolean(SyntaxNode n, Complex parentTyp){ String
+	 * name = n.getTag(); Builder<Boolean> s = this.getBuilderBoolean(name);
+	 * return s.create(n, parentTyp); }
 	 * 
 	 * 
-	 * private Map<String, Builder<String>> subBuildersString = new HashMap<String,
-	 * Builder<String>>();
+	 * private Map<String, Builder<String>> subBuildersString = new
+	 * HashMap<String, Builder<String>>();
 	 * 
 	 * public void addString(String theOperationName, Builder<String> b){
 	 * this.subBuildersString.put(theOperationName, b); } public Builder<String>
 	 * getBuilderString(String theOperationName){ return
-	 * this.subBuildersString.get(theOperationName); } public Accessible<? extends
-	 * String> createString(SyntaxNode n, Complex parentTyp){ String name =
-	 * n.getTag(); Builder<String> s = this.getBuilderString(name); return
-	 * s.create(n, parentTyp); }
+	 * this.subBuildersString.get(theOperationName); } public Accessible<?
+	 * extends String> createString(SyntaxNode n, Complex parentTyp){ String
+	 * name = n.getTag(); Builder<String> s = this.getBuilderString(name);
+	 * return s.create(n, parentTyp); }
 	 * 
 	 * 
-	 * private Map<String, Builder<Number>> subBuildersNumber = new HashMap<String,
-	 * Builder<Number>>();
+	 * private Map<String, Builder<Number>> subBuildersNumber = new
+	 * HashMap<String, Builder<Number>>();
 	 * 
 	 * public void addNumber(String theOperationName, Builder<Number> b){
 	 * this.subBuildersNumber.put(theOperationName, b); } public Builder<Number>
 	 * getBuilderNumber(String theOperationName){ return
-	 * this.subBuildersNumber.get(theOperationName); } public Accessible<? extends
-	 * Number> createNumber(SyntaxNode n, Complex parentTyp){ String name =
-	 * n.getTag(); Builder<Number> s = this.getBuilderNumber(name); return
-	 * s.create(n, parentTyp); }
+	 * this.subBuildersNumber.get(theOperationName); } public Accessible<?
+	 * extends Number> createNumber(SyntaxNode n, Complex parentTyp){ String
+	 * name = n.getTag(); Builder<Number> s = this.getBuilderNumber(name);
+	 * return s.create(n, parentTyp); }
 	 */
 
 }

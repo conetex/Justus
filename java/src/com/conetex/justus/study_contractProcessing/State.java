@@ -44,8 +44,7 @@ public class State {
 		Attribute<String> attribute = null;
 		try {
 			attribute = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -55,8 +54,7 @@ public class State {
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		}
-		catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -76,8 +74,7 @@ public class State {
 		Attribute<String> attributeChild = null;
 		try {
 			attributeChild = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -85,8 +82,7 @@ public class State {
 		ComplexDataType complexTypeParent = null;
 		try {
 			complexTypeParent = createComplexDataType(theOrderedAttributesChild);
-		}
-		catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -113,8 +109,7 @@ public class State {
 		Attribute<String> attribute = null;
 		try {
 			attribute = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -124,8 +119,7 @@ public class State {
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		}
-		catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -140,8 +134,7 @@ public class State {
 			// value.set("matthias.franke.conetex.com");
 			value.set("2@3.de");
 			// value.set("2ü@3.de");
-		}
-		catch (ValueException e) {
+		} catch (ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -162,8 +155,7 @@ public class State {
 		Attribute<String> attribute = null;
 		try {
 			attribute = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -173,8 +165,7 @@ public class State {
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		}
-		catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -195,8 +186,7 @@ public class State {
 		Attribute<Integer> attribute = null;
 		try {
 			attribute = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -206,8 +196,7 @@ public class State {
 		ComplexDataType complexType = null;
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		}
-		catch (DuplicateAttributeNameExeption | NullAttributeException e) {
+		} catch (DuplicateAttributeNameExeption | NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -217,8 +206,7 @@ public class State {
 		Value<Integer> value = state.getValue("ein Name", Int.class);
 		try {
 			value.set(3);
-		}
-		catch (ValueException e) {
+		} catch (ValueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -227,12 +215,13 @@ public class State {
 
 	}
 
-	private static PrimitiveDataType<?, ?>[] types = { new PrimitiveDataType<Complex, State>(Complex.class, new ValueFactory<State>() {
-		@Override
-		public Complex createValueImp() {
-			return new Complex();
-		}
-	})
+	private static PrimitiveDataType<?, ?>[] types = {
+			new PrimitiveDataType<Complex, State>(Complex.class, new ValueFactory<State>() {
+				@Override
+				public Complex createValueImp() {
+					return new Complex();
+				}
+			})
 
 			, new PrimitiveDataType<Bool, Boolean>(Bool.class, new ValueFactory<Boolean>() {
 				@Override
@@ -332,13 +321,11 @@ public class State {
 
 		try {
 			complexType = createComplexDataType(theOrderedAttributes);
-		}
-		catch (DuplicateAttributeNameExeption e) {
+		} catch (DuplicateAttributeNameExeption e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
-		}
-		catch (NullAttributeException e) {
+		} catch (NullAttributeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -469,8 +456,7 @@ public class State {
 					re.transSet(theValues[i]);
 					vals[i] = re;
 				}
-			}
-			catch (ValueTransformException | ValueException e) {
+			} catch (ValueTransformException | ValueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -494,8 +480,7 @@ public class State {
 					re.transSet(theValues.get(i));
 					vals[i] = re;
 				}
-			}
-			catch (ValueTransformException | ValueException e) {
+			} catch (ValueTransformException | ValueException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
@@ -544,8 +529,8 @@ public class State {
 		private final PrimitiveDataType<? extends Value<T>, T> type;
 
 		/*
-		 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
-		 * theLabel; this.factory = theFactory; }
+		 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
+		 * this.label = theLabel; this.factory = theFactory; }
 		 */
 		private Attribute(ASCII8 theLabel, PrimitiveDataType<? extends Value<T>, T> theType) {
 			this.label = theLabel;
@@ -576,8 +561,7 @@ public class State {
 			Class<?> theClass;
 			try {
 				theClass = Class.forName(Types.class.getName() + "$" + dataType);
-			}
-			catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;

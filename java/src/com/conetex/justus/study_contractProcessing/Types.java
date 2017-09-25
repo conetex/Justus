@@ -49,8 +49,7 @@ public class Types {
 			try {
 				Integer v = Integer.parseInt(value);
 				this.set(v);
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				throw new ValueTransformException("can not convert " + value + " to Integer", e);
 			}
 		}
@@ -76,8 +75,7 @@ public class Types {
 			try {
 				Long v = Long.parseLong(value);
 				this.set(v);
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				throw new ValueTransformException("can not convert " + value + " to Long", e);
 			}
 		}
@@ -102,17 +100,13 @@ public class Types {
 		public void transSet(String value) throws ValueTransformException {
 			if (value.equalsIgnoreCase("true")) {
 				this.set(Boolean.TRUE);
-			}
-			else if (value.equalsIgnoreCase("false")) {
+			} else if (value.equalsIgnoreCase("false")) {
 				this.set(Boolean.FALSE);
-			}
-			else if (value.equals("1")) {
+			} else if (value.equals("1")) {
 				this.set(Boolean.TRUE);
-			}
-			else if (value.equals("0")) {
+			} else if (value.equals("0")) {
 				this.set(Boolean.FALSE);
-			}
-			else {
+			} else {
 				throw new ValueTransformException("can not convert '" + value + "' to Boolean!");
 			}
 		}
@@ -190,9 +184,11 @@ public class Types {
 						if (groupCount > 0) {
 							String strBevorCtrlChar = ctrlCharMatcher.group(1);
 							if (strBevorCtrlChar == null || strBevorCtrlChar.length() == 0) {
-								throw new ValueException("found control char at begin of Input! Don't use control chars!");
+								throw new ValueException(
+										"found control char at begin of Input! Don't use control chars!");
 							}
-							throw new ValueException("Please do not use control chars! found control char after '" + strBevorCtrlChar + "'");
+							throw new ValueException("Please do not use control chars! found control char after '"
+									+ strBevorCtrlChar + "'");
 						}
 					}
 					throw new ValueException("found control char in Input! Don't use control chars!");
@@ -202,7 +198,8 @@ public class Types {
 			}
 
 			// when code above is correct we should never go here ...
-			throw new ValueException("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue + "'! Please report! This Issue should be debugged!");
+			throw new ValueException("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue
+					+ "'! Please report! This Issue should be debugged!");
 
 		}
 
@@ -288,8 +285,7 @@ public class Types {
 																		// "\\A\\p{ASCII}*\\z"
 																		// "^[\\p{ASCII}]*$"
 					super.value = aValue;
-				}
-				else {
+				} else {
 					throw new ValueException("no valid Base64! '=' is only allowed at the end!");
 				}
 			}
@@ -343,8 +339,7 @@ public class Types {
 			if (aValue.matches(
 					"\\A[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\z")) {
 				super.value = aValue;
-			}
-			else {
+			} else {
 				throw new ValueException("'" + aValue + "' is no valid mail-Address");
 			}
 		}

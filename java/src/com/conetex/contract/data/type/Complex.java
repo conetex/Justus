@@ -42,7 +42,8 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		return this.name;
 	}
 
-	private static Complex createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
+	private static Complex createImpl(final String theName, final Map<String, Integer> theIndex,
+			final Attribute<?>[] theOrderedIdentifiers) {
 		if (theIndex != null && theOrderedIdentifiers != null) {
 			return new Complex(theName, theIndex, theOrderedIdentifiers);
 		}
@@ -56,7 +57,8 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 	}
 
 	public static Complex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
-			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException, DublicateComplexException {
+			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException,
+			DublicateComplexException {
 		if (theOrderedIdentifiers.length == 0) {
 			return null;
 		}
@@ -85,14 +87,16 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		}
 	}
 
-	private Complex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
+	private Complex(final String theName, final Map<String, Integer> theIndex,
+			final Attribute<?>[] theOrderedIdentifiers) {
 		this.name = theName;
 		this.index = theIndex;
 		this.orderedAttributes = theOrderedIdentifiers;
 	}
 
 	public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers)
-			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
+			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException,
+			ComplexWasInitializedExeption, DublicateComplexException {
 		if (this.index.size() > 0 || this.orderedAttributes.length > 0) {
 			throw new ComplexWasInitializedExeption();
 		}
@@ -129,8 +133,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 				re.setConverted(theValues[i]);
 				vals[i] = re;
 			}
-		}
-		catch (Inconvertible | Invalid e) {
+		} catch (Inconvertible | Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -155,8 +158,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 				re.setConverted(theValues.get(i));
 				vals[i] = re;
 			}
-		}
-		catch (Inconvertible | Invalid e) {
+		} catch (Inconvertible | Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -186,8 +188,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 			}
 			// TODO typ-check !!!
 			return (Attribute<V>) this.orderedAttributes[i];
-		}
-		else {
+		} else {
 
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
@@ -224,8 +225,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		Label str = new Label();
 		try {
 			str.set(name);
-		}
-		catch (Invalid e) {
+		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -233,8 +233,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		Attribute<Structure> attribute = null;
 		try {
 			attribute = this.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return null;
@@ -244,7 +243,8 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 
 	}
 
-	public static Attribute<?> createAttribute(String attributeName, String typeName, Map<String, Complex> unformedComplexTypes) {
+	public static Attribute<?> createAttribute(String attributeName, String typeName,
+			Map<String, Complex> unformedComplexTypes) {
 		// ComplexType
 		if (typeName == null || typeName.length() == 0) {
 			// TODO exception

@@ -23,8 +23,7 @@ public class Lng implements Value<Long> {
 		try {
 			Long v = Long.parseLong(value);
 			return this.set(v);
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Long", e);
 		}
 	}

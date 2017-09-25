@@ -14,7 +14,8 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	private Value<?>[] values;
 
-	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent) {
+	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues,
+			final Structure theParent) {
 		if (theAttributeTuple != null && theValues != null) {
 			return null;// new Structure(theAttributeTuple, theValues,
 						// theParent);
@@ -64,17 +65,17 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		int idIndex = this.type.getSubAttributeIndex(aName);
 		if (idIndex > -1) {
 			return getValue(idIndex, c);
-		}
-		else {
+		} else {
 			/*
 			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0, i); if(i +
-			 * Label.NAME_SEPERATOR.length() < aName.length()){ attributeIdx =
-			 * this.type.getAttributeIndex( nameOfSubStructure ); Value.Interface<Structure>
-			 * subStructure = getValue(attributeIdx, Struct.class); if(subStructure !=
-			 * null){ Structure s = subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return s.getValue(aName,
-			 * c); } } } }
+			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
+			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
+			 * Struct.class); if(subStructure != null){ Structure s =
+			 * subStructure.get(); if(s != null){ aName =
+			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
+			 * s.getValue(aName, c); } } } }
 			 */
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
@@ -115,8 +116,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		if (v != null) {
 			if (v.getBaseType() == c) {
 				return (Value<R>) v;
-			}
-			else {
+			} else {
 				System.err.println("Cast not possible: " + c + " != " + v.getBaseType());
 			}
 		}
@@ -133,17 +133,17 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		if (idIndex > -1) {
 			// TODO check this cast
 			return (R) getValue(idIndex);
-		}
-		else {
+		} else {
 			/*
 			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0, i); if(i +
-			 * Label.NAME_SEPERATOR.length() < aName.length()){ attributeIdx =
-			 * this.type.getAttributeIndex( nameOfSubStructure ); Value.Interface<Structure>
-			 * subStructure = getValue(attributeIdx, Struct.class); if(subStructure !=
-			 * null){ Structure s = subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return s.getValue(aName,
-			 * c); } } } }
+			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
+			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
+			 * Struct.class); if(subStructure != null){ Structure s =
+			 * subStructure.get(); if(s != null){ aName =
+			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
+			 * s.getValue(aName, c); } } } }
 			 */
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
@@ -158,8 +158,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 						return subStructure.getValueNewNew(names[1], clazz);
 					}
 				}
-			}
-			else {
+			} else {
 				if (this.parent != null) {
 					return this.parent.getValueNewNew(aName, clazz);
 				}
@@ -174,8 +173,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		if (this.type.getName().equals(aName)) {
 			if (clazz == Structure.class) {
 				return (Value<R>) this;
-			}
-			else {
+			} else {
 				System.err.println("Cast not possible: " + clazz + " != " + this.getClass());
 				return null;
 			}
@@ -183,17 +181,17 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		int idIndex = this.type.getSubAttributeIndex(aName);
 		if (idIndex > -1) {
 			return getValueNew(idIndex, clazz);
-		}
-		else {
+		} else {
 			/*
 			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0, i); if(i +
-			 * Label.NAME_SEPERATOR.length() < aName.length()){ attributeIdx =
-			 * this.type.getAttributeIndex( nameOfSubStructure ); Value.Interface<Structure>
-			 * subStructure = getValue(attributeIdx, Struct.class); if(subStructure !=
-			 * null){ Structure s = subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return s.getValue(aName,
-			 * c); } } } }
+			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
+			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
+			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
+			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
+			 * Struct.class); if(subStructure != null){ Structure s =
+			 * subStructure.get(); if(s != null){ aName =
+			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
+			 * s.getValue(aName, c); } } } }
 			 */
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
@@ -208,8 +206,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 						return subStructure.getValueNew(names[1], clazz);
 					}
 				}
-			}
-			else {
+			} else {
 				if (this.parent != null) {
 					return this.parent.getValueNew(aName, clazz);
 				}
@@ -227,7 +224,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
-		Primitive<T> type = Primitive.<T>getInstance(src.getClass());
+		Primitive<T> type = Primitive.<T> getInstance(src.getClass());
 		Value<T> re = type.createValue();
 		T val = src.copy();
 		re.set(val); // throws the Exception

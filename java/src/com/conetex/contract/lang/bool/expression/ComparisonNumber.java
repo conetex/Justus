@@ -8,11 +8,12 @@ import com.conetex.contract.lang.Symbol;
 
 public class ComparisonNumber extends Accessible<Boolean> {
 
-	public static final int	SMALLER	= -1;
-	public static final int	EQUAL	= 0;
-	public static final int	GREATER	= 1;
+	public static final int SMALLER = -1;
+	public static final int EQUAL = 0;
+	public static final int GREATER = 1;
 
-	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String operation) {
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB,
+			String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -28,7 +29,8 @@ public class ComparisonNumber extends Accessible<Boolean> {
 		return null;
 	}
 
-	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int operation) {
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB,
+			int operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -56,8 +58,9 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
-	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA,
+	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
+	 * this.operator = theOperation; }
 	 */
 
 	@Override
@@ -79,39 +82,33 @@ public class ComparisonNumber extends Accessible<Boolean> {
 				BigInteger a = (BigInteger) aN;
 				BigInteger b = (BigInteger) bN;
 				return comp(a, b);
-			}
-			else {
+			} else {
 				BigInteger a = (BigInteger) aN;
 				BigInteger b = (BigInteger.valueOf(bN.longValue()));
 				return comp(a, b);
 			}
-		}
-		else {
+		} else {
 			if (bN.getClass() == BigInteger.class) {
 				BigInteger a = (BigInteger.valueOf(aN.longValue()));
 				BigInteger b = (BigInteger) bN;
 				return comp(a, b);
-			}
-			else {
+			} else {
 				if (aN.getClass() == Long.class) {
 					if (bN.getClass() == Long.class) {
 						Long a = (Long) aN;
 						Long b = (Long) bN;
 						return comp(a, b);
-					}
-					else {
+					} else {
 						Long a = (Long) aN;
 						Long b = bN.longValue();
 						return comp(a, b);
 					}
-				}
-				else {
+				} else {
 					if (bN.getClass() == Long.class) {
 						Long a = aN.longValue();
 						Long b = (Long) bN;
 						return comp(a, b);
-					}
-					else {
+					} else {
 						int a = aN.intValue();
 						int b = bN.intValue();
 						return comp(a, b);

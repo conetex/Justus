@@ -24,7 +24,8 @@ public class CodeNode {
 		return new CodeNode(theName, theNameAttribute, theValue, theType, new LinkedList<CodeNode>());
 	}
 
-	public static CodeNode create(String theName, String theNameAttribute, String theValue, String theType, List<CodeNode> theChildren) {
+	public static CodeNode create(String theName, String theNameAttribute, String theValue, String theType,
+			List<CodeNode> theChildren) {
 		if (theName == null || theName.length() == 0) {
 			return null;
 		}
@@ -34,7 +35,8 @@ public class CodeNode {
 		return new CodeNode(theName, theNameAttribute, theValue, theType, theChildren);
 	}
 
-	private CodeNode(String theName, String theNameAttribute, String theValue, String theType, List<CodeNode> theChildren) {
+	private CodeNode(String theName, String theNameAttribute, String theValue, String theType,
+			List<CodeNode> theChildren) {
 		this.tag = theName;
 		this.name = theNameAttribute;
 		this.value = theValue;
@@ -79,11 +81,12 @@ public class CodeNode {
 	}
 
 	public boolean isBuildInFunction() {
-		if (this.tag.equals(Symbol.PLUS) || this.tag.equals(Symbol.MINUS) || this.tag.equals(Symbol.TIMES) || this.tag.equals(Symbol.DIVIDED_BY)
-				|| this.tag.equals(Symbol.REMAINS) || this.tag.equals(Symbol.SMALLER) || this.tag.equals(Symbol.GREATER) || this.tag.equals(Symbol.EQUAL)
-				|| this.tag.equals(Symbol.AND) || this.tag.equals(Symbol.OR) || this.tag.equals(Symbol.XOR) || this.tag.equals(Symbol.NOT)
-				|| this.tag.equals(Symbol.REFERENCE) || this.tag.equals(Symbol.COPY) || this.tag.equals(Symbol.FUNCTION) || this.tag.equals(Symbol.RETURN)
-				|| this.tag.equals(Symbol.CALL)) {
+		if (this.tag.equals(Symbol.PLUS) || this.tag.equals(Symbol.MINUS) || this.tag.equals(Symbol.TIMES)
+				|| this.tag.equals(Symbol.DIVIDED_BY) || this.tag.equals(Symbol.REMAINS)
+				|| this.tag.equals(Symbol.SMALLER) || this.tag.equals(Symbol.GREATER) || this.tag.equals(Symbol.EQUAL)
+				|| this.tag.equals(Symbol.AND) || this.tag.equals(Symbol.OR) || this.tag.equals(Symbol.XOR)
+				|| this.tag.equals(Symbol.NOT) || this.tag.equals(Symbol.REFERENCE) || this.tag.equals(Symbol.COPY)
+				|| this.tag.equals(Symbol.FUNCTION) || this.tag.equals(Symbol.RETURN) || this.tag.equals(Symbol.CALL)) {
 			return true;
 		}
 		return false;
@@ -98,10 +101,11 @@ public class CodeNode {
 		}
 		/*
 		 * else if( this.tag.equals(Symbol.IDENTIFIER) ) { String valueNode =
-		 * this.value; if(valueNode == null){ //System.out.println("isValue N " + name +
-		 * " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) ); return false;
-		 * } else{ //System.out.println("isValue Y " + name + " - " +
-		 * ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) ); return true; } }
+		 * this.value; if(valueNode == null){ //System.out.println("isValue N "
+		 * + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME)
+		 * ); return false; } else{ //System.out.println("isValue Y " + name +
+		 * " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );
+		 * return true; } }
 		 */
 		else {
 			if (this.tag.equals(Symbol.FUNCTION)) {
@@ -109,14 +113,12 @@ public class CodeNode {
 				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );
 				return true;
-			}
-			else if (this.tag.equals(Symbol.ATTRIBUTE) || this.isType() || this.isBuildInFunction()) {
+			} else if (this.tag.equals(Symbol.ATTRIBUTE) || this.isType() || this.isBuildInFunction()) {
 				// System.out.println("isValue N " + name + " - " +
 				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );
 				return false;
-			}
-			else {
+			} else {
 				// System.out.println("isValue Y " + name + " - " +
 				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );

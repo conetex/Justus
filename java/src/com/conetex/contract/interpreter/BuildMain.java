@@ -12,7 +12,10 @@ import com.conetex.contract.lang.Accessible;
 
 public class BuildMain {
 
-	public static List<Complex> create(CodeNode r2) throws Invalid // TODO wird das wirklich geworfen?
+	public static List<Complex> create(CodeNode r2) throws Invalid // TODO wird
+																	// das
+																	// wirklich
+																	// geworfen?
 			, OperationInterpreterException {
 
 		List<Complex> complexTyps = Types.createComplexTypes(r2);
@@ -20,19 +23,10 @@ public class BuildMain {
 		if (complexTyps != null) {
 			Complex complexTypeRoot = Complex.getInstance(r2.getName());
 			Structure v = complexTypeRoot.createValue(null);
-			List<Value<?>> values = Values.createValues(r2, complexTypeRoot, v);
-
-			/*
-			 * List<Accessible<?>> functions = Functions.createFunctions(r2,
-			 * complexTypeRoot); Accessible<?>[] theSteps = new
-			 * Accessible<?>[functions.size()]; Accessible<?> main =
-			 * Function.createObj(functions.toArray(theSteps), complexTypeRoot.getName());
-			 * main.getFrom(v);
-			 */
-
-			Accessible<?> mainNEW = Factory.sbuild(r2, complexTypeRoot);
+			//List<Value<?>> values = 
+					Values.createValues(r2, complexTypeRoot, v);
+			Accessible<?> mainNEW = Factory.build(r2, complexTypeRoot);
 			mainNEW.getFrom(v);
-
 		}
 
 		return complexTyps;

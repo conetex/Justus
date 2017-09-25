@@ -23,8 +23,7 @@ public abstract class MailAddress extends SizedASCII {
 		if (aValue.matches(
 				"\\A[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\z")) {
 			super.actual = aValue;
-		}
-		else {
+		} else {
 			throw new Invalid("'" + aValue + "' is no valid mail-Address");
 		}
 

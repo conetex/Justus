@@ -12,6 +12,7 @@ import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.MailAddress64;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.interpreter.functions.exception.UnknownType;
 
 public class Primitive<T> extends AbstractType<T> {
 
@@ -50,18 +51,20 @@ public class Primitive<T> extends AbstractType<T> {
 			})
 			/*
 			 * , new PrimitiveDataType< String > ( ASCII12.class , new
-			 * ValueFactory<String>() { public ASCII12 createValueImp() { return new
-			 * ASCII12() ; } } ) , new PrimitiveDataType< String > ( ASCII16.class , new
-			 * ValueFactory<String>() { public ASCII16 createValueImp() { return new
-			 * ASCII16() ; } } ) , new PrimitiveDataType< String > ( ASCII32.class , new
-			 * ValueFactory<String>() { public ASCII32 createValueImp() { return new
-			 * ASCII32() ; } } ) , new PrimitiveDataType< String > ( ASCII64.class , new
-			 * ValueFactory<String>() { public ASCII64 createValueImp() { return new
-			 * ASCII64() ; } } ) , new PrimitiveDataType< String > ( ASCII128.class, new
-			 * ValueFactory<String>() { public ASCII128 createValueImp() { return new
-			 * ASCII128(); } } ) , new PrimitiveDataType< String > ( ASCII256.class, new
-			 * ValueFactory<String>() { public ASCII256 createValueImp() { return new
-			 * ASCII256(); } } )
+			 * ValueFactory<String>() { public ASCII12 createValueImp() { return
+			 * new ASCII12() ; } } ) , new PrimitiveDataType< String > (
+			 * ASCII16.class , new ValueFactory<String>() { public ASCII16
+			 * createValueImp() { return new ASCII16() ; } } ) , new
+			 * PrimitiveDataType< String > ( ASCII32.class , new
+			 * ValueFactory<String>() { public ASCII32 createValueImp() { return
+			 * new ASCII32() ; } } ) , new PrimitiveDataType< String > (
+			 * ASCII64.class , new ValueFactory<String>() { public ASCII64
+			 * createValueImp() { return new ASCII64() ; } } ) , new
+			 * PrimitiveDataType< String > ( ASCII128.class, new
+			 * ValueFactory<String>() { public ASCII128 createValueImp() {
+			 * return new ASCII128(); } } ) , new PrimitiveDataType< String > (
+			 * ASCII256.class, new ValueFactory<String>() { public ASCII256
+			 * createValueImp() { return new ASCII256(); } } )
 			 */
 			, new Primitive<String>(Base64_256.class, String.class, new PrimitiveValueFactory<String>() {
 				@Override
@@ -71,10 +74,10 @@ public class Primitive<T> extends AbstractType<T> {
 			})
 			/*
 			 * , new PrimitiveDataType< String > ( Base64_128.class, new
-			 * ValueFactory<String>() { public Base64_128 createValueImp() { return new
-			 * Base64_128(); } } ) , new PrimitiveDataType< String > ( Base64_64.class , new
-			 * ValueFactory<String>() { public Base64_64 createValueImp() { return new
-			 * Base64_64() ; } } )
+			 * ValueFactory<String>() { public Base64_128 createValueImp() {
+			 * return new Base64_128(); } } ) , new PrimitiveDataType< String >
+			 * ( Base64_64.class , new ValueFactory<String>() { public Base64_64
+			 * createValueImp() { return new Base64_64() ; } } )
 			 */
 			, new Primitive<String>(MailAddress64.class, String.class, new PrimitiveValueFactory<String>() {
 				@Override
@@ -84,10 +87,11 @@ public class Primitive<T> extends AbstractType<T> {
 			})
 			/*
 			 * , new PrimitiveDataType< String > ( MailAddress128.class, new
-			 * ValueFactory<String>() { public MailAddress128 createValueImp() { return new
-			 * MailAddress128(); } } ) , new PrimitiveDataType< String > (
-			 * MailAddress254.class, new ValueFactory<String>() { public MailAddress254
-			 * createValueImp() { return new MailAddress254(); } } )
+			 * ValueFactory<String>() { public MailAddress128 createValueImp() {
+			 * return new MailAddress128(); } } ) , new PrimitiveDataType<
+			 * String > ( MailAddress254.class, new ValueFactory<String>() {
+			 * public MailAddress254 createValueImp() { return new
+			 * MailAddress254(); } } )
 			 */
 	};
 
@@ -117,14 +121,12 @@ public class Primitive<T> extends AbstractType<T> {
 		String className = Bool.class.getPackage().getName() + "." + dataType;
 		try {
 			theClass = Class.forName(className);
-		}
-		catch (ClassNotFoundException e) {
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.err.println("can not find " + className);
 			// e.printStackTrace();
 			return null;
-		}
-		catch (NoClassDefFoundError e) {
+		} catch (NoClassDefFoundError e) {
 			// TODO Auto-generated catch block
 			System.err.println("can not find " + className);
 			// e.printStackTrace();
@@ -156,7 +158,7 @@ public class Primitive<T> extends AbstractType<T> {
 			return null;
 		}
 
-		Primitive<T> simpleType = Primitive.<T>getInstance(typeName);
+		Primitive<T> simpleType = Primitive.<T> getInstance(typeName);
 		if (simpleType == null) {
 			System.err.println("unknown simple Type " + typeName);
 			return null;
@@ -164,8 +166,7 @@ public class Primitive<T> extends AbstractType<T> {
 		Label str = new Label();
 		try {
 			str.set(attributeName);
-		}
-		catch (Invalid e) {
+		} catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -173,8 +174,7 @@ public class Primitive<T> extends AbstractType<T> {
 		Attribute<T> re = null;
 		try {
 			re = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
+		} catch (NullLabelException | EmptyLabelException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return null;
@@ -197,14 +197,15 @@ public class Primitive<T> extends AbstractType<T> {
 	}
 
 	@Override
-	public Attribute<T> createAttribute(Label theName) throws Attribute.NullLabelException, Attribute.EmptyLabelException {
+	public Attribute<T> createAttribute(Label theName)
+			throws Attribute.NullLabelException, Attribute.EmptyLabelException {
 		/*
 		 * if(theName == null || theName.get() == null){ throw new
-		 * Identifier.NullLabelException(); } if(theName.get().length() < 1){ throw new
-		 * Identifier.EmptyLabelException(); } return Identifier.<T>create(theName,
-		 * this);
+		 * Identifier.NullLabelException(); } if(theName.get().length() < 1){
+		 * throw new Identifier.EmptyLabelException(); } return
+		 * Identifier.<T>create(theName, this);
 		 */
-		return AbstractType.<T>createIdentifier(theName, this);
+		return AbstractType.<T> createIdentifier(theName, this);
 	}
 
 	@Override
@@ -224,6 +225,19 @@ public class Primitive<T> extends AbstractType<T> {
 	@Override
 	public <U> Attribute<U> getSubAttribute(String aName) {
 		return null;
+	}
+
+	public static Class<?> getBaseType(Attribute<?> id) throws UnknownType {
+		AbstractType<?> t = id.getType();
+		Class<? extends Value<?>> clazzChild = t.getClazz();
+		Primitive<?> pri = Primitive.getInstance(clazzChild);
+		if (pri == null) {
+			// System.err.println("ERR: can not get type of '" + n.getValue() +
+			// "'");
+			throw new UnknownType(clazzChild.toString());
+		}
+		Class<?> baseType = pri.getBaseType();
+		return baseType;
 	}
 
 }

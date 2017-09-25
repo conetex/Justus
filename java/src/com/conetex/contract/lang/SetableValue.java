@@ -1,8 +1,14 @@
 package com.conetex.contract.lang;
 
+import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
+import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.interpreter.functions.Factory;
+import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
+import com.conetex.contract.lang.math.ElementaryArithmetic;
 
 public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 
@@ -27,7 +33,8 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 		return value.set(newValue);
 		// just 4 debug:
 		// value = thisObject.getValueNew(this.path, this.clazz);
-		// System.out.println(valueOld + " setTo " + newValue + " -> " + value.get());
+		// System.out.println(valueOld + " setTo " + newValue + " -> " +
+		// value.get());
 		// return newValue;
 	}
 
@@ -39,4 +46,33 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 		return null;
 	}
 
+	public static <R> SetableValue<R> createFunctionSetable(String path, Complex parentTyp, Class<R> expected)
+			throws OperationInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Factory.checkType(Primitive.getBaseType(Attribute.getID(path, parentTyp)), expected);
+		// String path = n.getValue();
+		SetableValue<R> re = SetableValue.create(path, expected);
+		return re;
+	}
+
+	public static SetableValue<?> createFunctionSetableWhatEver(String path, Complex parentTyp)
+			throws OperationInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Class<?> baseType = Primitive.getBaseType(Attribute.getID(path, parentTyp));
+		// String path = n.getValue();
+		SetableValue<?> re = SetableValue.create(path, baseType);
+		return re;
+	}
+
+	public static SetableValue<? extends Number> createFunctionSetableNumber(String path, Complex parentTyp)
+			throws OperationInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Attribute<?> id = Attribute.getID(path, parentTyp);
+		Class<? extends Number> baseType = ElementaryArithmetic.getConcretNumClass(Primitive.getBaseType(id));
+		SetableValue<? extends Number> re = SetableValue.create(path, baseType);
+		return re;
+	}
 }

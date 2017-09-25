@@ -25,8 +25,7 @@ public class BigInt implements Value<BigInteger> {
 		try {
 			BigInteger v = new BigInteger(value);
 			return this.set(v);
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}

@@ -148,9 +148,9 @@ public class Function<V> extends Accessible<V> {
 	}
 
 	/*
-	 * public static <SV extends Value<?>> Function<SV> create(Structure theData,
-	 * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return
-	 * null; } return new Function<SV>(theData, theSteps); }
+	 * public static <SV extends Value<?>> Function<SV> create(Structure
+	 * theData, Accessible<?>[] theSteps){ if(theData == null || theSteps ==
+	 * null){ return null; } return new Function<SV>(theData, theSteps); }
 	 */
 	// private Value<?>[] values;
 	// private String[] valueNames;

@@ -11,8 +11,7 @@ public abstract class Base64 extends SizedASCII {
 																	// "\\A\\p{ASCII}*\\z"
 																	// "^[\\p{ASCII}]*$"
 				super.actual = newValue;
-			}
-			else {
+			} else {
 				throw new Invalid("no valid Base64! '=' is only allowed at the end!");
 			}
 		}

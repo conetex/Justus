@@ -11,8 +11,8 @@ public class CallJs {
 
 		String script = "var MyJavaClass = Java.type('org.conetex.prime2.study.CallJs');"
 
-				+ "function fun1(name) {" + "    print('Hi there from Javascript, ' + name);" + "    return \"Hi \" + name + \"! greetings from javascript \";"
-				+ "};"
+				+ "function fun1(name) {" + "    print('Hi there from Javascript, ' + name);"
+				+ "    return \"Hi \" + name + \"! greetings from javascript \";" + "};"
 
 				+ "var fun2 = function (object) {" + "var result = object.fun1('John Doe');" // does
 																								// not

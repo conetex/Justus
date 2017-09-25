@@ -6,9 +6,9 @@ import com.conetex.contract.lang.Symbol;
 
 public class ComparisonString extends Accessible<Boolean> {
 
-	public static final int	SMALLER	= -1;
-	public static final int	EQUAL	= 0;
-	public static final int	GREATER	= 1;
+	public static final int SMALLER = -1;
+	public static final int EQUAL = 0;
+	public static final int GREATER = 1;
 
 	public static Accessible<Boolean> _createNew(Accessible<String> theA, Accessible<String> theB, String name) {
 		return create(theA, theB, name);
@@ -58,8 +58,9 @@ public class ComparisonString extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
-	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA,
+	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
+	 * this.operator = theOperation; }
 	 */
 
 	@Override
@@ -71,8 +72,7 @@ public class ComparisonString extends Accessible<Boolean> {
 				return Boolean.TRUE;
 			}
 			return null;
-		}
-		else if (bN == null) {
+		} else if (bN == null) {
 			return null;
 		}
 

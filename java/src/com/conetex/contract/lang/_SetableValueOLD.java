@@ -65,7 +65,7 @@ public class _SetableValueOLD<T> extends Accessible<T> implements Setable<T> {
 
 	@Override
 	public Class<T> getBaseType() {
-		Primitive<T> pri = Primitive.<T>getInstance(this.valueClazz);// TODO
+		Primitive<T> pri = Primitive.<T> getInstance(this.valueClazz);// TODO
 																		// das
 																		// muss
 																		// getestet

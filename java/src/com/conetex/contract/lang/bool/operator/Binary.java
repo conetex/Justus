@@ -7,7 +7,8 @@ import com.conetex.contract.lang.Symbol;
 public abstract class Binary extends Accessible<Boolean> {// implements
 															// Accessible<Boolean>
 
-	public static Binary create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB, String operation) {
+	public static Binary create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB,
+			String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -21,8 +22,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 					return Boolean.FALSE;
 				}
 			};
-		}
-		else if (operation.equals(Symbol.OR)) {
+		} else if (operation.equals(Symbol.OR)) {
 			return new Binary(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean a, Boolean b) {
@@ -32,8 +32,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 					return Boolean.FALSE;
 				}
 			};
-		}
-		else if (operation.equals(Symbol.XOR)) {
+		} else if (operation.equals(Symbol.XOR)) {
 			return new Binary(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean a, Boolean b) {
@@ -74,9 +73,9 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 	}
 
 	/*
-	 * @Override public boolean compute(Structure thisObject) { getFrom(thisObject);
-	 * // TODO compute ist nur fürs debuggen ... ansonsten // ist das ja sinnlos
-	 * hier! return true; }
+	 * @Override public boolean compute(Structure thisObject) {
+	 * getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten
+	 * // ist das ja sinnlos hier! return true; }
 	 */
 
 	@Override

@@ -1,8 +1,14 @@
 package com.conetex.contract.lang;
 
+import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
+import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.interpreter.functions.Factory;
+import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
+import com.conetex.contract.lang.math.ElementaryArithmetic;
 
 public class AccessibleValue<T> extends Accessible<T> {
 
@@ -52,7 +58,8 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return value.set(newValue);
 		// just 4 debug:
 		// value = thisObject.getValueNew(this.path, this.clazz);
-		// System.out.println(valueOld + " setTo " + newValue + " -> " + value.get());
+		// System.out.println(valueOld + " setTo " + newValue + " -> " +
+		// value.get());
 		// return newValue;
 	}
 
@@ -68,6 +75,36 @@ public class AccessibleValue<T> extends Accessible<T> {
 	@Override
 	public Class<T> getBaseType() {
 		return this.clazz;
+	}
+
+	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected)
+			throws OperationInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Factory.checkType(Primitive.getBaseType(Attribute.getID(path, parentTyp)), expected);
+		// String path = n.getValue();
+		AccessibleValue<R> re = AccessibleValue.create(path, expected);
+		return re;
+	}
+
+	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp)
+			throws OperationInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Class<?> baseType = Primitive.getBaseType(Attribute.getID(path, parentTyp));
+		// String path = n.getValue();
+		AccessibleValue<?> re = AccessibleValue.create(path, baseType);
+		return re;
+	}
+
+	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp)
+			throws OperationInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Attribute<?> id = Attribute.getID(path, parentTyp);
+		Class<? extends Number> baseType = ElementaryArithmetic.getConcretNumClass(Primitive.getBaseType(id));
+		AccessibleValue<? extends Number> re = AccessibleValue.create(path, baseType);
+		return re;
 	}
 
 }

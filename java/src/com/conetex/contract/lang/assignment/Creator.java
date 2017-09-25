@@ -22,7 +22,8 @@ public abstract class Creator {
 
 	public abstract <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src);
 
-	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> baseType, String name) {
+	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> baseType,
+			String name) {
 		if (src == null || trg == null) {
 			return null;
 		}
@@ -34,7 +35,7 @@ public abstract class Creator {
 				if (c == null) {
 					return null;
 				}
-				return c.<T>create(trgCasted, srcCasted);
+				return c.<T> create(trgCasted, srcCasted);
 			}
 		}
 		return null;
@@ -52,7 +53,7 @@ public abstract class Creator {
 				if (c == null) {
 					return null;
 				}
-				return c.<T>create(trg, srcCasted);
+				return c.<T> create(trg, srcCasted);
 			}
 		}
 		return null;
@@ -70,7 +71,7 @@ public abstract class Creator {
 				if (c == null) {
 					return null;
 				}
-				return c.<T>create(trgCasted, src);
+				return c.<T> create(trgCasted, src);
 			}
 		}
 		return null;
@@ -84,7 +85,7 @@ public abstract class Creator {
 		if (c == null) {
 			return null;
 		}
-		return c.<T>create(trg, src);
+		return c.<T> create(trg, src);
 	}
 
 	private static Creator getCreator(String name) {

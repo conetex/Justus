@@ -59,9 +59,9 @@ public abstract class Egg<T> {
  * public Egg(String name) { super(name); }
  * 
  * public final void _means(String theOperationName, Egg<T> b) { if
- * (this._builder.containsKey(theOperationName)) {
- * System.err.println("duplicate operation '" + theOperationName + "' in " +
- * this.getName()); } this._builder.put(theOperationName, b); }
+ * (this._builder.containsKey(theOperationName)) { System.err.println(
+ * "duplicate operation '" + theOperationName + "' in " + this.getName()); }
+ * this._builder.put(theOperationName, b); }
  * 
  * public final void _means(String theOperationName) {
  * this._means(theOperationName, this); }
