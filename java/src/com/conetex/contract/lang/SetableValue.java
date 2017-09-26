@@ -6,8 +6,8 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.functions.Factory;
-import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.BuildFunctions;
+import com.conetex.contract.interpreter.exception.OperationInterpreterException;
 import com.conetex.contract.lang.math.ElementaryArithmetic;
 
 public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
@@ -24,7 +24,7 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 	}
 
 	public T setTo(Structure thisObject, T newValue) throws Invalid {
-		Value<T> value = thisObject.getValueNew(this.path, this.clazz);
+		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		if (value == null) {
 			return null;
 		}
@@ -38,6 +38,7 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 		// return newValue;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <X> Setable<X> asSetable(Class<X> baseType) {
 		if (baseType.isAssignableFrom(this.getBaseType())) {
@@ -50,7 +51,7 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 			throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
-		Factory.checkType(Primitive.getBaseType(Attribute.getID(path, parentTyp)), expected);
+		BuildFunctions.checkType(Primitive.getBaseType(Attribute.getID(path, parentTyp)), expected);
 		// String path = n.getValue();
 		SetableValue<R> re = SetableValue.create(path, expected);
 		return re;

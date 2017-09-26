@@ -18,6 +18,7 @@ public abstract class Accessible<T> {// implements Accessible<T> {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public final <X> Accessible<X> as(Class<X> baseType) {
 		if (baseType.isAssignableFrom(this.getBaseType())) {
 			return (Accessible<X>) this;

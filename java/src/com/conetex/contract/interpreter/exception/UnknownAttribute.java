@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.functions.exception;
+package com.conetex.contract.interpreter.exception;
 
 public class UnknownAttribute extends OperationInterpreterException {
 

@@ -3,6 +3,7 @@ package com.conetex.contract.lang.control.function;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.conetex.contract.data.Value;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Accessible;
@@ -175,7 +176,7 @@ public class Function<V> extends Accessible<V> {
 	@Override
 	public V getFrom(Structure thisObject) {
 		System.out.println("Function getFrom " + this.name);
-		Structure thisObjectB = (Structure) thisObject.getValue(this.name);
+		Value<Structure> thisObjectB = thisObject.getStructure(this.name);
 		if (thisObjectB == null) {
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
 			return null;
@@ -184,10 +185,10 @@ public class Function<V> extends Accessible<V> {
 			if (this.steps[i].getClass() == Return.class) {
 				// TODO der cast ist scheiﬂe!
 				// return (V) this.steps[i].getFrom(thisObject);
-				System.out.println("MOCK return: " + this.steps[i].getFrom(thisObjectB));
+				System.out.println("MOCK return: " + this.steps[i].getFrom(thisObjectB.get()));
 				return null;
 			}
-			System.out.println("MOCK: " + this.steps[i].getFrom(thisObjectB));
+			System.out.println("MOCK: " + this.steps[i].getFrom(thisObjectB.get()));
 			// this.steps[i].getFrom(thisObjectB);
 		}
 		return null;

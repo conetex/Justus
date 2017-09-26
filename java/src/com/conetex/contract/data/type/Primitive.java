@@ -12,7 +12,7 @@ import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.MailAddress64;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.functions.exception.UnknownType;
+import com.conetex.contract.interpreter.exception.UnknownType;
 
 public class Primitive<T> extends AbstractType<T> {
 
@@ -103,7 +103,7 @@ public class Primitive<T> extends AbstractType<T> {
 
 	final PrimitiveValueFactory<T> factory;
 
-	public static <V> Primitive<V> getInstance(String dataType) {
+	private static <V> Primitive<V> getInstance(String dataType) {
 
 		Class<?> theClass = getClass(dataType);
 		Primitive<V> re = getInstance(theClass);
@@ -114,7 +114,7 @@ public class Primitive<T> extends AbstractType<T> {
 
 	}
 
-	public static Class<?> getClass(String dataType) {
+	private static Class<?> getClass(String dataType) {
 
 		Class<?> theClass = null;
 
@@ -137,10 +137,10 @@ public class Primitive<T> extends AbstractType<T> {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <W> Primitive<W> getInstance(Class<?> theClass) {
 		for (int i = 0; i < types.length; i++) {
 			if (types[i].getClazz() == theClass) {
-				// TODO typ check !!!
 				return (Primitive<W>) Primitive.types[i];
 			}
 		}

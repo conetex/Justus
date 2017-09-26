@@ -16,16 +16,16 @@ import org.xml.sax.SAXException;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.BuildMain;
+import com.conetex.contract.interpreter.Build;
 import com.conetex.contract.interpreter.CodeNode;
-import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
-import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
-import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
-import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
-import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
-import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
-import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
-import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
+import com.conetex.contract.interpreter.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.exception.MissingSubOperation;
+import com.conetex.contract.interpreter.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.exception.TypeNotDeterminated;
+import com.conetex.contract.interpreter.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.exception.UnknownComplexType;
 import com.conetex.contract.lang.Symbol;
 
 public class ReadXML {
@@ -49,7 +49,7 @@ public class ReadXML {
 			if (typOfNode == Node.ELEMENT_NODE) {
 				if (complexTyps == null) {
 					CodeNode r2 = createSyntaxNode(r);
-					complexTyps = BuildMain.create(r2);
+					complexTyps = Build.create(r2);
 				} else {
 					System.err.println("more than one root element! can not proceed!");
 				}

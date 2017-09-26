@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.exception.TypesDoNotMatch;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.Symbol;
 

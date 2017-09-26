@@ -1,22 +1,24 @@
-package com.conetex.contract.interpreter.functions;
+package com.conetex.contract.interpreter;
 
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.interpreter.CodeNode;
-import com.conetex.contract.interpreter.functions.exception.FunctionNotFound;
-import com.conetex.contract.interpreter.functions.exception.MissingSubOperation;
-import com.conetex.contract.interpreter.functions.exception.NoAccessToValue;
-import com.conetex.contract.interpreter.functions.exception.OperationInterpreterException;
-import com.conetex.contract.interpreter.functions.exception.TypeNotDeterminated;
-import com.conetex.contract.interpreter.functions.exception.TypesDoNotMatch;
-import com.conetex.contract.interpreter.functions.exception.UnexpectedSubOperation;
-import com.conetex.contract.interpreter.functions.exception.UnknownComplexType;
-import com.conetex.contract.interpreter.functions.nesting.Box;
-import com.conetex.contract.interpreter.functions.nesting.Egg;
+import com.conetex.contract.interpreter.exception.FunctionNotFound;
+import com.conetex.contract.interpreter.exception.MissingSubOperation;
+import com.conetex.contract.interpreter.exception.NoAccessToValue;
+import com.conetex.contract.interpreter.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.exception.OperationMeansNotCalled;
+import com.conetex.contract.interpreter.exception.TypeNotDeterminated;
+import com.conetex.contract.interpreter.exception.TypesDoNotMatch;
+import com.conetex.contract.interpreter.exception.UnexpectedSubOperation;
+import com.conetex.contract.interpreter.exception.UnknownComplexType;
 import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.AccessibleConstant;
 import com.conetex.contract.lang.AccessibleValue;
@@ -32,8 +34,93 @@ import com.conetex.contract.lang.control.function.Function;
 import com.conetex.contract.lang.control.function.Return;
 import com.conetex.contract.lang.math.ElementaryArithmetic;
 
-public class Factory {
+public class BuildFunctions {
 
+	public static abstract class Box<T, S> extends Egg<T> {
+
+		private Map<String, Egg<? extends S>> childBuilder = new HashMap<>();
+
+		public Box(String name) {
+			super(name);
+		}
+
+		public final void contains(String theOperationName, Egg<? extends S> b) {
+			if (this.childBuilder.containsKey(theOperationName)) {
+				System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
+			}
+			this.childBuilder.put(theOperationName, b);
+		}
+
+		public final void contains(Egg<? extends S> b) throws OperationMeansNotCalled {
+			Set<String> keySet = b.keySet();
+			if (keySet.size() == 0) {
+				throw new OperationMeansNotCalled(b.getName());
+			}
+			for (String s : b.keySet()) {
+				this.contains(s, b);
+			}
+		}
+
+		public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp)
+				throws OperationInterpreterException {
+			String name = n.getCommand();
+			Egg<? extends S> s = this.childBuilder.get(name);
+			if (s == null) {
+				System.err.println("inner Operation '" + name + "' not found in " + this.getName());
+				return null;
+			}
+			System.out.println("createChild " + name + " " + n.getName());
+			return s.createThis(n, parentTyp);
+		}
+
+		public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException;
+
+	}	
+	
+	public static abstract class Egg<T> {
+
+		private String name;
+
+		private Set<String> meaning = new HashSet<>();
+
+		protected Egg(String theName) {
+			this.name = theName;
+		}
+
+		public final String getName() {
+			return this.name;
+		}
+
+		final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
+			if (!this.meaning.contains(n.getCommand())) {
+				System.err.println("Operation " + n.getCommand() + " not found!");
+				return null;
+			}
+			return this.create(n, parentTyp);
+		}
+
+		public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException;
+
+		final Set<String> keySet() {
+			return this.meaning;
+		}
+
+		public final void means(String theOperationName) {
+			if (this.meaning.contains(theOperationName)) {
+				System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
+			}
+			this.meaning.add(theOperationName);
+		}
+
+		public final void means(String[] theOperationNames) {
+			for (String theOperationName : theOperationNames) {
+				this.means(theOperationName);
+			}
+		}
+
+	}	
+	
+	
 	public static class Expression {
 
 		public static void means() {
@@ -49,7 +136,7 @@ public class Factory {
 			public Accessible<? extends Number> create(CodeNode n, Complex parentTyp)
 					throws OperationInterpreterException {
 				// MATH
-				String name = n.getTag();
+				String name = n.getCommand();
 				Accessible<? extends Number> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
 				Accessible<? extends Number> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
 				check2PartOperations(n, a, b);
@@ -62,7 +149,7 @@ public class Factory {
 			@Override
 			public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws OperationInterpreterException {
 				// BOOL
-				String name = n.getTag();
+				String name = n.getCommand();
 				if (name.equals(Symbol.NOT)) {
 					Accessible<? extends Boolean> sub = this.createChild(n.getChildElementByIndex(0), parentTyp);
 					check1PartOperations(n, sub);
@@ -83,7 +170,7 @@ public class Factory {
 				Accessible<?> a = this.createChild(n.getChildElementByIndex(0), parentTyp);
 				Accessible<?> b = this.createChild(n.getChildElementByIndex(1), parentTyp);
 				check2PartOperations(n, a, b);
-				return Comparsion.createComparison(a, b, n.getTag());
+				return Comparsion.createComparison(a, b, n.getCommand());
 			}
 		};
 
@@ -219,7 +306,7 @@ public class Factory {
 				check2PartOperations(n, trg, src);
 				Class<?> srcBaseType = src.getBaseType();
 				checkAssigmentStructBaseType(trgNode, srcNode, srcBaseType);
-				return Creator.createFromQualifiedTrg(trg, src, n.getTag());
+				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
 
@@ -237,7 +324,7 @@ public class Factory {
 				Class<?> trgBaseType = trg.getBaseType();
 				Class<?> srcBaseType = src.getBaseType();
 				checkAssigmentNumBaseType(trgBaseType, srcBaseType, trgNode, srcNode);
-				return Creator.createFromQualifiedTrg(trg, src, n.getTag());
+				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
 
@@ -252,7 +339,7 @@ public class Factory {
 				Accessible<?> src = this.createChild(srcNode, parentTyp);
 				check2PartOperations(n, trg, src);
 				checkType(src.getBaseType(), Boolean.class);
-				return Creator.createFromQualifiedTrg(trg, src, n.getTag());
+				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
 
@@ -271,16 +358,16 @@ public class Factory {
 				Class<?> srcBaseType = src.getBaseType();
 				if (trgBaseType == Boolean.class) {
 					checkType(src.getBaseType(), Boolean.class);
-					return Creator.createFromUnqualified(trg, src, Boolean.class, n.getTag());
+					return Creator.createFromUnqualified(trg, src, Boolean.class, n.getCommand());
 				} else if (trgBaseType == Structure.class) {
 					checkAssigmentStructBaseType(trgNode, srcNode, srcBaseType);
-					return Creator.createFromUnqualified(trg, src, Structure.class, n.getTag());
+					return Creator.createFromUnqualified(trg, src, Structure.class, n.getCommand());
 				} else if (trgBaseType == String.class) {
 					checkType(src.getBaseType(), String.class);
-					return Creator.createFromUnqualified(trg, src, String.class, n.getTag());
+					return Creator.createFromUnqualified(trg, src, String.class, n.getCommand());
 				} else if (Number.class.isAssignableFrom(trgBaseType)) {
 					checkAssigmentNumBaseType(trgBaseType, srcBaseType, trgNode, srcNode);
-					return Creator.createFromUnqualified(trg, src, trgBaseType, n.getTag());
+					return Creator.createFromUnqualified(trg, src, trgBaseType, n.getCommand());
 				} else {
 					throw new TypeNotDeterminated("target-Type: " + trgBaseType + ", source-Type: " + srcBaseType);
 				}
@@ -349,7 +436,7 @@ public class Factory {
 		static Box<Object, Object> noReturn = new Box<Object, Object>("voidFunction") {
 			@Override
 			public Accessible<? extends Object> create(CodeNode n, Complex type) throws OperationInterpreterException {
-				Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(n, type, this);
 				Class<?> returntype = getReturnTyp(theSteps);
 				if (returntype == Object.class) {
 					Accessible<Object> main = Function.createVoid(theSteps, n.getName());
@@ -371,7 +458,7 @@ public class Factory {
 			@Override
 			public Accessible<? extends Structure> create(CodeNode n, Complex type)
 					throws OperationInterpreterException {
-				Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(n, type, this);
 				Class<?> returntype = getReturnTyp(theSteps);
 				if (returntype == Structure.class) {
 					Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
@@ -385,7 +472,7 @@ public class Factory {
 		static Box<Number, Object> number = new Box<Number, Object>("numberFunction") {
 			@Override
 			public Accessible<? extends Number> create(CodeNode n, Complex type) throws OperationInterpreterException {
-				Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(n, type, this);
 				Class<?> returntype = getReturnTyp(theSteps);
 				if (Number.class.isAssignableFrom(returntype)) {
 					Accessible<? extends Number> main = Function.createNum(theSteps, n.getName());
@@ -399,7 +486,7 @@ public class Factory {
 		static Box<Boolean, Object> bool = new Box<Boolean, Object>("boolFunction") {
 			@Override
 			public Accessible<? extends Boolean> create(CodeNode n, Complex type) throws OperationInterpreterException {
-				Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(n, type, this);
 				Class<?> returntype = getReturnTyp(theSteps);
 				if (returntype == Boolean.class) {
 					Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
@@ -413,7 +500,7 @@ public class Factory {
 		static Box<Object, Object> unknown = new Box<Object, Object>("whatEverFunction") {
 			@Override
 			public Accessible<?> create(CodeNode n, Complex type) throws OperationInterpreterException {
-				Accessible<?>[] theSteps = Factory.getFunctionSteps(n, type, this);
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(n, type, this);
 				Class<?> returntype = getReturnTyp(theSteps);
 				if (returntype == String.class) {
 					return null;
@@ -546,7 +633,7 @@ public class Factory {
 			@Override
 			public Accessible<Structure> create(CodeNode n, Complex type) throws OperationInterpreterException {
 
-				String name = n.getTag();
+				String name = n.getCommand();
 				if (type == null) {
 					System.err.println("can not recognize type of " + name);
 					return null;
@@ -606,10 +693,10 @@ public class Factory {
 		FunCall.means();
 		Data.means();
 
-		Factory.buildBool(n, type);
-		Factory.buildNumber(n, type);
-		Factory.buildStruct(n, type);
-		Factory.buildUnknown(n, type);
+		BuildFunctions.buildBool(n, type);
+		BuildFunctions.buildNumber(n, type);
+		BuildFunctions.buildStruct(n, type);
+		BuildFunctions.buildUnknown(n, type);
 
 		Data.complex.contains(Fun.unknown);
 		Data.complex.contains(Data.complex);
@@ -760,7 +847,7 @@ public class Factory {
 	public static Accessible<?>[] getFunctionSteps(CodeNode n, Complex type, Box<?, ?> box)
 			throws OperationInterpreterException {
 
-		String name = n.getTag();
+		String name = n.getCommand();
 		if (type == null) {
 			System.err.println("can not recognize type of " + name + " " + n.getName());
 			return null;
@@ -770,8 +857,8 @@ public class Factory {
 
 		List<CodeNode> children = n.getChildNodes();
 		for (CodeNode c : children) {
-			if (c.isBuildInFunction() && !c.getTag().equals(Symbol.FUNCTION)) {
-				System.out.println("createBuild " + c.getTag() + " - " + c.getName());
+			if (c.isBuildInFunction() && !c.getCommand().equals(Symbol.FUNCTION)) {
+				System.out.println("createBuild " + c.getCommand() + " - " + c.getName());
 				// Accessible<?> v = createFunction(c, type);
 				Accessible<?> v = box.createChild(c, type);
 				if (v != null) {
@@ -786,7 +873,7 @@ public class Factory {
 	}
 
 	private static Accessible<? extends Number> try2CreateNumConst(CodeNode n, Complex parentTyp) {
-		String name = n.getTag();
+		String name = n.getCommand();
 		if (name.equals(Symbol.BINT)) {
 			return AccessibleConstant.<BigInteger> create2(BigInteger.class, n.getValue());
 		} else if (name.equals(Symbol.INT)) {
@@ -798,7 +885,7 @@ public class Factory {
 	}
 
 	private static Accessible<Boolean> try2CreateBoolConst(CodeNode n, Complex parentTyp) {
-		String name = n.getTag();
+		String name = n.getCommand();
 		if (name.equals(Symbol.BOOL)) {
 			return AccessibleConstant.<Boolean> create2(Boolean.class, n.getValue());
 		}
@@ -806,7 +893,7 @@ public class Factory {
 	}
 
 	private static Accessible<Structure> try2CreateStructureConst(CodeNode n, Complex parentTyp) {
-		String name = n.getTag();
+		String name = n.getCommand();
 		if (name.equals(Symbol.STRUCT)) {
 			return AccessibleConstant.<Structure> create2(Structure.class, n.getValue());
 		}
@@ -848,15 +935,15 @@ public class Factory {
 
 		Complex trgComplexType = Complex.getInstance(trgNode.getType());
 		if (trgComplexType == null) {
-			throw new UnknownComplexType(trgNode.getType() + "(" + trgNode.getTag() + " - " + trgNode.getName() + ")");
+			throw new UnknownComplexType(trgNode.getType() + "(" + trgNode.getCommand() + " - " + trgNode.getName() + ")");
 		}
 		Complex srcComplexType = Complex.getInstance(srcNode.getType());
 		if (srcComplexType == null) {
-			throw new UnknownComplexType(srcNode.getType() + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");
+			throw new UnknownComplexType(srcNode.getType() + "(" + srcNode.getCommand() + " - " + srcNode.getName() + ")");
 		}
 		if (trgComplexType != srcComplexType) {
-			throw new TypesDoNotMatch(trgNode.getType() + "(" + trgNode.getTag() + " - " + trgNode.getName() + ")",
-					srcNode.getType() + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");
+			throw new TypesDoNotMatch(trgNode.getType() + "(" + trgNode.getCommand() + " - " + trgNode.getName() + ")",
+					srcNode.getType() + "(" + srcNode.getCommand() + " - " + srcNode.getName() + ")");
 		}
 	}
 
@@ -868,8 +955,8 @@ public class Factory {
 		} else {
 			baseType = ElementaryArithmetic.getBiggest(trgBaseType, srcBaseType);
 			if (baseType == srcBaseType) {
-				throw new TypesDoNotMatch(trgBaseType + "(" + trgNode.getTag() + " - " + trgNode.getName() + ") > "
-						+ srcBaseType + "(" + srcNode.getTag() + " - " + srcNode.getName() + ")");
+				throw new TypesDoNotMatch(trgBaseType + "(" + trgNode.getCommand() + " - " + trgNode.getName() + ") > "
+						+ srcBaseType + "(" + srcNode.getCommand() + " - " + srcNode.getName() + ")");
 			}
 		}
 	}

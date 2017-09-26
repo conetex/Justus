@@ -7,7 +7,7 @@ import com.conetex.contract.lang.Symbol;
 
 public class CodeNode {
 
-	private String tag;
+	private String command;
 
 	private String name;
 
@@ -37,15 +37,15 @@ public class CodeNode {
 
 	private CodeNode(String theName, String theNameAttribute, String theValue, String theType,
 			List<CodeNode> theChildren) {
-		this.tag = theName;
+		this.command = theName;
 		this.name = theNameAttribute;
 		this.value = theValue;
 		this.type = theType;
 		this.children = theChildren;
 	}
 
-	public String getTag() {
-		return this.tag;
+	public String getCommand() {
+		return this.command;
 	}
 
 	public String getName() {
@@ -61,7 +61,7 @@ public class CodeNode {
 	}
 
 	public boolean isType() {
-		if (this.tag.equals(Symbol.COMPLEX) || this.tag.equals(Symbol.FUNCTION)) {
+		if (this.command.equals(Symbol.COMPLEX) || this.command.equals(Symbol.FUNCTION)) {
 			// System.out.println("isType Y " + name + " - " +
 			// ReadXMLtools.getAttribute(n,
 			// Symbol.IDENTIFIER_NAME) );
@@ -74,26 +74,26 @@ public class CodeNode {
 	}
 
 	public boolean isIdentifier() {
-		if (this.tag.equals(Symbol.ATTRIBUTE) || this.tag.equals(Symbol.VALUE)) {
+		if (this.command.equals(Symbol.ATTRIBUTE) || this.command.equals(Symbol.VALUE)) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isBuildInFunction() {
-		if (this.tag.equals(Symbol.PLUS) || this.tag.equals(Symbol.MINUS) || this.tag.equals(Symbol.TIMES)
-				|| this.tag.equals(Symbol.DIVIDED_BY) || this.tag.equals(Symbol.REMAINS)
-				|| this.tag.equals(Symbol.SMALLER) || this.tag.equals(Symbol.GREATER) || this.tag.equals(Symbol.EQUAL)
-				|| this.tag.equals(Symbol.AND) || this.tag.equals(Symbol.OR) || this.tag.equals(Symbol.XOR)
-				|| this.tag.equals(Symbol.NOT) || this.tag.equals(Symbol.REFERENCE) || this.tag.equals(Symbol.COPY)
-				|| this.tag.equals(Symbol.FUNCTION) || this.tag.equals(Symbol.RETURN) || this.tag.equals(Symbol.CALL)) {
+		if (this.command.equals(Symbol.PLUS) || this.command.equals(Symbol.MINUS) || this.command.equals(Symbol.TIMES)
+				|| this.command.equals(Symbol.DIVIDED_BY) || this.command.equals(Symbol.REMAINS)
+				|| this.command.equals(Symbol.SMALLER) || this.command.equals(Symbol.GREATER) || this.command.equals(Symbol.EQUAL)
+				|| this.command.equals(Symbol.AND) || this.command.equals(Symbol.OR) || this.command.equals(Symbol.XOR)
+				|| this.command.equals(Symbol.NOT) || this.command.equals(Symbol.REFERENCE) || this.command.equals(Symbol.COPY)
+				|| this.command.equals(Symbol.FUNCTION) || this.command.equals(Symbol.RETURN) || this.command.equals(Symbol.CALL)) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isValue() {
-		if (this.tag.equals(Symbol.VALUE)) {
+		if (this.command.equals(Symbol.VALUE)) {
 			// System.out.println("isValue Y " + name + " - " +
 			// ReadXMLtools.getAttribute(n,
 			// Symbol.IDENTIFIER_NAME) );
@@ -108,12 +108,12 @@ public class CodeNode {
 		 * return true; } }
 		 */
 		else {
-			if (this.tag.equals(Symbol.FUNCTION)) {
+			if (this.command.equals(Symbol.FUNCTION)) {
 				// System.out.println("isValue Y " + name + " - " +
 				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );
 				return true;
-			} else if (this.tag.equals(Symbol.ATTRIBUTE) || this.isType() || this.isBuildInFunction()) {
+			} else if (this.command.equals(Symbol.ATTRIBUTE) || this.isType() || this.isBuildInFunction()) {
 				// System.out.println("isValue N " + name + " - " +
 				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );

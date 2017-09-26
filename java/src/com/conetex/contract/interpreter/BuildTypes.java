@@ -16,7 +16,7 @@ import com.conetex.contract.data.type.Complex.DublicateComplexException;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.lang.Symbol;
 
-public class Types {
+public class BuildTypes {
 
 	private static class Recursive<I> {
 
@@ -111,7 +111,7 @@ public class Types {
 				idTypeName = c.getType();
 				idName = c.getName();
 				if (idTypeName == null) {
-					System.err.println("can not get Type of " + c.getTag() + " " + idName);
+					System.err.println("can not get Type of " + c.getCommand() + " " + idName);
 				} else {
 					if (idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)) {
 						// Simple
@@ -122,7 +122,7 @@ public class Types {
 						id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
 					}
 				}
-			} else if (c.getTag() == Symbol.FUNCTION) {
+			} else if (c.getCommand() == Symbol.FUNCTION) {
 				// Complex
 				idTypeName = c.getType();
 				idName = c.getName();

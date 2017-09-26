@@ -12,9 +12,9 @@ import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Symbol;
 
-public class Values {
+public class BuildValues {
 	public static List<Value<?>> createValues(CodeNode n, Complex type, Structure data) {
-		String name = n.getTag();
+		String name = n.getCommand();
 		if (type == null) {
 			System.err.println("can not recognize type of " + name);
 			return null;
@@ -27,7 +27,7 @@ public class Values {
 		for (CodeNode c : n.getChildNodes()) {
 
 			if (c.isValue()) {
-				System.out.println("createValues " + c.getTag());
+				System.out.println("createValues " + c.getCommand());
 				Value<?> v = createValue(c, type, data);
 				if (v != null) {
 					/*
@@ -55,7 +55,7 @@ public class Values {
 
 		// + " (local: " + n.getLocalName() + ")";
 
-		String name = n.getTag();
+		String name = n.getCommand();
 
 		if (n.isIdentifier()) {
 			name = n.getName();
