@@ -1,4 +1,4 @@
-package com.conetex.contract.lang;
+package com.conetex.contract.lang.access;
 
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
@@ -38,20 +38,11 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 		// return newValue;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <X> Setable<X> asSetable(Class<X> baseType) {
-		if (baseType.isAssignableFrom(this.getBaseType())) {
-			return (SetableValue<X>) this;
-		}
-		return null;
-	}
-
 	public static <R> SetableValue<R> createFunctionSetable(String path, Complex parentTyp, Class<R> expected)
 			throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
-		BuildFunctions.checkType(Primitive.getBaseType(Attribute.getID(path, parentTyp)), expected);
+		BuildFunctions.checkType(Primitive.getRawTypeClass(Attribute.getID(path, parentTyp)), expected);
 		// String path = n.getValue();
 		SetableValue<R> re = SetableValue.create(path, expected);
 		return re;
@@ -61,9 +52,9 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 			throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
-		Class<?> baseType = Primitive.getBaseType(Attribute.getID(path, parentTyp));
+		Class<?> rawType = Primitive.getRawTypeClass(Attribute.getID(path, parentTyp));
 		// String path = n.getValue();
-		SetableValue<?> re = SetableValue.create(path, baseType);
+		SetableValue<?> re = SetableValue.create(path, rawType);
 		return re;
 	}
 
@@ -72,8 +63,8 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Attribute<?> id = Attribute.getID(path, parentTyp);
-		Class<? extends Number> baseType = ElementaryArithmetic.getConcretNumClass(Primitive.getBaseType(id));
-		SetableValue<? extends Number> re = SetableValue.create(path, baseType);
+		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Primitive.getRawTypeClass(id));
+		SetableValue<? extends Number> re = SetableValue.create(path, rawType);
 		return re;
 	}
 }

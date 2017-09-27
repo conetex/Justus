@@ -1,21 +1,9 @@
-package com.conetex.contract.lang.assignment;
+package com.conetex.contract.lang.assign;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.Setable;
-
-/*
-public interface Accessible<T> {//accessible
-
-	public T getFrom(Structure thisObject);
-
-	public T copyFrom(Structure thisObject) throws Invalid;
-		
-    public Class<T> getBaseType();
-	
-}
-*/
+import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.access.Setable;
 
 public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
 																	// extends
@@ -61,7 +49,7 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 	}
 
 	@Override
-	public Class<T> getBaseType() {
+	public Class<T> getRawTypeClass() {
 		// TODO Auto-generated method stub
 		return null;
 	}

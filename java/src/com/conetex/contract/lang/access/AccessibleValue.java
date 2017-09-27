@@ -1,4 +1,4 @@
-package com.conetex.contract.lang;
+package com.conetex.contract.lang.access;
 
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
@@ -73,7 +73,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 	}
 
 	@Override
-	public Class<T> getBaseType() {
+	public Class<T> getRawTypeClass() {
 		return this.clazz;
 	}
 
@@ -81,7 +81,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 			throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
-		BuildFunctions.checkType(Primitive.getBaseType(Attribute.getID(path, parentTyp)), expected);
+		BuildFunctions.checkType(Primitive.getRawTypeClass(Attribute.getID(path, parentTyp)), expected);
 		// String path = n.getValue();
 		AccessibleValue<R> re = AccessibleValue.create(path, expected);
 		return re;
@@ -91,9 +91,9 @@ public class AccessibleValue<T> extends Accessible<T> {
 			throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
-		Class<?> baseType = Primitive.getBaseType(Attribute.getID(path, parentTyp));
+		Class<?> rawType = Primitive.getRawTypeClass(Attribute.getID(path, parentTyp));
 		// String path = n.getValue();
-		AccessibleValue<?> re = AccessibleValue.create(path, baseType);
+		AccessibleValue<?> re = AccessibleValue.create(path, rawType);
 		return re;
 	}
 
@@ -102,8 +102,8 @@ public class AccessibleValue<T> extends Accessible<T> {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Attribute<?> id = Attribute.getID(path, parentTyp);
-		Class<? extends Number> baseType = ElementaryArithmetic.getConcretNumClass(Primitive.getBaseType(id));
-		AccessibleValue<? extends Number> re = AccessibleValue.create(path, baseType);
+		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Primitive.getRawTypeClass(id));
+		AccessibleValue<? extends Number> re = AccessibleValue.create(path, rawType);
 		return re;
 	}
 

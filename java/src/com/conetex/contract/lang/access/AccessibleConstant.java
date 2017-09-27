@@ -1,4 +1,4 @@
-package com.conetex.contract.lang;
+package com.conetex.contract.lang.access;
 
 import java.math.BigInteger;
 
@@ -18,18 +18,18 @@ public class AccessibleConstant<T> extends Accessible<T> {
 	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value) {
 		Primitive<RE> theClass = null;
 		if (expectedBaseTyp == BigInteger.class) {
-			theClass = Primitive.<RE> getInstance(BigInt.class);
+			theClass = Primitive.<RE> getInstance(BigInt.class, expectedBaseTyp);
 		} else if (expectedBaseTyp == Long.class) {
-			theClass = Primitive.<RE> getInstance(Lng.class);
+			theClass = Primitive.<RE> getInstance(Lng.class, expectedBaseTyp);
 		} else if (expectedBaseTyp == Integer.class) {
-			theClass = Primitive.<RE> getInstance(Int.class);
+			theClass = Primitive.<RE> getInstance(Int.class, expectedBaseTyp);
 		} else if (expectedBaseTyp == Byte.class) {
 			// TODO Typen klären ...
 			return null;
 		} else if (expectedBaseTyp == String.class) {
-			theClass = Primitive.<RE> getInstance(SizedASCII.class);
+			theClass = Primitive.<RE> getInstance(SizedASCII.class, expectedBaseTyp);
 		} else if (expectedBaseTyp == Boolean.class) {
-			theClass = Primitive.<RE> getInstance(Bool.class);
+			theClass = Primitive.<RE> getInstance(Bool.class, expectedBaseTyp);
 		}
 		if (theClass != null) {
 			Value<RE> constVal = theClass.createValue();
@@ -78,8 +78,8 @@ public class AccessibleConstant<T> extends Accessible<T> {
 	}
 
 	@Override
-	public Class<T> getBaseType() {
-		return this.value.getBaseType();
+	public Class<T> getRawTypeClass() {
+		return this.value.getRawTypeClass();
 	}
 
 }

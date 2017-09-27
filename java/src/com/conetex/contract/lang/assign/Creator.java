@@ -1,8 +1,9 @@
-package com.conetex.contract.lang.assignment;
+package com.conetex.contract.lang.assign;
 
-import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.Setable;
+import com.conetex.contract.lang.Cast;
 import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.access.Setable;
 
 public abstract class Creator {
 
@@ -22,14 +23,14 @@ public abstract class Creator {
 
 	public abstract <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src);
 
-	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> baseType,
+	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> rawType,
 			String name) {
 		if (src == null || trg == null) {
 			return null;
 		}
-		Accessible<T> srcCasted = src.as(baseType);
+		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);//src.as(rawType);
 		if (srcCasted != null) {
-			Setable<T> trgCasted = trg.asSetable(baseType);
+			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);//trg.asSetable(rawType);
 			if (trgCasted != null) {
 				Creator c = Creator.getCreator(name);
 				if (c == null) {
@@ -45,9 +46,9 @@ public abstract class Creator {
 		if (src == null || trg == null) {
 			return null;
 		}
-		Class<T> trgBaseType = trg.getBaseType();
-		if (trgBaseType == src.getBaseType()) {
-			Accessible<T> srcCasted = src.as(trgBaseType);
+		Class<T> trgRawType = trg.getRawTypeClass();
+		if (trgRawType == src.getRawTypeClass()) {
+			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);//src.as(trgRawType);
 			if (srcCasted != null) {
 				Creator c = Creator.getCreator(name);
 				if (c == null) {
@@ -63,9 +64,9 @@ public abstract class Creator {
 		if (src == null || trg == null) {
 			return null;
 		}
-		Class<T> srcBaseType = src.getBaseType();
-		if (srcBaseType == trg.getBaseType()) {
-			Setable<T> trgCasted = trg.asSetable(srcBaseType);
+		Class<T> srcRawType = src.getRawTypeClass();
+		if (srcRawType == trg.getRawTypeClass()) {
+			Setable<T> trgCasted = Cast.toTypedSetable(trg, srcRawType);//trg.asSetable(srcRawType);
 			if (trgCasted != null) {
 				Creator c = Creator.getCreator(name);
 				if (c == null) {
