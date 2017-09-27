@@ -27,13 +27,15 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 
 			if (this.doCopy()) {
 				value = this.source.copyFrom(thisObject);
-			} else {
+			}
+			else {
 				value = this.source.getFrom(thisObject);
 			}
 
 			value = this.target.setTo(thisObject, value);
 
-		} catch (Invalid e) {
+		}
+		catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

@@ -77,8 +77,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return this.clazz;
 	}
 
-	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected)
-			throws OperationInterpreterException {
+	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected) throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		BuildFunctions.checkType(Primitive.getRawTypeClass(Attribute.getID(path, parentTyp)), expected);
@@ -87,8 +86,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return re;
 	}
 
-	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp)
-			throws OperationInterpreterException {
+	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp) throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Class<?> rawType = Primitive.getRawTypeClass(Attribute.getID(path, parentTyp));
@@ -97,8 +95,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return re;
 	}
 
-	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp)
-			throws OperationInterpreterException {
+	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp) throws OperationInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Attribute<?> id = Attribute.getID(path, parentTyp);

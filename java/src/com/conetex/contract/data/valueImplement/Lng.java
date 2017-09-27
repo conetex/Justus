@@ -21,9 +21,10 @@ public class Lng implements Value<Long> {
 	@Override
 	public Long setConverted(String value) throws Inconvertible, NumberFormatException {
 		try {
-			Long v = Long.parseLong(value);
+			Long v = Long.valueOf(Long.parseLong(value));
 			return this.set(v);
-		} catch (NumberFormatException e) {
+		}
+		catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Long", e);
 		}
 	}

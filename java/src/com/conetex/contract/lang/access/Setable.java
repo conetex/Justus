@@ -9,6 +9,6 @@ public interface Setable<T> {
 
 	public T setTo(Structure thisObject, T value) throws Invalid;
 
-	//public <X> Setable<X> asSetable(Setable<?> thisObj, Class<X> rawType);
+	// public <X> Setable<X> asSetable(Setable<?> thisObj, Class<X> rawType);
 
 }

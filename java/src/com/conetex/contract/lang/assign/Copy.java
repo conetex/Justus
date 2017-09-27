@@ -10,9 +10,9 @@ public class Copy<T> extends AbstractAssigment<T> {
 		if (src == null || trg == null) {
 			return null;
 		}
-		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);//src.as(rawType);
+		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);// src.as(rawType);
 		if (srcCasted != null) {
-			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);//trg.asSetable(rawType);
+			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);// trg.asSetable(rawType);
 			if (trgCasted != null) {
 				return new Copy<>(trgCasted, srcCasted);
 			}
@@ -26,7 +26,7 @@ public class Copy<T> extends AbstractAssigment<T> {
 		}
 		Class<T> trgRawType = trg.getRawTypeClass();
 		if (trgRawType == src.getRawTypeClass()) {
-			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);//src.as(trgRawType);
+			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);// src.as(trgRawType);
 			if (srcCasted != null) {
 				return new Copy<>(trg, srcCasted);
 			}
@@ -40,7 +40,7 @@ public class Copy<T> extends AbstractAssigment<T> {
 		}
 		Class<T> srcRawType = src.getRawTypeClass();
 		if (srcRawType == trg.getRawTypeClass()) {
-			Setable<T> trgCasted = Cast.toTypedSetable(trg, srcRawType);//trg.asSetable(srcRawType);
+			Setable<T> trgCasted = Cast.toTypedSetable(trg, srcRawType);// trg.asSetable(srcRawType);
 			if (trgCasted != null) {
 				return new Copy<>(trgCasted, src);
 			}
@@ -52,7 +52,7 @@ public class Copy<T> extends AbstractAssigment<T> {
 		if (src == null || trg == null) {
 			return null;
 		}
-		return new Copy<T>(trg, src);
+		return new Copy<>(trg, src);
 	}
 
 	Copy(Setable<T> trg, Accessible<T> src) {

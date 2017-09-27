@@ -86,8 +86,7 @@ public class BuildTypes {
 		return re;
 	}
 
-	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes,
-			Set<String> referringComplexTypeNames) {
+	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> referringComplexTypeNames) {
 		String typeName = n.getName();
 		if (typeName == null) {
 			// TODO Exception
@@ -112,29 +111,34 @@ public class BuildTypes {
 				idName = c.getName();
 				if (idTypeName == null) {
 					System.err.println("can not get Type of " + c.getCommand() + " " + idName);
-				} else {
+				}
+				else {
 					if (idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)) {
 						// Simple
 						id = Primitive.createAttribute(idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()));
-					} else {
+					}
+					else {
 						// Complex
 						// referringComplexTypeNames.add(idTypeName);
 						id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
 					}
 				}
-			} else if (c.getCommand() == Symbol.FUNCTION) {
+			}
+			else if (c.getCommand() == Symbol.FUNCTION) {
 				// Complex
 				idTypeName = c.getType();
 				idName = c.getName();
 				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
 				// TODO BUG !!!
 				id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
-			} else {
+			}
+			else {
 				continue;
 			}
 			if (id != null) {
 				identifiers.add(id);
-			} else {
+			}
+			else {
 				// TODO Exception
 				System.err.println("createComplexType can not create Identifier " + idName + " (" + idTypeName + ")");
 			}
@@ -155,33 +159,40 @@ public class BuildTypes {
 																					// gibts
 																					// keinen
 																					// typ
-			} catch (DuplicateIdentifierNameExeption | Attribute.NullIdentifierException e) {
+			}
+			catch (DuplicateIdentifierNameExeption | Attribute.NullIdentifierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			} catch (DublicateComplexException e) {
+			}
+			catch (DublicateComplexException e) {
 				// TODO Auto-generated catch block
 				System.err.println(e.getMessage());
 				e.printStackTrace();
 				return null;
 			}
 			return complexType;
-		} else {
+		}
+		else {
 			try {
 				complexType.init(typeName, theOrderedIdentifiers);
-			} catch (DuplicateIdentifierNameExeption e) {
+			}
+			catch (DuplicateIdentifierNameExeption e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			} catch (NullIdentifierException e) {
+			}
+			catch (NullIdentifierException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			} catch (ComplexWasInitializedExeption e) {
+			}
+			catch (ComplexWasInitializedExeption e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			} catch (DublicateComplexException e) {
+			}
+			catch (DublicateComplexException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;

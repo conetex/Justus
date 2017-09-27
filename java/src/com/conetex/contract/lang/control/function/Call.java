@@ -17,7 +17,7 @@ public class Call<V> extends Accessible<V> { // V extends Value<?>
 			System.err.println("theReference is null");
 			return null;
 		}
-		return new Call<SV>(theFunction, theReference);
+		return new Call<>(theFunction, theReference);
 	}
 
 	private Accessible<V> function;

@@ -18,6 +18,4 @@ public abstract class Accessible<T> {// implements Accessible<T> {
 		return null;
 	}
 
-
-
 }

@@ -15,8 +15,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	private Value<?>[] values;
 
-	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues,
-			final Structure theParent) {
+	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent) {
 		if (theAttributeTuple != null && theValues != null) {
 			return null;// new Structure(theAttributeTuple, theValues,
 						// theParent);
@@ -67,7 +66,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		int idIndex = this.type.getSubAttributeIndex(aName);
 		if (idIndex > -1) {
 			return getValue(idIndex, Structure.class);
-		} 
+		}
 		else {
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
@@ -82,7 +81,8 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 						return subStructure.get().getStructure(names[1]);
 					}
 				}
-			} else {
+			}
+			else {
 				if (this.parent != null) {
 					return this.parent.getStructure(aName);
 				}
@@ -91,17 +91,17 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		}
 		return null;
 	}
-	
+
 	public <R> Value<R> getValue(String aName, Class<R> clazz) {
 		// TODO hier erst getStructure...
-		
-		
+
 		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
 		// TODO do xpath syntax. access parent objects ???
 		if (this.type.getName().equals(aName)) {
 			if (clazz == Structure.class) {
-				return Cast.<R>toTypedValue(this, clazz);//(Value<R>) this;
-			} else {
+				return Cast.<R>toTypedValue(this, clazz);// (Value<R>) this;
+			}
+			else {
 				System.err.println("Cast not possible: " + clazz + " != " + this.getClass());
 				return null;
 			}
@@ -109,7 +109,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		int idIndex = this.type.getSubAttributeIndex(aName);
 		if (idIndex > -1) {
 			return getValue(idIndex, clazz);
-		} 
+		}
 		else {
 			String[] names = Structure.split(aName);
 			if (names[0] != null) {
@@ -124,7 +124,8 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 						return subStructure.get().getValue(names[1], clazz);
 					}
 				}
-			} else {
+			}
+			else {
 				if (this.parent != null) {
 					return this.parent.getValue(aName, clazz);
 				}
@@ -138,14 +139,15 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		Value<?> v = getValue(i);
 		if (v != null) {
 			if (v.getRawTypeClass() == c) {
-				return Cast.<R>toTypedValue(v, c);//(Value<R>) v;
-			} else {
+				return Cast.<R>toTypedValue(v, c);// (Value<R>) v;
+			}
+			else {
 				System.err.println("Cast not possible: " + c + " != " + v.getRawTypeClass());
 			}
 		}
 		return null;
 	}
-	
+
 	private Value<?> getValue(int i) {
 		if (i > -1 && i < this.values.length) {
 			return this.values[i];
@@ -154,7 +156,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
-		Primitive<T> type = Primitive.<T> getInstance(src.getClass(), src.getRawTypeClass());
+		Primitive<T> type = Primitive.<T>getInstance(src.getClass(), src.getRawTypeClass());
 		Value<T> re = type.createValue();
 		T val = src.copy();
 		re.set(val); // throws the Exception

@@ -13,21 +13,19 @@ public class Comparsion {
 			Accessible<? extends Number> theB = Cast.<Number>toTypedAccessible(b, Number.class);
 			return ComparisonNumber.create(theA, theB, name);
 		}
-		/* 
-		if (Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypB)) {
-			Accessible<? extends Number> theA = (Accessible<? extends Number>) a;
-			Accessible<? extends Number> theB = (Accessible<? extends Number>) b;
-			return ComparisonNumber.create(theA, theB, name);
-		} 
+		/*
+		 * if (Number.class.isAssignableFrom(baseTypA) &&
+		 * Number.class.isAssignableFrom(baseTypB)) { Accessible<? extends Number> theA
+		 * = (Accessible<? extends Number>) a; Accessible<? extends Number> theB =
+		 * (Accessible<? extends Number>) b; return ComparisonNumber.create(theA, theB,
+		 * name); } if (baseTypA == String.class && baseTypB == String.class) {
+		 * Accessible<String> theA = (Accessible<String>) a.as(String.class);
+		 * Accessible<String> theB = (Accessible<String>) b; return
+		 * ComparisonString.create(theA, theB, name); }
+		 */
 		if (baseTypA == String.class && baseTypB == String.class) {
-			Accessible<String> theA = (Accessible<String>) a.as(String.class);
-			Accessible<String> theB = (Accessible<String>) b;
-			return ComparisonString.create(theA, theB, name);
-		}
-		*/
-		if (baseTypA == String.class && baseTypB == String.class) {
-			Accessible<String> theA = Cast.<String>toTypedAccessible(a, String.class); //a.as(String.class);
-			Accessible<String> theB = Cast.<String>toTypedAccessible(b, String.class); //b.as(String.class);
+			Accessible<String> theA = Cast.<String>toTypedAccessible(a, String.class); // a.as(String.class);
+			Accessible<String> theB = Cast.<String>toTypedAccessible(b, String.class); // b.as(String.class);
 			return ComparisonString.create(theA, theB, name);
 		}
 		return null;

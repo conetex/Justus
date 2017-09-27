@@ -7,36 +7,37 @@ import com.conetex.contract.lang.access.Accessible;
 public abstract class Binary extends Accessible<Boolean> {// implements
 															// Accessible<Boolean>
 
-	public static Binary create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB,
-			String operation) {
+	public static Binary create(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB, String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
 		if (operation.equals(Symbol.AND)) {
 			return new Binary(theA, theB) {
 				@Override
-				protected Boolean calc(Boolean a, Boolean b) {
-					if (a && b) {
+				protected Boolean calc(Boolean aA, Boolean aB) {
+					if (aA.booleanValue() && aB.booleanValue()) {
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
 				}
 			};
-		} else if (operation.equals(Symbol.OR)) {
+		}
+		else if (operation.equals(Symbol.OR)) {
 			return new Binary(theA, theB) {
 				@Override
-				protected Boolean calc(Boolean a, Boolean b) {
-					if (a || b) {
+				protected Boolean calc(Boolean aA, Boolean aB) {
+					if (aA.booleanValue() || aB.booleanValue()) {
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
 				}
 			};
-		} else if (operation.equals(Symbol.XOR)) {
+		}
+		else if (operation.equals(Symbol.XOR)) {
 			return new Binary(theA, theB) {
 				@Override
-				protected Boolean calc(Boolean a, Boolean b) {
-					if (a ^ b) {
+				protected Boolean calc(Boolean aA, Boolean aB) {
+					if (aA.booleanValue() ^ aB.booleanValue()) {
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -50,33 +51,27 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 
 	private Accessible<? extends Boolean> b;
 
-	private Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
+	protected Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
 		this.a = theA;
 		this.b = theB;
 	}
 
-	protected abstract Boolean calc(Boolean a, Boolean b);
+	protected abstract Boolean calc(Boolean aA, Boolean aB);
 
 	@Override
 	public Boolean getFrom(Structure thisObject) {
-		Boolean a = this.a.getFrom(thisObject);
-		Boolean b = this.b.getFrom(thisObject);
-		if (a == null || b == null) {
+		Boolean aA = this.a.getFrom(thisObject);
+		Boolean aB = this.b.getFrom(thisObject);
+		if (aA == null || aB == null) {
 			return null;
 		}
-		return this.calc(a, b);
+		return this.calc(aA, aB);
 	}
 
 	@Override
 	public Boolean copyFrom(Structure thisObject) {
 		return this.getFrom(thisObject);
 	}
-
-	/*
-	 * @Override public boolean compute(Structure thisObject) {
-	 * getFrom(thisObject); // TODO compute ist nur fürs debuggen ... ansonsten
-	 * // ist das ja sinnlos hier! return true; }
-	 */
 
 	@Override
 	public Class<Boolean> getRawTypeClass() {

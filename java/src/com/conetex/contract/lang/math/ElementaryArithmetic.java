@@ -10,14 +10,14 @@ import com.conetex.contract.lang.access.Accessible;
 
 public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R> {
 
-	public static final int PLUS = 0; // Addition
-	public static final int MINUS = 1; // Subtraction
-	public static final int TIMES = 2; // Multiplication
-	public static final int DIVIDED_BY = 3; // Division
-	public static final int REMAINS = 4; // Remainder
+	public static final int	PLUS		= 0;	// Addition
+	public static final int	MINUS		= 1;	// Subtraction
+	public static final int	TIMES		= 2;	// Multiplication
+	public static final int	DIVIDED_BY	= 3;	// Division
+	public static final int	REMAINS		= 4;	// Remainder
 
-	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(
-			Accessible<IA> theA, Accessible<IB> theB, String operation) {
+	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB,
+			String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -39,8 +39,8 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		return null;
 	}
 
-	private static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(
-			Accessible<IA> theA, Accessible<IB> theB, int operation) {
+	private static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB,
+			int operation) {
 		if (operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS) {
 			return null;
 		}
@@ -57,58 +57,62 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		}
 
 		if (inputTyp == BigInteger.class) {
-			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation){
+			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation) {
 				@Override
 				public BigInteger getFrom(Structure thisObject) {
-					IA a = super.a.getFrom(thisObject);
-					IB b = super.b.getFrom(thisObject);
-					if (a == null || b == null) {
-						// TODO Error 
+					IA aA = super.a.getFrom(thisObject);
+					IB aB = super.b.getFrom(thisObject);
+					if (aA == null || aB == null) {
+						// TODO Error
 						return null;
-					}					
-					return super.calcBigIntNum(a, b);
+					}
+					return super.calcBigIntNum(aA, aB);
 				}
 			};
-		} else if (inputTyp == Long.class) {
-			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation){
+		}
+		else if (inputTyp == Long.class) {
+			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation) {
 				@Override
 				public Long getFrom(Structure thisObject) {
-					IA a = super.a.getFrom(thisObject);
-					IB b = super.b.getFrom(thisObject);
-					if (a == null || b == null) {
-						// TODO Error 
+					IA aA = super.a.getFrom(thisObject);
+					IB aB = super.b.getFrom(thisObject);
+					if (aA == null || aB == null) {
+						// TODO Error
 						return null;
-					}					
-					return super.calcLong(a.longValue(), b.longValue());
+					}
+					return super.calcLong(aA.longValue(), aB.longValue());
 				}
 			};
-		} else if (inputTyp == Integer.class) {
-			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation){
+		}
+		else if (inputTyp == Integer.class) {
+			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation) {
 				@Override
 				public Integer getFrom(Structure thisObject) {
-					IA a = super.a.getFrom(thisObject);
-					IB b = super.b.getFrom(thisObject);
-					if (a == null || b == null) {
-						// TODO Error 
+					IA aA = super.a.getFrom(thisObject);
+					IB aB = super.b.getFrom(thisObject);
+					if (aA == null || aB == null) {
+						// TODO Error
 						return null;
-					}					
-					return super.calcInt(a.intValue(), b.intValue());
+					}
+					return super.calcInt(aA.intValue(), aB.intValue());
 				}
 			};
-		} else if (inputTyp == Byte.class) {
-			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation){
+		}
+		else if (inputTyp == Byte.class) {
+			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation) {
 				@Override
 				public Byte getFrom(Structure thisObject) {
-					IA a = super.a.getFrom(thisObject);
-					IB b = super.b.getFrom(thisObject);
-					if (a == null || b == null) {
-						// TODO Error 
+					IA aA = super.a.getFrom(thisObject);
+					IB aB = super.b.getFrom(thisObject);
+					if (aA == null || aB == null) {
+						// TODO Error
 						return null;
-					}					
-					return super.calcByte(a.byteValue(), b.byteValue());
+					}
+					return super.calcByte(aA, aB);
 				}
 			};
-		} else {
+		}
+		else {
 			// TODO Error unknown Typ
 			return null;
 		}
@@ -124,7 +128,8 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 					if (classes[bi] == b) {
 						if (ai < bi) {
 							return classes[ai];
-						} else {
+						}
+						else {
 							return classes[bi];
 						}
 					}
@@ -139,9 +144,9 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 
 	private Class<R> resultTyp;
 
-	private Accessible<Ia> a;
+	Accessible<Ia> a;
 
-	private Accessible<Ib> b;
+	Accessible<Ib> b;
 
 	protected ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
 		this.a = theA;
@@ -150,107 +155,103 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		this.resultTyp = theResultTyp;
 	}
 
-	private Byte calcByte(byte a, byte b) throws ArithmeticException {
+	Byte calcByte(Number aA, Number aB) throws ArithmeticException {
 		Integer re = null;
 		if (this.operator == ElementaryArithmetic.PLUS) {
-			re = Math.addExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.MINUS) {
-			re = Math.subtractExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.TIMES) {
-			re = Math.multiplyExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
-			re = a / b;
-		} else if (this.operator == ElementaryArithmetic.REMAINS) {
-			re = a % b;
+			re = Integer.valueOf(Math.addExact(aA.intValue(), aB.intValue()));
 		}
-		if (re == null) {
+		else if (this.operator == ElementaryArithmetic.MINUS) {
+			re = Integer.valueOf(Math.subtractExact(aA.intValue(), aB.intValue()));
+		}
+		else if (this.operator == ElementaryArithmetic.TIMES) {
+			re = Integer.valueOf(Math.multiplyExact(aA.intValue(), aB.intValue()));
+		}
+		else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
+			re = Integer.valueOf(aA.intValue() / aB.intValue());
+		}
+		else if (this.operator == ElementaryArithmetic.REMAINS) {
+			re = Integer.valueOf(aA.intValue() % aB.intValue());
+		}
+		else {
 			return null;
 		}
-		return re.byteValue(); // TODO: convertiere nur, wenns wirklich passt...
+		return Byte.valueOf(re.byteValue()); // TODO: convertiere nur, wenns wirklich passt...
 	}
 
-	private Integer calcInt(int a, int b) throws ArithmeticException {
+	Integer calcInt(int aA, int aB) throws ArithmeticException {
 		if (this.operator == ElementaryArithmetic.PLUS) {
-			return Math.addExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.MINUS) {
-			return Math.subtractExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.TIMES) {
-			return Math.multiplyExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
-			return a / b;
-		} else if (this.operator == ElementaryArithmetic.REMAINS) {
-			return a % b;
+			return Integer.valueOf(Math.addExact(aA, aB));
+		}
+		else if (this.operator == ElementaryArithmetic.MINUS) {
+			return Integer.valueOf(Math.subtractExact(aA, aB));
+		}
+		else if (this.operator == ElementaryArithmetic.TIMES) {
+			return Integer.valueOf(Math.multiplyExact(aA, aB));
+		}
+		else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
+			return Integer.valueOf(aA / aB);
+		}
+		else if (this.operator == ElementaryArithmetic.REMAINS) {
+			return Integer.valueOf(aA % aB);
 		}
 		return null;
 	}
 
-	private Long calcLong(long a, long b) throws ArithmeticException {
+	Long calcLong(long aA, long aB) throws ArithmeticException {
 		if (this.operator == ElementaryArithmetic.PLUS) {
-			return Math.addExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.MINUS) {
-			return Math.subtractExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.TIMES) {
-			return Math.multiplyExact(a, b);
-		} else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
-			return a / b;
-		} else if (this.operator == ElementaryArithmetic.REMAINS) {
-			return a % b;
+			return Long.valueOf(Math.addExact(aA, aB));
+		}
+		else if (this.operator == ElementaryArithmetic.MINUS) {
+			return Long.valueOf(Math.subtractExact(aA, aB));
+		}
+		else if (this.operator == ElementaryArithmetic.TIMES) {
+			return Long.valueOf(Math.multiplyExact(aA, aB));
+		}
+		else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
+			return Long.valueOf(aA / aB);
+		}
+		else if (this.operator == ElementaryArithmetic.REMAINS) {
+			return Long.valueOf(aA % aB);
 		}
 		return null;
 	}
 
-	private BigInteger calcBigInt(BigInteger a, BigInteger b) throws ArithmeticException {
+	BigInteger calcBigInt(BigInteger aA, BigInteger aB) throws ArithmeticException {
 		if (this.operator == ElementaryArithmetic.PLUS) {
-			return a.add(b);
-		} else if (this.operator == ElementaryArithmetic.MINUS) {
-			return a.subtract(b);
-		} else if (this.operator == ElementaryArithmetic.TIMES) {
-			return a.multiply(b);
-		} else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
-			return a.divide(b);
-		} else if (this.operator == ElementaryArithmetic.REMAINS) {
-			return a.remainder(b);
+			return aA.add(aB);
+		}
+		else if (this.operator == ElementaryArithmetic.MINUS) {
+			return aA.subtract(aB);
+		}
+		else if (this.operator == ElementaryArithmetic.TIMES) {
+			return aA.multiply(aB);
+		}
+		else if (this.operator == ElementaryArithmetic.DIVIDED_BY) {
+			return aA.divide(aB);
+		}
+		else if (this.operator == ElementaryArithmetic.REMAINS) {
+			return aA.remainder(aB);
 		}
 		return null;
 	}
 
-	private BigInteger calcBigIntNum(Number a, Number b) throws ArithmeticException {
-		if (a instanceof BigInteger) {
-			if (b instanceof BigInteger) {
-				return calcBigInt((BigInteger) a, (BigInteger) b);
-			} else {
-				return calcBigInt((BigInteger) a, BigInteger.valueOf(b.longValue()));
+	BigInteger calcBigIntNum(Number aA, Number aB) throws ArithmeticException {
+		if (aA instanceof BigInteger) {
+			if (aB instanceof BigInteger) {
+				return calcBigInt((BigInteger) aA, (BigInteger) aB);
 			}
-		} else {
-			if (b instanceof BigInteger) {
-				return calcBigInt(BigInteger.valueOf(a.longValue()), (BigInteger) b);
-			} else {
-				return calcBigInt(BigInteger.valueOf(a.longValue()), BigInteger.valueOf(b.longValue()));
+			else {
+				return calcBigInt((BigInteger) aA, BigInteger.valueOf(aB.longValue()));
 			}
 		}
-	}
-
-	public Integer _getFromI(Structure thisObject, Class<Integer> resultTyp) throws ArithmeticException {
-		Ia a = this.a.getFrom(thisObject);
-		Ib b = this.b.getFrom(thisObject);
-		return this.calcInt(a.intValue(), b.intValue());
-	}
-
-	public Long _getFromL(Structure thisObject, Class<Long> resultTyp) throws ArithmeticException {
-		Ia a = this.a.getFrom(thisObject);
-		Ib b = this.b.getFrom(thisObject);
-		return this.calcLong(a.longValue(), b.longValue());
-	}
-
-	public BigInteger _getFromBi(Structure thisObject, Class<BigInteger> resultTyp) throws ArithmeticException {
-		Ia a = this.a.getFrom(thisObject);
-		Ib b = this.b.getFrom(thisObject);
-		return this.calcBigIntNum(a, b);
-	}
-
-	public void _setTo_(Structure thisObject, Number value) throws Invalid {
-		// TODO Auto-generated method stub
-
+		else {
+			if (aB instanceof BigInteger) {
+				return calcBigInt(BigInteger.valueOf(aA.longValue()), (BigInteger) aB);
+			}
+			else {
+				return calcBigInt(BigInteger.valueOf(aA.longValue()), BigInteger.valueOf(aB.longValue()));
+			}
+		}
 	}
 
 	@Override

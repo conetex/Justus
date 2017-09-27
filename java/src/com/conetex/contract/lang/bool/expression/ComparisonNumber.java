@@ -7,13 +7,14 @@ import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
 
 public class ComparisonNumber extends Accessible<Boolean> {
+	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit über den
+	// tatsächlichen typ entschieden wird.
 
-	public static final int SMALLER = -1;
-	public static final int EQUAL = 0;
-	public static final int GREATER = 1;
+	public static final int	SMALLER	= -1;
+	public static final int	EQUAL	= 0;
+	public static final int	GREATER	= 1;
 
-	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB,
-			String operation) {
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -29,8 +30,7 @@ public class ComparisonNumber extends Accessible<Boolean> {
 		return null;
 	}
 
-	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB,
-			int operation) {
+	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int operation) {
 		if (theA == null || theB == null) {
 			return null;
 		}
@@ -58,9 +58,8 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA,
-	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
-	 * this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
+	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
 	 */
 
 	@Override
@@ -79,39 +78,45 @@ public class ComparisonNumber extends Accessible<Boolean> {
 
 		if (aN.getClass() == BigInteger.class) {
 			if (bN instanceof BigInteger) {
-				BigInteger a = (BigInteger) aN;
-				BigInteger b = (BigInteger) bN;
-				return comp(a, b);
-			} else {
-				BigInteger a = (BigInteger) aN;
-				BigInteger b = (BigInteger.valueOf(bN.longValue()));
-				return comp(a, b);
+				BigInteger aConcret = (BigInteger) aN;
+				BigInteger bConcret = (BigInteger) bN;
+				return comp(aConcret, bConcret);
 			}
-		} else {
+			else {
+				BigInteger aConcret = (BigInteger) aN;
+				BigInteger bConcret = (BigInteger.valueOf(bN.longValue()));
+				return comp(aConcret, bConcret);
+			}
+		}
+		else {
 			if (bN.getClass() == BigInteger.class) {
-				BigInteger a = (BigInteger.valueOf(aN.longValue()));
-				BigInteger b = (BigInteger) bN;
-				return comp(a, b);
-			} else {
+				BigInteger aConcret = (BigInteger.valueOf(aN.longValue()));
+				BigInteger bConcret = (BigInteger) bN;
+				return comp(aConcret, bConcret);
+			}
+			else {
 				if (aN.getClass() == Long.class) {
 					if (bN.getClass() == Long.class) {
-						Long a = (Long) aN;
-						Long b = (Long) bN;
-						return comp(a, b);
-					} else {
-						Long a = (Long) aN;
-						Long b = bN.longValue();
-						return comp(a, b);
+						Long aConcret = (Long) aN;
+						Long bConcret = (Long) bN;
+						return comp(aConcret, bConcret);
 					}
-				} else {
+					else {
+						Long aConcret = (Long) aN;
+						Long bConcret = Long.valueOf(bN.longValue());
+						return comp(aConcret, bConcret);
+					}
+				}
+				else {
 					if (bN.getClass() == Long.class) {
-						Long a = aN.longValue();
-						Long b = (Long) bN;
-						return comp(a, b);
-					} else {
-						int a = aN.intValue();
-						int b = bN.intValue();
-						return comp(a, b);
+						Long aConcret = Long.valueOf(aN.longValue());
+						Long bConcret = (Long) bN;
+						return comp(aConcret, bConcret);
+					}
+					else {
+						Integer aConcret = Integer.valueOf(aN.intValue());
+						Integer bConcret = Integer.valueOf(bN.intValue());
+						return comp(aConcret, bConcret);
 					}
 				}
 			}
@@ -119,21 +124,21 @@ public class ComparisonNumber extends Accessible<Boolean> {
 
 	}
 
-	private <T extends Comparable<T>> Boolean comp(T a, T b) {
+	private <T extends Comparable<T>> Boolean comp(T aA, T aB) {
 		if (this.operator == ComparisonNumber.GREATER) {
-			if (a.compareTo(b) > 0) {
+			if (aA.compareTo(aB) > 0) {
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;
 		}
 		if (this.operator == ComparisonNumber.SMALLER) {
-			if (a.compareTo(b) < 0) {
+			if (aA.compareTo(aB) < 0) {
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;
 		}
 		if (this.operator == ComparisonNumber.EQUAL) {
-			if (a.compareTo(b) == 0) {
+			if (aA.compareTo(aB) == 0) {
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;

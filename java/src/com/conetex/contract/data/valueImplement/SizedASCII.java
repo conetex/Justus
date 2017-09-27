@@ -78,8 +78,7 @@ public abstract class SizedASCII implements Value<String> {
 						if (strBevorCtrlChar == null || strBevorCtrlChar.length() == 0) {
 							throw new Invalid("found control char at begin of Input! Don't use control chars!");
 						}
-						throw new Invalid(
-								"Please do not use control chars! found control char after '" + strBevorCtrlChar + "'");
+						throw new Invalid("Please do not use control chars! found control char after '" + strBevorCtrlChar + "'");
 					}
 				}
 				throw new Invalid("found control char in Input! Don't use control chars!");
@@ -89,8 +88,7 @@ public abstract class SizedASCII implements Value<String> {
 		}
 
 		// when code above is correct we should never go here ...
-		throw new Invalid("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue
-				+ "'! Please report! This Issue should be debugged!");
+		throw new Invalid("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue + "'! Please report! This Issue should be debugged!");
 
 	}
 

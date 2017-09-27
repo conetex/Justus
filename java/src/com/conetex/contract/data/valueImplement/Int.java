@@ -21,9 +21,10 @@ public class Int implements Value<Integer> {
 	@Override
 	public Integer setConverted(String value) throws Inconvertible {
 		try {
-			Integer v = Integer.parseInt(value);
+			Integer v = Integer.valueOf(Integer.parseInt(value));
 			return this.set(v);
-		} catch (NumberFormatException e) {
+		}
+		catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}

@@ -32,7 +32,7 @@ public class State {
 
 	public static void main(String[] args) throws ValueException {
 		PrimitiveDataType<Base64_256, String> simpleType = PrimitiveDataType.getInstance(Base64_256.class);
-		simpleType = new PrimitiveDataType<Base64_256, String>(Base64_256.class, new ValueFactory<String>() {
+		simpleType = new PrimitiveDataType<>(Base64_256.class, new ValueFactory<String>() {
 			@Override
 			public Base64_256 createValueImp() {
 				return new Base64_256();

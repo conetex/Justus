@@ -6,9 +6,9 @@ import com.conetex.contract.lang.access.Accessible;
 
 public class ComparisonString extends Accessible<Boolean> {
 
-	public static final int SMALLER = -1;
-	public static final int EQUAL = 0;
-	public static final int GREATER = 1;
+	public static final int	SMALLER	= -1;
+	public static final int	EQUAL	= 0;
+	public static final int	GREATER	= 1;
 
 	public static Accessible<Boolean> _createNew(Accessible<String> theA, Accessible<String> theB, String name) {
 		return create(theA, theB, name);
@@ -58,9 +58,8 @@ public class ComparisonString extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA,
-	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
-	 * this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
+	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
 	 */
 
 	@Override
@@ -72,28 +71,29 @@ public class ComparisonString extends Accessible<Boolean> {
 				return Boolean.TRUE;
 			}
 			return null;
-		} else if (bN == null) {
+		}
+		else if (bN == null) {
 			return null;
 		}
 
 		return comp(aN, bN);
 	}
 
-	private <T extends Comparable<T>> Boolean comp(T a, T b) {
+	private <T extends Comparable<T>> Boolean comp(T aA, T aB) {
 		if (this.operator == ComparisonString.GREATER) {
-			if (a.compareTo(b) > 0) {
+			if (aA.compareTo(aB) > 0) {
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;
 		}
 		if (this.operator == ComparisonString.SMALLER) {
-			if (a.compareTo(b) < 0) {
+			if (aA.compareTo(aB) < 0) {
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;
 		}
 		if (this.operator == ComparisonString.EQUAL) {
-			if (a.compareTo(b) == 0) {
+			if (aA.compareTo(aB) == 0) {
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;

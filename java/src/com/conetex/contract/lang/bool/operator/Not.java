@@ -25,7 +25,7 @@ public class Not extends Accessible<Boolean> {
 		if (b == null) {
 			return null;
 		}
-		if (b) {
+		if (b.booleanValue()) {
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;

@@ -21,13 +21,17 @@ public class Bool implements Value<Boolean> {
 	public static Boolean getTrans(String value) {
 		if (value.equalsIgnoreCase("true")) {
 			return Boolean.TRUE;
-		} else if (value.equalsIgnoreCase("false")) {
+		}
+		else if (value.equalsIgnoreCase("false")) {
 			return Boolean.FALSE;
-		} else if (value.equals("1")) {
+		}
+		else if (value.equals("1")) {
 			return Boolean.TRUE;
-		} else if (value.equals("0")) {
+		}
+		else if (value.equals("0")) {
 			return Boolean.FALSE;
-		} else {
+		}
+		else {
 			return null;
 		}
 	}

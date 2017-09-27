@@ -38,10 +38,9 @@ public class BuildValues {
 		}
 
 		/*
-		 * old Value<?>[] theValues = new Value<?>[ values.size() ];
-		 * values.toArray( theValues ); try { data.set(theValues); } catch
-		 * (Invalid e) { // TODO Auto-generated catch block e.printStackTrace();
-		 * }
+		 * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
+		 * theValues ); try { data.set(theValues); } catch (Invalid e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
 		 * 
 		 * 
 		 * return values;
@@ -59,7 +58,8 @@ public class BuildValues {
 
 		if (n.isIdentifier()) {
 			name = n.getName();
-		} else if (name.equals(Symbol.FUNCTION)) {
+		}
+		else if (name.equals(Symbol.FUNCTION)) {
 			name = n.getName();
 		}
 
@@ -76,28 +76,30 @@ public class BuildValues {
 			createValues(n, (Complex) type, re);
 			try {
 				parentData.set(name, re);
-			} catch (Invalid e) {
+			}
+			catch (Invalid e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			/*
-			 * old List<Value<?>> subvalues = createValues(n, (Complex) type,
-			 * re); Value<?>[] theValues = new Value<?>[ subvalues.size() ];
-			 * subvalues.toArray( theValues ); try { re.set(theValues); } catch
-			 * (Invalid e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
+			 * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
+			 * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
+			 * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); }
 			 */
 
 			return re;
-		} else {
+		}
+		else {
 			String valueNode = n.getValue();
 			System.out.println("createValue " + name + " " + valueNode);
 			if (valueNode != null) {
 				Value<?> re = ((AttributePrimitive<?>) id).createValue(valueNode, parentData);
 				try {
 					parentData.set(name, re);
-				} catch (Invalid e) {
+				}
+				catch (Invalid e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

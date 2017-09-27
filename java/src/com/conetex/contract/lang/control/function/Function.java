@@ -10,15 +10,15 @@ import com.conetex.contract.lang.access.Accessible;
 
 public class Function<V> extends Accessible<V> {
 
-	private static Map<String, Function<? extends Number>> instancesNum = new HashMap<String, Function<? extends Number>>();
+	private static Map<String, Function<? extends Number>> instancesNum = new HashMap<>();
 
-	private static Map<String, Function<Boolean>> instancesBoolean = new HashMap<String, Function<Boolean>>();
+	private static Map<String, Function<Boolean>> instancesBoolean = new HashMap<>();
 
-	private static Map<String, Function<String>> instancesString = new HashMap<String, Function<String>>();
+	private static Map<String, Function<String>> instancesString = new HashMap<>();
 
-	private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<String, Function<? extends Structure>>();
+	private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<>();
 
-	private static Map<String, Function<?>> instancesVoid = new HashMap<String, Function<? extends Object>>();
+	private static Map<String, Function<?>> instancesVoid = new HashMap<>();
 
 	public static Accessible<Boolean> getInstanceBool(String name) {
 		Function<Boolean> f = instancesBoolean.get(name);
@@ -89,7 +89,7 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		Function<SV> re = new Function<SV>(theSteps, theName);
+		Function<SV> re = new Function<>(theSteps, theName);
 		Function.instancesNum.put(theName, re);
 		return re;
 	}
@@ -107,7 +107,7 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		Function<Boolean> re = new Function<Boolean>(theSteps, theName);
+		Function<Boolean> re = new Function<>(theSteps, theName);
 		Function.instancesBoolean.put(theName, re);
 		return re;
 	}
@@ -125,7 +125,7 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		Function<SV> re = new Function<SV>(theSteps, theName);
+		Function<SV> re = new Function<>(theSteps, theName);
 		Function.instancesStructure.put(theName, re);
 		return re;
 	}
@@ -143,15 +143,15 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		Function<Object> re = new Function<Object>(theSteps, theName);
+		Function<Object> re = new Function<>(theSteps, theName);
 		Function.instancesVoid.put(theName, re);
 		return re;
 	}
 
 	/*
-	 * public static <SV extends Value<?>> Function<SV> create(Structure
-	 * theData, Accessible<?>[] theSteps){ if(theData == null || theSteps ==
-	 * null){ return null; } return new Function<SV>(theData, theSteps); }
+	 * public static <SV extends Value<?>> Function<SV> create(Structure theData,
+	 * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return
+	 * null; } return new Function<SV>(theData, theSteps); }
 	 */
 	// private Value<?>[] values;
 	// private String[] valueNames;

@@ -11,7 +11,7 @@ public class AttributePrimitive<T> extends Attribute<T> {
 
 	public static <V> AttributePrimitive<V> create(Label theLabel, Primitive<V> theType) {
 		if (theLabel != null && theType != null) {
-			return new AttributePrimitive<V>(theLabel, theType);
+			return new AttributePrimitive<>(theLabel, theType);
 		}
 		return null;
 	}
@@ -23,8 +23,8 @@ public class AttributePrimitive<T> extends Attribute<T> {
 	private final Primitive<T> type;
 
 	/*
-	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
-	 * this.label = theLabel; this.factory = theFactory; }
+	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
+	 * theLabel; this.factory = theFactory; }
 	 */
 	private AttributePrimitive(Label theLabel, Primitive<T> theType) {
 		this.label = theLabel;
@@ -55,7 +55,8 @@ public class AttributePrimitive<T> extends Attribute<T> {
 		Value<T> v = this.createValue(theParent);
 		try {
 			v.setConverted(value);
-		} catch (Inconvertible | Invalid e) {
+		}
+		catch (Inconvertible | Invalid e) {
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 			// e.printStackTrace();
@@ -68,7 +69,8 @@ public class AttributePrimitive<T> extends Attribute<T> {
 		Value<T> v = this._createValue();
 		try {
 			v.setConverted(value);
-		} catch (Inconvertible | Invalid e) {
+		}
+		catch (Inconvertible | Invalid e) {
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 			// e.printStackTrace();
@@ -85,7 +87,8 @@ public class AttributePrimitive<T> extends Attribute<T> {
 		// Structure value = ct.construct(theValues);
 		try {
 			v.set(theValues);
-		} catch (Invalid e) {
+		}
+		catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

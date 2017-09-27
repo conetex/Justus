@@ -23,20 +23,19 @@ public abstract class Creator {
 
 	public abstract <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src);
 
-	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> rawType,
-			String name) {
+	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> rawType, String name) {
 		if (src == null || trg == null) {
 			return null;
 		}
-		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);//src.as(rawType);
+		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);// src.as(rawType);
 		if (srcCasted != null) {
-			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);//trg.asSetable(rawType);
+			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);// trg.asSetable(rawType);
 			if (trgCasted != null) {
 				Creator c = Creator.getCreator(name);
 				if (c == null) {
 					return null;
 				}
-				return c.<T> create(trgCasted, srcCasted);
+				return c.<T>create(trgCasted, srcCasted);
 			}
 		}
 		return null;
@@ -48,13 +47,13 @@ public abstract class Creator {
 		}
 		Class<T> trgRawType = trg.getRawTypeClass();
 		if (trgRawType == src.getRawTypeClass()) {
-			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);//src.as(trgRawType);
+			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);// src.as(trgRawType);
 			if (srcCasted != null) {
 				Creator c = Creator.getCreator(name);
 				if (c == null) {
 					return null;
 				}
-				return c.<T> create(trg, srcCasted);
+				return c.<T>create(trg, srcCasted);
 			}
 		}
 		return null;
@@ -66,13 +65,13 @@ public abstract class Creator {
 		}
 		Class<T> srcRawType = src.getRawTypeClass();
 		if (srcRawType == trg.getRawTypeClass()) {
-			Setable<T> trgCasted = Cast.toTypedSetable(trg, srcRawType);//trg.asSetable(srcRawType);
+			Setable<T> trgCasted = Cast.toTypedSetable(trg, srcRawType);// trg.asSetable(srcRawType);
 			if (trgCasted != null) {
 				Creator c = Creator.getCreator(name);
 				if (c == null) {
 					return null;
 				}
-				return c.<T> create(trgCasted, src);
+				return c.<T>create(trgCasted, src);
 			}
 		}
 		return null;
@@ -86,7 +85,7 @@ public abstract class Creator {
 		if (c == null) {
 			return null;
 		}
-		return c.<T> create(trg, src);
+		return c.<T>create(trg, src);
 	}
 
 	private static Creator getCreator(String name) {
