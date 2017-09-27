@@ -13,6 +13,7 @@ import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.MailAddress64;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.exception.UnknownType;
+import com.conetex.contract.lang.Cast;
 
 public class Primitive<T> extends AbstractType<T> {
 
@@ -95,26 +96,28 @@ public class Primitive<T> extends AbstractType<T> {
 			 */
 	};
 
-	private final Class<? extends Value<T>> clazz;
+	private final Class<? extends Value<T>> valueImplementClass;
 
-	private final Class<T> baseType;
+	private final Class<T> rawTypeClass;
 
 	// private final Class<Value.Interface<T>> clazz;
 
 	final PrimitiveValueFactory<T> factory;
 
-	private static <V> Primitive<V> getInstance(String dataType) {
 
-		Class<?> theClass = getClass(dataType);
-		Primitive<V> re = getInstance(theClass);
+
+	private static Primitive<?> getInstanceWild(String dataType) {
+
+		Class<?> theClass = getValueImplementClass(dataType);
+		Primitive<?> re = getInstanceWild(theClass);
 		if (re != null) {
 			return re;
 		}
 		return null;
 
 	}
-
-	private static Class<?> getClass(String dataType) {
+	
+	private static Class<?> getValueImplementClass(String dataType) {
 
 		Class<?> theClass = null;
 
@@ -137,17 +140,30 @@ public class Primitive<T> extends AbstractType<T> {
 
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <W> Primitive<W> getInstance(Class<?> theClass) {
+
+	
+	
+	public static <W> Primitive<W> getInstance(Class<?> theClass, Class<W> rawType) {
 		for (int i = 0; i < types.length; i++) {
-			if (types[i].getClazz() == theClass) {
-				return (Primitive<W>) Primitive.types[i];
+			if (types[i].getValueImplementClass() == theClass) {
+				return Cast.<W>toTypedPrimitive(Primitive.types[i], rawType);//(Primitive<W>) Primitive.types[i];
 			}
 		}
 		return null;
 	}
+	
 
-	public static <T> Attribute<T> createAttribute(String attributeName, String typeName) {
+
+	public static Primitive<?> getInstanceWild(Class<?> theClass) {
+		for (int i = 0; i < types.length; i++) {
+			if (types[i].getValueImplementClass() == theClass) {
+				return Primitive.types[i];
+			}
+		}
+		return null;
+	}
+	
+	public static Attribute<?> createAttribute(String attributeName, String typeName) {
 		// SimpleType
 		if (typeName == null || typeName.length() == 0) {
 			// TODO exception
@@ -158,7 +174,7 @@ public class Primitive<T> extends AbstractType<T> {
 			return null;
 		}
 
-		Primitive<T> simpleType = Primitive.<T> getInstance(typeName);
+		Primitive<?> simpleType = Primitive.getInstanceWild(typeName);
 		if (simpleType == null) {
 			System.err.println("unknown simple Type " + typeName);
 			return null;
@@ -171,7 +187,7 @@ public class Primitive<T> extends AbstractType<T> {
 			e.printStackTrace();
 			return null;
 		}
-		Attribute<T> re = null;
+		Attribute<?> re = null;
 		try {
 			re = simpleType.createAttribute(str);
 		} catch (NullLabelException | EmptyLabelException e1) {
@@ -186,9 +202,9 @@ public class Primitive<T> extends AbstractType<T> {
 
 	// private PrimitiveDataType(Class<Value.Interface<T>> theClass,
 	// ValueFactory<T> theFactory){
-	private Primitive(Class<? extends Value<T>> theClass, Class<T> theBaseType, PrimitiveValueFactory<T> theFactory) {
-		this.clazz = theClass;
-		this.baseType = theBaseType;
+	private Primitive(Class<? extends Value<T>> theImplementClass, Class<T> theRawTypeClass, PrimitiveValueFactory<T> theFactory) {
+		this.valueImplementClass = theImplementClass;
+		this.rawTypeClass = theRawTypeClass;
 		this.factory = theFactory;
 	}
 
@@ -209,35 +225,30 @@ public class Primitive<T> extends AbstractType<T> {
 	}
 
 	@Override
-	public Class<? extends Value<T>> getClazz() {
-		return this.clazz;
+	public Class<? extends Value<T>> getValueImplementClass() {
+		return this.valueImplementClass;
 	}
 
-	@SuppressWarnings("unused")
-	private String getClazzName() {
-		return this.clazz.getName();
-	}
-
-	public Class<T> getBaseType() {
-		return this.baseType;
+	public Class<T> getRawTypeClass() {
+		return this.rawTypeClass;
 	}
 
 	@Override
-	public <U> Attribute<U> getSubAttribute(String aName) {
+	public Attribute<?> getSubAttribute(String aName) {
 		return null;
 	}
 
-	public static Class<?> getBaseType(Attribute<?> id) throws UnknownType {
+	public static Class<?> getRawTypeClass(Attribute<?> id) throws UnknownType {
 		AbstractType<?> t = id.getType();
-		Class<? extends Value<?>> clazzChild = t.getClazz();
-		Primitive<?> pri = Primitive.getInstance(clazzChild);
+		Class<? extends Value<?>> clazzChild = t.getValueImplementClass();
+		Primitive<?> pri = Primitive.getInstanceWild(clazzChild);
 		if (pri == null) {
 			// System.err.println("ERR: can not get type of '" + n.getValue() +
 			// "'");
 			throw new UnknownType(clazzChild.toString());
 		}
-		Class<?> baseType = pri.getBaseType();
-		return baseType;
+		Class<?> rawType = pri.getRawTypeClass();
+		return rawType;
 	}
 
 }

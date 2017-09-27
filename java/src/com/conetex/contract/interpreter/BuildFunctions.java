@@ -19,12 +19,12 @@ import com.conetex.contract.interpreter.exception.TypeNotDeterminated;
 import com.conetex.contract.interpreter.exception.TypesDoNotMatch;
 import com.conetex.contract.interpreter.exception.UnexpectedSubOperation;
 import com.conetex.contract.interpreter.exception.UnknownComplexType;
-import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleConstant;
-import com.conetex.contract.lang.AccessibleValue;
-import com.conetex.contract.lang.SetableValue;
 import com.conetex.contract.lang.Symbol;
-import com.conetex.contract.lang.assignment.Creator;
+import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.access.AccessibleConstant;
+import com.conetex.contract.lang.access.AccessibleValue;
+import com.conetex.contract.lang.access.SetableValue;
+import com.conetex.contract.lang.assign.Creator;
 import com.conetex.contract.lang.bool.expression.Comparsion;
 import com.conetex.contract.lang.bool.expression.IsNull;
 import com.conetex.contract.lang.bool.operator.Binary;
@@ -304,8 +304,8 @@ public class BuildFunctions {
 				CodeNode srcNode = n.getChildElementByIndex(1);
 				Accessible<?> src = this.createChild(srcNode, parentTyp);
 				check2PartOperations(n, trg, src);
-				Class<?> srcBaseType = src.getBaseType();
-				checkAssigmentStructBaseType(trgNode, srcNode, srcBaseType);
+				Class<?> srcRawType = src.getRawTypeClass();
+				checkAssigmentStructRawType(trgNode, srcNode, srcRawType);
 				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
@@ -321,9 +321,9 @@ public class BuildFunctions {
 				CodeNode srcNode = n.getChildElementByIndex(1);
 				Accessible<?> src = this.createChild(srcNode, parentTyp);
 				check2PartOperations(n, trg, src);
-				Class<?> trgBaseType = trg.getBaseType();
-				Class<?> srcBaseType = src.getBaseType();
-				checkAssigmentNumBaseType(trgBaseType, srcBaseType, trgNode, srcNode);
+				Class<?> trgRawType = trg.getRawTypeClass();
+				Class<?> srcRawType = src.getRawTypeClass();
+				checkAssigmentNumRawType(trgRawType, srcRawType, trgNode, srcNode);
 				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
@@ -338,7 +338,7 @@ public class BuildFunctions {
 				CodeNode srcNode = n.getChildElementByIndex(1);
 				Accessible<?> src = this.createChild(srcNode, parentTyp);
 				check2PartOperations(n, trg, src);
-				checkType(src.getBaseType(), Boolean.class);
+				checkType(src.getRawTypeClass(), Boolean.class);
 				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
@@ -354,22 +354,22 @@ public class BuildFunctions {
 
 				check2PartOperations(n, trg, src);
 
-				Class<?> trgBaseType = trg.getBaseType();
-				Class<?> srcBaseType = src.getBaseType();
-				if (trgBaseType == Boolean.class) {
-					checkType(src.getBaseType(), Boolean.class);
+				Class<?> trgRawType = trg.getRawTypeClass();
+				Class<?> srcRawType = src.getRawTypeClass();
+				if (trgRawType == Boolean.class) {
+					checkType(src.getRawTypeClass(), Boolean.class);
 					return Creator.createFromUnqualified(trg, src, Boolean.class, n.getCommand());
-				} else if (trgBaseType == Structure.class) {
-					checkAssigmentStructBaseType(trgNode, srcNode, srcBaseType);
+				} else if (trgRawType == Structure.class) {
+					checkAssigmentStructRawType(trgNode, srcNode, srcRawType);
 					return Creator.createFromUnqualified(trg, src, Structure.class, n.getCommand());
-				} else if (trgBaseType == String.class) {
-					checkType(src.getBaseType(), String.class);
+				} else if (trgRawType == String.class) {
+					checkType(src.getRawTypeClass(), String.class);
 					return Creator.createFromUnqualified(trg, src, String.class, n.getCommand());
-				} else if (Number.class.isAssignableFrom(trgBaseType)) {
-					checkAssigmentNumBaseType(trgBaseType, srcBaseType, trgNode, srcNode);
-					return Creator.createFromUnqualified(trg, src, trgBaseType, n.getCommand());
+				} else if (Number.class.isAssignableFrom(trgRawType)) {
+					checkAssigmentNumRawType(trgRawType, srcRawType, trgNode, srcNode);
+					return Creator.createFromUnqualified(trg, src, trgRawType, n.getCommand());
 				} else {
-					throw new TypeNotDeterminated("target-Type: " + trgBaseType + ", source-Type: " + srcBaseType);
+					throw new TypeNotDeterminated("target-Type: " + trgRawType + ", source-Type: " + srcRawType);
 				}
 			}
 		};
@@ -663,7 +663,7 @@ public class BuildFunctions {
 		Class<?> pre = null;
 		for (Accessible<?> a : theSteps) {
 			if (a instanceof Return) {
-				Class<?> c = a.getBaseType();
+				Class<?> c = a.getRawTypeClass();
 				if (pre != null) {
 					if (pre != c) {
 						if (Number.class.isAssignableFrom(c)) {
@@ -927,10 +927,10 @@ public class BuildFunctions {
 		;
 	}
 
-	private static void checkAssigmentStructBaseType(CodeNode trgNode, CodeNode srcNode, Class<?> srcBaseType)
+	private static void checkAssigmentStructRawType(CodeNode trgNode, CodeNode srcNode, Class<?> srcRawType)
 			throws TypesDoNotMatch, UnknownComplexType {
-		if (srcBaseType != Structure.class) {
-			throw new TypesDoNotMatch(srcBaseType.toString(), Structure.class.toString());
+		if (srcRawType != Structure.class) {
+			throw new TypesDoNotMatch(srcRawType.toString(), Structure.class.toString());
 		}
 
 		Complex trgComplexType = Complex.getInstance(trgNode.getType());
@@ -947,16 +947,16 @@ public class BuildFunctions {
 		}
 	}
 
-	private static void checkAssigmentNumBaseType(Class<?> trgBaseType, Class<?> srcBaseType, CodeNode trgNode,
+	private static void checkAssigmentNumRawType(Class<?> trgRawType, Class<?> srcRawType, CodeNode trgNode,
 			CodeNode srcNode) throws TypesDoNotMatch {
-		Class<?> baseType;
-		if (trgBaseType == srcBaseType) {
-			baseType = trgBaseType;
+		Class<?> rawType;
+		if (trgRawType == srcRawType) {
+			rawType = trgRawType;
 		} else {
-			baseType = ElementaryArithmetic.getBiggest(trgBaseType, srcBaseType);
-			if (baseType == srcBaseType) {
-				throw new TypesDoNotMatch(trgBaseType + "(" + trgNode.getCommand() + " - " + trgNode.getName() + ") > "
-						+ srcBaseType + "(" + srcNode.getCommand() + " - " + srcNode.getName() + ")");
+			rawType = ElementaryArithmetic.getBiggest(trgRawType, srcRawType);
+			if (rawType == srcRawType) {
+				throw new TypesDoNotMatch(trgRawType + "(" + trgNode.getCommand() + " - " + trgNode.getName() + ") > "
+						+ srcRawType + "(" + srcNode.getCommand() + " - " + srcNode.getName() + ")");
 			}
 		}
 	}

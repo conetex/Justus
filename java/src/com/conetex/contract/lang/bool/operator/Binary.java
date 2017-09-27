@@ -1,8 +1,8 @@
 package com.conetex.contract.lang.bool.operator;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.lang.access.Accessible;
 
 public abstract class Binary extends Accessible<Boolean> {// implements
 															// Accessible<Boolean>
@@ -79,7 +79,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 	 */
 
 	@Override
-	public Class<Boolean> getBaseType() {
+	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
 

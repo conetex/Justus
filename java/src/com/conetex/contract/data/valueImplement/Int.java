@@ -34,7 +34,7 @@ public class Int implements Value<Integer> {
 	}
 
 	@Override
-	public Class<Integer> getBaseType() {
+	public Class<Integer> getRawTypeClass() {
 		return Integer.class;
 	}
 

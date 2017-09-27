@@ -47,7 +47,7 @@ public class Bool implements Value<Boolean> {
 	}
 
 	@Override
-	public Class<Boolean> getBaseType() {
+	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
 

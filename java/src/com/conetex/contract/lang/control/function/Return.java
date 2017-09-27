@@ -2,7 +2,7 @@ package com.conetex.contract.lang.control.function;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.lang.Accessible;
+import com.conetex.contract.lang.access.Accessible;
 
 public class Return<V> extends Accessible<V> { // V extends Value<?>
 
@@ -57,8 +57,8 @@ public class Return<V> extends Accessible<V> { // V extends Value<?>
 	}
 
 	@Override
-	public Class<V> getBaseType() {
-		return this.expression.getBaseType();
+	public Class<V> getRawTypeClass() {
+		return this.expression.getRawTypeClass();
 	}
 
 }

@@ -6,7 +6,7 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.exception.OperationInterpreterException;
-import com.conetex.contract.lang.Accessible;
+import com.conetex.contract.lang.access.Accessible;
 
 public class Build {
 

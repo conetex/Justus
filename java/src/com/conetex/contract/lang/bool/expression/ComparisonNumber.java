@@ -3,8 +3,8 @@ package com.conetex.contract.lang.bool.expression;
 import java.math.BigInteger;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.lang.access.Accessible;
 
 public class ComparisonNumber extends Accessible<Boolean> {
 
@@ -147,7 +147,7 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Class<Boolean> getBaseType() {
+	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
 

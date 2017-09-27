@@ -13,11 +13,11 @@ public abstract class AbstractType<T> {
 
 	public abstract Attribute<T> createAttribute(Label theName) throws NullLabelException, EmptyLabelException;
 
-	public abstract Class<? extends Value<T>> getClazz();
+	public abstract Class<? extends Value<T>> getValueImplementClass();
 
 	// public abstract Value<T> createValue();
 
-	public abstract <U> Attribute<U> getSubAttribute(String aName);
+	public abstract Attribute<?> getSubAttribute(String aName);
 
 	public static <V> Attribute<V> createIdentifier(Label theName, Primitive<V> thisObj)
 			throws NullLabelException, EmptyLabelException {

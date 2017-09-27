@@ -2,8 +2,8 @@ package com.conetex.contract.lang.control.function;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.lang.Accessible;
-import com.conetex.contract.lang.AccessibleValue;
+import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.access.AccessibleValue;
 
 public class Call<V> extends Accessible<V> { // V extends Value<?>
 
@@ -54,8 +54,8 @@ public class Call<V> extends Accessible<V> { // V extends Value<?>
 	}
 
 	@Override
-	public Class<V> getBaseType() {
-		return this.function.getBaseType();
+	public Class<V> getRawTypeClass() {
+		return this.function.getRawTypeClass();
 	}
 
 }

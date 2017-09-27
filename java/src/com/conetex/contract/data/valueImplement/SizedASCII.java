@@ -121,7 +121,7 @@ public abstract class SizedASCII implements Value<String> {
 	}
 
 	@Override
-	public Class<String> getBaseType() {
+	public Class<String> getRawTypeClass() {
 		return String.class;
 	}
 

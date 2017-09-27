@@ -34,7 +34,7 @@ public class Lng implements Value<Long> {
 	}
 
 	@Override
-	public Class<Long> getBaseType() {
+	public Class<Long> getRawTypeClass() {
 		return Long.class;
 	}
 

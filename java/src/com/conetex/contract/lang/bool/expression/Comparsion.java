@@ -1,15 +1,16 @@
 package com.conetex.contract.lang.bool.expression;
 
-import com.conetex.contract.lang.Accessible;
+import com.conetex.contract.lang.Cast;
+import com.conetex.contract.lang.access.Accessible;
 
 public class Comparsion {
 
 	public static Accessible<Boolean> createComparison(Accessible<?> a, Accessible<?> b, String name) {
-		Class<?> baseTypA = a.getBaseType();
-		Class<?> baseTypB = b.getBaseType();
+		Class<?> baseTypA = a.getRawTypeClass();
+		Class<?> baseTypB = b.getRawTypeClass();
 		if (Number.class.isAssignableFrom(baseTypA) && Number.class.isAssignableFrom(baseTypB)) {
-			Accessible<? extends Number> theA = a.<Number>as(Number.class);
-			Accessible<? extends Number> theB = b.<Number>as(Number.class);
+			Accessible<? extends Number> theA = Cast.<Number>toTypedAccessible(a, Number.class);
+			Accessible<? extends Number> theB = Cast.<Number>toTypedAccessible(b, Number.class);
 			return ComparisonNumber.create(theA, theB, name);
 		}
 		/* 
@@ -25,8 +26,8 @@ public class Comparsion {
 		}
 		*/
 		if (baseTypA == String.class && baseTypB == String.class) {
-			Accessible<String> theA = a.as(String.class);
-			Accessible<String> theB = b.as(String.class);
+			Accessible<String> theA = Cast.<String>toTypedAccessible(a, String.class); //a.as(String.class);
+			Accessible<String> theB = Cast.<String>toTypedAccessible(b, String.class); //b.as(String.class);
 			return ComparisonString.create(theA, theB, name);
 		}
 		return null;

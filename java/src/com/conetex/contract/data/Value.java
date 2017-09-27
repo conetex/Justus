@@ -13,6 +13,6 @@ public interface Value<T> {
 
 	public T setConverted(String value) throws Inconvertible, Invalid;
 
-	public Class<T> getBaseType();
+	public Class<T> getRawTypeClass();
 
 }

@@ -5,10 +5,10 @@ import java.math.BigInteger;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.exception.TypesDoNotMatch;
-import com.conetex.contract.lang.Accessible;
 import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.lang.access.Accessible;
 
-public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R> {
+public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R> {
 
 	public static final int PLUS = 0; // Addition
 	public static final int MINUS = 1; // Subtraction
@@ -39,7 +39,7 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 		return null;
 	}
 
-	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(
+	private static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(
 			Accessible<IA> theA, Accessible<IB> theB, int operation) {
 		if (operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS) {
 			return null;
@@ -48,8 +48,8 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 		if (theA == null || theB == null) {
 			return null;
 		}
-		Class<IA> inputTypA = theA.getBaseType();
-		Class<IB> inputTypB = theB.getBaseType();
+		Class<IA> inputTypA = theA.getRawTypeClass();
+		Class<IB> inputTypB = theB.getRawTypeClass();
 		Class<?> inputTyp = getBiggest(inputTypA, inputTypB);
 		if (inputTyp == null) {
 			// TODO Error unknown Typ
@@ -57,13 +57,57 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 		}
 
 		if (inputTyp == BigInteger.class) {
-			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation);
+			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation){
+				@Override
+				public BigInteger getFrom(Structure thisObject) {
+					IA a = super.a.getFrom(thisObject);
+					IB b = super.b.getFrom(thisObject);
+					if (a == null || b == null) {
+						// TODO Error 
+						return null;
+					}					
+					return super.calcBigIntNum(a, b);
+				}
+			};
 		} else if (inputTyp == Long.class) {
-			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation);
+			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation){
+				@Override
+				public Long getFrom(Structure thisObject) {
+					IA a = super.a.getFrom(thisObject);
+					IB b = super.b.getFrom(thisObject);
+					if (a == null || b == null) {
+						// TODO Error 
+						return null;
+					}					
+					return super.calcLong(a.longValue(), b.longValue());
+				}
+			};
 		} else if (inputTyp == Integer.class) {
-			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation);
+			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation){
+				@Override
+				public Integer getFrom(Structure thisObject) {
+					IA a = super.a.getFrom(thisObject);
+					IB b = super.b.getFrom(thisObject);
+					if (a == null || b == null) {
+						// TODO Error 
+						return null;
+					}					
+					return super.calcInt(a.intValue(), b.intValue());
+				}
+			};
 		} else if (inputTyp == Byte.class) {
-			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation);
+			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation){
+				@Override
+				public Byte getFrom(Structure thisObject) {
+					IA a = super.a.getFrom(thisObject);
+					IB b = super.b.getFrom(thisObject);
+					if (a == null || b == null) {
+						// TODO Error 
+						return null;
+					}					
+					return super.calcByte(a.byteValue(), b.byteValue());
+				}
+			};
 		} else {
 			// TODO Error unknown Typ
 			return null;
@@ -99,7 +143,7 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 
 	private Accessible<Ib> b;
 
-	private ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
+	protected ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
@@ -186,43 +230,25 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 		}
 	}
 
-	@Override
-	public R getFrom(Structure thisObject) throws ArithmeticException {
-		Ia a = this.a.getFrom(thisObject);
-		Ib b = this.b.getFrom(thisObject);
-		if (a == null || b == null) {
-			return null;
-		} else if (this.resultTyp == Byte.class) {
-			return (R) (this.calcByte(a.byteValue(), b.byteValue()));
-		} else if (this.resultTyp == Integer.class) {
-			return (R) (this.calcInt(a.intValue(), b.intValue()));
-		} else if (this.resultTyp == Long.class) {
-			return (R) (this.calcLong(a.longValue(), b.longValue()));
-		} else if (this.resultTyp == BigInteger.class) {
-			return (R) (this.calcBigIntNum(a, b));
-		}
-		return null;
-	}
-
-	public Integer getFromI(Structure thisObject, Class<Integer> resultTyp) throws ArithmeticException {
+	public Integer _getFromI(Structure thisObject, Class<Integer> resultTyp) throws ArithmeticException {
 		Ia a = this.a.getFrom(thisObject);
 		Ib b = this.b.getFrom(thisObject);
 		return this.calcInt(a.intValue(), b.intValue());
 	}
 
-	public Long getFromL(Structure thisObject, Class<Long> resultTyp) throws ArithmeticException {
+	public Long _getFromL(Structure thisObject, Class<Long> resultTyp) throws ArithmeticException {
 		Ia a = this.a.getFrom(thisObject);
 		Ib b = this.b.getFrom(thisObject);
 		return this.calcLong(a.longValue(), b.longValue());
 	}
 
-	public BigInteger getFromBi(Structure thisObject, Class<BigInteger> resultTyp) throws ArithmeticException {
+	public BigInteger _getFromBi(Structure thisObject, Class<BigInteger> resultTyp) throws ArithmeticException {
 		Ia a = this.a.getFrom(thisObject);
 		Ib b = this.b.getFrom(thisObject);
 		return this.calcBigIntNum(a, b);
 	}
 
-	public void setTo_(Structure thisObject, Number value) throws Invalid {
+	public void _setTo_(Structure thisObject, Number value) throws Invalid {
 		// TODO Auto-generated method stub
 
 	}
@@ -233,24 +259,24 @@ public class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extend
 	}
 
 	@Override
-	public Class<R> getBaseType() {
+	public Class<R> getRawTypeClass() {
 		return this.resultTyp;
 	}
 
-	public static Class<? extends Number> getConcretNumClass(Class<?> baseType) throws TypesDoNotMatch {
-		if (baseType == Integer.class) {
+	public static Class<? extends Number> getConcretNumRawType(Class<?> rawType) throws TypesDoNotMatch {
+		if (rawType == Integer.class) {
 			return Integer.class;
 		}
-		if (baseType == BigInteger.class) {
+		if (rawType == BigInteger.class) {
 			return BigInteger.class;
 		}
-		if (baseType == Long.class) {
+		if (rawType == Long.class) {
 			return Long.class;
 		}
-		if (baseType == Byte.class) {
+		if (rawType == Byte.class) {
 			return Byte.class;
 		}
-		throw new TypesDoNotMatch(baseType.toString(), Number.class.toString());
+		throw new TypesDoNotMatch(rawType.toString(), Number.class.toString());
 	}
 
 }

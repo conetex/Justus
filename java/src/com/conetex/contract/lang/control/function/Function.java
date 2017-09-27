@@ -6,7 +6,7 @@ import java.util.Map;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.lang.Accessible;
+import com.conetex.contract.lang.access.Accessible;
 
 public class Function<V> extends Accessible<V> {
 
@@ -201,7 +201,7 @@ public class Function<V> extends Accessible<V> {
 	}
 
 	@Override
-	public Class<V> getBaseType() {
+	public Class<V> getRawTypeClass() {
 		// TODO Auto-generated method stub
 		return null;
 	}

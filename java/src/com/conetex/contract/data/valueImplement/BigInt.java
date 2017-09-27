@@ -36,7 +36,7 @@ public class BigInt implements Value<BigInteger> {
 	}
 
 	@Override
-	public Class<BigInteger> getBaseType() {
+	public Class<BigInteger> getRawTypeClass() {
 		return BigInteger.class;
 	}
 

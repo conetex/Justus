@@ -1,7 +1,7 @@
 package com.conetex.contract.lang.bool.expression;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Accessible;
+import com.conetex.contract.lang.access.Accessible;
 
 public class IsNull extends Accessible<Boolean> {
 
@@ -33,7 +33,7 @@ public class IsNull extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Class<Boolean> getBaseType() {
+	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
 

@@ -1,7 +1,7 @@
 package com.conetex.contract.lang.bool.operator;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Accessible;
+import com.conetex.contract.lang.access.Accessible;
 
 //Unary operation
 public class Not extends Accessible<Boolean> {
@@ -37,7 +37,7 @@ public class Not extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Class<Boolean> getBaseType() {
+	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
 

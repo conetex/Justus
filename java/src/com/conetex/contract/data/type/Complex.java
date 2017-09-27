@@ -176,8 +176,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
-	public <V> Attribute<V> getSubAttribute(String aName) {
+	public Attribute<?> getSubAttribute(String aName) {
 		Integer i = this.index.get(aName);
 		if (i != null) {
 			if (i < 0 || i >= this.orderedAttributes.length) {
@@ -186,8 +185,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 				// bitte schwere Exception werfen!
 				return null;
 			}
-			// TODO typ-check !!!
-			return (Attribute<V>) this.orderedAttributes[i];
+			return this.orderedAttributes[i];//(Attribute<V>) this.orderedAttributes[i];
 		} else {
 
 			String[] names = Structure.split(aName);
@@ -216,7 +214,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 
 		return null;
 	}
-
+	
 	public Attribute<Structure> createComplexAttribute(String name) {
 		// PrimitiveDataType<Structure> simpleType =
 		// PrimitiveDataType.getInstance(
@@ -281,7 +279,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 	}
 
 	@Override
-	public Class<? extends Value<Structure>> getClazz() {
+	public Class<? extends Value<Structure>> getValueImplementClass() {
 		return Structure.class;
 	}
 

@@ -5,6 +5,7 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.exception.Inconvertible;
 import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.lang.Cast;
 
 public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
@@ -57,97 +58,6 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return re;
 	}
 
-	@SuppressWarnings("unchecked")
-	private <V extends Value<?>> V _getValue(String aName, Class<V> c) {
-		// TODO do xpath syntax. access parent objects ???
-		if (this.type.getName().equals(aName)) {
-			return (V) this;
-		}
-		int idIndex = this.type.getSubAttributeIndex(aName);
-		if (idIndex > -1) {
-			return _getValue(idIndex, c);
-		} else {
-			/*
-			 * int i = aName.indexOf(Label.NAME_SEPERATOR); if(i > -1 && i <
-			 * aName.length()){ String nameOfSubStructure = aName.substring(0,
-			 * i); if(i + Label.NAME_SEPERATOR.length() < aName.length()){
-			 * attributeIdx = this.type.getAttributeIndex( nameOfSubStructure );
-			 * Value.Interface<Structure> subStructure = getValue(attributeIdx,
-			 * Struct.class); if(subStructure != null){ Structure s =
-			 * subStructure.get(); if(s != null){ aName =
-			 * aName.substring(i+Label.NAME_SEPERATOR.length()); return
-			 * s.getValue(aName, c); } } } }
-			 */
-			String[] names = Structure.split(aName);
-			if (names[0] != null) {
-				if (names[1] != null) {
-					idIndex = this.type.getSubAttributeIndex(names[0]);
-					// TODO wenn hier die typen nicht passen und keine structure
-					// da liegt, sondern
-					// was anderes...
-					// sollte das vernünftig gemeldet werden!!!
-					Structure subStructure = _getValue(idIndex, Structure.class);
-					if (subStructure != null) {
-						return subStructure._getValue(names[1], c);
-					}
-				}
-			}
-
-		}
-		return null;
-	}
-
-	public Value<?> _getValue(String aName) {
-		return this._getValue(aName, Value.class);// TODO seltsam sieht das aus
-													// ...
-	}
-
-	@SuppressWarnings("unchecked")
-	private <V extends Value<?>> V _getValue(int i, Class<V> c) {
-		Value<?> v = getValue(i);
-		if (v != null) {
-			// TODO check this cast
-			return (V) v;
-		}
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <R extends Value<?>> R _getValueNewNew(String aName, Class<R> clazz) {
-		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
-		// TODO do xpath syntax. access parent objects ???
-		if (this.type.getName().equals(aName)) {
-			return (R) this;
-		}
-		int idIndex = this.type.getSubAttributeIndex(aName);
-		if (idIndex > -1) {
-			// TODO check this cast
-			return (R) getValue(idIndex);
-		} else {
-			String[] names = Structure.split(aName);
-			if (names[0] != null) {
-				if (names[1] != null) {
-					idIndex = this.type.getSubAttributeIndex(names[0]);
-					// TODO wenn hier die typen nicht passen und keine structure
-					// da liegt, sondern
-					// was anderes...
-					// sollte das vernünftig gemeldet werden!!!
-					Structure subStructure = _getValue(idIndex, Structure.class);
-					if (subStructure != null) {
-						return subStructure._getValueNewNew(names[1], clazz);
-					}
-				}
-			} else {
-				if (this.parent != null) {
-					return this.parent._getValueNewNew(aName, clazz);
-				}
-			}
-		}
-		return null;
-	}	
-
-
-
 	public Value<Structure> getStructure(String aName) {
 		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
 		// TODO do xpath syntax. access parent objects ???
@@ -182,7 +92,6 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <R> Value<R> getValue(String aName, Class<R> clazz) {
 		// TODO hier erst getStructure...
 		
@@ -191,7 +100,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		// TODO do xpath syntax. access parent objects ???
 		if (this.type.getName().equals(aName)) {
 			if (clazz == Structure.class) {
-				return (Value<R>) this;
+				return Cast.<R>toTypedValue(this, clazz);//(Value<R>) this;
 			} else {
 				System.err.println("Cast not possible: " + clazz + " != " + this.getClass());
 				return null;
@@ -225,14 +134,13 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	private <R> Value<R> getValue(int i, Class<R> c) {
 		Value<?> v = getValue(i);
 		if (v != null) {
-			if (v.getBaseType() == c) {
-				return (Value<R>) v;
+			if (v.getRawTypeClass() == c) {
+				return Cast.<R>toTypedValue(v, c);//(Value<R>) v;
 			} else {
-				System.err.println("Cast not possible: " + c + " != " + v.getBaseType());
+				System.err.println("Cast not possible: " + c + " != " + v.getRawTypeClass());
 			}
 		}
 		return null;
@@ -246,7 +154,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
-		Primitive<T> type = Primitive.<T> getInstance(src.getClass());
+		Primitive<T> type = Primitive.<T> getInstance(src.getClass(), src.getRawTypeClass());
 		Value<T> re = type.createValue();
 		T val = src.copy();
 		re.set(val); // throws the Exception
@@ -301,7 +209,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	@Override
-	public Class<Structure> getBaseType() {
+	public Class<Structure> getRawTypeClass() {
 		return Structure.class;
 	}
 
