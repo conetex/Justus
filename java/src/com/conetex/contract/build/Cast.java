@@ -1,15 +1,13 @@
-package com.conetex.contract.interpreter;
+package com.conetex.contract.build;
 
-import com.conetex.contract.data.Value;
+import com.conetex.contract.build.exceptionLang.CastException;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
+import com.conetex.contract.build.exceptionType.TypException;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.interpreter.exceptionLang.CastException;
-import com.conetex.contract.interpreter.exceptionType.AbstractTypException;
-import com.conetex.contract.interpreter.exceptionType.TypException;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
 import com.conetex.contract.lang.access.SetableValue;
 import com.conetex.contract.lang.control.function.Return;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class Cast {
 

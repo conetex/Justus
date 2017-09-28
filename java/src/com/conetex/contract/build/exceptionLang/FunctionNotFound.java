@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.exceptionLang;
+package com.conetex.contract.build.exceptionLang;
 
 public class FunctionNotFound extends AbstractInterpreterException {
 

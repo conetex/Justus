@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.exceptionType;
+package com.conetex.contract.build.exceptionType;
 
 public abstract class AbstractTypException extends Exception {
 

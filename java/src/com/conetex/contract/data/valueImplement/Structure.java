@@ -3,7 +3,6 @@ package com.conetex.contract.data.valueImplement;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.interpreter.Cast;
 import com.conetex.contract.runtime.RtCast;
 import com.conetex.contract.runtime.exceptionValue.Inconvertible;
 import com.conetex.contract.runtime.exceptionValue.Invalid;

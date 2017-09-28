@@ -1,4 +1,4 @@
-package com.conetex.contract.interpreter.exceptionValue;
+package com.conetex.contract.build.exceptionValue;
 
 public abstract class AbstractValueBuildException extends Exception {
 

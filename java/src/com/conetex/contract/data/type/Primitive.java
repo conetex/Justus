@@ -1,5 +1,8 @@
 package com.conetex.contract.data.type;
 
+import com.conetex.contract.build.Cast;
+import com.conetex.contract.build.exceptionLang.UnknownType;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Attribute.EmptyLabelException;
 import com.conetex.contract.data.Attribute.NullLabelException;
@@ -11,9 +14,6 @@ import com.conetex.contract.data.valueImplement.Int;
 import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.MailAddress64;
-import com.conetex.contract.interpreter.Cast;
-import com.conetex.contract.interpreter.exceptionLang.UnknownType;
-import com.conetex.contract.interpreter.exceptionType.AbstractTypException;
 import com.conetex.contract.runtime.exceptionValue.Invalid;
 
 public class Primitive<T> extends AbstractType<T> {

@@ -2,8 +2,8 @@ package com.conetex.contract.lang.math;
 
 import java.math.BigInteger;
 
+import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.interpreter.exceptionLang.TypesDoNotMatch;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.runtime.exceptionValue.Invalid;
