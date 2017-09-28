@@ -1,21 +1,19 @@
 package com.conetex.contract.data.type;
 
-
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
- 
+
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Attribute.EmptyLabelException;
 import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Inconvertible;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.runtime.exceptionValue.Inconvertible;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
 
 public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[]>
 
@@ -33,12 +31,13 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		return instances.keySet();
 	}
 
-	private final Map<String, Integer> index;
+	private final Map<String, Integer>	index;
 
-	private Attribute<?>[] orderedAttributes;// TODO kann das nicht doch final
-												// werden?
+	private Attribute<?>[]				orderedAttributes;	// TODO kann das
+															// nicht doch final
+															// werden?
 
-	private String name;
+	private String						name;
 
 	public String getName() {
 		return this.name;
@@ -186,7 +185,8 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 				// bitte schwere Exception werfen!
 				return null;
 			}
-			return this.orderedAttributes[iv];// (Attribute<V>) this.orderedAttributes[i];
+			return this.orderedAttributes[iv];// (Attribute<V>)
+												// this.orderedAttributes[i];
 		}
 		else {
 

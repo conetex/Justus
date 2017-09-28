@@ -3,6 +3,7 @@ package com.conetex.contract.lang.bool.operator;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public abstract class Binary extends Accessible<Boolean> {// implements
 															// Accessible<Boolean>
@@ -47,9 +48,9 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 		return null;
 	}
 
-	private Accessible<? extends Boolean> a;
+	private Accessible<? extends Boolean>	a;
 
-	private Accessible<? extends Boolean> b;
+	private Accessible<? extends Boolean>	b;
 
 	protected Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
 		this.a = theA;
@@ -59,7 +60,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 	protected abstract Boolean calc(Boolean aA, Boolean aB);
 
 	@Override
-	public Boolean getFrom(Structure thisObject) {
+	public Boolean getFrom(Structure thisObject) throws ValueCastException {
 		Boolean aA = this.a.getFrom(thisObject);
 		Boolean aB = this.b.getFrom(thisObject);
 		if (aA == null || aB == null) {
@@ -69,7 +70,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 	}
 
 	@Override
-	public Boolean copyFrom(Structure thisObject) {
+	public Boolean copyFrom(Structure thisObject) throws ValueCastException {
 		return this.getFrom(thisObject);
 	}
 

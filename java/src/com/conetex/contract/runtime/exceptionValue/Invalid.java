@@ -1,6 +1,6 @@
-package com.conetex.contract.data.valueImplement.exception;
+package com.conetex.contract.runtime.exceptionValue;
 
-public class Invalid extends Exception {
+public class Invalid extends AbstractValueException {
 
 	private static final long serialVersionUID = 1L;
 

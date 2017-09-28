@@ -3,6 +3,7 @@ package com.conetex.contract.lang.bool.expression;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class ComparisonString extends Accessible<Boolean> {
 
@@ -40,11 +41,11 @@ public class ComparisonString extends Accessible<Boolean> {
 		return new ComparisonString(theA, theB, operation);
 	}
 
-	private int operator;
+	private int					operator;
 
-	private Accessible<String> a;
+	private Accessible<String>	a;
 
-	private Accessible<String> b;
+	private Accessible<String>	b;
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
@@ -58,12 +59,13 @@ public class ComparisonString extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
-	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA,
+	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
+	 * this.operator = theOperation; }
 	 */
 
 	@Override
-	public Boolean getFrom(Structure thisObject) {
+	public Boolean getFrom(Structure thisObject) throws ValueCastException {
 		String aN = this.a.getFrom(thisObject);
 		String bN = this.b.getFrom(thisObject);
 		if (aN == null) {
@@ -102,7 +104,7 @@ public class ComparisonString extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean copyFrom(Structure thisObject) {
+	public Boolean copyFrom(Structure thisObject) throws ValueCastException {
 		return this.getFrom(thisObject);
 	}
 

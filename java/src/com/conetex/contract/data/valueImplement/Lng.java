@@ -1,7 +1,7 @@
 package com.conetex.contract.data.valueImplement;
 
 import com.conetex.contract.data.Value;
-import com.conetex.contract.data.valueImplement.exception.Inconvertible;
+import com.conetex.contract.runtime.exceptionValue.Inconvertible;
 
 public class Lng implements Value<Long> {
 

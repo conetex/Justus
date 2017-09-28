@@ -15,15 +15,16 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.Build;
 import com.conetex.contract.interpreter.CodeNode;
-import com.conetex.contract.interpreter.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class ReadXML {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid, OperationInterpreterException {
+	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, Invalid, AbstractInterpreterException, ValueCastException {
 
 		try (FileInputStream is = new FileInputStream("input2.xml")) {
 

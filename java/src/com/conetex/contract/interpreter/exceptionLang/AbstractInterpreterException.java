@@ -1,17 +1,17 @@
-package com.conetex.contract.interpreter.exception;
+package com.conetex.contract.interpreter.exceptionLang;
 
-public class OperationInterpreterException extends Exception {
+public class AbstractInterpreterException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public OperationInterpreterException(String msg, Exception cause) {
+	public AbstractInterpreterException(String msg, Exception cause) {
 		super(msg, cause);
 	}
 
-	public OperationInterpreterException(String msg) {
+	public AbstractInterpreterException(String msg) {
 		super(msg);
 	}
 

@@ -2,6 +2,7 @@ package com.conetex.contract.lang.bool.operator;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 //Unary operation
 public class Not extends Accessible<Boolean> {
@@ -20,7 +21,7 @@ public class Not extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean getFrom(Structure thisObject) {
+	public Boolean getFrom(Structure thisObject) throws ValueCastException {
 		Boolean b = this.sub.getFrom(thisObject);
 		if (b == null) {
 			return null;
@@ -32,7 +33,7 @@ public class Not extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean copyFrom(Structure thisObject) {
+	public Boolean copyFrom(Structure thisObject) throws ValueCastException {
 		return this.getFrom(thisObject);
 	}
 

@@ -7,15 +7,15 @@ import com.conetex.contract.lang.Symbol;
 
 public class CodeNode {
 
-	private String command;
+	private String			command;
 
-	private String name;
+	private String			name;
 
-	private String value;
+	private String			value;
 
-	private String type;
+	private String			type;
 
-	private List<CodeNode> children;
+	private List<CodeNode>	children;
 
 	public static CodeNode create(String theName, String theNameAttribute, String theValue, String theType) {
 		if (theName == null || theName.length() == 0) {
@@ -80,7 +80,8 @@ public class CodeNode {
 				|| this.command.equals(Symbol.REMAINS) || this.command.equals(Symbol.SMALLER) || this.command.equals(Symbol.GREATER)
 				|| this.command.equals(Symbol.EQUAL) || this.command.equals(Symbol.AND) || this.command.equals(Symbol.OR) || this.command.equals(Symbol.XOR)
 				|| this.command.equals(Symbol.NOT) || this.command.equals(Symbol.REFERENCE) || this.command.equals(Symbol.COPY)
-				|| this.command.equals(Symbol.FUNCTION) || this.command.equals(Symbol.RETURN) || this.command.equals(Symbol.CALL)) {
+				|| this.command.equals(Symbol.FUNCTION) || this.command.equals(Symbol.RETURN) || this.command.equals(Symbol.CALL)
+				|| this.command.equals(Symbol.IF)) {
 			return true;
 		}
 		return false;
@@ -95,10 +96,11 @@ public class CodeNode {
 		}
 		/*
 		 * else if( this.tag.equals(Symbol.IDENTIFIER) ) { String valueNode =
-		 * this.value; if(valueNode == null){ //System.out.println("isValue N " + name +
-		 * " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) ); return false;
-		 * } else{ //System.out.println("isValue Y " + name + " - " +
-		 * ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) ); return true; } }
+		 * this.value; if(valueNode == null){ //System.out.println("isValue N "
+		 * + name + " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME)
+		 * ); return false; } else{ //System.out.println("isValue Y " + name +
+		 * " - " + ReadXMLtools.getAttribute(n, Symbol.IDENTIFIER_NAME) );
+		 * return true; } }
 		 */
 		else {
 			if (this.command.equals(Symbol.FUNCTION)) {

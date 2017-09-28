@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.interpreter.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class Build {
 
@@ -14,7 +15,7 @@ public class Build {
 																	// das
 																	// wirklich
 																	// geworfen?
-			, OperationInterpreterException {
+			, AbstractInterpreterException, ValueCastException {
 
 		List<Complex> complexTyps = BuildTypes.createComplexTypes(r2);
 		System.out.println("Builder " + r2.getCommand());

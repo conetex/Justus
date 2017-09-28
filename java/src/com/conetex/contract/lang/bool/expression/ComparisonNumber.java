@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class ComparisonNumber extends Accessible<Boolean> {
 	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit über den
@@ -40,11 +41,11 @@ public class ComparisonNumber extends Accessible<Boolean> {
 		return new ComparisonNumber(theA, theB, operation);
 	}
 
-	private int operator;
+	private int								operator;
 
-	private Accessible<? extends Number> a;
+	private Accessible<? extends Number>	a;
 
-	private Accessible<? extends Number> b;
+	private Accessible<? extends Number>	b;
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
@@ -58,12 +59,13 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
-	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA,
+	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
+	 * this.operator = theOperation; }
 	 */
 
 	@Override
-	public Boolean getFrom(Structure thisObject) {
+	public Boolean getFrom(Structure thisObject) throws ValueCastException {
 		Number aN = this.a.getFrom(thisObject);
 		Number bN = this.b.getFrom(thisObject);
 		if (aN == null) {
@@ -147,7 +149,7 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean copyFrom(Structure thisObject) {
+	public Boolean copyFrom(Structure thisObject) throws ValueCastException {
 		return this.getFrom(thisObject);
 	}
 

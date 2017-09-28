@@ -1,9 +1,10 @@
 package com.conetex.contract.lang.control.function;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.AccessibleValue;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class Call<V> extends Accessible<V> { // V extends Value<?>
 
@@ -20,9 +21,9 @@ public class Call<V> extends Accessible<V> { // V extends Value<?>
 		return new Call<>(theFunction, theReference);
 	}
 
-	private Accessible<V> function;
+	private Accessible<V>				function;
 
-	private AccessibleValue<Structure> reference;
+	private AccessibleValue<Structure>	reference;
 
 	@Override
 	public String toString() {
@@ -35,7 +36,7 @@ public class Call<V> extends Accessible<V> { // V extends Value<?>
 	}
 
 	@Override
-	public V getFrom(Structure thisObject) {
+	public V getFrom(Structure thisObject) throws ValueCastException {
 
 		Structure obj = this.reference.getFrom(thisObject);
 		if (obj == null) {

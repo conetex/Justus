@@ -5,10 +5,11 @@ import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.interpreter.BuildFunctions;
-import com.conetex.contract.interpreter.exception.OperationInterpreterException;
+import com.conetex.contract.interpreter.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.lang.math.ElementaryArithmetic;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class AccessibleValue<T> extends Accessible<T> {
 
@@ -27,9 +28,9 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return new AccessibleValue<>(thePath, theClass);
 	}
 
-	protected String path;
+	protected String			path;
 
-	protected final Class<T> clazz;
+	protected final Class<T>	clazz;
 
 	protected AccessibleValue(String thePath, Class<T> theClass) {
 		this.path = thePath;
@@ -37,7 +38,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 	}
 
 	@Override
-	public T getFrom(Structure thisObject) {
+	public T getFrom(Structure thisObject) throws ValueCastException {
 
 		// return thisObject.getValueNewNew(this.path, this.clazz);
 
@@ -48,7 +49,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return value.get();
 	}
 
-	public T setTo(Structure thisObject, T newValue) throws Invalid {
+	public T setTo(Structure thisObject, T newValue) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		if (value == null) {
 			return null;
@@ -64,7 +65,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 	}
 
 	@Override
-	public T copyFrom(Structure thisObject) throws Invalid {
+	public T copyFrom(Structure thisObject) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		if (value == null) {
 			return null;
@@ -77,7 +78,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return this.clazz;
 	}
 
-	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected) throws OperationInterpreterException {
+	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected) throws AbstractInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		BuildFunctions.checkType(Primitive.getRawTypeClass(Attribute.getID(path, parentTyp)), expected);
@@ -86,7 +87,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return re;
 	}
 
-	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp) throws OperationInterpreterException {
+	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp) throws AbstractInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Class<?> rawType = Primitive.getRawTypeClass(Attribute.getID(path, parentTyp));
@@ -95,7 +96,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return re;
 	}
 
-	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp) throws OperationInterpreterException {
+	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp) throws AbstractInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Attribute<?> id = Attribute.getID(path, parentTyp);

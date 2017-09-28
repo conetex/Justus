@@ -1,12 +1,13 @@
 package com.conetex.contract.lang.assign;
 
-import com.conetex.contract.lang.Cast;
+import com.conetex.contract.interpreter.Cast;
+import com.conetex.contract.interpreter.exceptionLang.CastException;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
 
 public class Copy<T> extends AbstractAssigment<T> {
 
-	public static <T> Copy<T> _createFromClass(Setable<?> trg, Accessible<?> src, Class<T> rawType) {
+	public static <T> Copy<T> _createFromClass(Setable<?> trg, Accessible<?> src, Class<T> rawType) throws CastException {
 		if (src == null || trg == null) {
 			return null;
 		}
@@ -20,7 +21,7 @@ public class Copy<T> extends AbstractAssigment<T> {
 		return null;
 	}
 
-	public static <T> Copy<T> _createFromTrg(Setable<T> trg, Accessible<?> src) {
+	public static <T> Copy<T> _createFromTrg(Setable<T> trg, Accessible<?> src) throws CastException {
 		if (src == null || trg == null) {
 			return null;
 		}
@@ -34,7 +35,7 @@ public class Copy<T> extends AbstractAssigment<T> {
 		return null;
 	}
 
-	public static <T> Copy<T> _createFromSrc(Setable<?> trg, Accessible<T> src) {
+	public static <T> Copy<T> _createFromSrc(Setable<?> trg, Accessible<T> src) throws CastException {
 		if (src == null || trg == null) {
 			return null;
 		}

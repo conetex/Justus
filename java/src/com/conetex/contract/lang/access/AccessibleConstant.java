@@ -10,44 +10,58 @@ import com.conetex.contract.data.valueImplement.Int;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.SizedASCII;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Inconvertible;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.interpreter.exceptionLang.UnknownType;
+import com.conetex.contract.interpreter.exceptionType.AbstractTypException;
+import com.conetex.contract.runtime.exceptionValue.Inconvertible;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
 
 public class AccessibleConstant<T> extends Accessible<T> {
 
-	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value) {
+	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value) throws UnknownType {
 		Primitive<RE> theClass = null;
-		if (expectedBaseTyp == BigInteger.class) {
-			theClass = Primitive.<RE>getInstance(BigInt.class, expectedBaseTyp);
+		try {
+
+			if (expectedBaseTyp == BigInteger.class) {
+					theClass = Primitive.<RE>getInstance(BigInt.class, expectedBaseTyp);
+			}
+			else if (expectedBaseTyp == Long.class) {
+				theClass = Primitive.<RE>getInstance(Lng.class, expectedBaseTyp);
+			}
+			else if (expectedBaseTyp == Integer.class) {
+				theClass = Primitive.<RE>getInstance(Int.class, expectedBaseTyp);
+			}
+			else if (expectedBaseTyp == Byte.class) {
+				// TODO Typen klären ...
+				return null;
+			}
+			else if (expectedBaseTyp == String.class) {
+				theClass = Primitive.<RE>getInstance(SizedASCII.class, expectedBaseTyp);
+			}
+			else if (expectedBaseTyp == Boolean.class) {
+				theClass = Primitive.<RE>getInstance(Bool.class, expectedBaseTyp);
+			}
+		
 		}
-		else if (expectedBaseTyp == Long.class) {
-			theClass = Primitive.<RE>getInstance(Lng.class, expectedBaseTyp);
+		catch (AbstractTypException e) {
+			// convert TypeCastException InterpreterException
+			throw new UnknownType(expectedBaseTyp.getName());
 		}
-		else if (expectedBaseTyp == Integer.class) {
-			theClass = Primitive.<RE>getInstance(Int.class, expectedBaseTyp);
-		}
-		else if (expectedBaseTyp == Byte.class) {
-			// TODO Typen klären ...
-			return null;
-		}
-		else if (expectedBaseTyp == String.class) {
-			theClass = Primitive.<RE>getInstance(SizedASCII.class, expectedBaseTyp);
-		}
-		else if (expectedBaseTyp == Boolean.class) {
-			theClass = Primitive.<RE>getInstance(Bool.class, expectedBaseTyp);
-		}
+		
 		if (theClass != null) {
 			Value<RE> constVal = theClass.createValue();
 			try {
 				constVal.setConverted(value);
 			}
 			catch (Inconvertible | Invalid e) {
-				// TODO Auto-generated catch block
+				// TODO convert runtime exceptions to build Lang Exception
 				e.printStackTrace();
 				return null;
 			}
 			AccessibleConstant<RE> re = AccessibleConstant.<RE>create(constVal);
 			return re;
+		}
+		else{
+			// TODO error ... Primitive.<RE>getInstance can return null ...
 		}
 		return null;
 	}
@@ -71,8 +85,8 @@ public class AccessibleConstant<T> extends Accessible<T> {
 	}
 
 	/*
-	 * @Override public void setTo(Structure thisObject, T newValue) throws Invalid
-	 * { this.value.set(newValue); }
+	 * @Override public void setTo(Structure thisObject, T newValue) throws
+	 * Invalid { this.value.set(newValue); }
 	 * 
 	 * public void transSet(Structure thisObject, String newValue) throws
 	 * Inconvertible, Invalid { this.value.setConverted(newValue); }

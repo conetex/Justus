@@ -1,6 +1,6 @@
-package com.conetex.contract.interpreter.exception;
+package com.conetex.contract.interpreter.exceptionLang;
 
-public class MissingSubOperation extends OperationInterpreterException {
+public class MissingSubOperation extends AbstractInterpreterException {
 
 	private static final long serialVersionUID = 1L;
 

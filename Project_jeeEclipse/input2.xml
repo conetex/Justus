@@ -21,6 +21,11 @@
 		</complexType> 		 
 		<function name="tuWas" type="contract4u.root.person.tuWas">  
 			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+			<if>
+			<equal><Integer>13</Integer><Integer>13</Integer></equal>
+			<then><return><ref>nr</ref></return></then>
+			<else><return><Integer>8</Integer></return></else>
+			</if>
 		    <return><ref>nr</ref></return>			        
 		</function>       
 	</complexType>	

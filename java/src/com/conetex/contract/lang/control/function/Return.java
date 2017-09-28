@@ -1,8 +1,9 @@
 package com.conetex.contract.lang.control.function;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class Return<V> extends Accessible<V> { // V extends Value<?>
 
@@ -46,7 +47,7 @@ public class Return<V> extends Accessible<V> { // V extends Value<?>
 	}
 
 	@Override
-	public V getFrom(Structure thisObject) {
+	public V getFrom(Structure thisObject) throws ValueCastException {
 		return this.expression.getFrom(thisObject);
 	}
 

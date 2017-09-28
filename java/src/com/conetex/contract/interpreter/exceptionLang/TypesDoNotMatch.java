@@ -1,6 +1,6 @@
-package com.conetex.contract.interpreter.exception;
+package com.conetex.contract.interpreter.exceptionLang;
 
-public class TypesDoNotMatch extends OperationInterpreterException {
+public class TypesDoNotMatch extends AbstractInterpreterException {
 
 	private static final long serialVersionUID = 1L;
 

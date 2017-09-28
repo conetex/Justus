@@ -4,7 +4,7 @@ import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.SizedASCII;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.interpreter.exception.UnknownAttribute;
+import com.conetex.contract.interpreter.exceptionLang.UnknownAttribute;
 
 public abstract class Attribute<T> {
 

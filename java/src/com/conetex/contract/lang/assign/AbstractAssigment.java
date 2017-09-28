@@ -1,17 +1,18 @@
 package com.conetex.contract.lang.assign;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
 																	// extends
 																	// ComputablePair<T>{
 
-	private Setable<T> target;
+	private Setable<T>		target;
 
-	private Accessible<T> source;
+	private Accessible<T>	source;
 
 	protected AbstractAssigment(Setable<T> trg, Accessible<T> src) {
 		this.target = trg;
@@ -21,7 +22,7 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 	public abstract boolean doCopy();
 
 	@Override
-	public T getFrom(Structure thisObject) {
+	public T getFrom(Structure thisObject) throws ValueCastException {
 		T value = null;
 		try {
 
@@ -45,7 +46,7 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 	}
 
 	@Override
-	public T copyFrom(Structure thisObject) throws Invalid {
+	public T copyFrom(Structure thisObject) throws Invalid, ValueCastException {
 		// TODO: das wird ja nur selten gebraucht...
 		return getFrom(thisObject);
 	}

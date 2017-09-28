@@ -1,6 +1,6 @@
 package com.conetex.contract.data.valueImplement;
 
-import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
 
 public abstract class Base64 extends SizedASCII {
 	@Override

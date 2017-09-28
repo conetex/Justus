@@ -7,10 +7,10 @@ import com.conetex.contract.lang.access.Accessible;
 
 public class Program {
 
-	public static List<Accessible<?>> assignments = new LinkedList<>();
+	public static List<Accessible<?>>					assignments	= new LinkedList<>();
 
-	public static List<Accessible<Boolean>> boolExpress = new LinkedList<>();
+	public static List<Accessible<Boolean>>				boolExpress	= new LinkedList<>();
 
-	public static List<Accessible<? extends Number>> mathExpress = new LinkedList<>();
+	public static List<Accessible<? extends Number>>	mathExpress	= new LinkedList<>();
 
 }

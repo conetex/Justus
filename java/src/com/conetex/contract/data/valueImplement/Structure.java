@@ -3,17 +3,19 @@ package com.conetex.contract.data.valueImplement;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.data.valueImplement.exception.Inconvertible;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
-import com.conetex.contract.lang.Cast;
+import com.conetex.contract.interpreter.Cast;
+import com.conetex.contract.runtime.RtCast;
+import com.conetex.contract.runtime.exceptionValue.Inconvertible;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.runtime.exceptionValue.ValueCastException;
 
 public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
-	private final Complex type;
+	private final Complex	type;
 
-	private Structure parent;
+	private Structure		parent;
 
-	private Value<?>[] values;
+	private Value<?>[]		values;
 
 	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent) {
 		if (theAttributeTuple != null && theValues != null) {
@@ -57,7 +59,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return re;
 	}
 
-	public Value<Structure> getStructure(String aName) {
+	public Structure getStructure(String aName) throws ValueCastException {
 		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
 		// TODO do xpath syntax. access parent objects ???
 		if (this.type.getName().equals(aName)) {
@@ -65,7 +67,11 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		}
 		int idIndex = this.type.getSubAttributeIndex(aName);
 		if (idIndex > -1) {
-			return getValue(idIndex, Structure.class);
+			Value<Structure> v = getValue(idIndex, Structure.class);
+			if (v == null) {
+				return null;
+			}
+			return v.get();
 		}
 		else {
 			String[] names = Structure.split(aName);
@@ -92,14 +98,14 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return null;
 	}
 
-	public <R> Value<R> getValue(String aName, Class<R> clazz) {
+	public <R> Value<R> getValue(String aName, Class<R> clazz) throws ValueCastException {
 		// TODO hier erst getStructure...
 
 		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
 		// TODO do xpath syntax. access parent objects ???
 		if (this.type.getName().equals(aName)) {
 			if (clazz == Structure.class) {
-				return Cast.<R>toTypedValue(this, clazz);// (Value<R>) this;
+				return RtCast.<R>toTypedValue(this, clazz);// (Value<R>) this;
 			}
 			else {
 				System.err.println("Cast not possible: " + clazz + " != " + this.getClass());
@@ -135,11 +141,11 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return null;
 	}
 
-	private <R> Value<R> getValue(int i, Class<R> c) {
+	private <R> Value<R> getValue(int i, Class<R> c) throws ValueCastException {
 		Value<?> v = getValue(i);
 		if (v != null) {
 			if (v.getRawTypeClass() == c) {
-				return Cast.<R>toTypedValue(v, c);// (Value<R>) v;
+				return RtCast.<R>toTypedValue(v, c);
 			}
 			else {
 				System.err.println("Cast not possible: " + c + " != " + v.getRawTypeClass());
@@ -156,7 +162,11 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
-		Primitive<T> type = Primitive.<T>getInstance(src.getClass(), src.getRawTypeClass());
+		Primitive<T> type = Primitive.<T>getInstanceAtRunTime(src.getClass(), src.getRawTypeClass());
+		if(type == null){
+			// TODO ERROR
+			return null;
+		}
 		Value<T> re = type.createValue();
 		T val = src.copy();
 		re.set(val); // throws the Exception

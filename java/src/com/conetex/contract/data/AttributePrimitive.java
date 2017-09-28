@@ -4,8 +4,8 @@ import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.data.valueImplement.exception.Inconvertible;
-import com.conetex.contract.data.valueImplement.exception.Invalid;
+import com.conetex.contract.runtime.exceptionValue.Inconvertible;
+import com.conetex.contract.runtime.exceptionValue.Invalid;
 
 public class AttributePrimitive<T> extends Attribute<T> {
 
@@ -16,15 +16,15 @@ public class AttributePrimitive<T> extends Attribute<T> {
 		return null;
 	}
 
-	private final Label label;
+	private final Label			label;
 
 	// private final ValueFactory<T> factory;
 
-	private final Primitive<T> type;
+	private final Primitive<T>	type;
 
 	/*
-	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
-	 * theLabel; this.factory = theFactory; }
+	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){
+	 * this.label = theLabel; this.factory = theFactory; }
 	 */
 	private AttributePrimitive(Label theLabel, Primitive<T> theType) {
 		this.label = theLabel;
