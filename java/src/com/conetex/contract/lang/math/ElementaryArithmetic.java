@@ -6,8 +6,8 @@ import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R> {
 
@@ -141,13 +141,13 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		return null;
 	}
 
-	private int			operator;
+	private int operator;
 
-	private Class<R>	resultTyp;
+	private Class<R> resultTyp;
 
-	Accessible<Ia>		a;
+	Accessible<Ia> a;
 
-	Accessible<Ib>		b;
+	Accessible<Ib> b;
 
 	protected ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
 		this.a = theA;

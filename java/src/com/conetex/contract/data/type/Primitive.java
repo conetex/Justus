@@ -14,56 +14,56 @@ import com.conetex.contract.data.valueImplement.Int;
 import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.MailAddress64;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class Primitive<T> extends AbstractType<T> {
 
-	public static Primitive<?>[]			types	= { new Primitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>() {
-												@Override
-												public Bool createValueImp() {
-													return new Bool();
-												}
-											}), new Primitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>() {
-												@Override
-												public Int createValueImp() {
-													return new Int();
-												}
-											}), new Primitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>() {
-												@Override
-												public Lng createValueImp() {
-													return new Lng();
-												}
-											}), new Primitive<>(ASCII8.class, String.class, new PrimitiveValueFactory<String>() {
-												@Override
-												public ASCII8 createValueImp() {
-													return new ASCII8();
-												}
-											}), new Primitive<>(Label.class, String.class, new PrimitiveValueFactory<String>() {
-												@Override
-												public Label createValueImp() {
-													return new Label();
-												}
-											}), new Primitive<>(Base64_256.class, String.class, new PrimitiveValueFactory<String>() {
-												@Override
-												public Base64_256 createValueImp() {
-													return new Base64_256();
-												}
-											}), new Primitive<>(MailAddress64.class, String.class, new PrimitiveValueFactory<String>() {
-												@Override
-												public MailAddress64 createValueImp() {
-													return new MailAddress64();
-												}
-											})
+	public static Primitive<?>[] types = { new Primitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>() {
+		@Override
+		public Bool createValueImp() {
+			return new Bool();
+		}
+	}), new Primitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>() {
+		@Override
+		public Int createValueImp() {
+			return new Int();
+		}
+	}), new Primitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>() {
+		@Override
+		public Lng createValueImp() {
+			return new Lng();
+		}
+	}), new Primitive<>(ASCII8.class, String.class, new PrimitiveValueFactory<String>() {
+		@Override
+		public ASCII8 createValueImp() {
+			return new ASCII8();
+		}
+	}), new Primitive<>(Label.class, String.class, new PrimitiveValueFactory<String>() {
+		@Override
+		public Label createValueImp() {
+			return new Label();
+		}
+	}), new Primitive<>(Base64_256.class, String.class, new PrimitiveValueFactory<String>() {
+		@Override
+		public Base64_256 createValueImp() {
+			return new Base64_256();
+		}
+	}), new Primitive<>(MailAddress64.class, String.class, new PrimitiveValueFactory<String>() {
+		@Override
+		public MailAddress64 createValueImp() {
+			return new MailAddress64();
+		}
+	})
 
 	};
 
-	private final Class<? extends Value<T>>	valueImplementClass;
+	private final Class<? extends Value<T>> valueImplementClass;
 
-	private final Class<T>					rawTypeClass;
+	private final Class<T> rawTypeClass;
 
 	// private final Class<Value.Interface<T>> clazz;
 
-	final PrimitiveValueFactory<T>			factory;
+	final PrimitiveValueFactory<T> factory;
 
 	private static Primitive<?> getInstanceWild(String dataType) {
 
@@ -109,7 +109,7 @@ public class Primitive<T> extends AbstractType<T> {
 		}
 		return null;
 	}
-	
+
 	public static <W> Primitive<W> getInstanceAtRunTime(Class<?> theClass, Class<W> rawType) {
 		for (int i = 0; i < types.length; i++) {
 			if (types[i].getValueImplementClass() == theClass) {
@@ -189,9 +189,9 @@ public class Primitive<T> extends AbstractType<T> {
 	public Attribute<T> createAttribute(Label theName) throws Attribute.NullLabelException, Attribute.EmptyLabelException {
 		/*
 		 * if(theName == null || theName.get() == null){ throw new
-		 * Identifier.NullLabelException(); } if(theName.get().length() < 1){
-		 * throw new Identifier.EmptyLabelException(); } return
-		 * Identifier.<T>create(theName, this);
+		 * Identifier.NullLabelException(); } if(theName.get().length() < 1){ throw new
+		 * Identifier.EmptyLabelException(); } return Identifier.<T>create(theName,
+		 * this);
 		 */
 		return AbstractType.<T>createIdentifier(theName, this);
 	}

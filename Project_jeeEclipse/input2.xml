@@ -72,6 +72,21 @@
 	    </return>		             
     </function>
     
+    <value name="counter" type='t:Int'>0</value>	
+    <loop>
+		<smaller><ref>counter</ref><Integer>4</Integer></smaller>
+		<steps>
+		<copy>
+        	<ref name="target">counter</ref>
+        	<plus><ref>counter</ref><Integer>1</Integer></plus>
+        </copy>
+		<times>
+		    <Integer>3</Integer>	       
+		    <Integer>6</Integer>
+	    </times>
+	    </steps>
+	</loop>
+    
     <value name="param" type='t:Int'>12</value>	
 	<copy>
 	   <ref name="target" typ='MailAddress64'>foo.param</ref>

@@ -2,7 +2,7 @@ package com.conetex.contract.lang.bool.expression;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class IsNull extends Accessible<Boolean> {
 

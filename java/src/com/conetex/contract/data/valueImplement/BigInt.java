@@ -3,7 +3,7 @@ package com.conetex.contract.data.valueImplement;
 import java.math.BigInteger;
 
 import com.conetex.contract.data.Value;
-import com.conetex.contract.runtime.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
 
 public class BigInt implements Value<BigInteger> {
 

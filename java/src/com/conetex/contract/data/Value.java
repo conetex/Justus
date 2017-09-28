@@ -1,7 +1,7 @@
 package com.conetex.contract.data;
 
-import com.conetex.contract.runtime.exceptionValue.Inconvertible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public interface Value<T> {
 

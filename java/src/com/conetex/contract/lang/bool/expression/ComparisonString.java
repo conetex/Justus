@@ -3,7 +3,7 @@ package com.conetex.contract.lang.bool.expression;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class ComparisonString extends Accessible<Boolean> {
 
@@ -41,11 +41,11 @@ public class ComparisonString extends Accessible<Boolean> {
 		return new ComparisonString(theA, theB, operation);
 	}
 
-	private int					operator;
+	private int operator;
 
-	private Accessible<String>	a;
+	private Accessible<String> a;
 
-	private Accessible<String>	b;
+	private Accessible<String> b;
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
@@ -59,9 +59,8 @@ public class ComparisonString extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA,
-	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
-	 * this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
+	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
 	 */
 
 	@Override

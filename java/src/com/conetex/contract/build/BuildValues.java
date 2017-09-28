@@ -10,7 +10,7 @@ import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class BuildValues {
 	public static List<Value<?>> createValues(CodeNode n, Complex type, Structure data) {
@@ -38,10 +38,9 @@ public class BuildValues {
 		}
 
 		/*
-		 * old Value<?>[] theValues = new Value<?>[ values.size() ];
-		 * values.toArray( theValues ); try { data.set(theValues); } catch
-		 * (Invalid e) { // TODO Auto-generated catch block e.printStackTrace();
-		 * }
+		 * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
+		 * theValues ); try { data.set(theValues); } catch (Invalid e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); }
 		 * 
 		 * 
 		 * return values;
@@ -84,11 +83,10 @@ public class BuildValues {
 			}
 
 			/*
-			 * old List<Value<?>> subvalues = createValues(n, (Complex) type,
-			 * re); Value<?>[] theValues = new Value<?>[ subvalues.size() ];
-			 * subvalues.toArray( theValues ); try { re.set(theValues); } catch
-			 * (Invalid e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
+			 * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
+			 * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
+			 * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); }
 			 */
 
 			return re;

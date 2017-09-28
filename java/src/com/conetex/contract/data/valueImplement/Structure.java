@@ -3,18 +3,18 @@ package com.conetex.contract.data.valueImplement;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.runtime.RtCast;
-import com.conetex.contract.runtime.exceptionValue.Inconvertible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.RtCast;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
-	private final Complex	type;
+	private final Complex type;
 
-	private Structure		parent;
+	private Structure parent;
 
-	private Value<?>[]		values;
+	private Value<?>[] values;
 
 	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent) {
 		if (theAttributeTuple != null && theValues != null) {
@@ -162,7 +162,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
 		Primitive<T> type = Primitive.<T>getInstanceAtRunTime(src.getClass(), src.getRawTypeClass());
-		if(type == null){
+		if (type == null) {
 			// TODO ERROR
 			return null;
 		}

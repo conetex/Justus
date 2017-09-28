@@ -1,7 +1,7 @@
 package com.conetex.contract.data.valueImplement;
 
 import com.conetex.contract.data.Value;
-import com.conetex.contract.runtime.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
 
 public class Bool implements Value<Boolean> {
 

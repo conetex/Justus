@@ -1,14 +1,14 @@
-package com.conetex.contract.lang.control.function;
+package com.conetex.contract.lang.control;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.AccessibleValue;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Call<V> extends Accessible<V> { // V extends Value<?>
+public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
-	public static <SV> Call<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference) {
+	public static <SV> FunctionCall<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference) {
 		// TODO drop this
 		if (theFunction == null) {
 			System.err.println("theFunction is null");
@@ -18,19 +18,19 @@ public class Call<V> extends Accessible<V> { // V extends Value<?>
 			System.err.println("theReference is null");
 			return null;
 		}
-		return new Call<>(theFunction, theReference);
+		return new FunctionCall<>(theFunction, theReference);
 	}
 
-	private Accessible<V>				function;
+	private Accessible<V> function;
 
-	private AccessibleValue<Structure>	reference;
+	private AccessibleValue<Structure> reference;
 
 	@Override
 	public String toString() {
 		return "call function " + this.function;
 	}
 
-	private Call(Accessible<V> theExpression, AccessibleValue<Structure> theReference) {
+	private FunctionCall(Accessible<V> theExpression, AccessibleValue<Structure> theReference) {
 		this.function = theExpression;
 		this.reference = theReference;
 	}

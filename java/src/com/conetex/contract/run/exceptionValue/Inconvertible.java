@@ -1,4 +1,4 @@
-package com.conetex.contract.runtime.exceptionValue;
+package com.conetex.contract.run.exceptionValue;
 
 public class Inconvertible extends AbstractValueException {
 

@@ -1,6 +1,6 @@
-package com.conetex.contract.runtime.exceptionValue;
+package com.conetex.contract.run.exceptionValue;
 
-public class ValueCastException extends AbstractValueException{
+public class ValueCastException extends AbstractValueException {
 	private static final long serialVersionUID = 1L;
 
 	public ValueCastException(String msg, Exception cause) {

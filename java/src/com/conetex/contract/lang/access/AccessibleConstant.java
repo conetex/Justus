@@ -2,9 +2,12 @@ package com.conetex.contract.lang.access;
 
 import java.math.BigInteger;
 
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.exceptionLang.TypeNotDeterminated;
 import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.data.Value;
+import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.BigInt;
 import com.conetex.contract.data.valueImplement.Bool;
@@ -12,17 +15,56 @@ import com.conetex.contract.data.valueImplement.Int;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.SizedASCII;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.runtime.exceptionValue.Inconvertible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.lang.Symbol;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class AccessibleConstant<T> extends Accessible<T> {
+
+	public static Accessible<? extends Number> createNumConst(CodeNode n, Complex parentTyp) throws UnknownType, TypeNotDeterminated {
+		Accessible<? extends Number> re = try2CreateNumConst(n, parentTyp);
+		if (re == null) {
+			throw new TypeNotDeterminated("number const-Type: " + n.getName());
+		}
+		return re;
+	}
+
+	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, Complex parentTyp) throws UnknownType {
+		String name = n.getCommand();
+		if (name.equals(Symbol.BINT)) {
+			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
+		}
+		else if (name.equals(Symbol.INT)) {
+			return AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
+		}
+		else if (name.equals(Symbol.LNG)) {
+			return AccessibleConstant.<Long>create2(Long.class, n.getValue());
+		}
+		return null;
+	}
+
+	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, Complex parentTyp) throws UnknownType {
+		String name = n.getCommand();
+		if (name.equals(Symbol.BOOL)) {
+			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
+		}
+		return null;
+	}
+
+	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, Complex parentTyp) throws UnknownType {
+		String name = n.getCommand();
+		if (name.equals(Symbol.STRUCT)) {
+			return AccessibleConstant.<Structure>create2(Structure.class, n.getValue());
+		}
+		return null;
+	}
 
 	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value) throws UnknownType {
 		Primitive<RE> theClass = null;
 		try {
 
 			if (expectedBaseTyp == BigInteger.class) {
-					theClass = Primitive.<RE>getInstance(BigInt.class, expectedBaseTyp);
+				theClass = Primitive.<RE>getInstance(BigInt.class, expectedBaseTyp);
 			}
 			else if (expectedBaseTyp == Long.class) {
 				theClass = Primitive.<RE>getInstance(Lng.class, expectedBaseTyp);
@@ -40,13 +82,13 @@ public class AccessibleConstant<T> extends Accessible<T> {
 			else if (expectedBaseTyp == Boolean.class) {
 				theClass = Primitive.<RE>getInstance(Bool.class, expectedBaseTyp);
 			}
-		
+
 		}
 		catch (AbstractTypException e) {
 			// convert TypeCastException InterpreterException
 			throw new UnknownType(expectedBaseTyp.getName());
 		}
-		
+
 		if (theClass != null) {
 			Value<RE> constVal = theClass.createValue();
 			try {
@@ -60,7 +102,7 @@ public class AccessibleConstant<T> extends Accessible<T> {
 			AccessibleConstant<RE> re = AccessibleConstant.<RE>create(constVal);
 			return re;
 		}
-		else{
+		else {
 			// TODO error ... Primitive.<RE>getInstance can return null ...
 		}
 		return null;
@@ -85,8 +127,8 @@ public class AccessibleConstant<T> extends Accessible<T> {
 	}
 
 	/*
-	 * @Override public void setTo(Structure thisObject, T newValue) throws
-	 * Invalid { this.value.set(newValue); }
+	 * @Override public void setTo(Structure thisObject, T newValue) throws Invalid
+	 * { this.value.set(newValue); }
 	 * 
 	 * public void transSet(Structure thisObject, String newValue) throws
 	 * Inconvertible, Invalid { this.value.setConverted(newValue); }

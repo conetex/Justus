@@ -2,7 +2,7 @@ package com.conetex.contract.lang.bool.operator;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 //Unary operation
 public class Not extends Accessible<Boolean> {

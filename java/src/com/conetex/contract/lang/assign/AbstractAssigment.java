@@ -3,16 +3,16 @@ package com.conetex.contract.lang.assign;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
 																	// extends
 																	// ComputablePair<T>{
 
-	private Setable<T>		target;
+	private Setable<T> target;
 
-	private Accessible<T>	source;
+	private Accessible<T> source;
 
 	protected AbstractAssigment(Setable<T> trg, Accessible<T> src) {
 		this.target = trg;

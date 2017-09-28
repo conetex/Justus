@@ -6,8 +6,8 @@ import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Build {
 

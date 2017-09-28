@@ -1,28 +1,31 @@
-package com.conetex.contract.lang.control.function;
+package com.conetex.contract.lang.control;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.conetex.contract.build.BuildFunctions;
+import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.exceptionLang.CastException;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.lang.control.ReturnAbstract.Result;
+import com.conetex.contract.lang.math.ElementaryArithmetic;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Function<V> extends Accessible<V> {
 
-	private static Map<String, Function<? extends Number>>		instancesNum		= new HashMap<>();
+	private static Map<String, Function<? extends Number>> instancesNum = new HashMap<>();
 
-	private static Map<String, Function<Boolean>>				instancesBoolean	= new HashMap<>();
+	private static Map<String, Function<Boolean>> instancesBoolean = new HashMap<>();
 
-	private static Map<String, Function<String>>				instancesString		= new HashMap<>();
+	private static Map<String, Function<String>> instancesString = new HashMap<>();
 
-	private static Map<String, Function<? extends Structure>>	instancesStructure	= new HashMap<>();
+	private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<>();
 
-	private static Map<String, Function<?>>						instancesVoid		= new HashMap<>();
+	private static Map<String, Function<?>> instancesVoid = new HashMap<>();
 
 	public static Accessible<Boolean> getInstanceBool(String name) {
 		Function<Boolean> f = instancesBoolean.get(name);
@@ -95,25 +98,25 @@ public class Function<V> extends Accessible<V> {
 		}
 
 		if (theRawTypeClass == Byte.class) {
-			List<Return<Byte>> returns = BuildFunctions.getReturns(theSteps, Byte.class);
+			List<ReturnAbstract<Byte>> returns = getReturns(theSteps, Byte.class);
 			Function<? extends Number> main = new Function<>(theSteps, returns, theName, Byte.class);
 			Function.instancesNum.put(theName, main);
 			return main;
 		}
 		if (theRawTypeClass == Integer.class) {
-			List<Return<Integer>> returns = BuildFunctions.getReturns(theSteps, Integer.class);
+			List<ReturnAbstract<Integer>> returns = getReturns(theSteps, Integer.class);
 			Function<? extends Number> main = new Function<>(theSteps, returns, theName, Integer.class);
 			Function.instancesNum.put(theName, main);
 			return main;
 		}
 		if (theRawTypeClass == Long.class) {
-			List<Return<Long>> returns = BuildFunctions.getReturns(theSteps, Long.class);
+			List<ReturnAbstract<Long>> returns = getReturns(theSteps, Long.class);
 			Function<? extends Number> main = new Function<>(theSteps, returns, theName, Long.class);
 			Function.instancesNum.put(theName, main);
 			return main;
 		}
 		if (theRawTypeClass == BigInteger.class) {
-			List<Return<BigInteger>> returns = BuildFunctions.getReturns(theSteps, BigInteger.class);
+			List<ReturnAbstract<BigInteger>> returns = getReturns(theSteps, BigInteger.class);
 			Function<? extends Number> main = new Function<>(theSteps, returns, theName, BigInteger.class);
 			Function.instancesNum.put(theName, main);
 			return main;
@@ -136,7 +139,7 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		List<Return<Boolean>> returns = BuildFunctions.getReturns(theSteps, Boolean.class);
+		List<ReturnAbstract<Boolean>> returns = getReturns(theSteps, Boolean.class);
 		Function<Boolean> re = new Function<>(theSteps, returns, theName, Boolean.class);
 		Function.instancesBoolean.put(theName, re);
 		return re;
@@ -155,7 +158,7 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		List<Return<Structure>> returns = BuildFunctions.getReturns(theSteps, Structure.class);
+		List<ReturnAbstract<Structure>> returns = getReturns(theSteps, Structure.class);
 		Function<Structure> re = new Function<>(theSteps, returns, theName, Structure.class);
 		Function.instancesStructure.put(theName, re);
 		return re;
@@ -174,44 +177,92 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
-		List<Return<Object>> returns = BuildFunctions.getReturns(theSteps, Object.class);
+		List<ReturnAbstract<Object>> returns = getReturns(theSteps, Object.class);
 		Function<Object> re = new Function<>(theSteps, returns, theName, Object.class);
 		Function.instancesVoid.put(theName, re);
 		return re;
 	}
 
-	public static final <V> V doSteps(Accessible<?>[] steps, List<Return<V>> returns, Structure thisObject) throws ValueCastException {
-		for (int i = 0; i < steps.length; i++) {
-			if (steps[i].getClass() == Return.class) {
-				for (Return<V> r : returns) {
+	public static final <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject) throws ValueCastException {
+		loopOverSteps: for (int i = 0; i < steps.length; i++) {
+			if (steps[i] instanceof ReturnAbstract) {
+				for (ReturnAbstract<V> r : returns) {
 					if (r == steps[i]) {
-						V re = r.getFrom(thisObject.get());
-						System.out.println("MOCK return: " + re);
-						return re;
+						V re = r.getFrom(thisObject.get(), ret);
+						if (ret.toReturn) {
+							System.out.println("MOCK return: " + re);
+							return re;
+						}
+						else {
+							continue loopOverSteps;
+						}
 					}
 				}
 				System.err.println("not able to return... " + steps[i]);
 			}
-			Object stepResult = steps[i].getFrom(thisObject.get());
-			System.out.println("MOCK stepResult: " + stepResult);
+			else {
+				Object stepResult = steps[i].getFrom(thisObject.get());
+				System.out.println("MOCK stepResult: " + stepResult);
+			}
 		}
 		return null;
 	}
 
+	public static Class<?> getReturnTyp(Accessible<?>[] theSteps) {
+		Class<?> pre = null;
+		for (Accessible<?> a : theSteps) {
+			if (a instanceof ReturnAbstract) {
+				Class<?> c = a.getRawTypeClass();
+				if (pre != null) {
+					if (pre != c) {
+						if (Number.class.isAssignableFrom(c)) {
+							pre = ElementaryArithmetic.getBiggest(pre, c);
+						}
+						else {
+							System.err.println("typen passen nich...");
+						}
+					} // else ok
+				}
+				pre = c;
+			}
+		}
+		if (pre == null) {
+			return Object.class;
+		}
+		return pre;
+	}
+
+	public static <X> List<ReturnAbstract<X>> getReturns(Accessible<?>[] theSteps, Class<X> rawType) throws CastException {
+		List<ReturnAbstract<X>> returns = new LinkedList<>();
+		for (Accessible<?> a : theSteps) {
+			if (a instanceof ReturnAbstract) {
+				Class<?> c = a.getRawTypeClass();
+				if (rawType.isAssignableFrom(c)) {
+					ReturnAbstract<X> re = Cast.toTypedReturn(a, rawType);
+					returns.add(re);
+				}
+				else {
+					System.err.println("typen passen nich...");
+				}
+			}
+		}
+		return returns;
+	}
+
 	/*
-	 * public static <SV extends Value<?>> Function<SV> create(Structure
-	 * theData, Accessible<?>[] theSteps){ if(theData == null || theSteps ==
-	 * null){ return null; } return new Function<SV>(theData, theSteps); }
+	 * public static <SV extends Value<?>> Function<SV> create(Structure theData,
+	 * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return
+	 * null; } return new Function<SV>(theData, theSteps); }
 	 */
 	// private Value<?>[] values;
 	// private String[] valueNames;
 	// private Structure data;
 
-	private String			name;
+	private String name;
 
-	private Class<V>		rawTypeClass;
+	private Class<V> rawTypeClass;
 
-	private List<Return<V>>	returns;
+	private List<ReturnAbstract<V>> returns;
 
 	@Override
 	public String toString() {
@@ -220,7 +271,7 @@ public class Function<V> extends Accessible<V> {
 
 	private Accessible<?>[] steps;
 
-	private Function(Accessible<?>[] theSteps, List<Return<V>> theReturns, String theName, Class<V> theRawTypeClass) {
+	private Function(Accessible<?>[] theSteps, List<ReturnAbstract<V>> theReturns, String theName, Class<V> theRawTypeClass) {
 		// this.data = theData;
 		this.steps = theSteps;
 		this.returns = theReturns;
@@ -236,7 +287,7 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
 			return null;
 		}
-		return Function.doSteps(this.steps, this.returns, thisObjectB);
+		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
 	}
 
 	@Override

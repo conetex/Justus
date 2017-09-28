@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.conetex.contract.data.Value;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public abstract class SizedASCII implements Value<String> {
 

@@ -1,11 +1,11 @@
-package com.conetex.contract.lang.control.function;
+package com.conetex.contract.lang.control;
 
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Return<V> extends Accessible<V> { // V extends Value<?>
+public class Return<V> extends ReturnAbstract<V> {
 
 	public static <SV> Return<SV> create2(Accessible<SV> theExpression) {
 		// TODO drop this
@@ -60,6 +60,12 @@ public class Return<V> extends Accessible<V> { // V extends Value<?>
 	@Override
 	public Class<V> getRawTypeClass() {
 		return this.expression.getRawTypeClass();
+	}
+
+	@Override
+	public V getFrom(Structure thisObject, Result r) throws ValueCastException {
+		r.toReturn = true;
+		return this.getFrom(thisObject);
 	}
 
 }

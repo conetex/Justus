@@ -8,19 +8,19 @@ import com.conetex.contract.lang.access.Setable;
 
 public abstract class Creator {
 
-	public static final Creator	copy	= new Creator() {
-											@Override
-											public <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src) {
-												return new Copy<>(trg, src);
-											}
-										};
+	public static final Creator copy = new Creator() {
+		@Override
+		public <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src) {
+			return new Copy<>(trg, src);
+		}
+	};
 
-	public static final Creator	refer	= new Creator() {
-											@Override
-											public <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src) {
-												return new Reference<>(trg, src);
-											}
-										};
+	public static final Creator refer = new Creator() {
+		@Override
+		public <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src) {
+			return new Reference<>(trg, src);
+		}
+	};
 
 	public abstract <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src);
 

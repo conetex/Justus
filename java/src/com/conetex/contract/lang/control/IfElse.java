@@ -2,20 +2,17 @@ package com.conetex.contract.lang.control;
 
 import java.util.List;
 
-import com.conetex.contract.build.BuildFunctions;
 import com.conetex.contract.build.exceptionLang.CastException;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.lang.control.function.Function;
-import com.conetex.contract.lang.control.function.Return;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class IfElse<V> extends If<V> {
 
-	private Accessible<?>[]	stepsElse;
+	private Accessible<?>[] stepsElse;
 
-	private List<Return<V>>	returnsElse;
+	private List<ReturnAbstract<V>> returnsElse;
 
 	public static <SV> IfElse<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass)
 			throws CastException {
@@ -31,13 +28,13 @@ public class IfElse<V> extends If<V> {
 			System.err.println("theName is null");
 			return null;
 		}
-		List<Return<SV>> returnsIf = BuildFunctions.getReturns(theStepsIf, theRawTypeClass);
-		List<Return<SV>> returnsElse = BuildFunctions.getReturns(theStepsElse, theRawTypeClass);
+		List<ReturnAbstract<SV>> returnsIf = Function.getReturns(theStepsIf, theRawTypeClass);
+		List<ReturnAbstract<SV>> returnsElse = Function.getReturns(theStepsElse, theRawTypeClass);
 		IfElse<SV> re = new IfElse<>(theStepsIf, returnsIf, theStepsElse, returnsElse, theCondition, theRawTypeClass);
 		return re;
 	}
 
-	private IfElse(Accessible<?>[] theStepsIf, List<Return<V>> theReturnsIf, Accessible<?>[] theStepsElse, List<Return<V>> theReturnsElse,
+	private IfElse(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> theReturnsIf, Accessible<?>[] theStepsElse, List<ReturnAbstract<V>> theReturnsElse,
 			Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
 		super(theStepsIf, theReturnsIf, theCondition, theRawTypeClass);
 		this.stepsElse = theStepsElse;
@@ -45,17 +42,17 @@ public class IfElse<V> extends If<V> {
 	}
 
 	@Override
-	public V getFrom(Structure thisObject) throws ValueCastException {
+	public V getFrom(Structure thisObject, Result r) throws ValueCastException {
 		Boolean res = super.condition.getFrom(thisObject);
 		if (res == null) {
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
 		}
 		if (res.booleanValue()) {
-			return Function.doSteps(super.stepsIf, super.returnsIf, thisObject);
+			return Function.doSteps(super.stepsIf, super.returnsIf, r, thisObject);
 		}
 		else {
-			return Function.doSteps(this.stepsElse, this.returnsElse, thisObject);
+			return Function.doSteps(this.stepsElse, this.returnsElse, r, thisObject);
 		}
 	}
 

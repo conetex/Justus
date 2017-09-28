@@ -7,7 +7,7 @@ import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
 import com.conetex.contract.lang.access.SetableValue;
-import com.conetex.contract.lang.control.function.Return;
+import com.conetex.contract.lang.control.ReturnAbstract;
 
 public class Cast {
 
@@ -19,8 +19,6 @@ public class Cast {
 		throw new TypException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());
 	}
 
-
-	
 	@SuppressWarnings("unchecked")
 	public static <X> Accessible<X> toTypedAccessible(Accessible<?> thisObj, Class<X> rawType) throws CastException {
 		if (rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
@@ -30,9 +28,9 @@ public class Cast {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <X> Return<X> toTypedReturn(Accessible<?> thisObj, Class<X> rawType) throws CastException {
-		if (thisObj instanceof Return && rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
-			return (Return<X>) thisObj;
+	public static <X> ReturnAbstract<X> toTypedReturn(Accessible<?> thisObj, Class<X> rawType) throws CastException {
+		if (thisObj instanceof ReturnAbstract && rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
+			return (ReturnAbstract<X>) thisObj;
 		}
 		throw new CastException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());
 	}
@@ -44,7 +42,5 @@ public class Cast {
 		}
 		throw new CastException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());
 	}
-
-
 
 }

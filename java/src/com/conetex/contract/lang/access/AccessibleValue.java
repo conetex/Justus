@@ -8,8 +8,8 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.math.ElementaryArithmetic;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class AccessibleValue<T> extends Accessible<T> {
 
@@ -28,9 +28,9 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return new AccessibleValue<>(thePath, theClass);
 	}
 
-	protected String			path;
+	protected String path;
 
-	protected final Class<T>	clazz;
+	protected final Class<T> clazz;
 
 	protected AccessibleValue(String thePath, Class<T> theClass) {
 		this.path = thePath;

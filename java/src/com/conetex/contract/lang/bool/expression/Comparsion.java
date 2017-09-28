@@ -16,14 +16,13 @@ public class Comparsion {
 		}
 		/*
 		 * if (Number.class.isAssignableFrom(baseTypA) &&
-		 * Number.class.isAssignableFrom(baseTypB)) { Accessible<? extends
-		 * Number> theA = (Accessible<? extends Number>) a; Accessible<? extends
-		 * Number> theB = (Accessible<? extends Number>) b; return
-		 * ComparisonNumber.create(theA, theB, name); } if (baseTypA ==
-		 * String.class && baseTypB == String.class) { Accessible<String> theA =
-		 * (Accessible<String>) a.as(String.class); Accessible<String> theB =
-		 * (Accessible<String>) b; return ComparisonString.create(theA, theB,
-		 * name); }
+		 * Number.class.isAssignableFrom(baseTypB)) { Accessible<? extends Number> theA
+		 * = (Accessible<? extends Number>) a; Accessible<? extends Number> theB =
+		 * (Accessible<? extends Number>) b; return ComparisonNumber.create(theA, theB,
+		 * name); } if (baseTypA == String.class && baseTypB == String.class) {
+		 * Accessible<String> theA = (Accessible<String>) a.as(String.class);
+		 * Accessible<String> theB = (Accessible<String>) b; return
+		 * ComparisonString.create(theA, theB, name); }
 		 */
 		if (baseTypA == String.class && baseTypB == String.class) {
 			Accessible<String> theA = Cast.<String>toTypedAccessible(a, String.class); // a.as(String.class);

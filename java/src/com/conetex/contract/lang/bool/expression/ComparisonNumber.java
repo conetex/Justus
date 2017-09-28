@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class ComparisonNumber extends Accessible<Boolean> {
 	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit über den
@@ -41,11 +41,11 @@ public class ComparisonNumber extends Accessible<Boolean> {
 		return new ComparisonNumber(theA, theB, operation);
 	}
 
-	private int								operator;
+	private int operator;
 
-	private Accessible<? extends Number>	a;
+	private Accessible<? extends Number> a;
 
-	private Accessible<? extends Number>	b;
+	private Accessible<? extends Number> b;
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
@@ -59,9 +59,8 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
 	/*
-	 * public Comparison(Accessible<Comparable<?>> theA,
-	 * Accessible<Comparable<?>> theB, int theOperation) { super(theA, theB);
-	 * this.operator = theOperation; }
+	 * public Comparison(Accessible<Comparable<?>> theA, Accessible<Comparable<?>>
+	 * theB, int theOperation) { super(theA, theB); this.operator = theOperation; }
 	 */
 
 	@Override

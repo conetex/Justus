@@ -1,8 +1,8 @@
 package com.conetex.contract.lang.access;
 
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.runtime.exceptionValue.Invalid;
-import com.conetex.contract.runtime.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public interface Setable<T> {
 
