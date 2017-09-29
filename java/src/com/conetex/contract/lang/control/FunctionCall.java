@@ -1,14 +1,17 @@
 package com.conetex.contract.lang.control;
 
+import java.util.List;
+
 import com.conetex.contract.data.valueImplement.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.AccessibleValue;
+import com.conetex.contract.lang.assign.AbstractAssigment;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
-	public static <SV> FunctionCall<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference) {
+	public static <SV> FunctionCall<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference, List<AbstractAssigment<? extends Object>> assig) {
 		// TODO drop this
 		if (theFunction == null) {
 			System.err.println("theFunction is null");
@@ -18,26 +21,36 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 			System.err.println("theReference is null");
 			return null;
 		}
-		return new FunctionCall<>(theFunction, theReference);
+		if (assig == null) {
+			System.err.println("params is null");
+			return null;
+		}		
+		return new FunctionCall<>(theFunction, theReference, assig);
 	}
 
 	private Accessible<V> function;
 
 	private AccessibleValue<Structure> reference;
 
+	private List<AbstractAssigment<? extends Object>> paramAssigments;
+	
 	@Override
 	public String toString() {
 		return "call function " + this.function;
 	}
 
-	private FunctionCall(Accessible<V> theExpression, AccessibleValue<Structure> theReference) {
+	private FunctionCall(Accessible<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<? extends Object>> assig) {
 		this.function = theExpression;
 		this.reference = theReference;
+		this.paramAssigments = assig;
 	}
 
 	@Override
 	public V getFrom(Structure thisObject) throws ValueCastException {
 
+		for(AbstractAssigment<? extends Object> a : paramAssigments){
+			a.getFrom(thisObject);
+		}
 		Structure obj = this.reference.getFrom(thisObject);
 		if (obj == null) {
 			System.err.println("Call getFrom ERROR");

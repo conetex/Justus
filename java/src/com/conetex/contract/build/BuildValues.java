@@ -9,7 +9,6 @@ import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class BuildValues {
@@ -37,6 +36,8 @@ public class BuildValues {
 			}
 		}
 
+		data.fillMissingValues();
+		
 		/*
 		 * old Value<?>[] theValues = new Value<?>[ values.size() ]; values.toArray(
 		 * theValues ); try { data.set(theValues); } catch (Invalid e) { // TODO

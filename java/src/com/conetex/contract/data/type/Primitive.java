@@ -1,6 +1,7 @@
 package com.conetex.contract.data.type;
 
 import com.conetex.contract.build.Cast;
+import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.data.Attribute;
@@ -75,7 +76,7 @@ public class Primitive<T> extends AbstractType<T> {
 		return null;
 
 	}
-
+	
 	private static Class<?> getValueImplementClass(String dataType) {
 
 		Class<?> theClass = null;
@@ -181,6 +182,10 @@ public class Primitive<T> extends AbstractType<T> {
 		this.factory = theFactory;
 	}
 
+	public String getName() {
+		return Symbol.SIMPLE_TYPE_NS + this.getValueImplementClass().getSimpleName();
+	}
+	
 	public Value<T> createValue() {
 		return this.factory.createValueImp();
 	}

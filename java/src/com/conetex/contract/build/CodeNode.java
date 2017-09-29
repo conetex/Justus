@@ -3,8 +3,6 @@ package com.conetex.contract.build;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conetex.contract.lang.Symbol;
-
 public class CodeNode {
 
 	private String command;

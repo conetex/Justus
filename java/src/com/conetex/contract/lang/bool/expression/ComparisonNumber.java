@@ -2,8 +2,8 @@ package com.conetex.contract.lang.bool.expression;
 
 import java.math.BigInteger;
 
+import com.conetex.contract.build.Symbol;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 

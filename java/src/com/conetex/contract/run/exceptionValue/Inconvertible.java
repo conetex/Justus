@@ -1,6 +1,6 @@
 package com.conetex.contract.run.exceptionValue;
 
-public class Inconvertible extends AbstractValueException {
+public class Inconvertible extends AbstractRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,6 @@
 package com.conetex.contract.data.valueImplement;
 
+import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
@@ -43,6 +44,21 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		this.parent = theParent;
 	}
 
+	public void fillMissingValues(){
+		for(int i = 0; i < this.values.length; i++){
+			if(this.values[i] == null){
+				Attribute<?> a = this.type.getSubAttribute(i);
+				if(a == null){
+					System.err.println("no getSubAttribute " + i );
+				}
+				else{
+					this.values[i] = a.createValue(this);	
+				}
+			}
+		}
+	}
+	
+	
 	public static String[] split(String aName) {
 		String[] re = new String[2];
 		if (aName == null) {

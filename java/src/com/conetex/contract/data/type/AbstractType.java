@@ -15,6 +15,7 @@ public abstract class AbstractType<T> {
 
 	public abstract Class<? extends Value<T>> getValueImplementClass();
 
+	public abstract String getName();
 	// public abstract Value<T> createValue();
 
 	public abstract Attribute<?> getSubAttribute(String aName);

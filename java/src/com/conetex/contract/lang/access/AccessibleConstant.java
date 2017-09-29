@@ -3,6 +3,7 @@ package com.conetex.contract.lang.access;
 import java.math.BigInteger;
 
 import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.TypeNotDeterminated;
 import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
@@ -15,7 +16,6 @@ import com.conetex.contract.data.valueImplement.Int;
 import com.conetex.contract.data.valueImplement.Lng;
 import com.conetex.contract.data.valueImplement.SizedASCII;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 

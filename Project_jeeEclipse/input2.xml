@@ -76,14 +76,14 @@
     <loop>
 		<smaller><ref>counter</ref><Integer>4</Integer></smaller>
 		<steps>
-		<copy>
-        	<ref name="target">counter</ref>
-        	<plus><ref>counter</ref><Integer>1</Integer></plus>
-        </copy>
-		<times>
-		    <Integer>3</Integer>	       
-		    <Integer>6</Integer>
-	    </times>
+			<copy>
+	        	<ref name="target">counter</ref>
+	        	<plus><ref>counter</ref><Integer>1</Integer></plus>
+	        </copy>
+			<times>
+			    <Integer>3</Integer>	       
+			    <Integer>6</Integer>
+		    </times>
 	    </steps>
 	</loop>
     
@@ -94,6 +94,26 @@
 	</copy>   
     <call name="foo" type='contract4u' />
 	
+	<call name="foo" type='contract4u'>
+    	<Integer name="param">13</Integer>
+    </call>
+	
+ 	<function name='foo2' type="contract4u.foo2"> 
+		<value name="param" type='t:Int'>11</value>
+		<attribute name="param2" type="t:Int" />
+	    <return>
+		    <times>
+			    <ref>param</ref>	    
+			    <ref>param2</ref>	
+		    </times>             
+	    </return>		             
+    </function>
+        
+    <call name="foo2" type='contract4u'>
+    	<Integer name="param">6</Integer>
+    	<Integer name="param2">5</Integer>  
+    </call>
+		
 <!-- ASSIGNMENT OK -->
 	<value name="aAddress" type='t:MailAddress64'>12@32543.com</value>
 	<value name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</value>

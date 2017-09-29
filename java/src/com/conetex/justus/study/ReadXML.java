@@ -15,17 +15,18 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.conetex.contract.build.Build;
+import com.conetex.contract.build.Build.Main;
 import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.lang.Symbol;
-import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class ReadXML {
 
 	public static void main(String[] args)
-			throws ParserConfigurationException, SAXException, IOException, Invalid, AbstractInterpreterException, ValueCastException {
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException {
+
+		Main main = null;
 
 		try (FileInputStream is = new FileInputStream("input2.xml")) {
 
@@ -33,7 +34,7 @@ public class ReadXML {
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(is);
 
-			List<Complex> complexTyps = null;
+			//List<Complex> complexTyps_ = null;
 			// List<Value<?>> values = null;
 			// List<Accessible<?>> functions = null;
 
@@ -42,9 +43,9 @@ public class ReadXML {
 				Node r = children.item(i);
 				short typOfNode = children.item(i).getNodeType();
 				if (typOfNode == Node.ELEMENT_NODE) {
-					if (complexTyps == null) {
+					if (main == null) {
 						CodeNode r2 = createSyntaxNode(r);
-						complexTyps = Build.create(r2);
+						main = Build.create(r2);
 					}
 					else {
 						System.err.println("more than one root element! can not proceed!");
@@ -54,6 +55,11 @@ public class ReadXML {
 
 			is.close();
 		}
+		
+		if(main != null){
+			main.run();
+		}
+		
 	}
 
 	public static CodeNode createSyntaxNode(Node n) {

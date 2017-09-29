@@ -2,53 +2,21 @@
 
 <contract name="contract4u" t="http://conetex.org/justus/baseTyps">
 	
-	<complexType name="root"> 
+ 	<function name='foo2' type="contract4u.foo2"> 
+		<value name="param" type='t:Int'>11</value>
+		<attribute name="param2" type="t:Int" />
+	    <return>
+		    <times>
+			    <ref>param</ref>	    
+			    <ref>param2</ref>	
+		    </times>             
+	    </return>		             
+    </function>
+        
+    <call name="foo2" type='contract4u'>
+    	<Integer name="param">6</Integer>
+    	<Integer name="param2">5</Integer>  
+    </call>
 	
-	<attribute name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
-	<complexType name="credit">  
-		<attribute name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<attribute name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
-	</complexType>	
-	<complexType name="person">  
-		<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<complexType name="person">  
-			<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-			<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		</complexType> 		 
-		<function name="tuWas" type="contract4u.root.person.tuWas">  
-			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
-		    <return><ref>nr</ref></return>			        
-		</function>       
-	</complexType>	
-	
-	</complexType>
-
-	<attribute name="instance" type="contract4u.root.credit" minOccurs="1" maxOccurs="1" nillable="false"/><!-- TODO create ComplexTypContract to keep this -->  
-	<instance>  
-		<glaeubig> 
-			<name>hobo</name>        
-			<mail>hobo@dida.de</mail>
-			<nr>111</nr>
-			<tuWas>
-				<action>dummy</action>
-			</tuWas>
-		</glaeubig> 
-		<schuldne> 
-			<name>biba</name>        
-			<mail>biba@dida.de</mail>
-			<nr>222</nr>
-			<tuWas>
-				<action>dummy</action>
-			</tuWas>			
-		</schuldne>				       
-		<betrag>1024</betrag>
-		<aktiv>true</aktiv>       
-	</instance>		
-
-	<call type="instance.glaeubig" name="tuWas" />
 
 </contract>

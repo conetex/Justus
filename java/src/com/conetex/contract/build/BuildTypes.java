@@ -14,7 +14,6 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Complex.ComplexWasInitializedExeption;
 import com.conetex.contract.data.type.Complex.DublicateComplexException;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.lang.Symbol;
 
 public class BuildTypes {
 

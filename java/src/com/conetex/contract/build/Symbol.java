@@ -1,4 +1,4 @@
-package com.conetex.contract.lang;
+package com.conetex.contract.build;
 
 public class Symbol {
 

@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.conetex.contract.build.Symbol;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Attribute.EmptyLabelException;
 import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.valueImplement.Label;
 import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
@@ -174,6 +174,16 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		return i.intValue();
 	}
 
+	public Attribute<?> getSubAttribute(int i){
+		if (i < 0 || i >= this.orderedAttributes.length) {
+			// TODO i < this.orderedAttributes.length darf auf keinen fall
+			// vorkommen! hier
+			// bitte schwere Exception werfen!
+			return null;
+		}		
+		return this.orderedAttributes[i];
+	}
+	
 	@Override
 	public Attribute<?> getSubAttribute(String aName) {
 		Integer i = this.index.get(aName);

@@ -1,8 +1,8 @@
 package com.conetex.contract.lang.assign;
 
 import com.conetex.contract.build.Cast;
+import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.lang.Symbol;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
 
