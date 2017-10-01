@@ -1,9 +1,9 @@
 package com.conetex.contract.lang.control;
 
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Return<V> extends ReturnAbstract<V> {
 
@@ -47,7 +47,7 @@ public class Return<V> extends ReturnAbstract<V> {
 	}
 
 	@Override
-	public V getFrom(Structure thisObject) throws ValueCastException {
+	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
 		return this.expression.getFrom(thisObject);
 	}
 
@@ -63,7 +63,7 @@ public class Return<V> extends ReturnAbstract<V> {
 	}
 
 	@Override
-	public V getFrom(Structure thisObject, Result r) throws ValueCastException {
+	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		r.toReturn = true;
 		return this.getFrom(thisObject);
 	}

@@ -3,8 +3,8 @@ package com.conetex.contract.data;
 import com.conetex.contract.build.exceptionLang.UnknownAttribute;
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.valueImplement.SizedASCII;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.SizedASCII;
+import com.conetex.contract.data.value.Structure;
 
 public abstract class Attribute<T> {
 
@@ -44,7 +44,7 @@ public abstract class Attribute<T> {
 		String typName = parentTyp.getName();
 		Complex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);
-		while (id == null) {
+		while (id == null) {// suche nach oben ...
 			String[] names = Complex.splitRight(typName);
 			if (names[0] == null) {
 				break;
@@ -58,7 +58,7 @@ public abstract class Attribute<T> {
 		}
 		if (id == null) {
 			// System.err.println("ERR: can not find '" + idName + "'");
-			throw new UnknownAttribute(idName);
+			throw new UnknownAttribute(idName + "@" + typName);
 		}
 		return id;
 	}

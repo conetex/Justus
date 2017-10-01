@@ -1,4 +1,4 @@
-package com.conetex.contract.data.valueImplement;
+package com.conetex.contract.data.value;
 
 public class ASCII8 extends SizedASCII {
 

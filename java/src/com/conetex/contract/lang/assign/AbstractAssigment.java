@@ -1,10 +1,10 @@
 package com.conetex.contract.lang.assign;
 
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
 																	// extends
@@ -22,7 +22,7 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 	public abstract boolean doCopy();
 
 	@Override
-	public T getFrom(Structure thisObject) throws ValueCastException {
+	public T getFrom(Structure thisObject) throws AbstractRuntimeException {
 		T value = null;
 		try {
 
@@ -46,7 +46,7 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 	}
 
 	@Override
-	public T copyFrom(Structure thisObject) throws Invalid, ValueCastException {
+	public T copyFrom(Structure thisObject) throws AbstractRuntimeException {
 		// TODO: das wird ja nur selten gebraucht...
 		return getFrom(thisObject);
 	}

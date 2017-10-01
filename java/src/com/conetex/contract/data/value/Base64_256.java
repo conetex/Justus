@@ -1,4 +1,4 @@
-package com.conetex.contract.data.valueImplement;
+package com.conetex.contract.data.value;
 
 public class Base64_256 extends Base64 {
 	// How to calculate the memory for Base64-encoded data? See

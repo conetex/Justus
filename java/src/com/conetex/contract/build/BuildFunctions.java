@@ -19,7 +19,7 @@ import com.conetex.contract.build.exceptionLang.UnknownComplexType;
 import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.AccessibleConstant;
 import com.conetex.contract.lang.access.AccessibleValue;
@@ -455,28 +455,43 @@ public class BuildFunctions {
 			}
 		};
 
-		static Box<Object, Object> unknown = new Box<Object, Object>("whatEverFunction") {
+		public static abstract class FunBox extends Box<Object, Object>{
+
+			public FunBox(String name) {
+				super(name);
+			}
+			
 			@Override
-			public Accessible<?> create(CodeNode n, Complex type) throws AbstractInterpreterException {
+			public Function<?> create(CodeNode n, Complex type) throws AbstractInterpreterException {
+				return this.createFunction(n, type);
+			}
+
+			public abstract Function<?> createFunction(CodeNode n, Complex parentTyp) throws AbstractInterpreterException;
+			
+		}
+		
+		static FunBox unknown = new FunBox("whatEverFunction") {
+			@Override
+			public Function<?> createFunction(CodeNode n, Complex type) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(n, type, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if (returntype == String.class) {
 					return null;
 				}
 				else if (returntype == Boolean.class) {
-					Accessible<? extends Boolean> main = Function.createBool(theSteps, n.getName());
+					Function<? extends Boolean> main = Function.createBool(theSteps, n.getName());
 					return main;
 				}
 				else if (Number.class.isAssignableFrom(returntype)) {
-					Accessible<? extends Number> main = Function.createNum(theSteps, n.getName(), returntype);
+					Function<? extends Number> main = Function.createNum(theSteps, n.getName(), returntype);
 					return main;
 				}
 				else if (returntype == Structure.class) {
-					Accessible<? extends Structure> main = Function.createStructure(theSteps, n.getName());
+					Function<? extends Structure> main = Function.createStructure(theSteps, n.getName());
 					return main;
 				}
 				else if (returntype == Object.class) {
-					Accessible<Object> main = Function.createVoid(theSteps, n.getName());
+					Function<Object> main = Function.createVoid(theSteps, n.getName());
 					return main;
 				}
 				System.err.println("unknown return type " + returntype);
@@ -721,7 +736,7 @@ public class BuildFunctions {
 
 	}
 
-	public static Accessible<?> build(CodeNode n, Complex type) throws AbstractInterpreterException {
+	public static Function<?> build(CodeNode n, Complex type) throws AbstractInterpreterException {
 
 		Expression.means();
 		Reference.means();
@@ -742,7 +757,7 @@ public class BuildFunctions {
 		Data.complex.contains(Data.complex);
 
 		Data.complex.create(n, type);
-		return Fun.unknown.create(n, type);
+		return Fun.unknown.createFunction(n, type);
 
 	}
 

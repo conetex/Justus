@@ -3,10 +3,10 @@ package com.conetex.contract.lang.control;
 import java.util.List;
 
 import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class IfElse<V> extends If<V> {
 
@@ -42,7 +42,7 @@ public class IfElse<V> extends If<V> {
 	}
 
 	@Override
-	public V getFrom(Structure thisObject, Result r) throws ValueCastException {
+	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = super.condition.getFrom(thisObject);
 		if (res == null) {
 			System.err.println("Function Structure getFrom: no access to data for if ... ");

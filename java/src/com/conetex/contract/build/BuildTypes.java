@@ -101,11 +101,12 @@ public class BuildTypes {
 			System.out.println("createComplexType " + typeName);
 		}
 		List<Attribute<?>> identifiers = new LinkedList<>();
+		Map<String, Attribute<?>> functions = new HashMap<>();
 		for (CodeNode c : n.getChildNodes()) {
 			String idTypeName = null;
 			String idName = null;
-			Attribute<?> id = null;
 			if (c.isIdentifier()) {
+				Attribute<?> id = null;
 				idTypeName = c.getType();
 				idName = c.getName();
 				if (idTypeName == null) {
@@ -122,6 +123,13 @@ public class BuildTypes {
 						id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
 					}
 				}
+				if (id != null) {
+					identifiers.add(id);
+				}
+				else {
+					// TODO Exception
+					System.err.println("createComplexType can not create Identifier " + idName + " (" + idTypeName + ")");
+				}			
 			}
 			else if (c.getCommand() == Symbol.FUNCTION) {
 				// Complex
@@ -129,17 +137,13 @@ public class BuildTypes {
 				idName = c.getName();
 				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
 				// TODO BUG !!!
-				id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
+				Attribute<?> fun = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
+				if(fun != null) {
+					functions.put(fun.getLabel().get(), fun);
+				}
 			}
 			else {
 				continue;
-			}
-			if (id != null) {
-				identifiers.add(id);
-			}
-			else {
-				// TODO Exception
-				System.err.println("createComplexType can not create Identifier " + idName + " (" + idTypeName + ")");
 			}
 		}
 		Attribute<?>[] theOrderedIdentifiers = new Attribute<?>[identifiers.size()];
@@ -149,7 +153,8 @@ public class BuildTypes {
 		Complex complexType = unformedComplexTypes.get(typeName);
 		if (complexType == null) {
 			try {
-				complexType = Complex.createInit(typeName, theOrderedIdentifiers); // TODO
+				complexType = Complex.createInit(typeName, theOrderedIdentifiers, functions);
+				// TODO
 																					// theOrderedIdentifiers
 																					// müssen
 																					// elemente
@@ -174,7 +179,7 @@ public class BuildTypes {
 		}
 		else {
 			try {
-				complexType.init(typeName, theOrderedIdentifiers);
+				complexType.init(typeName, theOrderedIdentifiers, functions);
 			}
 			catch (DuplicateIdentifierNameExeption e) {
 				// TODO Auto-generated catch block

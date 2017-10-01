@@ -8,7 +8,7 @@ import com.conetex.contract.data.AttributePrimitive;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class BuildValues {

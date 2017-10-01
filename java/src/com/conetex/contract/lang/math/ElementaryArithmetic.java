@@ -4,10 +4,9 @@ import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R> {
 
@@ -60,7 +59,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		if (inputTyp == BigInteger.class) {
 			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation) {
 				@Override
-				public BigInteger getFrom(Structure thisObject) throws ValueCastException {
+				public BigInteger getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
 					IB aB = super.b.getFrom(thisObject);
 					if (aA == null || aB == null) {
@@ -74,7 +73,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		else if (inputTyp == Long.class) {
 			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation) {
 				@Override
-				public Long getFrom(Structure thisObject) throws ValueCastException {
+				public Long getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
 					IB aB = super.b.getFrom(thisObject);
 					if (aA == null || aB == null) {
@@ -88,7 +87,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		else if (inputTyp == Integer.class) {
 			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation) {
 				@Override
-				public Integer getFrom(Structure thisObject) throws ValueCastException {
+				public Integer getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
 					IB aB = super.b.getFrom(thisObject);
 					if (aA == null || aB == null) {
@@ -102,7 +101,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		else if (inputTyp == Byte.class) {
 			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation) {
 				@Override
-				public Byte getFrom(Structure thisObject) throws ValueCastException {
+				public Byte getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
 					IB aB = super.b.getFrom(thisObject);
 					if (aA == null || aB == null) {
@@ -257,7 +256,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 	}
 
 	@Override
-	public R copyFrom(Structure thisObject) throws Invalid, ValueCastException {
+	public R copyFrom(Structure thisObject) throws AbstractRuntimeException {
 		return this.getFrom(thisObject);
 	}
 

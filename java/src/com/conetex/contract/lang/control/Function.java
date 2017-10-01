@@ -8,12 +8,14 @@ import java.util.Map;
 
 import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.Attribute;
+import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.control.ReturnAbstract.Result;
 import com.conetex.contract.lang.math.ElementaryArithmetic;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Function<V> extends Accessible<V> {
 
@@ -183,7 +185,7 @@ public class Function<V> extends Accessible<V> {
 		return re;
 	}
 
-	public static final <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject) throws ValueCastException {
+	public static final <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject) throws AbstractRuntimeException {
 		loopOverSteps: for (int i = 0; i < steps.length; i++) {
 			if (steps[i] instanceof ReturnAbstract) {
 				for (ReturnAbstract<V> r : returns) {
@@ -279,14 +281,38 @@ public class Function<V> extends Accessible<V> {
 		this.rawTypeClass = theRawTypeClass;
 	}
 
-	@Override
-	public V getFrom(Structure thisObject) throws ValueCastException {
+	public V getFromRoot(Structure thisObject) throws AbstractRuntimeException {
 		System.out.println("Function getFrom " + this.name);
+		
 		Structure thisObjectB = thisObject.getStructure(this.name);
+		if(thisObject.getParent() == null) {
+			thisObjectB = thisObject;
+		}
+		
 		if (thisObjectB == null) {
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
 			return null;
 		}
+		//thisObjectB = thisObjectB.copy();
+		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
+	}
+	
+	@Override
+	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
+		System.out.println("Function getFrom " + this.name);
+		Complex x =	thisObject.getComplex();//.getInstance(this.name);
+		Attribute<?> y = x.functions.get(this.name);
+		here we go
+		Structure thisObjectB = null;//thisObject.getStructure(this.name);
+		if(thisObject.getParent() == null) {
+			thisObjectB = thisObject;
+		}
+		
+		if (thisObjectB == null) {
+			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
+			return null;
+		}
+		//thisObjectB = thisObjectB.copy();
 		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
 	}
 

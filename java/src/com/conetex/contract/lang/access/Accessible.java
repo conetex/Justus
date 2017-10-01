@@ -1,14 +1,13 @@
 package com.conetex.contract.lang.access;
 
-import com.conetex.contract.data.valueImplement.Structure;
-import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.data.value.Structure;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public abstract class Accessible<T> {// implements Accessible<T> {
 
-	public abstract T getFrom(Structure thisObject) throws ValueCastException;
+	public abstract T getFrom(Structure thisObject) throws AbstractRuntimeException;
 
-	public abstract T copyFrom(Structure thisObject) throws Invalid, ValueCastException;
+	public abstract T copyFrom(Structure thisObject) throws AbstractRuntimeException;
 
 	public abstract Class<T> getRawTypeClass();
 

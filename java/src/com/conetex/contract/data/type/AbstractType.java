@@ -6,8 +6,8 @@ import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.AttributeComplex;
 import com.conetex.contract.data.AttributePrimitive;
 import com.conetex.contract.data.Value;
-import com.conetex.contract.data.valueImplement.Label;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Label;
+import com.conetex.contract.data.value.Structure;
 
 public abstract class AbstractType<T> {
 

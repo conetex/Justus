@@ -3,9 +3,9 @@ package com.conetex.contract.lang.control;
 import java.util.List;
 
 import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class Loop<V> extends If<V> {
 
@@ -27,7 +27,7 @@ public class Loop<V> extends If<V> {
 	}
 
 	@Override
-	public V getFrom(Structure thisObject, Result r) throws ValueCastException {
+	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = this.condition.getFrom(thisObject);
 		while (res != null && res.booleanValue()) {
 			V re = Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);

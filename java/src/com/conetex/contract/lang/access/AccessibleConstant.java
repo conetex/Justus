@@ -10,12 +10,12 @@ import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.data.valueImplement.BigInt;
-import com.conetex.contract.data.valueImplement.Bool;
-import com.conetex.contract.data.valueImplement.Int;
-import com.conetex.contract.data.valueImplement.Lng;
-import com.conetex.contract.data.valueImplement.SizedASCII;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.BigInt;
+import com.conetex.contract.data.value.Bool;
+import com.conetex.contract.data.value.Int;
+import com.conetex.contract.data.value.Lng;
+import com.conetex.contract.data.value.SizedASCII;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 

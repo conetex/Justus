@@ -8,13 +8,13 @@ import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Attribute.EmptyLabelException;
 import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.Value;
-import com.conetex.contract.data.valueImplement.ASCII8;
-import com.conetex.contract.data.valueImplement.Base64_256;
-import com.conetex.contract.data.valueImplement.Bool;
-import com.conetex.contract.data.valueImplement.Int;
-import com.conetex.contract.data.valueImplement.Label;
-import com.conetex.contract.data.valueImplement.Lng;
-import com.conetex.contract.data.valueImplement.MailAddress64;
+import com.conetex.contract.data.value.ASCII8;
+import com.conetex.contract.data.value.Base64_256;
+import com.conetex.contract.data.value.Bool;
+import com.conetex.contract.data.value.Int;
+import com.conetex.contract.data.value.Label;
+import com.conetex.contract.data.value.Lng;
+import com.conetex.contract.data.value.MailAddress64;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class Primitive<T> extends AbstractType<T> {

@@ -10,8 +10,8 @@ import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Attribute.EmptyLabelException;
 import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.Value;
-import com.conetex.contract.data.valueImplement.Label;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Label;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
@@ -36,16 +36,18 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 	private Attribute<?>[] orderedAttributes; // TODO kann das
 												// nicht doch final
 												// werden?
-
+	
+	public Map<String, Attribute<?>> functions;
+	
 	private String name;
 
 	public String getName() {
 		return this.name;
 	}
 
-	private static Complex createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
+	private static Complex createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun) {
 		if (theIndex != null && theOrderedIdentifiers != null) {
-			return new Complex(theName, theIndex, theOrderedIdentifiers);
+			return new Complex(theName, theIndex, theOrderedIdentifiers, fun);
 		}
 		return null;
 	}
@@ -53,10 +55,10 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 	public static Complex create(final String theName) {
 		Map<String, Integer> index = new HashMap<>();
 		Attribute<?>[] idents = new Attribute<?>[0];
-		return Complex.createImpl(theName, index, idents);
+		return Complex.createImpl(theName, index, idents, new HashMap<>());
 	}
 
-	public static Complex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
+	public static Complex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun)
 			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException, DublicateComplexException {
 		if (theOrderedIdentifiers.length == 0) {
 			return null;
@@ -67,7 +69,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		if (Complex.instances.containsKey(typeName)) {
 			throw new DublicateComplexException(typeName);
 		}
-		Complex re = Complex.createImpl(typeName, theIndex, theOrderedIdentifiers);
+		Complex re = Complex.createImpl(typeName, theIndex, theOrderedIdentifiers, fun);
 		Complex.instances.put(typeName, re);
 		return re;
 	}
@@ -86,13 +88,14 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		}
 	}
 
-	private Complex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
+	private Complex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun) {
 		this.name = theName;
 		this.index = theIndex;
 		this.orderedAttributes = theOrderedIdentifiers;
+		this.functions = fun;
 	}
 
-	public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers)
+	public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun)
 			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
 		if (this.index.size() > 0 || this.orderedAttributes.length > 0) {
 			throw new ComplexWasInitializedExeption();
@@ -100,6 +103,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		if (Complex.instances.containsKey(typeName)) {
 			throw new DublicateComplexException(typeName);
 		}
+		this.functions = fun;
 		this.orderedAttributes = theOrderedIdentifiers;
 		buildIndex(this.index, theOrderedIdentifiers);
 		Complex.instances.put(typeName, this);
@@ -186,6 +190,14 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 	
 	@Override
 	public Attribute<?> getSubAttribute(String aName) {
+		//und hier muss jetzt auch nach functionsstructuren gesucht werden
+		System.out.println( "complexname: " + this.name );
+
+		Attribute<?> aFun = this.functions.get(aName);
+		if(aFun != null) {
+			return aFun;
+		}		
+		
 		Integer i = this.index.get(aName);
 		if (i != null) {
 			int iv = i.intValue();
@@ -199,11 +211,19 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 												// this.orderedAttributes[i];
 		}
 		else {
-
 			String[] names = Structure.split(aName);
+
 			if (names[0] != null) {
 				if (names[1] != null) {
-
+					
+					aFun = this.functions.get(names[0]);
+					if(aFun != null) {
+						AbstractType<?> dt = aFun.getType();
+						if (dt != null) {
+							return dt.getSubAttribute(names[1]);
+						}						
+					}
+					
 					i = this.index.get(names[0]);
 					if (i != null) {
 						int iv = i.intValue();

@@ -2,8 +2,8 @@ package com.conetex.contract.data;
 
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.valueImplement.Label;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Label;
+import com.conetex.contract.data.value.Structure;
 
 public class AttributeComplex extends Attribute<Structure> {// Attribute<Value<?>[]>
 

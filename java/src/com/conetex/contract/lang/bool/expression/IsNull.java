@@ -1,8 +1,8 @@
 package com.conetex.contract.lang.bool.expression;
 
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class IsNull extends Accessible<Boolean> {
 
@@ -20,7 +20,7 @@ public class IsNull extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean getFrom(Structure thisObject) throws ValueCastException {
+	public Boolean getFrom(Structure thisObject) throws AbstractRuntimeException {
 		Object b = this.sub.getFrom(thisObject);
 		if (b == null) {
 			return Boolean.TRUE;
@@ -29,7 +29,7 @@ public class IsNull extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean copyFrom(Structure thisObject) throws ValueCastException {
+	public Boolean copyFrom(Structure thisObject) throws AbstractRuntimeException {
 		return this.getFrom(thisObject);
 	}
 

@@ -3,9 +3,9 @@ package com.conetex.contract.lang.bool.expression;
 import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbol;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class ComparisonNumber extends Accessible<Boolean> {
 	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit über den
@@ -64,7 +64,7 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	 */
 
 	@Override
-	public Boolean getFrom(Structure thisObject) throws ValueCastException {
+	public Boolean getFrom(Structure thisObject) throws AbstractRuntimeException {
 		Number aN = this.a.getFrom(thisObject);
 		Number bN = this.b.getFrom(thisObject);
 		if (aN == null) {
@@ -148,7 +148,7 @@ public class ComparisonNumber extends Accessible<Boolean> {
 	}
 
 	@Override
-	public Boolean copyFrom(Structure thisObject) throws ValueCastException {
+	public Boolean copyFrom(Structure thisObject) throws AbstractRuntimeException {
 		return this.getFrom(thisObject);
 	}
 

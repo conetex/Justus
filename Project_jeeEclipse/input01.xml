@@ -18,5 +18,6 @@
     	<Integer name="param2">5</Integer>  
     </call>
 	
+	<value name="param" type='t:Int'>12</value>	
 
 </contract>

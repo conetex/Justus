@@ -1,4 +1,4 @@
-package com.conetex.contract.data.valueImplement;
+package com.conetex.contract.data.value;
 
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
@@ -239,5 +239,11 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	public Class<Structure> getRawTypeClass() {
 		return Structure.class;
 	}
-
+	
+	public Complex getComplex() {
+		return this.type;
+	}
+	public Structure getParent() {
+		return this.parent;
+	}
 }

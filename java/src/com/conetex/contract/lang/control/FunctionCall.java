@@ -2,12 +2,12 @@ package com.conetex.contract.lang.control;
 
 import java.util.List;
 
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.AccessibleValue;
 import com.conetex.contract.lang.assign.AbstractAssigment;
+import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
@@ -46,9 +46,9 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 	}
 
 	@Override
-	public V getFrom(Structure thisObject) throws ValueCastException {
+	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
 
-		for(AbstractAssigment<? extends Object> a : paramAssigments){
+		for(AbstractAssigment<? extends Object> a : this.paramAssigments){
 			a.getFrom(thisObject);
 		}
 		Structure obj = this.reference.getFrom(thisObject);

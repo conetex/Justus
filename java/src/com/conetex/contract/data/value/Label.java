@@ -1,4 +1,4 @@
-package com.conetex.contract.data.valueImplement;
+package com.conetex.contract.data.value;
 
 public class Label extends SizedASCII {
 

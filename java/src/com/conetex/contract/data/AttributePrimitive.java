@@ -2,8 +2,8 @@ package com.conetex.contract.data;
 
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.data.valueImplement.Label;
-import com.conetex.contract.data.valueImplement.Structure;
+import com.conetex.contract.data.value.Label;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
