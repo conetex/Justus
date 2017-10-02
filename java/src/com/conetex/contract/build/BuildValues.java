@@ -8,6 +8,7 @@ import com.conetex.contract.data.AttributePrimitive;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.ComplexFunction;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
@@ -92,6 +93,32 @@ public class BuildValues {
 
 			return re;
 		}
+		else if (type.getClass() == ComplexFunction.class) {
+			Structure re = ((AttributeComplex) id).createValue(parentData);
+
+			// new
+			createValues(n, (Complex) type, re);
+			try {
+				// TODO hier passier garnix weil  parentData keinen platz für die funktion hat...
+				parentData.set(name, re);
+			}
+			catch (Invalid e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// TODO der cast ist scheißßß
+			((ComplexFunction)type ).setPrototype(re);
+
+			/*
+			 * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
+			 * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
+			 * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); }
+			 */
+
+			return re;
+		}		
 		else {
 			String valueNode = n.getValue();
 			System.out.println("createValue " + name + " " + valueNode);

@@ -17,7 +17,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[]>
 
-	private static Map<String, Complex> instances = new HashMap<>();
+	static Map<String, Complex> instances = new HashMap<>();
 
 	public static Complex getInstance(String typeName) {
 		return instances.get(typeName);
@@ -74,7 +74,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		return re;
 	}
 
-	private static void buildIndex(Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers)
+	static void buildIndex(Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers)
 			throws Attribute.DuplicateIdentifierNameExeption, Attribute.NullIdentifierException {
 		for (int i = 0; i < theOrderedIdentifiers.length; i++) {
 			if (theOrderedIdentifiers[i] == null) {
@@ -88,7 +88,7 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		}
 	}
 
-	private Complex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun) {
+	Complex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun) {
 		this.name = theName;
 		this.index = theIndex;
 		this.orderedAttributes = theOrderedIdentifiers;

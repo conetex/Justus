@@ -13,6 +13,7 @@ import com.conetex.contract.data.Attribute.NullIdentifierException;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.Complex.ComplexWasInitializedExeption;
 import com.conetex.contract.data.type.Complex.DublicateComplexException;
+import com.conetex.contract.data.type.ComplexFunction;
 import com.conetex.contract.data.type.Primitive;
 
 public class BuildTypes {
@@ -137,7 +138,7 @@ public class BuildTypes {
 				idName = c.getName();
 				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
 				// TODO BUG !!!
-				Attribute<?> fun = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
+				Attribute<?> fun = ComplexFunction.createAttribute(idName, idTypeName, unformedComplexTypes);
 				if(fun != null) {
 					functions.put(fun.getLabel().get(), fun);
 				}
@@ -153,7 +154,13 @@ public class BuildTypes {
 		Complex complexType = unformedComplexTypes.get(typeName);
 		if (complexType == null) {
 			try {
-				complexType = Complex.createInit(typeName, theOrderedIdentifiers, functions);
+				if(n.getCommand() == Symbol.FUNCTION){
+					complexType = ComplexFunction.createInit(typeName, theOrderedIdentifiers, functions);					
+				}
+				else{
+					complexType = Complex.createInit(typeName, theOrderedIdentifiers, functions);					
+				}
+				
 				// TODO
 																					// theOrderedIdentifiers
 																					// müssen

@@ -10,6 +10,7 @@ import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.exceptionLang.CastException;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.ComplexFunction;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.control.ReturnAbstract.Result;
@@ -302,8 +303,8 @@ public class Function<V> extends Accessible<V> {
 		System.out.println("Function getFrom " + this.name);
 		Complex x =	thisObject.getComplex();//.getInstance(this.name);
 		Attribute<?> y = x.functions.get(this.name);
-		here we go
-		Structure thisObjectB = null;//thisObject.getStructure(this.name);
+		// TODO der cast ist scheiﬂﬂﬂe
+		Structure thisObjectB = ( (ComplexFunction)(y.getType()) ).prototype;//thisObject.getStructure(this.name);
 		if(thisObject.getParent() == null) {
 			thisObjectB = thisObject;
 		}
