@@ -15,6 +15,15 @@ public class ComplexFunction extends Complex{
 		this.prototype = thePrototype;
 	}
 	
+	public Structure utilizeStructure(){
+		here we go
+		return this.prototype;//unutilize
+	}
+	
+	public void utilizeStructure(Structure s){
+		// TODO implement
+	}
+	
 	ComplexFunction(String theName, Map<String, Integer> theIndex, Attribute<?>[] theOrderedIdentifiers, Map<String, Attribute<?>> fun) {
 		super(theName, theIndex, theOrderedIdentifiers, fun);
 	}

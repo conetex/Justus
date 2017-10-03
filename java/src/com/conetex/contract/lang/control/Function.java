@@ -303,6 +303,8 @@ public class Function<V> extends Accessible<V> {
 		System.out.println("Function getFrom " + this.name);
 		Complex x =	thisObject.getComplex();//.getInstance(this.name);
 		Attribute<?> y = x.functions.get(this.name);
+		
+		String n = x.getName();
 		// TODO der cast ist scheiﬂﬂﬂe
 		Structure thisObjectB = ( (ComplexFunction)(y.getType()) ).prototype;//thisObject.getStructure(this.name);
 		if(thisObject.getParent() == null) {
