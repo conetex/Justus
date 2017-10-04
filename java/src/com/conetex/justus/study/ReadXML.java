@@ -28,7 +28,7 @@ public class ReadXML {
 
 		Main main = null;
 
-		try (FileInputStream is = new FileInputStream("input01.xml")) {
+		try (FileInputStream is = new FileInputStream("input2.xml")) {
 
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

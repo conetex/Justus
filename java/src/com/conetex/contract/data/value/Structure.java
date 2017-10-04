@@ -3,6 +3,7 @@ package com.conetex.contract.data.value;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.ComplexFunction;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
@@ -143,6 +144,14 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 					Value<Structure> subStructure = getValue(idIndex, Structure.class);
 					if (subStructure != null) {
 						return subStructure.get().getValue(names[1], clazz);
+					}
+					// Todo so machen wirs nich! scon bei call reservieren!
+					else {
+						Attribute<?> y = this.type.functions.get(names[0]);
+						if(y != null) {
+							ComplexFunction z = (ComplexFunction)(y.getType());
+							return z.prototype.getValue(names[1], clazz);
+						}
 					}
 				}
 			}

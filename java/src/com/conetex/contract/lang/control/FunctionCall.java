@@ -47,7 +47,7 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
 	@Override
 	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
-
+// block hier ...
 		for(AbstractAssigment<? extends Object> a : this.paramAssigments){
 			a.getFrom(thisObject);
 		}

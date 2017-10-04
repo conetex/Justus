@@ -16,11 +16,10 @@ public class ComplexFunction extends Complex{
 	}
 	
 	public Structure utilizeStructure(){
-		here we go
 		return this.prototype;//unutilize
 	}
 	
-	public void utilizeStructure(Structure s){
+	public void unutilizeStructure(Structure s){
 		// TODO implement
 	}
 	

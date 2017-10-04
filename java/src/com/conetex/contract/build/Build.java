@@ -30,6 +30,7 @@ public class Build {
 						@Override
 						public void run() throws AbstractRuntimeException {
 							mainFunction.getFromRoot(rootStructure);
+							//mainFunction.getFrom(rootStructure);
 						}
 					};
 				}

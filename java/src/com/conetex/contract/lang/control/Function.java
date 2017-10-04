@@ -303,22 +303,25 @@ public class Function<V> extends Accessible<V> {
 		System.out.println("Function getFrom " + this.name);
 		Complex x =	thisObject.getComplex();//.getInstance(this.name);
 		Attribute<?> y = x.functions.get(this.name);
-		
-		String n = x.getName();
 		// TODO der cast ist scheiﬂﬂﬂe
-		Structure thisObjectB = ( (ComplexFunction)(y.getType()) ).prototype;//thisObject.getStructure(this.name);
-		if(thisObject.getParent() == null) {
-			thisObjectB = thisObject;
-		}
-		
+		ComplexFunction z = (ComplexFunction)(y.getType());
+		return getFrom(z);
+	}
+	
+	public V getFrom(ComplexFunction z) throws AbstractRuntimeException {
+
+		Structure thisObjectB = z.utilizeStructure();   //.prototype;//thisObject.getStructure(this.name);
+	
 		if (thisObjectB == null) {
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
 			return null;
 		}
 		//thisObjectB = thisObjectB.copy();
-		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
+		V re = Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
+		z.unutilizeStructure(thisObjectB);
+		return re;
 	}
-
+	
 	@Override
 	public V copyFrom(Structure thisObject) throws Invalid {
 		// TODO Auto-generated method stub
