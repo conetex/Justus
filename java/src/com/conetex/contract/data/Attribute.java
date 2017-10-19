@@ -1,5 +1,6 @@
 package com.conetex.contract.data;
 
+import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.UnknownAttribute;
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
@@ -8,18 +9,28 @@ import com.conetex.contract.data.value.Structure;
 
 public abstract class Attribute<T> {
 
-	public static class NullLabelException extends Exception {
+	public static class _NullLabelException extends AbstractInterpreterException {
+		public _NullLabelException(String msg) {
+			super(msg);
+			// TODO Auto-generated constructor stub
+		}
+
 		private static final long serialVersionUID = 1L;
 
 	}
 
-	public static class EmptyLabelException extends Exception {
+	public static class _EmptyLabelException extends AbstractInterpreterException {
+		public _EmptyLabelException(String msg) {
+			super(msg);
+			// TODO Auto-generated constructor stub
+		}
+
 		private static final long serialVersionUID = 1L;
 
 	}
 
-	public static class DuplicateIdentifierNameExeption extends Exception {
-		public DuplicateIdentifierNameExeption(String msg) {
+	public static class _DuplicateIdentifierNameExeption extends AbstractInterpreterException {
+		public _DuplicateIdentifierNameExeption(String msg) {
 			super(msg);
 		}
 
@@ -27,7 +38,12 @@ public abstract class Attribute<T> {
 
 	}
 
-	public static class NullIdentifierException extends Exception {
+	public static class _NullIdentifierException extends AbstractInterpreterException {
+		public _NullIdentifierException(String msg) {
+			super(msg);
+			// TODO Auto-generated constructor stub
+		}
+
 		private static final long serialVersionUID = 1L;
 
 	}

@@ -7,13 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.data.Attribute;
-import com.conetex.contract.data.Attribute.DuplicateIdentifierNameExeption;
-import com.conetex.contract.data.Attribute.NullIdentifierException;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.Complex.ComplexWasInitializedExeption;
-import com.conetex.contract.data.type.Complex.DublicateComplexException;
-import com.conetex.contract.data.type.ComplexFunction;
+import com.conetex.contract.data.type.FunctionAttributes;
 import com.conetex.contract.data.type.Primitive;
 
 public class BuildTypes {
@@ -28,10 +25,10 @@ public class BuildTypes {
 	}
 
 	private static interface Run {
-		public void run(CodeNode node, Complex parent);
+		public void run(CodeNode node, Complex parent)  throws AbstractInterpreterException;
 	}
 
-	public static List<Complex> createComplexTypes(CodeNode n) {
+	public static List<Complex> createComplexTypes(CodeNode n) throws AbstractInterpreterException {
 		Complex.clearInstances();
 		Map<String, Complex> unformedComplexTypes = new HashMap<>();
 		Set<String> referringComplexTypeNames = new TreeSet<>();
@@ -40,7 +37,7 @@ public class BuildTypes {
 		Recursive<Run> recursive = new Recursive<>();
 		recursive.function = (CodeNode node, Complex parent) -> {
 			for (CodeNode c : node.getChildNodes()) {
-				if (c.isType()) {
+				if (c.isType() || c.isFunction()) {
 					Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);
 					if (complexType != null) {
 						re.add(complexType);
@@ -86,7 +83,7 @@ public class BuildTypes {
 		return re;
 	}
 
-	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> referringComplexTypeNames) {
+	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> referringComplexTypeNames) throws AbstractInterpreterException {
 		String typeName = n.getName();
 		if (typeName == null) {
 			// TODO Exception
@@ -102,11 +99,11 @@ public class BuildTypes {
 			System.out.println("createComplexType " + typeName);
 		}
 		List<Attribute<?>> identifiers = new LinkedList<>();
-		Map<String, Attribute<?>> functions = new HashMap<>();
+		// Map<String, Attribute<?>> functions = new HashMap<>();
 		for (CodeNode c : n.getChildNodes()) {
 			String idTypeName = null;
 			String idName = null;
-			if (c.isIdentifier()) {
+			if (c.isAttribute() || c.isAttributeInitialized()) {
 				Attribute<?> id = null;
 				idTypeName = c.getType();
 				idName = c.getName();
@@ -130,7 +127,7 @@ public class BuildTypes {
 				else {
 					// TODO Exception
 					System.err.println("createComplexType can not create Identifier " + idName + " (" + idTypeName + ")");
-				}			
+				}
 			}
 			else if (c.getCommand() == Symbol.FUNCTION) {
 				// Complex
@@ -138,10 +135,12 @@ public class BuildTypes {
 				idName = c.getName();
 				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
 				// TODO BUG !!!
-				Attribute<?> fun = ComplexFunction.createAttribute(idName, idTypeName, unformedComplexTypes);
-				if(fun != null) {
-					functions.put(fun.getLabel().get(), fun);
-				}
+				// Attribute<?> fun =
+				FunctionAttributes.createAttribute(idName, idTypeName, unformedComplexTypes);
+				/*
+				 * if(fun != null) { //ComplexFunction.functions.put(idTypeName, fun);//typeName
+				 * + "." + functions.put(fun.getLabel().get(), fun);//typeName + "." + }
+				 */
 			}
 			else {
 				continue;
@@ -153,61 +152,30 @@ public class BuildTypes {
 		// TODO doppelte definitionen abfangen ...
 		Complex complexType = unformedComplexTypes.get(typeName);
 		if (complexType == null) {
-			try {
-				if(n.getCommand() == Symbol.FUNCTION){
-					complexType = ComplexFunction.createInit(typeName, theOrderedIdentifiers, functions);					
+			
+				if (n.getCommand() == Symbol.FUNCTION) {
+					complexType = FunctionAttributes.createInit(typeName, theOrderedIdentifiers);
 				}
-				else{
-					complexType = Complex.createInit(typeName, theOrderedIdentifiers, functions);					
+				else {
+					complexType = Complex.createInit(typeName, theOrderedIdentifiers);
 				}
-				
+
 				// TODO
-																					// theOrderedIdentifiers
-																					// müssen
-																					// elemente
-																					// enthalten,
-																					// sonst
-																					// gibts
-																					// keinen
-																					// typ
-			}
-			catch (DuplicateIdentifierNameExeption | Attribute.NullIdentifierException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			catch (DublicateComplexException e) {
-				// TODO Auto-generated catch block
-				System.err.println(e.getMessage());
-				e.printStackTrace();
-				return null;
-			}
+				// theOrderedIdentifiers
+				// müssen
+				// elemente
+				// enthalten,
+				// sonst
+				// gibts
+				// keinen
+				// typ
+			
+			
 			return complexType;
 		}
 		else {
-			try {
-				complexType.init(typeName, theOrderedIdentifiers, functions);
-			}
-			catch (DuplicateIdentifierNameExeption e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			catch (NullIdentifierException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			catch (ComplexWasInitializedExeption e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
-			catch (DublicateComplexException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return null;
-			}
+			complexType.init(typeName, theOrderedIdentifiers);
+			
 			unformedComplexTypes.remove(typeName);
 			return complexType;
 		}

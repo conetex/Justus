@@ -15,6 +15,8 @@ import com.conetex.contract.build.exceptionLang.OperationMeansNotCalled;
 import com.conetex.contract.build.exceptionLang.TypeNotDeterminated;
 import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
 import com.conetex.contract.build.exceptionLang.UnexpectedSubOperation;
+import com.conetex.contract.build.exceptionLang.UnknownCommand;
+import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionLang.UnknownComplexType;
 import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.data.Attribute;
@@ -72,7 +74,6 @@ public class BuildFunctions {
 				System.err.println("inner Operation '" + name + "' not found in " + this.getName());
 				return null;
 			}
-			System.out.println("createChild " + name + " " + n.getName());
 			return s.createThis(n, parentTyp);
 		}
 
@@ -235,14 +236,15 @@ public class BuildFunctions {
 
 		static Egg<Structure> objConst = new Egg<Structure>("objConst") {
 			@Override
-			public Accessible<Structure> create(CodeNode n, Complex parentTyp) throws UnknownType {
+			public Accessible<Structure> create(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 				return AccessibleConstant.<Structure>create2(Structure.class, n.getValue());
 			}
 		};
 
 		static Egg<Object> whatEverConst = new Egg<Object>("whatEverConst") {
 			@Override
-			public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws TypeNotDeterminated, UnknownType {
+			public Accessible<? extends Object> create(CodeNode n, Complex parentTyp)
+					throws TypeNotDeterminated, UnknownType, UnknownCommandParameter, UnknownCommand {
 				Accessible<? extends Number> reNu = AccessibleConstant.try2CreateNumConst(n, parentTyp);
 				if (reNu != null) {
 					return reNu;
@@ -261,7 +263,8 @@ public class BuildFunctions {
 
 		static Egg<Number> numberConst = new Egg<Number>("numberConst") {
 			@Override
-			public Accessible<? extends Number> create(CodeNode n, Complex parentTyp) throws UnknownType, TypeNotDeterminated {
+			public Accessible<? extends Number> create(CodeNode n, Complex parentTyp)
+					throws UnknownType, TypeNotDeterminated, UnknownCommandParameter, UnknownCommand {
 				Accessible<? extends Number> re = AccessibleConstant.createNumConst(n, parentTyp);
 				return re;
 			}
@@ -269,7 +272,7 @@ public class BuildFunctions {
 
 		static Egg<Boolean> boolConst = new Egg<Boolean>("boolConst") {
 			@Override
-			public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnknownType {
+			public Accessible<Boolean> create(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 				return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
 			}
 		};
@@ -327,7 +330,7 @@ public class BuildFunctions {
 				return Creator.createFromQualifiedTrg(trg, src, n.getCommand());
 			}
 		};
-		
+
 		static Box<Object, Object> whatEverAssigment = new Box<Object, Object>("whatEverAssigment") {
 			@Override
 			public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
@@ -336,7 +339,12 @@ public class BuildFunctions {
 				CodeNode srcNode = n.getChildElementByIndex(1);
 				Accessible<?> src = this.createChild(srcNode, parentTyp);
 				check2PartOperations(n, trg, src);
-				return createAssig(n.getCommand(), srcNode, src, trgNode.getType(), trg);				
+				if (trg.getRawTypeClass() == Structure.class) {
+					return createAssigComp(n.getCommand(), srcNode, src, trgNode.getType(), trg);
+				}
+				else {
+					return createAssig(n.getCommand(), srcNode, src, trg);
+				}
 			}
 		};
 
@@ -455,21 +463,21 @@ public class BuildFunctions {
 			}
 		};
 
-		public static abstract class FunBox extends Box<Object, Object>{
+		public static abstract class FunBox extends Box<Object, Object> {
 
 			public FunBox(String name) {
 				super(name);
 			}
-			
+
 			@Override
 			public Function<?> create(CodeNode n, Complex type) throws AbstractInterpreterException {
 				return this.createFunction(n, type);
 			}
 
 			public abstract Function<?> createFunction(CodeNode n, Complex parentTyp) throws AbstractInterpreterException;
-			
+
 		}
-		
+
 		static FunBox unknown = new FunBox("whatEverFunction") {
 			@Override
 			public Function<?> createFunction(CodeNode n, Complex type) throws AbstractInterpreterException {
@@ -519,7 +527,7 @@ public class BuildFunctions {
 				if (re == null) {
 					throw new NoAccessToValue(n.getType());
 				}
-				Accessible<? extends Object> e = Function.getInstanceVoid(n.getName());
+				Function<? extends Object> e = Function.getInstanceVoid(n.getName());
 				if (e == null) {
 					throw new FunctionNotFound(n.getName());
 				}
@@ -535,7 +543,7 @@ public class BuildFunctions {
 				if (re == null) {
 					throw new NoAccessToValue(n.getType());
 				}
-				Accessible<? extends Object> e = Function.getInstance(n.getName());
+				Function<? extends Object> e = Function.getInstance(n.getName());
 				if (e == null) {
 					throw new FunctionNotFound(n.getName());
 				}
@@ -551,7 +559,7 @@ public class BuildFunctions {
 				if (re == null) {
 					throw new NoAccessToValue(n.getType());
 				}
-				Accessible<? extends Structure> e = Function.getInstanceStructure(n.getName());
+				Function<? extends Structure> e = Function.getInstanceStructure(n.getName());
 				if (e == null) {
 					throw new FunctionNotFound(n.getName());
 				}
@@ -568,7 +576,7 @@ public class BuildFunctions {
 				if (re == null) {
 					throw new NoAccessToValue(n.getType());
 				}
-				Accessible<? extends Number> e = Function.getInstanceNum(n.getName());
+				Function<? extends Number> e = Function.getInstanceNum(n.getName());
 				if (e == null) {
 					throw new FunctionNotFound(n.getName());
 				}
@@ -585,7 +593,7 @@ public class BuildFunctions {
 				if (re == null) {
 					throw new NoAccessToValue(n.getType());
 				}
-				Accessible<Boolean> e = Function.getInstanceBool(n.getName());
+				Function<Boolean> e = Function.getInstanceBool(n.getName());
 				if (e == null) {
 					throw new FunctionNotFound(n.getName());
 				}
@@ -718,9 +726,13 @@ public class BuildFunctions {
 
 				List<CodeNode> children = n.getChildNodes();
 				for (CodeNode c : children) {
-					if (c.isType()) {
+					if (c.isType() || c.isFunction()) {
 						String cname = c.getName();
 						Complex ctype = Complex.getInstance(type.getName() + "." + cname);
+						/*
+						 * if(ctype == null) { ctype = ComplexFunction.getInstance(type.getName() + "."
+						 * + cname); }
+						 */
 						if (ctype == null) {
 							System.err.println("createFunctions: can not identify " + type.getName() + "." + cname);
 						}
@@ -947,13 +959,12 @@ public class BuildFunctions {
 			System.err.println("can not recognize type of " + name + " " + n.getName());
 			return null;
 		}
-		System.out.println("createFunction " + name + " " + n.getName());
+		//System.out.println("createFunction " + name + " " + n.getName());
 		List<Accessible<?>> steps = new LinkedList<>();
 
 		List<CodeNode> children = n.getChildNodes();
 		for (CodeNode c : children) {
 			if (c.isBuildInFunction() && !c.getCommand().equals(Symbol.FUNCTION)) {
-				System.out.println("createBuild " + c.getCommand() + " - " + c.getName());
 				// Accessible<?> v = createFunction(c, type);
 				Accessible<?> v = box.createChild(c, type);
 				if (v != null) {
@@ -967,7 +978,7 @@ public class BuildFunctions {
 		return steps.toArray(theSteps);
 	}
 
-	static void check1PartOperations(CodeNode n, Accessible<?> a) throws MissingSubOperation, UnexpectedSubOperation {
+	static void check1PartOperations(CodeNode n, Accessible<?> a) throws MissingSubOperation, UnexpectedSubOperation, UnknownCommandParameter, UnknownCommand {
 		if (a == null) {
 			throw new MissingSubOperation("");
 		}
@@ -977,7 +988,8 @@ public class BuildFunctions {
 		}
 	}
 
-	static void check2PartOperations(CodeNode n, Accessible<?> trg, Accessible<?> src) throws MissingSubOperation, UnexpectedSubOperation {
+	static void check2PartOperations(CodeNode n, Accessible<?> trg, Accessible<?> src)
+			throws MissingSubOperation, UnexpectedSubOperation, UnknownCommandParameter, UnknownCommand {
 		if (trg == null) {
 			throw new MissingSubOperation("");
 		}
@@ -990,7 +1002,8 @@ public class BuildFunctions {
 		}
 	}
 
-	static void checkAssigmentStructRawType(String ComplexTrgTyp, CodeNode srcNode, Class<?> srcRawType) throws TypesDoNotMatch, UnknownComplexType {
+	static void checkAssigmentStructRawType(String ComplexTrgTyp, CodeNode srcNode, Class<?> srcRawType)
+			throws TypesDoNotMatch, UnknownComplexType, UnknownCommandParameter, UnknownCommand {
 		if (srcRawType != Structure.class) {
 			throw new TypesDoNotMatch(srcRawType.toString(), Structure.class.toString());
 		}
@@ -1008,7 +1021,8 @@ public class BuildFunctions {
 		}
 	}
 
-	static void checkAssigmentNumRawType(Class<?> trgRawType, Class<?> srcRawType, CodeNode srcNode) throws TypesDoNotMatch {
+	static void checkAssigmentNumRawType(Class<?> trgRawType, Class<?> srcRawType, CodeNode srcNode)
+			throws TypesDoNotMatch, UnknownCommandParameter, UnknownCommand {
 		Class<?> rawType;
 		if (trgRawType == srcRawType) {
 			rawType = trgRawType;
@@ -1016,8 +1030,7 @@ public class BuildFunctions {
 		else {
 			rawType = ElementaryArithmetic.getBiggest(trgRawType, srcRawType);
 			if (rawType == srcRawType) {
-				throw new TypesDoNotMatch(trgRawType + " > " + srcRawType + "(" + srcNode.getCommand()
-						+ " - " + srcNode.getName() + ")");
+				throw new TypesDoNotMatch(trgRawType + " > " + srcRawType + "(" + srcNode.getCommand() + " - " + srcNode.getName() + ")");
 			}
 		}
 	}
@@ -1027,46 +1040,70 @@ public class BuildFunctions {
 			throw new TypesDoNotMatch(type.getName() + " is not " + expected.getName());
 		}
 	}
-	
-	public static List<AbstractAssigment<? extends Object>> createAssigs(CodeNode n, Complex parentTyp) throws AbstractInterpreterException{
-		//for(String x : Complex.getInstanceNames()){
-		//	System.out.println(x);
-		//}
-		
-		String path2FunctionComplex = n.getType() + "." + n.getName();
-		Complex functionComplex = Complex.getInstance(path2FunctionComplex);
-		
-		List<AbstractAssigment<? extends Object>> assig = new LinkedList<>();
-		
-		for(CodeNode srcNode : n.getChildNodes()){
-			String path2TrgParam = n.getName() + "." + srcNode.getName();
-			SetableValue<?> trg = SetableValue.createFunctionSetableWhatEver(path2TrgParam, parentTyp);
 
-			Attribute<?> trgAttr = functionComplex.getSubAttribute(srcNode.getName());
-			String trgTypeName = trgAttr.getType().getName();
-			
+	public static List<AbstractAssigment<? extends Object>> createAssigs(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+
+		// ComplexFunction z = ComplexFunction.getInstance(parentTyp.getName() + "." +
+		// n.getName());
+
+		String path2FunctionComplex = n.getType() + "." + n.getName();
+		Complex functionComplex = Complex.getInstance(path2FunctionComplex); // z ...
+
+		List<AbstractAssigment<? extends Object>> assig = new LinkedList<>();
+
+		for (CodeNode srcNode : n.getChildNodes()) {
+			String path2TrgParam = // n.getName() + "." +
+					srcNode.getName();
+			SetableValue<?> trg = SetableValue.createFunctionSetableWhatEver(path2TrgParam, functionComplex);
+
 			Accessible<?> src = Assign.whatEverAssigment.createChild(srcNode, parentTyp);
-			assig.add( createAssig(Symbol.COPY, srcNode, src, trgTypeName, trg) );
+			
+			if (trg.getRawTypeClass() == Structure.class) {
+				Attribute<?> trgAttr = functionComplex.getSubAttribute(srcNode.getName());
+				String trgTypeName = trgAttr.getType().getName();				
+				assig.add(createAssigComp(Symbol.COPY, srcNode, src, trgTypeName, trg));
+			}
+			else {
+				assig.add(createAssig(Symbol.COPY, srcNode, src, trg));
+			}
+			
 		}
-		
+
 		return assig;
 	}
+
+	public static AbstractAssigment<Structure> createAssigComp(String command, CodeNode srcNode, Accessible<?> src, String ComplexTrgNodeTyp,
+			SetableValue<?> trg) throws AbstractInterpreterException {
+		// CodeNode trgNode = n.getChildElementByIndex(0);
+		// SetableValue<?> trg =
+		// SetableValue.createFunctionSetableWhatEver(trgNode.getValue(), parentTyp);
+		// CodeNode srcNode = n.getChildElementByIndex(1);
+		// Accessible<?> src = this.createChild(srcNode, parentTyp);
+
+		Class<?> trgRawType = trg.getRawTypeClass();
+		Class<?> srcRawType = src.getRawTypeClass();
+		if (trgRawType == Structure.class) {
+			checkAssigmentStructRawType(ComplexTrgNodeTyp, srcNode, srcRawType);
+			return Creator.createFromUnqualified(trg, src, Structure.class, command);
+		}
+		else {
+			throw new TypeNotDeterminated("target-Type: " + trgRawType + ", source-Type: " + srcRawType);
+		}
+	}
 	
-	public static AbstractAssigment<? extends Object> createAssig(String command, CodeNode srcNode, Accessible<?> src, String ComplexTrgNodeTyp, SetableValue<?> trg) throws AbstractInterpreterException{
-		//CodeNode trgNode = n.getChildElementByIndex(0);
-		//SetableValue<?> trg = SetableValue.createFunctionSetableWhatEver(trgNode.getValue(), parentTyp);
-		//CodeNode srcNode = n.getChildElementByIndex(1);
-		//Accessible<?> src = this.createChild(srcNode, parentTyp);
+	public static AbstractAssigment<? extends Object> createAssig(String command, CodeNode srcNode, Accessible<?> src,
+			SetableValue<?> trg) throws AbstractInterpreterException {
+		// CodeNode trgNode = n.getChildElementByIndex(0);
+		// SetableValue<?> trg =
+		// SetableValue.createFunctionSetableWhatEver(trgNode.getValue(), parentTyp);
+		// CodeNode srcNode = n.getChildElementByIndex(1);
+		// Accessible<?> src = this.createChild(srcNode, parentTyp);
 
 		Class<?> trgRawType = trg.getRawTypeClass();
 		Class<?> srcRawType = src.getRawTypeClass();
 		if (trgRawType == Boolean.class) {
 			checkType(src.getRawTypeClass(), Boolean.class);
 			return Creator.createFromUnqualified(trg, src, Boolean.class, command);
-		}
-		else if (trgRawType == Structure.class) {
-			checkAssigmentStructRawType(ComplexTrgNodeTyp, srcNode, srcRawType);
-			return Creator.createFromUnqualified(trg, src, Structure.class, command);
 		}
 		else if (trgRawType == String.class) {
 			checkType(src.getRawTypeClass(), String.class);
@@ -1078,7 +1115,7 @@ public class BuildFunctions {
 		}
 		else {
 			throw new TypeNotDeterminated("target-Type: " + trgRawType + ", source-Type: " + srcRawType);
-		}			
+		}
 	}
 
 }

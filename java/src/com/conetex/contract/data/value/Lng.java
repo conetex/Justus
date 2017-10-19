@@ -1,7 +1,10 @@
 package com.conetex.contract.data.value;
 
 import com.conetex.contract.data.Value;
+import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Lng implements Value<Long> {
 
@@ -13,6 +16,11 @@ public class Lng implements Value<Long> {
 		return this.actual;
 	}
 
+	@Override
+	public Long setObject(Object value) throws Invalid, ValueCastException {
+		return this.set( RtCast.cast(value, Long.class) );
+	}
+	
 	@Override
 	public final Long get() {
 		return this.actual;

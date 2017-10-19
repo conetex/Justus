@@ -2,6 +2,8 @@ package com.conetex.contract.lang.control;
 
 import java.util.List;
 
+import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.FunctionAttributes;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.AccessibleValue;
@@ -11,7 +13,8 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
-	public static <SV> FunctionCall<SV> create(Accessible<SV> theFunction, AccessibleValue<Structure> theReference, List<AbstractAssigment<? extends Object>> assig) {
+	public static <SV> FunctionCall<SV> create(Function<SV> theFunction, AccessibleValue<Structure> theReference,
+			List<AbstractAssigment<? extends Object>> assig) {
 		// TODO drop this
 		if (theFunction == null) {
 			System.err.println("theFunction is null");
@@ -24,22 +27,22 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 		if (assig == null) {
 			System.err.println("params is null");
 			return null;
-		}		
+		}
 		return new FunctionCall<>(theFunction, theReference, assig);
 	}
 
-	private Accessible<V> function;
+	private Function<V> function;
 
 	private AccessibleValue<Structure> reference;
 
 	private List<AbstractAssigment<? extends Object>> paramAssigments;
-	
+
 	@Override
 	public String toString() {
 		return "call function " + this.function;
 	}
 
-	private FunctionCall(Accessible<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<? extends Object>> assig) {
+	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<? extends Object>> assig) {
 		this.function = theExpression;
 		this.reference = theReference;
 		this.paramAssigments = assig;
@@ -47,18 +50,44 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
 	@Override
 	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
-// block hier ...
-		for(AbstractAssigment<? extends Object> a : this.paramAssigments){
-			a.getFrom(thisObject);
-		}
+		// block hier ...
+
 		Structure obj = this.reference.getFrom(thisObject);
 		if (obj == null) {
 			System.err.println("Call getFrom ERROR");
 			return null;
 		}
-		return this.function.getFrom(obj);
+
+		System.out.println("Function getFrom " + this.function.getName() + " - " + this.reference.getPath());
+		Complex x = obj.getComplex();// .getInstance(this.name);
+		// Attribute<?> y = x.getFunctionAttribute(this.function.name);
+		// TODO der cast ist scheiﬂﬂﬂe
+		// ComplexFunction z =
+		// x.getComplexFunction(this.function.name);//(ComplexFunction)(y.getType());
+		FunctionAttributes z = FunctionAttributes.getInstance(x.getName() + "." + this.function.getName());
+		return getFromComplexFun(z, obj);
 
 		// return this.function.getFrom(thisObject);
+	}
+
+	public V getFromComplexFun(FunctionAttributes z, Structure obj) throws AbstractRuntimeException {
+
+		Structure thisObject = z.utilizeStructure(obj); // .prototype;//thisObject.getStructure(this.name);
+
+		if (thisObject == null) {
+			System.err.println("Function Structure getFrom: no access to data for function " + this.function.getName());
+			return null;
+		}
+		// thisObjectB = thisObjectB.copy();
+
+		for (AbstractAssigment<? extends Object> a : this.paramAssigments) {
+			a.getFrom(thisObject);
+		}
+
+		V re = this.function.getFrom(thisObject);
+
+		z.unutilizeStructure(thisObject);
+		return re;
 	}
 
 	@Override

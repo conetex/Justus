@@ -2,11 +2,11 @@ package com.conetex.contract.data.type;
 
 import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.exceptionLang.EmptyLabelException;
+import com.conetex.contract.build.exceptionLang.NullLabelException;
 import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.data.Attribute;
-import com.conetex.contract.data.Attribute.EmptyLabelException;
-import com.conetex.contract.data.Attribute.NullLabelException;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.value.ASCII8;
 import com.conetex.contract.data.value.Base64_256;
@@ -16,6 +16,7 @@ import com.conetex.contract.data.value.Label;
 import com.conetex.contract.data.value.Lng;
 import com.conetex.contract.data.value.MailAddress64;
 import com.conetex.contract.run.exceptionValue.Invalid;
+
 
 public class Primitive<T> extends AbstractType<T> {
 
@@ -76,7 +77,7 @@ public class Primitive<T> extends AbstractType<T> {
 		return null;
 
 	}
-	
+
 	private static Class<?> getValueImplementClass(String dataType) {
 
 		Class<?> theClass = null;
@@ -135,7 +136,7 @@ public class Primitive<T> extends AbstractType<T> {
 		return null;
 	}
 
-	public static Attribute<?> createAttribute(String attributeName, String typeName) {
+	public static Attribute<?> createAttribute(String attributeName, String typeName) throws EmptyLabelException, NullLabelException {
 		// SimpleType
 		if (typeName == null || typeName.length() == 0) {
 			// TODO exception
@@ -161,15 +162,8 @@ public class Primitive<T> extends AbstractType<T> {
 			return null;
 		}
 		Attribute<?> re = null;
-		try {
-			re = simpleType.createAttribute(str);
-		}
-		catch (NullLabelException | EmptyLabelException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return null;
-		}
-
+		re = simpleType.createAttribute(str);
+		
 		System.out.println("Primitive.createIdentifier " + attributeName + " " + typeName + " ==> " + re);
 		return re;
 	}
@@ -185,13 +179,13 @@ public class Primitive<T> extends AbstractType<T> {
 	public String getName() {
 		return Symbol.SIMPLE_TYPE_NS + this.getValueImplementClass().getSimpleName();
 	}
-	
+
 	public Value<T> createValue() {
 		return this.factory.createValueImp();
 	}
 
 	@Override
-	public Attribute<T> createAttribute(Label theName) throws Attribute.NullLabelException, Attribute.EmptyLabelException {
+	public Attribute<T> createAttribute(Label theName) throws EmptyLabelException, NullLabelException {
 		/*
 		 * if(theName == null || theName.get() == null){ throw new
 		 * Identifier.NullLabelException(); } if(theName.get().length() < 1){ throw new
@@ -217,6 +211,10 @@ public class Primitive<T> extends AbstractType<T> {
 
 	public static Class<?> getRawTypeClass(Attribute<?> id) throws UnknownType {
 		AbstractType<?> t = id.getType();
+		return getRawTypeClass(t);
+	}
+
+	public static Class<?> getRawTypeClass(AbstractType<?> t) throws UnknownType {
 		Class<? extends Value<?>> clazzChild = t.getValueImplementClass();
 		Primitive<?> pri = Primitive.getInstanceWild(clazzChild);
 		if (pri == null) {

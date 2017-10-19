@@ -20,15 +20,11 @@ public class AccessibleValue<T> extends Accessible<T> {
 		return new AccessibleValue<>(thePath, theClass);
 	}
 
-	public static <T extends Number> AccessibleValue<T> _createNum(String thePath, Class<T> theClass) {
-		if (thePath == null) {
-			System.err.println("thePath is null");
-			return null;
-		}
-		return new AccessibleValue<>(thePath, theClass);
-	}
-
 	protected String path;
+
+	public String getPath() {
+		return this.path;
+	}
 
 	protected final Class<T> clazz;
 

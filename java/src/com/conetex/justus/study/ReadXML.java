@@ -19,6 +19,8 @@ import com.conetex.contract.build.Build.Main;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionLang.UnknownCommand;
+import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class ReadXML {
@@ -34,7 +36,7 @@ public class ReadXML {
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(is);
 
-			//List<Complex> complexTyps_ = null;
+			// List<Complex> complexTyps_ = null;
 			// List<Value<?>> values = null;
 			// List<Accessible<?>> functions = null;
 
@@ -55,14 +57,14 @@ public class ReadXML {
 
 			is.close();
 		}
-		
-		if(main != null){
+
+		if (main != null) {
 			main.run();
 		}
-		
+
 	}
 
-	public static CodeNode createSyntaxNode(Node n) {
+	public static CodeNode createSyntaxNode(Node n) throws UnknownCommandParameter, UnknownCommand {
 
 		short typOfNode = n.getNodeType();
 		if (typOfNode != Node.ELEMENT_NODE) {

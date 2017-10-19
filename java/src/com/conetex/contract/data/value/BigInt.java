@@ -3,12 +3,20 @@ package com.conetex.contract.data.value;
 import java.math.BigInteger;
 
 import com.conetex.contract.data.Value;
+import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class BigInt implements Value<BigInteger> {
 
 	private BigInteger actual;
 
+	@Override
+	public BigInteger setObject(Object value) throws Invalid, ValueCastException {
+		return this.set( RtCast.cast(value, BigInteger.class) );
+	}
+	
 	@Override
 	public BigInteger set(BigInteger aValue) {
 		this.actual = aValue;

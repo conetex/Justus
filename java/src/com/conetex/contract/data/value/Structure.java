@@ -3,7 +3,7 @@ package com.conetex.contract.data.value;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.ComplexFunction;
+import com.conetex.contract.data.type.FunctionAttributes;
 import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
@@ -17,14 +17,6 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	private Structure parent;
 
 	private Value<?>[] values;
-
-	public static Structure _create(final Complex theAttributeTuple, final Value<?>[] theValues, final Structure theParent) {
-		if (theAttributeTuple != null && theValues != null) {
-			return null;// new Structure(theAttributeTuple, theValues,
-						// theParent);
-		}
-		return null;
-	}
 
 	public static Structure create(final Complex theAttributeTuple, final Structure theParent) {
 		if (theAttributeTuple != null) {
@@ -45,21 +37,20 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		this.parent = theParent;
 	}
 
-	public void fillMissingValues(){
-		for(int i = 0; i < this.values.length; i++){
-			if(this.values[i] == null){
+	public void fillMissingValues() {
+		for (int i = 0; i < this.values.length; i++) {
+			if (this.values[i] == null) {
 				Attribute<?> a = this.type.getSubAttribute(i);
-				if(a == null){
-					System.err.println("no getSubAttribute " + i );
+				if (a == null) {
+					System.err.println("no getSubAttribute " + i);
 				}
-				else{
-					this.values[i] = a.createValue(this);	
+				else {
+					this.values[i] = a.createValue(this);
 				}
 			}
 		}
 	}
-	
-	
+
 	public static String[] split(String aName) {
 		String[] re = new String[2];
 		if (aName == null) {
@@ -114,6 +105,14 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return null;
 	}
 
+	public Value<?> getValue(String aName) {
+		int i = this.type.getSubAttributeIndex(aName);
+		if (i > -1) {
+			return getValue(i);
+		}
+		return null;
+	}
+	
 	public <R> Value<R> getValue(String aName, Class<R> clazz) throws ValueCastException {
 		// TODO hier erst getStructure...
 
@@ -145,14 +144,15 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 					if (subStructure != null) {
 						return subStructure.get().getValue(names[1], clazz);
 					}
-					// Todo so machen wirs nich! scon bei call reservieren!
+					/* Todo so machen wirs nich! scon bei call reservieren! */
 					else {
-						Attribute<?> y = this.type.functions.get(names[0]);
-						if(y != null) {
-							ComplexFunction z = (ComplexFunction)(y.getType());
-							return z.prototype.getValue(names[1], clazz);
+						FunctionAttributes z = FunctionAttributes.getInstance(this.type.getName() + "." + names[0]);
+						// ComplexFunction z = this.type.getComplexFunction(names[0]);
+						if (z != null) {
+							return z.<R>getValue(names[1], clazz);
 						}
 					}
+
 				}
 			}
 			else {
@@ -206,6 +206,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return false;
 	}
 
+
 	@Override
 	public Structure get() {
 		return this;
@@ -235,10 +236,12 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		return this;
 	}
 
-	public Value<?>[] _setConverted2(String value) throws Inconvertible, Invalid {
-		throw new Inconvertible("can not create Structure from String!");
+	@Override
+	public Structure setObject(Object value) throws Invalid, ValueCastException {
+		Structure v = RtCast.cast(value, Structure.class);
+		return this.set(v);
 	}
-
+	
 	@Override
 	public Structure setConverted(String value) throws Inconvertible, Invalid {
 		throw new Inconvertible("can not create Structure from String!");
@@ -248,11 +251,18 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	public Class<Structure> getRawTypeClass() {
 		return Structure.class;
 	}
-	
+
 	public Complex getComplex() {
 		return this.type;
 	}
+
 	public Structure getParent() {
 		return this.parent;
 	}
+
+	public void setParent(Structure theParent) {
+		this.parent = theParent;
+	}
+
+
 }

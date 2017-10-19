@@ -8,9 +8,6 @@ import java.util.Map;
 
 import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.data.Attribute;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.ComplexFunction;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.control.ReturnAbstract.Result;
@@ -30,7 +27,7 @@ public class Function<V> extends Accessible<V> {
 
 	private static Map<String, Function<?>> instancesVoid = new HashMap<>();
 
-	public static Accessible<Boolean> getInstanceBool(String name) {
+	public static Function<Boolean> getInstanceBool(String name) {
 		Function<Boolean> f = instancesBoolean.get(name);
 		if (f == null) {
 			return null;
@@ -38,7 +35,7 @@ public class Function<V> extends Accessible<V> {
 		return f;
 	}
 
-	public static Accessible<? extends Number> getInstanceNum(String name) {
+	public static Function<? extends Number> getInstanceNum(String name) {
 		Function<? extends Number> f = instancesNum.get(name);
 		if (f == null) {
 			return null;
@@ -46,7 +43,7 @@ public class Function<V> extends Accessible<V> {
 		return f;
 	}
 
-	public static Accessible<? extends Structure> getInstanceStructure(String name) {
+	public static Function<? extends Structure> getInstanceStructure(String name) {
 		Function<? extends Structure> f = instancesStructure.get(name);
 		if (f == null) {
 			return null;
@@ -54,7 +51,7 @@ public class Function<V> extends Accessible<V> {
 		return f;
 	}
 
-	public static Accessible<? extends Object> getInstanceVoid(String name) {
+	public static Function<? extends Object> getInstanceVoid(String name) {
 		Function<? extends Object> fn = instancesVoid.get(name);
 		if (fn != null) {
 			return fn;
@@ -62,7 +59,7 @@ public class Function<V> extends Accessible<V> {
 		return null;
 	}
 
-	public static Accessible<?> getInstance(String name) {
+	public static Function<?> getInstance(String name) {
 		Function<? extends Number> fn = instancesNum.get(name);
 		if (fn != null) {
 			return fn;
@@ -186,12 +183,13 @@ public class Function<V> extends Accessible<V> {
 		return re;
 	}
 
-	public static final <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject) throws AbstractRuntimeException {
+	public static final <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject)
+			throws AbstractRuntimeException {
 		loopOverSteps: for (int i = 0; i < steps.length; i++) {
 			if (steps[i] instanceof ReturnAbstract) {
 				for (ReturnAbstract<V> r : returns) {
 					if (r == steps[i]) {
-						V re = r.getFrom(thisObject.get(), ret);
+						V re = r.getFrom(thisObject.get(), ret);// TODO get() weg
 						if (ret.toReturn) {
 							System.out.println("MOCK return: " + re);
 							return re;
@@ -263,6 +261,10 @@ public class Function<V> extends Accessible<V> {
 
 	private String name;
 
+	public String getName() {
+		return this.name;
+	}
+
 	private Class<V> rawTypeClass;
 
 	private List<ReturnAbstract<V>> returns;
@@ -284,44 +286,33 @@ public class Function<V> extends Accessible<V> {
 
 	public V getFromRoot(Structure thisObject) throws AbstractRuntimeException {
 		System.out.println("Function getFrom " + this.name);
-		
+
 		Structure thisObjectB = thisObject.getStructure(this.name);
-		if(thisObject.getParent() == null) {
+		if (thisObject.getParent() == null) {
 			thisObjectB = thisObject;
 		}
-		
+
 		if (thisObjectB == null) {
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
 			return null;
 		}
-		//thisObjectB = thisObjectB.copy();
+		// thisObjectB = thisObjectB.copy();
 		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
 	}
-	
+
 	@Override
 	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
-		System.out.println("Function getFrom " + this.name);
-		Complex x =	thisObject.getComplex();//.getInstance(this.name);
-		Attribute<?> y = x.functions.get(this.name);
-		// TODO der cast ist scheiﬂﬂﬂe
-		ComplexFunction z = (ComplexFunction)(y.getType());
-		return getFrom(z);
-	}
-	
-	public V getFrom(ComplexFunction z) throws AbstractRuntimeException {
 
-		Structure thisObjectB = z.utilizeStructure();   //.prototype;//thisObject.getStructure(this.name);
-	
-		if (thisObjectB == null) {
-			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
-			return null;
-		}
-		//thisObjectB = thisObjectB.copy();
-		V re = Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
-		z.unutilizeStructure(thisObjectB);
-		return re;
+		return Function.doSteps(this.steps, this.returns, new Result(), thisObject);
+
+		/*
+		 * System.out.println("Function getFrom " + this.name); Complex x =
+		 * thisObject.getComplex();//.getInstance(this.name); Attribute<?> y =
+		 * x.functions.get(this.name); // TODO der cast ist scheiﬂﬂﬂe ComplexFunction z
+		 * = (ComplexFunction)(y.getType()); return getFrom(z);
+		 */
 	}
-	
+
 	@Override
 	public V copyFrom(Structure thisObject) throws Invalid {
 		// TODO Auto-generated method stub

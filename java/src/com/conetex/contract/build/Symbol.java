@@ -2,10 +2,10 @@ package com.conetex.contract.build;
 
 public class Symbol {
 
-	// description of data
+	// def of data (const)
+	public static final String	STRUCT	= "struct";
 
 	public static final String	BOOL	= "Boolean";
-	public static final String	STRUCT	= "struct";
 
 	public static final String	BINT	= "BigInteger";
 	public static final String	INT		= "Integer";

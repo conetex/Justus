@@ -22,9 +22,9 @@
 		<function name="tuWas" type="contract4u.root.person.tuWas">  
 			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
 			<if>
-			<equal><Integer>13</Integer><Integer>13</Integer></equal>
+			<equal><Integer name="egal">13</Integer><Integer name="egal">13</Integer></equal>
 			<then><return><ref>nr</ref></return></then>
-			<else><return><Integer>8</Integer></return></else>
+			<else><return><Integer name="egal">8</Integer></return></else>
 			</if>
 		    <return><ref>nr</ref></return>			        
 		</function>       
@@ -38,17 +38,17 @@
 			<name>hobo</name>        
 			<mail>hobo@dida.de</mail>
 			<nr>111</nr>
-			<tuWas>
-				<action>dummy</action>
-			</tuWas>
+			<!-- <tuWas>
+				<action>dummy1</action>
+			</tuWas> -->
 		</glaeubig> 
 		<schuldne> 
 			<name>biba</name>        
 			<mail>biba@dida.de</mail>
 			<nr>222</nr>
-			<tuWas>
-				<action>dummy</action>
-			</tuWas>			
+			<!-- <tuWas>
+				<action>dummy2</action>
+			</tuWas> -->			
 		</schuldne>				       
 		<betrag>1024</betrag>
 		<aktiv>true</aktiv>       
@@ -59,6 +59,7 @@
     	<Integer name="param2">5</Integer>  
     </call>
     
+	<call type="instance.schuldne" name="tuWas" />
 	<call type="instance.glaeubig" name="tuWas" />
 	<!-- <call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" /> -->
 	
@@ -66,36 +67,36 @@
  	<function name='foo' type="contract4u.foo"> 
 		<value name="param" type='t:Int'>11</value>
 		<times>
-		    <Integer>2</Integer>	       
-		    <Integer>9</Integer>
+		    <Integer name="egal">2</Integer>	       
+		    <Integer name="egal">9</Integer>
 	    </times>
 	    <return>
 		    <times>
 			    <ref>param</ref>	    
-			    <Integer>8</Integer>	
+			    <Integer name="egal">8</Integer>	
 		    </times>             
 	    </return>		             
     </function>
     
     <value name="counter" type='t:Int'>0</value>	
     <loop>
-		<smaller><ref>counter</ref><Integer>4</Integer></smaller>
+		<smaller><ref>counter</ref><Integer name="egal">4</Integer></smaller>
 		<steps>
 			<copy>
-	        	<ref name="target">counter</ref>
-	        	<plus><ref>counter</ref><Integer>1</Integer></plus>
+	        	<ref>counter</ref>
+	        	<plus><ref>counter</ref><Integer name="egal">1</Integer></plus>
 	        </copy>
 			<times>
-			    <Integer>3</Integer>	       
-			    <Integer>6</Integer>
+			    <Integer name="egal">3</Integer>	       
+			    <Integer name="egal">6</Integer>
 		    </times>
 	    </steps>
 	</loop>
     
     <value name="param" type='t:Int'>12</value>	
 	<copy>
-	   <ref name="target" typ='MailAddress64'>foo.param</ref>
-	   <ref name="source" typ='MailAddress64'>param</ref>
+	   <ref>foo.param</ref>
+	   <ref>param</ref>
 	</copy>   
     <call name="foo" type='contract4u' />
 	
@@ -120,8 +121,8 @@
 	<value name="aAddress" type='t:MailAddress64'>12@32543.com</value>
 	<value name="a2Addres" type='t:MailAddress64'>ab@cdefg.com</value>
 	<copy>
-	   <ref name="target" typ='MailAddress64'>a2Addres</ref>
-	   <ref name="src" typ='MailAddress64'>aAddress</ref>
+	   <ref>a2Addres</ref>
+	   <ref>aAddress</ref>
 	</copy>           
 	             
 	<!--<copy> geht nich 
@@ -129,14 +130,14 @@
 		<ref typ='MailAddress64'>sub.aAddress</ref>
 	</copy>-->
 	             
- 	<attribute name="sub">	         
+ 	<!--<attribute name="sub">	         
 		<attribute name="aAddress" type='t:MailAddress64'>yy@yyy.com</attribute>
 		<attribute name="a2Addres" type='t:MailAddress64'>xx@xxx.com</attribute>		
-       <!--<copy>
+       <copy>
             <source typ='MailAddress64'>sub.aAddress</source>
             <target typ='MailAddress64'>sub.a2Addres</target>
-           </copy> -->
-	</attribute>	
+           </copy>
+	</attribute>	 -->
 	
 <!-- MATH OK -->
     <value name="ai" type='t:Int'>3</value>
@@ -159,7 +160,7 @@
         <ref>ai</ref>	             
         <ref>bi</ref>	             
       </times> 	             
-      <Integer>8</Integer>	             
+      <Integer name="egal">8</Integer>	             
     </remains> 	             
 	             
 <!--  Comparsion / IsNull OK -->
@@ -169,7 +170,7 @@
         <ref>ai</ref>	             
         <ref>bi</ref>	             
       </times><!--  12 	  -->            
-      <Integer>9</Integer>	                        <!-- true  -->       
+      <Integer name="egal">9</Integer>	                        <!-- true  -->       
     </greater> 
         
     <smaller> 
@@ -177,7 +178,7 @@
         <ref>ai</ref>	             
         <ref>bi</ref>	             
       </times> // 12 	             
-      <Integer>9</Integer>	                        <!-- false -->     
+      <Integer name="egal">9</Integer>	                        <!-- false -->     
     </smaller>  
 	             
     <smaller> 
@@ -185,7 +186,7 @@
         <ref>ai</ref>	             
         <ref>bi</ref>	             
       </times> <!--  12 	  -->            
-      <Integer>13</Integer>	                        <!-- true  -->      
+      <Integer name="egal">13</Integer>	                        <!-- true  -->      
     </smaller> 
 	               
     <greater> 
@@ -193,11 +194,11 @@
         <ref>ai</ref>	             
         <ref>bi</ref>	             
       </times> <!--  12 	  -->            
-      <Integer>13</Integer>	                        <!-- false -->     
+      <Integer name="egal">13</Integer>	                        <!-- false -->     
     </greater>
 	             
     <greater> 
-      <Integer>13</Integer>       
+      <Integer name="egal">13</Integer>       
       <times> 
         <ref>ai</ref>	             
         <ref>bi</ref>	             
@@ -205,7 +206,7 @@
     </greater>	                                    <!-- true  -->
 	             
     <greater> 
-      <Integer>11</Integer>       
+      <Integer name="egal">11</Integer>       
       <times> 
         <ref>ai</ref>	             
         <ref>bi</ref>	             

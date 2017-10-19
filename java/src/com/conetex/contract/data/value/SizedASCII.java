@@ -4,12 +4,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.conetex.contract.data.Value;
+import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public abstract class SizedASCII implements Value<String> {
 
 	protected String actual;
 
+	@Override
+	public String setObject(Object value) throws Invalid, ValueCastException {
+		return this.set( RtCast.cast(value, String.class) );
+	}
+	
 	protected boolean check(String aValue, String allowedChars) throws Invalid {
 		if (aValue == null) {
 			return true;

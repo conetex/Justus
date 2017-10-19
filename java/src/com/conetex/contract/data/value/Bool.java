@@ -1,7 +1,10 @@
 package com.conetex.contract.data.value;
 
 import com.conetex.contract.data.Value;
+import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Bool implements Value<Boolean> {
 
@@ -13,6 +16,11 @@ public class Bool implements Value<Boolean> {
 		return this.actual;
 	}
 
+	@Override
+	public Boolean setObject(Object value) throws Invalid, ValueCastException {
+		return this.set( RtCast.cast(value, Boolean.class) );
+	}
+	
 	@Override
 	public final Boolean get() {
 		return this.actual;
