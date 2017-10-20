@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import com.conetex.contract.build.Build;
 import com.conetex.contract.build.Build.Main;
+import com.conetex.contract.build.CodeModel;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbol;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
