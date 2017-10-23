@@ -106,8 +106,7 @@ public class BuildFunctions {
 
 	static class Reference {
 
-
-
+		
 		static Egg<Object> whatEverRef = new Egg<Object>("whatEverRef") {
 			@Override
 			public Accessible<? extends Object> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
@@ -135,6 +134,8 @@ public class BuildFunctions {
 				return AccessibleValue.createFunctionRef(n.getValue(), parentTyp, Boolean.class);
 			}
 		};
+		
+
 	}
 
 	static class Constant {

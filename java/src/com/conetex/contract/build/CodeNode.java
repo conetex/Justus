@@ -3,6 +3,7 @@ package com.conetex.contract.build;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.conetex.contract.build.CodeModel.Egg;
 import com.conetex.contract.build.exceptionLang.UnknownCommand;
 import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 
@@ -70,31 +71,31 @@ public class CodeNode {
 
 	private static String[][] parameterNames = {
 
-			/* isType                    */ { CommandParameterSymbols.NAME }, //
-			/* isFunction                */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
-			/* isAttribute               */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
-			/* isAttributeInitialized    */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }, //
+			/*- isType                    */ { CommandParameterSymbols.NAME }, //
+			/*- isFunction                */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
+			/*- isAttribute               */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
+			/*- isAttributeInitialized    */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }, //
 
-			/* VIRTUAL_COMP_VALUE        */ { CommandParameterSymbols.NAME }, //	
-			/* VIRTUAL_PRIM_VALUE        */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //	
+			/*- VIRTUAL_COMP_VALUE        */ { CommandParameterSymbols.NAME }, //	
+			/*- VIRTUAL_PRIM_VALUE        */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //	
 
 			/* isBuildInFunction then    */ {}, //
 			/* isBuildInFunction else    */ {}, // 
 
 			// def of data (const)
 			/* isBuildInFunction struct  */ {}, //
-			/* isBuildInFunction Boolean */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/* isBuildInFunction BigInt  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/* isBuildInFunction Integer */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/* isBuildInFunction Long    */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/* isBuildInFunction String  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
+			/*- isBuildInFunction Boolean */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
+			/*- isBuildInFunction BigInt  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
+			/*- isBuildInFunction Integer */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
+			/*- isBuildInFunction Long    */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
+			/*- isBuildInFunction String  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
 
 			// assignment of data
 			/* isBuildInFunction         */ {}, //
 			/* isBuildInFunction         */ {}, //
 
 			// addressing of data
-			/* isBuildInFunction  ref    */ { CommandParameterSymbols.VALUE }, //
+			/*- isBuildInFunction  ref    */ { CommandParameterSymbols.VALUE }, //
 
 			// boolean operators
 			/* isBuildInFunction         */ {}, //
@@ -123,13 +124,15 @@ public class CodeNode {
 			/* isBuildInFunction         */ {}, //
 
 			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction   CALL  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
+			/*- isBuildInFunction   CALL  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
 
-			/* CONTRACT                  */ { CommandParameterSymbols.NAME } //
+			/*- CONTRACT                  */ { CommandParameterSymbols.NAME } //
 
 	};
 
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
+		Egg<?> command = CodeModel.getInstance(c);
+		// TODO use this instad of for...
 		for (int i = 0; i < CodeNode.commandNames.length; i++) {
 			if (CodeNode.commandNames[i] == c) {
 				for (int j = 0; j < CodeNode.parameterNames[i].length; j++) {
