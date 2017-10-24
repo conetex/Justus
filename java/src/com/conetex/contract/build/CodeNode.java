@@ -132,9 +132,23 @@ public class CodeNode {
 
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		Egg<?> command = CodeModel.getInstance(c);
-		// TODO use this instad of for...
+		if(command == null){
+			throw new UnknownCommand(c);
+		}
+		int idx = command.getParameterIndex(p);
+		if(idx == -1){
+			throw new UnknownCommandParameter(c + "." + p);
+		}
+		if (idx < thisObj.parameters.length) {
+			return thisObj.parameters[idx];
+		}
+		else{
+			throw new UnknownCommandParameter(c + "." + p + " not consistent...");
+		}
+		/*
 		for (int i = 0; i < CodeNode.commandNames.length; i++) {
 			if (CodeNode.commandNames[i] == c) {
+				
 				for (int j = 0; j < CodeNode.parameterNames[i].length; j++) {
 					if (CodeNode.parameterNames[i][j] == p) {
 						if (j < thisObj.parameters.length) {
@@ -146,6 +160,7 @@ public class CodeNode {
 			}
 		}
 		throw new UnknownCommand(c);
+		*/
 	}
 
 	private String getParameter(String p) throws UnknownCommandParameter, UnknownCommand {
@@ -153,6 +168,22 @@ public class CodeNode {
 	}
 
 	private static void checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
+		Egg<?> command = CodeModel.getInstance(c);
+		if(command == null){
+			throw new UnknownCommand(c);
+		}
+		String[] commands = command.getParameters();
+		if (commands.length == p.length) {
+			for (int j = 0; j < commands.length; j++) {
+				if (commands[j] != p[j]) {
+					throw new UnknownCommandParameter(commands[j] + " != " + p[j]);
+				}
+			}
+		}
+		else{
+			throw new UnknownCommandParameter(commands.length + " != " + p.length);
+		}
+		/*
 		boolean commandNotFound = true;
 		for (int i = 0; i < CodeNode.commandNames.length; i++) {
 			if (CodeNode.commandNames[i] == c) {
@@ -172,6 +203,7 @@ public class CodeNode {
 		if (commandNotFound) {
 			throw new UnknownCommand(c);
 		}
+		*/
 	}
 
 	@SuppressWarnings("unused")

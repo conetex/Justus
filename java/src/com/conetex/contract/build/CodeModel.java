@@ -96,6 +96,8 @@ public class CodeModel {
 			return this.name;
 		}
 
+
+		
 		final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
 			if (!this.meaning.contains(n.getCommand())) {
 				System.err.println("Operation " + n.getCommand() + " not found!");
@@ -123,13 +125,26 @@ public class CodeModel {
 			}
 		}
 		
-		public final void hasParams(String[] theParameterNames) {
+		public final void registerParameters(String[] theParameterNames) {
 			if (this.parameterNames != null) {
 				System.err.println("duplicate Param call");
 			}
 			this.parameterNames = theParameterNames;
 		}
 
+		public final int getParameterIndex(String p) {
+			for (int j = 0; j < this.parameterNames.length; j++) {
+				if (this.parameterNames[j] == p) {
+					return j;
+				}
+			}
+			return -1;
+		}
+		
+		public final String[] getParameters() {
+			return this.parameterNames;
+		}
+		
 	}
 	
 	static void buildBool() throws AbstractInterpreterException {
@@ -321,25 +336,25 @@ public class CodeModel {
 		
 		String[] params4Reference = new String[]{ CommandParameterSymbols.VALUE };
 		Reference.objRef.means(Symbol.REFERENCE);
-		Reference.objRef.hasParams(params4Reference);
+		Reference.objRef.registerParameters(params4Reference);
 		Reference.numberRef.means(Symbol.REFERENCE);
-		Reference.numberRef.hasParams(params4Reference);
+		Reference.numberRef.registerParameters(params4Reference);
 		Reference.boolRef.means(Symbol.REFERENCE);
-		Reference.boolRef.hasParams(params4Reference);
+		Reference.boolRef.registerParameters(params4Reference);
 		Reference.whatEverRef.means(Symbol.REFERENCE);
-		Reference.whatEverRef.hasParams(params4Reference);
+		Reference.whatEverRef.registerParameters(params4Reference);
 		
 		
 		
 		String[] params4Const = new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE };
 		Constant.numberConst.means(new String[] { Symbol.BINT, Symbol.INT, Symbol.LNG });
-		Constant.numberConst.hasParams(params4Const);
+		Constant.numberConst.registerParameters(params4Const);
 		Constant.boolConst.means(Symbol.BOOL);
-		Constant.boolConst.hasParams(params4Const);
+		Constant.boolConst.registerParameters(params4Const);
 		Constant.objConst.means(Symbol.STRUCT);
-		Constant.objConst.hasParams(params4Const);
+		Constant.objConst.registerParameters(params4Const);
 		Constant.whatEverConst.means(new String[] { Symbol.BINT, Symbol.INT, Symbol.LNG, Symbol.BOOL, Symbol.STRUCT });
-		Constant.whatEverConst.hasParams(params4Const);
+		Constant.whatEverConst.registerParameters(params4Const);
 		
 		
 		
@@ -363,41 +378,44 @@ public class CodeModel {
 		
 		String[] params4Function = { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE };
 		Fun.noReturn.means(Symbol.FUNCTION);
-		Fun.noReturn.hasParams(params4Function);
+		Fun.noReturn.registerParameters(params4Function);
 		Fun.structure.means(Symbol.FUNCTION);
-		Fun.structure.hasParams(params4Function);
+		Fun.structure.registerParameters(params4Function);
 		Fun.number.means(Symbol.FUNCTION);
-		Fun.number.hasParams(params4Function);
+		Fun.number.registerParameters(params4Function);
 		Fun.bool.means(Symbol.FUNCTION);
-		Fun.bool.hasParams(params4Function);
+		Fun.bool.registerParameters(params4Function);
 		Fun.unknown.means(Symbol.FUNCTION);
-		Fun.unknown.hasParams(params4Function);
+		Fun.unknown.registerParameters(params4Function);
 
 		
 		String[] params4Call = { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE };
 		FunCall.objCall.means(Symbol.CALL);
-		FunCall.objCall.hasParams(params4Call);
+		FunCall.objCall.registerParameters(params4Call);
 		FunCall.numberCall.means(Symbol.CALL);
-		FunCall.numberCall.hasParams(params4Call);
+		FunCall.numberCall.registerParameters(params4Call);
 		FunCall.boolCall.means(Symbol.CALL);
-		FunCall.boolCall.hasParams(params4Call);
+		FunCall.boolCall.registerParameters(params4Call);
 		FunCall.voidCall.means(Symbol.CALL);
-		FunCall.voidCall.hasParams(params4Call);
+		FunCall.voidCall.registerParameters(params4Call);
 		FunCall.whatEverCall.means(Symbol.CALL);
-		FunCall.whatEverCall.hasParams(params4Call);
+		FunCall.whatEverCall.registerParameters(params4Call);
 		
 		
 		
 		Data.complex.means(Symbol.COMPLEX);
-		Data.complex.hasParams(new String[]{ CommandParameterSymbols.NAME });
+		Data.complex.registerParameters(new String[]{ CommandParameterSymbols.NAME });
 
 		
-		
-		/*
 		// Attribute
-			 isAttribute                { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //Symbol.ATTRIBUTE
-			 isAttributeInitialized     { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }, //Symbol.VALUE
-			 
+		Data.attribute.means(Symbol.ATTRIBUTE);	// isAttribute //Symbol.ATTRIBUTE               , 
+		Data.attribute.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }); 
+		
+		Data.value.means(Symbol.VALUE);	// isAttributeInitialized //Symbol.VALUE 
+		Data.value.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }); 
+			      
+		
+		/* TODO
 		// value
 			 VIRTUAL_COMP_VALUE         { CommandParameterSymbols.NAME }, //	CommandSymbols.VIRTUAL_COMP_VALUE
 			 VIRTUAL_PRIM_VALUE         { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //	CommandSymbols.VIRTUAL_PRIM_VALUE

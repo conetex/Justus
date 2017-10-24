@@ -592,8 +592,6 @@ public class BuildFunctions {
 
 	static class Data {
 
-
-
 		static Box<Structure, Object> complex = new Box<Structure, Object>("complex") {
 			@Override
 			public Accessible<Structure> create(CodeNode n, Complex type) throws AbstractInterpreterException {
@@ -626,6 +624,26 @@ public class BuildFunctions {
 			}
 		};
 
+		static Box<Object, Object> attribute = new Box<Object, Object>("attribute") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};		
+		
+		static Box<Object, Object> value = new Box<Object, Object>("value") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		
 	}
 
 	public static Function<?> build(CodeNode n, Complex type) throws AbstractInterpreterException {
