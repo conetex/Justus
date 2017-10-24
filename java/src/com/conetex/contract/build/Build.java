@@ -32,7 +32,7 @@ public class Build {
 
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
 		
-		CodeModel.build();
+		
 		
 		List<Complex> complexTyps = BuildTypes.createComplexTypes(code);
 		System.out.println("Builder " + code.getCommand());

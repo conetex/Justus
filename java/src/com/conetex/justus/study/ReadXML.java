@@ -31,6 +31,8 @@ public class ReadXML {
 
 		Main main = null;
 
+		CodeModel.build();
+		
 		try (FileInputStream is = new FileInputStream("input2.xml")) {
 
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

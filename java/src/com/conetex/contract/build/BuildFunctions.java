@@ -624,7 +624,7 @@ public class BuildFunctions {
 			}
 		};
 
-		static Box<Object, Object> attribute = new Box<Object, Object>("attribute") {
+		static Box<Object, Object> attribute = new Box<Object, Object>("attribute", 1) {
 
 			@Override
 			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
@@ -634,7 +634,7 @@ public class BuildFunctions {
 
 		};		
 		
-		static Box<Object, Object> value = new Box<Object, Object>("value") {
+		static Box<Object, Object> value = new Box<Object, Object>("value", 2) {
 
 			@Override
 			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {

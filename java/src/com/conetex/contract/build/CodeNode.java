@@ -131,20 +131,24 @@ public class CodeNode {
 	};
 
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
-		Egg<?> command = CodeModel.getInstance(c);
-		if(command == null){
+		List<Egg<?>> commands = CodeModel.getInstance(c);
+		if(commands == null){
 			throw new UnknownCommand(c);
 		}
-		int idx = command.getParameterIndex(p);
-		if(idx == -1){
-			throw new UnknownCommandParameter(c + "." + p);
+		String error = "";
+		for(Egg<?> command : commands) {
+			if ( command.getParameters().length == thisObj.parameters.length ) {
+				int idx = command.getParameterIndex(p);
+				if(idx == -1){
+					error += c + "." + p + ", ";
+				}
+			}
+			else{
+				error += command.getParameters().length + " != " + thisObj.parameters.length;
+			}
 		}
-		if (idx < thisObj.parameters.length) {
-			return thisObj.parameters[idx];
-		}
-		else{
-			throw new UnknownCommandParameter(c + "." + p + " not consistent...");
-		}
+		throw new UnknownCommandParameter( error );
+		
 		/*
 		for (int i = 0; i < CodeNode.commandNames.length; i++) {
 			if (CodeNode.commandNames[i] == c) {
@@ -168,21 +172,31 @@ public class CodeNode {
 	}
 
 	private static void checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
-		Egg<?> command = CodeModel.getInstance(c);
-		if(command == null){
+		
+		List<Egg<?>> commands = CodeModel.getInstance(c);
+		if(commands == null){
 			throw new UnknownCommand(c);
 		}
-		String[] commands = command.getParameters();
-		if (commands.length == p.length) {
-			for (int j = 0; j < commands.length; j++) {
-				if (commands[j] != p[j]) {
-					throw new UnknownCommandParameter(commands[j] + " != " + p[j]);
-				}
+		String error = "";
+		outerLoop:
+		for(Egg<?> command : commands) {
+			String[] paramNames = command.getParameters();
+			if(paramNames == null && (p == null || p.length == 0)) {
+				return;
 			}
+			if (paramNames.length == p.length) {
+				for (int j = 0; j < paramNames.length; j++) {
+					if (paramNames[j] != p[j]) {
+						error += paramNames[j] + " != " + p[j] + ", ";
+						continue outerLoop;
+					}
+				}
+				return;
+			}
+			error += paramNames.length + " != " + p.length + ", ";
 		}
-		else{
-			throw new UnknownCommandParameter(commands.length + " != " + p.length);
-		}
+		throw new UnknownCommandParameter(error);
+		
 		/*
 		boolean commandNotFound = true;
 		for (int i = 0; i < CodeNode.commandNames.length; i++) {
@@ -250,8 +264,8 @@ public class CodeNode {
 		if (theNameAttribute == null) {
 			if (theValue == null) {
 				if (theType == null) {
-					checkParameter(theName, new String[] {});
-					return new CodeNode(theName, new String[] {}, theChildren);
+					checkParameter(theName, null);
+					return new CodeNode(theName, null, theChildren);
 				}
 				else {
 					checkParameter(theName, new String[] { CommandParameterSymbols.TYPE });

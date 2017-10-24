@@ -2,6 +2,7 @@ package com.conetex.contract.build;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,9 +29,9 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 public class CodeModel {
 
 	
-	public static Map<String, Egg<?>> instances = new HashMap<>();
+	private static Map<String, List<Egg<?>>> instances = new HashMap<>();
 
-	public static Egg<?> getInstance(String command){
+	public static List<Egg<?>> getInstance(String command){
 		return CodeModel.instances.get(command);
 	}
 	
@@ -42,6 +43,11 @@ public class CodeModel {
 			super(theName);
 		}
 
+		public Box(String theName, int i) {
+			
+			super(theName);
+		}
+		
 		public final void contains(String theOperationName, Egg<? extends S> b) {
 			if (this.childBuilder.containsKey(theOperationName)) {
 				System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
@@ -84,12 +90,6 @@ public class CodeModel {
 
 		protected Egg(String theName) {
 			this.name = theName;
-			if(CodeModel.instances.containsKey(theName)){
-				//TODO: groesseres refactoring notwendig um dies zu machen:
-				//throw new DublicateOperation(theName);
-				System.err.println("Operation dublicate!");
-			}
-			CodeModel.instances.put(theName, this);
 		}
 
 		public final String getName() {
@@ -112,14 +112,21 @@ public class CodeModel {
 			return this.meaning;
 		}
 
-		public final void means(String theOperationName) {
+		public final void means(String theOperationName) throws DublicateOperation {
 			if (this.meaning.contains(theOperationName)) {
-				System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
+				//System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
+				throw new DublicateOperation( "duplicate operation '" + theOperationName + "' in " + this.getName() );
 			}
 			this.meaning.add(theOperationName);
+			List<Egg<?>> instanceList = CodeModel.instances.get(theOperationName);
+			if(instanceList == null){
+				instanceList = new LinkedList<>();
+				CodeModel.instances.put(theOperationName, instanceList);
+			}
+			instanceList.add(this);			
 		}
 
-		public final void means(String[] theOperationNames) {
+		public final void means(String[] theOperationNames) throws DublicateOperation {
 			for (String theOperationName : theOperationNames) {
 				this.means(theOperationName);
 			}
