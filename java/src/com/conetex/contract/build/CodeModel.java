@@ -20,20 +20,12 @@ import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.DublicateOperation;
 import com.conetex.contract.build.exceptionLang.OperationMeansNotCalled;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.FunctionAttributes;
-import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.lang.control.Function;
-import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class CodeModel {
 
 	
-	private static Map<String, List<Egg<?>>> instances = new HashMap<>();
-
-	public static List<Egg<?>> getInstance(String command){
-		return CodeModel.instances.get(command);
-	}
+	
 	
 	public static abstract class Box<T, S> extends Egg<T> {
 
@@ -82,6 +74,12 @@ public class CodeModel {
 
 	public static abstract class Egg<T> {
 
+		private static Map<String, List<Egg<?>>> instances = new HashMap<>();
+
+		public static List<Egg<?>> getInstance(String command){
+			return Egg.instances.get(command);
+		}
+		
 		private String name;
 		
 		private String[] parameterNames;
@@ -118,10 +116,10 @@ public class CodeModel {
 				throw new DublicateOperation( "duplicate operation '" + theOperationName + "' in " + this.getName() );
 			}
 			this.meaning.add(theOperationName);
-			List<Egg<?>> instanceList = CodeModel.instances.get(theOperationName);
+			List<Egg<?>> instanceList = Egg.getInstance(theOperationName);
 			if(instanceList == null){
 				instanceList = new LinkedList<>();
-				CodeModel.instances.put(theOperationName, instanceList);
+				Egg.instances.put(theOperationName, instanceList);
 			}
 			instanceList.add(this);			
 		}
@@ -373,7 +371,7 @@ public class CodeModel {
 		
 		
 		Control.unknownIf.means(Symbol.IF);
-		Control.unknownLoop.means(Symbol.LOOP);;
+		Control.unknownLoop.means(Symbol.LOOP);
 		
 		
 		
@@ -418,18 +416,28 @@ public class CodeModel {
 		Data.attribute.means(Symbol.ATTRIBUTE);	// isAttribute //Symbol.ATTRIBUTE               , 
 		Data.attribute.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }); 
 		
-		Data.value.means(Symbol.VALUE);	// isAttributeInitialized //Symbol.VALUE 
+		// TODO this box-object is only a dummy ...
+		Data.value.means( Symbol.VALUE );	// isAttributeInitialized //Symbol.VALUE 
 		Data.value.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }); 
-			      
+
+		Data.valueVirtPrim.means( CommandSymbols.VIRTUAL_PRIM_VALUE );	// isAttributeInitialized //Symbol.VALUE 
+		Data.valueVirtPrim.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }); 
 		
+		Data.valueVirtComp.means( CommandSymbols.VIRTUAL_COMP_VALUE );	// isAttributeInitialized //Symbol.VALUE 
+		Data.valueVirtComp.registerParameters(new String[]{ CommandParameterSymbols.NAME }); 
+		
+		Data.contract.means( CommandSymbols.CONTRACT );	// isAttributeInitialized //Symbol.VALUE 
+		Data.contract.registerParameters(new String[]{ CommandParameterSymbols.NAME }); 		
 		/* TODO
 		// value
 			 VIRTUAL_COMP_VALUE         { CommandParameterSymbols.NAME }, //	CommandSymbols.VIRTUAL_COMP_VALUE
 			 VIRTUAL_PRIM_VALUE         { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //	CommandSymbols.VIRTUAL_PRIM_VALUE
  
   		// CONTRACT                   { CommandParameterSymbols.NAME } //CommandSymbols.CONTRACT
-  		
 		*/
+		// TODO this box-object is only a dummy ...
+		Control.then.means(Symbol.THEN);
+		Control.otherwise.means(Symbol.OTHERWISE);
 		
 		CodeModel.buildBool();
 		CodeModel.buildNumber();

@@ -43,6 +43,8 @@ public class Symbol {
 
 	// control function
 	public static final String	IF		= "if";
+	public static final String	THEN		= "then";
+	public static final String	OTHERWISE = "else";
 	public static final String	LOOP	= "loop";
 
 	public static final String	RETURN	= "return";

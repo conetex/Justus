@@ -9,129 +9,8 @@ import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 
 public class CodeNode {
 
-	private static String[] commandNames = {
-
-			/* isType                    */ Symbol.COMPLEX, //
-			/* isFunction                */ Symbol.FUNCTION, //
-			/* isAttribute               */ Symbol.ATTRIBUTE, //
-			/* isAttributeInitialized    */ Symbol.VALUE, //
-
-			/* VIRTUAL_COMP_VALUE        */ CommandSymbols.VIRTUAL_COMP_VALUE, //	
-			/* VIRTUAL_PRIM_VALUE        */ CommandSymbols.VIRTUAL_PRIM_VALUE, //	
-
-			/* isBuildInFunction then    */ "then", //
-			/* isBuildInFunction else    */ "else", //
-
-			// def of data (const)
-			/* isBuildInFunction struct  */ Symbol.STRUCT, //
-			/* isBuildInFunction Boolean */ Symbol.BOOL, //
-			/* isBuildInFunction BigInt  */ Symbol.BINT, //
-			/* isBuildInFunction Integer */ Symbol.INT, //
-			/* isBuildInFunction Long    */ Symbol.LNG, //
-			/* isBuildInFunction String  */ Symbol.STR, //
-
-			// assignment of data
-			/* isBuildInFunction         */ Symbol.COPY, //
-			/* isBuildInFunction         */ Symbol.REFER, //
-
-			// addressing of data
-			/* isBuildInFunction         */ Symbol.REFERENCE, //
-
-			// boolean operators
-			/* isBuildInFunction         */ Symbol.AND, //
-			/* isBuildInFunction         */ Symbol.OR, //
-			/* isBuildInFunction         */ Symbol.XOR, //
-			/* isBuildInFunction         */ Symbol.NOT, //
-
-			// boolean expressions for comparison
-			/* isBuildInFunction         */ Symbol.SMALLER, //
-			/* isBuildInFunction         */ Symbol.EQUAL, //
-			/* isBuildInFunction         */ Symbol.GREATER, //
-
-			// boolean expressions for checks
-			/* isBuildInFunction         */ Symbol.ISNULL, //
-
-			// math elementary arithmetic
-			/* isBuildInFunction         */ Symbol.PLUS, //
-			/* isBuildInFunction         */ Symbol.MINUS, //
-			/* isBuildInFunction         */ Symbol.TIMES, //
-			/* isBuildInFunction         */ Symbol.DIVIDED_BY, //
-			/* isBuildInFunction         */ Symbol.REMAINS, //
-
-			// control function
-			/* isBuildInFunction         */ Symbol.IF, //
-			/* isBuildInFunction         */ Symbol.LOOP, //
-
-			/* isBuildInFunction         */ Symbol.RETURN, //
-			/* isBuildInFunction         */ Symbol.CALL, //
-
-			/* CONTRACT                  */ CommandSymbols.CONTRACT//
-
-	};
-
-	private static String[][] parameterNames = {
-
-			/*- isType                    */ { CommandParameterSymbols.NAME }, //
-			/*- isFunction                */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
-			/*- isAttribute               */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
-			/*- isAttributeInitialized    */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }, //
-
-			/*- VIRTUAL_COMP_VALUE        */ { CommandParameterSymbols.NAME }, //	
-			/*- VIRTUAL_PRIM_VALUE        */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //	
-
-			/* isBuildInFunction then    */ {}, //
-			/* isBuildInFunction else    */ {}, // 
-
-			// def of data (const)
-			/* isBuildInFunction struct  */ {}, //
-			/*- isBuildInFunction Boolean */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/*- isBuildInFunction BigInt  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/*- isBuildInFunction Integer */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/*- isBuildInFunction Long    */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-			/*- isBuildInFunction String  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //
-
-			// assignment of data
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-
-			// addressing of data
-			/*- isBuildInFunction  ref    */ { CommandParameterSymbols.VALUE }, //
-
-			// boolean operators
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-
-			// boolean expressions for comparison
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-
-			// boolean expressions for checks
-			/* isBuildInFunction         */ {}, //
-
-			// math elementary arithmetic
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-
-			// control function
-			/* isBuildInFunction         */ {}, //
-			/* isBuildInFunction         */ {}, //
-
-			/* isBuildInFunction         */ {}, //
-			/*- isBuildInFunction   CALL  */ { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }, //
-
-			/*- CONTRACT                  */ { CommandParameterSymbols.NAME } //
-
-	};
-
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
-		List<Egg<?>> commands = CodeModel.getInstance(c);
+		List<Egg<?>> commands = CodeModel.Egg.getInstance(c);
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
@@ -139,15 +18,16 @@ public class CodeNode {
 		for(Egg<?> command : commands) {
 			if ( command.getParameters().length == thisObj.parameters.length ) {
 				int idx = command.getParameterIndex(p);
-				if(idx == -1){
-					error += c + "." + p + ", ";
+				if(idx > -1){
+					//error += c + "." + p + ", ";
+					return thisObj.parameters[idx];
 				}
 			}
 			else{
-				error += command.getParameters().length + " != " + thisObj.parameters.length;
+				error += ", " + command.getParameters().length + " != " + thisObj.parameters.length;
 			}
 		}
-		throw new UnknownCommandParameter( error );
+		throw new UnknownCommandParameter( c + "." + p + " " + error);
 		
 		/*
 		for (int i = 0; i < CodeNode.commandNames.length; i++) {
@@ -173,7 +53,7 @@ public class CodeNode {
 
 	private static void checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
 		
-		List<Egg<?>> commands = CodeModel.getInstance(c);
+		List<Egg<?>> commands = CodeModel.Egg.getInstance(c);
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
@@ -181,19 +61,21 @@ public class CodeNode {
 		outerLoop:
 		for(Egg<?> command : commands) {
 			String[] paramNames = command.getParameters();
-			if(paramNames == null && (p == null || p.length == 0)) {
-				return;
-			}
-			if (paramNames.length == p.length) {
-				for (int j = 0; j < paramNames.length; j++) {
-					if (paramNames[j] != p[j]) {
-						error += paramNames[j] + " != " + p[j] + ", ";
-						continue outerLoop;
+			if(paramNames != null && !(p == null || p.length == 0)) {
+				if (paramNames.length == p.length) {
+					for (int j = 0; j < paramNames.length; j++) {
+						if (paramNames[j] != p[j]) {
+							error += paramNames[j] + " != " + p[j] + ", ";
+							continue outerLoop;
+						}
 					}
+					return;
 				}
+				error += paramNames.length + " != " + p.length + ", ";
+			}
+			else {
 				return;
 			}
-			error += paramNames.length + " != " + p.length + ", ";
 		}
 		throw new UnknownCommandParameter(error);
 		
@@ -220,15 +102,7 @@ public class CodeNode {
 		*/
 	}
 
-	@SuppressWarnings("unused")
-	private static int getParameterCount(String c) throws UnknownCommand {
-		for (int i = 0; i < CodeNode.commandNames.length; i++) {
-			if (CodeNode.commandNames[i] == c) {
-				return CodeNode.parameterNames.length;
-			}
-		}
-		throw new UnknownCommand(c);
-	}
+	
 
 	private String command;
 

@@ -1,11 +1,7 @@
 package com.conetex.contract.build;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import com.conetex.contract.build.CodeModel.Box;
 import com.conetex.contract.build.CodeModel.Egg;
@@ -13,7 +9,6 @@ import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.FunctionNotFound;
 import com.conetex.contract.build.exceptionLang.MissingSubOperation;
 import com.conetex.contract.build.exceptionLang.NoAccessToValue;
-import com.conetex.contract.build.exceptionLang.OperationMeansNotCalled;
 import com.conetex.contract.build.exceptionLang.TypeNotDeterminated;
 import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
 import com.conetex.contract.build.exceptionLang.UnexpectedSubOperation;
@@ -588,6 +583,26 @@ public class BuildFunctions {
 			}
 		};
 
+		static Box<Object, Object> then = new Box<Object, Object>("then") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		
+		static Box<Object, Object> otherwise = new Box<Object, Object>("else") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		
 	}
 
 	static class Data {
@@ -644,6 +659,35 @@ public class BuildFunctions {
 
 		};
 		
+		static Box<Object, Object> valueVirtComp = new Box<Object, Object>("VIRTUAL_COMP_VALUE") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		
+		static Box<Object, Object> valueVirtPrim = new Box<Object, Object>("VIRTUAL_PRIM_VALUE") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
+		
+		static Box<Object, Object> contract = new Box<Object, Object>("contract") {
+
+			@Override
+			public Accessible<? extends Structure> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		};
 	}
 
 	public static Function<?> build(CodeNode n, Complex type) throws AbstractInterpreterException {
