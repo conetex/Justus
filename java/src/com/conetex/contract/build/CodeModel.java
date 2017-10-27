@@ -420,24 +420,25 @@ public class CodeModel {
 		Data.value.means( Symbol.VALUE );	// isAttributeInitialized //Symbol.VALUE 
 		Data.value.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }); 
 
+		// TODO this box-object is only a dummy ...
 		Data.valueVirtPrim.means( CommandSymbols.VIRTUAL_PRIM_VALUE );	// isAttributeInitialized //Symbol.VALUE 
 		Data.valueVirtPrim.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }); 
 		
+		// TODO this box-object is only a dummy ...
 		Data.valueVirtComp.means( CommandSymbols.VIRTUAL_COMP_VALUE );	// isAttributeInitialized //Symbol.VALUE 
 		Data.valueVirtComp.registerParameters(new String[]{ CommandParameterSymbols.NAME }); 
 		
+		// TODO this box-object is only a dummy ...
 		Data.contract.means( CommandSymbols.CONTRACT );	// isAttributeInitialized //Symbol.VALUE 
 		Data.contract.registerParameters(new String[]{ CommandParameterSymbols.NAME }); 		
-		/* TODO
-		// value
-			 VIRTUAL_COMP_VALUE         { CommandParameterSymbols.NAME }, //	CommandSymbols.VIRTUAL_COMP_VALUE
-			 VIRTUAL_PRIM_VALUE         { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }, //	CommandSymbols.VIRTUAL_PRIM_VALUE
- 
-  		// CONTRACT                   { CommandParameterSymbols.NAME } //CommandSymbols.CONTRACT
-		*/
+
 		// TODO this box-object is only a dummy ...
 		Control.then.means(Symbol.THEN);
+		// TODO this box-object is only a dummy ...
 		Control.otherwise.means(Symbol.OTHERWISE);
+
+		
+		
 		
 		CodeModel.buildBool();
 		CodeModel.buildNumber();
