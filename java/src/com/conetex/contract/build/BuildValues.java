@@ -2,6 +2,8 @@ package com.conetex.contract.build;
 
 import java.util.List;
 
+import com.conetex.contract.build.BuildFunctions.Data;
+import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.PrototypeWasInitialized;
 import com.conetex.contract.build.exceptionLang.UnknownCommand;
 import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
@@ -16,7 +18,7 @@ import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class BuildValues {
-	public static List<Value<?>> createValues(CodeNode n, Complex type, Structure data) throws PrototypeWasInitialized, UnknownCommandParameter, UnknownCommand {
+	public static List<Value<?>> createValues(CodeNode n, Complex type, Structure data) throws AbstractInterpreterException {
 		String name = n.getCommand();
 		if (type == null) {
 			System.err.println("can not recognize type of " + name);
@@ -29,15 +31,13 @@ public class BuildValues {
 
 		for (CodeNode c : n.getChildNodes()) {
 
+			Value<?> v = Data.complex.valueCreateChild(c, type, data);
+			/*
 			if (c.isAttributeInitialized() || c.isFunction() || c.isValue()) {
 				System.out.println("createValues " + c.getCommand());
-				Value<?> v = createValue(c, type, data);
-				if (v != null) {
-					/*
-					 * old values.add( v );
-					 */
-				}
+				Value<?> vOld = createValue(c, type, data);
 			}
+			*/
 		}
 
 		data.fillMissingValues();
@@ -55,49 +55,19 @@ public class BuildValues {
 		return null;
 	}
 
-	public static Value<?> createValue(CodeNode n, Complex parentTyp, Structure parentData) throws PrototypeWasInitialized, UnknownCommandParameter, UnknownCommand {
+	public static Value<?> createValue(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
 
 		// + " (local: " + n.getLocalName() + ")";
 
 		String name = n.getCommand();
-
-		if (name.equals(Symbol.FUNCTION)) {
-			name = n.getName();
-
-			FunctionAttributes type = FunctionAttributes.getInstance(parentTyp.getName() + "." + name);
-			if (type != null) {
-				// Structure re = ((AttributeComplex) id).createValue(parentData);
-				Structure re = Structure.create(type, null);
-				// new
-				createValues(n, (Complex) type, re);
-				try {
-					// TODO hier passier garnix weil parentData keinen platz für die funktion hat...
-					parentData.set(name, re);
-				}
-				catch (Invalid e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				// TODO der cast ist scheißßß
-				((FunctionAttributes) type).setPrototype(re);
-
-				/*
-				 * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
-				 * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
-				 * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
-				 * Auto-generated catch block e.printStackTrace(); }
-				 */
-
-				return re;
-			}
-
-			return null;
-		}
-
-		if (n.isAttribute() || n.isAttributeInitialized() || name.equals(CommandSymbols.VIRTUAL_PRIM_VALUE) || name.equals(CommandSymbols.VIRTUAL_COMP_VALUE)) {
+		
+		if (n._isAttribute() || n._isAttributeInitialized() || name.equals(CommandSymbols.VIRTUAL_PRIM_VALUE) || name.equals(CommandSymbols.VIRTUAL_COMP_VALUE)) {
 			name = n.getName();
 		}
+		else{
+			System.err.println("shitty call of this " + name);
+		}
+		
 
 		Attribute<?> id = parentTyp.getSubAttribute(name); //
 
@@ -149,4 +119,48 @@ public class BuildValues {
 
 	}
 
+	public static Value<?> createValue4Function(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
+
+		// + " (local: " + n.getLocalName() + ")";
+
+		//String name = n.getCommand();
+
+		//if (name.equals(Symbol.FUNCTION)) {
+			String name = n.getName();
+
+			FunctionAttributes type = FunctionAttributes.getInstance(parentTyp.getName() + "." + name);
+			if (type != null) {
+				// Structure re = ((AttributeComplex) id).createValue(parentData);
+				Structure re = Structure.create(type, null);
+				// new
+				createValues(n, (Complex) type, re);
+				try {
+					// TODO hier passier garnix weil parentData keinen platz für die funktion hat...
+					parentData.set(name, re);
+				}
+				catch (Invalid e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				// TODO der cast ist scheißßß
+				((FunctionAttributes) type).setPrototype(re);
+
+				/*
+				 * old List<Value<?>> subvalues = createValues(n, (Complex) type, re);
+				 * Value<?>[] theValues = new Value<?>[ subvalues.size() ]; subvalues.toArray(
+				 * theValues ); try { re.set(theValues); } catch (Invalid e) { // TODO
+				 * Auto-generated catch block e.printStackTrace(); }
+				 */
+
+				return re;
+			}
+
+			return null;
+		//}
+
+		//return null;
+	}
+
+	
 }

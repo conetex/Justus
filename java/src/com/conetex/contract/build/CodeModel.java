@@ -19,7 +19,14 @@ import com.conetex.contract.build.BuildFunctions.Reference;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.DublicateOperation;
 import com.conetex.contract.build.exceptionLang.OperationMeansNotCalled;
+import com.conetex.contract.build.exceptionLang.UnexpectedSubOperation;
+import com.conetex.contract.build.exceptionLang.UnknownCommand;
+import com.conetex.contract.data.Attribute;
+import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
+import com.conetex.contract.data.type.FunctionAttributes;
+import com.conetex.contract.data.type.Primitive;
+import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 
 public class CodeModel {
@@ -57,18 +64,30 @@ public class CodeModel {
 			}
 		}
 
-		public final Accessible<? extends S> createChild(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+		private final Egg<? extends S> getChildBuilder(CodeNode n) throws AbstractInterpreterException {
 			String name = n.getCommand();
 			Egg<? extends S> s = this.childBuilder.get(name);
 			if (s == null) {
-				System.err.println("inner Operation '" + name + "' not found in " + this.getName());
-				return null;
+				throw new UnexpectedSubOperation("inner Operation '" + name + "' not found in " + this.getName());
 			}
-			return s.createThis(n, parentTyp);
+			return s;
+		}
+		
+		public final Accessible<? extends S> functionCreateChild(CodeNode child, Complex parentTyp) throws AbstractInterpreterException {
+			Egg<? extends S> cb = this.getChildBuilder(child);
+			return cb.functionCreateThis(child, parentTyp);
 		}
 
-		public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException;
-
+		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+			Egg<? extends S> cb = this.getChildBuilder(child);
+			return cb.attributeCreateThis(child, unformedComplexTypes);
+		}
+		
+		public final Value<?> valueCreateChild(CodeNode child, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
+			Egg<? extends S> cb = this.getChildBuilder(child);			
+			return cb.valueCreateThis(child, parentTyp, parentData);
+		}
+		
 	}
 
 
@@ -94,18 +113,43 @@ public class CodeModel {
 			return this.name;
 		}
 
-
-		
-		final Accessible<? extends T> createThis(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
-			if (!this.meaning.contains(n.getCommand())) {
-				System.err.println("Operation " + n.getCommand() + " not found!");
-				return null;
+		private final void checkMeaning(CodeNode c) throws AbstractInterpreterException{
+			if (!this.meaning.contains(c.getCommand())) {
+				System.err.println("Operation " + c.getCommand() + " not found!");
+				throw new UnknownCommand("Operation " + c.getCommand() + " not found!");
 			}
-			return this.create(n, parentTyp);
 		}
-
-		public abstract Accessible<? extends T> create(CodeNode n, Complex parentTyp) throws AbstractInterpreterException;
-
+		
+		final Attribute<?> attributeCreateThis(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException{
+			this.checkMeaning(c);
+			return this.attributeCreate(c, unformedComplexTypes);
+		}
+		
+		public Attribute<?> attributeCreate(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException{
+			return null;
+		}
+		
+		final Accessible<? extends T> functionCreateThis(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+			this.checkMeaning(n);
+			return this.functionCreate(n, parentTyp);
+		}
+		
+		public Accessible<? extends T> functionCreate(CodeNode n, Complex parentTyp) throws AbstractInterpreterException{
+			return null;
+		}
+		
+		final Value<?> valueCreateThis(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
+			this.checkMeaning(n);
+			return this.valueCreate(n, parentTyp, parentData);
+		}
+		
+		public Value<?> valueCreate(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException{
+			if (n._isAttributeInitialized() || n.isFunction() || n._isValue()) {
+				System.err.println("this call should go to a concret implementation of build " + n.getCommand());
+			}
+			return null;
+		}
+				
 		final Set<String> keySet() {
 			return this.meaning;
 		}
@@ -149,6 +193,9 @@ public class CodeModel {
 		public final String[] getParameters() {
 			return this.parameterNames;
 		}
+		
+		
+
 		
 	}
 	
@@ -447,7 +494,24 @@ public class CodeModel {
 
 		Data.complex.contains(Fun.unknown);
 		Data.complex.contains(Data.complex);
+		
+		Data.complex.contains(Data.attribute);
+		Data.complex.contains(Data.value);
+		Data.complex.contains(Data.valueVirtComp);
 
+		Data.complex.contains(FunCall.whatEverCall);
+		Data.complex.contains(Assign.whatEverAssigment);
+		Data.complex.contains(Control.unknownLoop);
+		Data.complex.contains(Control.unknownIf);
+		Data.complex.contains(FunReturn.whatEverReturn);		
+		//Data.complex.contains(Control.unknownIf);		
+		Data.complex.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
+		Data.complex.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
+		Data.complex.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
+		
+		Data.complex.contains(Data.valueVirtPrim);
+		
+		//Data.contract.contains( Data.valueVirtComp );
 	}
 	
 }

@@ -7,7 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.conetex.contract.build.BuildFunctions.Data;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionLang.UnknownCommand;
+import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.FunctionAttributes;
@@ -37,6 +40,10 @@ public class BuildTypes {
 		Recursive<Run> recursive = new Recursive<>();
 		recursive.function = (CodeNode node, Complex parent) -> {
 			for (CodeNode c : node.getChildNodes()) {
+				
+				// TODO
+				  hier we go ...
+				  
 				if (c.isType() || c.isFunction()) {
 					Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);
 					if (complexType != null) {
@@ -82,8 +89,8 @@ public class BuildTypes {
 
 		return re;
 	}
-
-	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> referringComplexTypeNames) throws AbstractInterpreterException {
+	
+	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> _referringComplexTypeNames) throws AbstractInterpreterException {
 		String typeName = n.getName();
 		if (typeName == null) {
 			// TODO Exception
@@ -100,7 +107,14 @@ public class BuildTypes {
 		}
 		List<Attribute<?>> identifiers = new LinkedList<>();
 		// Map<String, Attribute<?>> functions = new HashMap<>();
+		
 		for (CodeNode c : n.getChildNodes()) {
+			Attribute<?> id = Data.complex.attributeCreateChild(c, unformedComplexTypes);
+			//Attribute<?> id = createAttribute(c, unformedComplexTypes);
+			if (id != null) {
+				identifiers.add(id);
+			}
+			/*
 			String idTypeName = null;
 			String idName = null;
 			if (c.isAttribute() || c.isAttributeInitialized()) {
@@ -137,14 +151,11 @@ public class BuildTypes {
 				// TODO BUG !!!
 				// Attribute<?> fun =
 				FunctionAttributes.createAttribute(idName, idTypeName, unformedComplexTypes);
-				/*
-				 * if(fun != null) { //ComplexFunction.functions.put(idTypeName, fun);//typeName
-				 * + "." + functions.put(fun.getLabel().get(), fun);//typeName + "." + }
-				 */
 			}
 			else {
 				continue;
 			}
+		    */
 		}
 		Attribute<?>[] theOrderedIdentifiers = new Attribute<?>[identifiers.size()];
 		identifiers.toArray(theOrderedIdentifiers);

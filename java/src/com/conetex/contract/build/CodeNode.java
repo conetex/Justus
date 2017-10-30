@@ -224,7 +224,7 @@ public class CodeNode {
 		return false;
 	}
 
-	public boolean isAttribute() {
+	public boolean _isAttribute() {
 		return isAttribute(this.command);
 	}
 
@@ -232,7 +232,7 @@ public class CodeNode {
 		return theCommand.equals(Symbol.ATTRIBUTE);
 	}
 
-	public boolean isAttributeInitialized() {
+	public boolean _isAttributeInitialized() {
 		return isAttributeInitialized(this.command);
 	}
 
@@ -256,7 +256,7 @@ public class CodeNode {
 		return false;
 	}
 
-	public boolean isValue() {
+	public boolean _isValue() {
 		return isValue(this.command);
 	}
 
