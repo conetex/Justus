@@ -8,23 +8,24 @@ import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class WhenOtherwise<V> extends When<V> {
+public class WhenOtherwise<V> extends When<V>{
 
 	private Accessible<?>[] stepsElse;
 
 	private List<ReturnAbstract<V>> returnsElse;
 
-	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass)
+	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition,
+			Class<SV> theRawTypeClass)
 			throws CastException {
-		if (theStepsIf == null) {
+		if(theStepsIf == null){
 			System.err.println("theStepsIf is null");
 			return null;
 		}
-		if (theStepsElse == null) {
+		if(theStepsElse == null){
 			System.err.println("theStepsElse is null");
 			return null;
 		}
-		if (theCondition == null) {
+		if(theCondition == null){
 			System.err.println("theName is null");
 			return null;
 		}
@@ -34,7 +35,8 @@ public class WhenOtherwise<V> extends When<V> {
 		return re;
 	}
 
-	private WhenOtherwise(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> theReturnsIf, Accessible<?>[] theStepsElse, List<ReturnAbstract<V>> theReturnsElse,
+	private WhenOtherwise(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> theReturnsIf, Accessible<?>[] theStepsElse,
+			List<ReturnAbstract<V>> theReturnsElse,
 			Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
 		super(theStepsIf, theReturnsIf, theCondition, theRawTypeClass);
 		this.stepsElse = theStepsElse;
@@ -44,14 +46,14 @@ public class WhenOtherwise<V> extends When<V> {
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = super.condition.getFrom(thisObject);
-		if (res == null) {
+		if(res == null){
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
 		}
-		if (res.booleanValue()) {
+		if(res.booleanValue()){
 			return Function.doSteps(super.stepsIf, super.returnsIf, r, thisObject);
 		}
-		else {
+		else{
 			return Function.doSteps(this.stepsElse, this.returnsElse, r, thisObject);
 		}
 	}

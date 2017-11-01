@@ -27,9 +27,9 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 
-public class CodeModel {
-	
-	public static abstract class Box<T, S> extends Egg<T> {
+public class CodeModel{
+
+	public static abstract class Box<T, S> extends Egg<T>{
 
 		private Map<String, Egg<? extends S>> childBuilder = new HashMap<>();
 
@@ -38,12 +38,12 @@ public class CodeModel {
 		}
 
 		public Box(String theName, int i) {
-			
+
 			super(theName);
 		}
-		
+
 		public final void contains(String theOperationName, Egg<? extends S> b) {
-			if (this.childBuilder.containsKey(theOperationName)) {
+			if(this.childBuilder.containsKey(theOperationName)){
 				System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
 			}
 			this.childBuilder.put(theOperationName, b);
@@ -51,10 +51,10 @@ public class CodeModel {
 
 		public final void contains(Egg<? extends S> b) throws OperationMeansNotCalled {
 			Set<String> keySet = b.keySet();
-			if (keySet.size() == 0) {
+			if(keySet.size() == 0){
 				throw new OperationMeansNotCalled(b.getName());
 			}
-			for (String s : b.keySet()) {
+			for(String s : b.keySet()){
 				this.contains(s, b);
 			}
 		}
@@ -62,12 +62,12 @@ public class CodeModel {
 		private final Egg<? extends S> getChildBuilder(CodeNode n) throws AbstractInterpreterException {
 			String name = n.getCommand();
 			Egg<? extends S> s = this.childBuilder.get(name);
-			if (s == null) {
+			if(s == null){
 				throw new UnexpectedSubOperation("inner Operation '" + name + "' not found in " + this.getName());
 			}
 			return s;
 		}
-		
+
 		public final Accessible<? extends S> functionCreateChild(CodeNode child, Complex parentTyp) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.functionCreateThis(child, parentTyp);
@@ -77,30 +77,29 @@ public class CodeModel {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.attributeCreateThis(child, unformedComplexTypes);
 		}
-		
+
 		public final Value<?> valueCreateChild(CodeNode child, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
-			Egg<? extends S> cb = this.getChildBuilder(child);			
+			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.valueCreateThis(child, parentTyp, parentData);
 		}
-		
+
 		public final Complex complexCreateChild(CodeNode child, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.complexCreateThis(child, parent, unformedComplexTypes);
 		}
-		
-	}
 
+	}
 
 	public static abstract class Egg<T> {
 
 		private static Map<String, List<Egg<?>>> instances = new HashMap<>();
 
-		public static List<Egg<?>> getInstance(String command){
+		public static List<Egg<?>> getInstance(String command) {
 			return Egg.instances.get(command);
 		}
-		
+
 		private String name;
-		
+
 		private String[] parameterNames;
 
 		private Set<String> meaning = new HashSet<>();
@@ -113,56 +112,56 @@ public class CodeModel {
 			return this.name;
 		}
 
-		private final void checkMeaning(CodeNode c) throws AbstractInterpreterException{
-			if (!this.meaning.contains(c.getCommand())) {
+		private final void checkMeaning(CodeNode c) throws AbstractInterpreterException {
+			if(!this.meaning.contains(c.getCommand())){
 				System.err.println("Operation " + c.getCommand() + " not found!");
 				throw new UnknownCommand("Operation " + c.getCommand() + " not found!");
 			}
 		}
-		
-		final Attribute<?> attributeCreateThis(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException{
+
+		final Attribute<?> attributeCreateThis(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
 			this.checkMeaning(c);
 			return this.attributeCreate(c, unformedComplexTypes);
 		}
-		
-		public Attribute<?> attributeCreate(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException{
+
+		public Attribute<?> attributeCreate(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
 			return null;
 		}
-		
+
 		final Accessible<? extends T> functionCreateThis(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
 			this.checkMeaning(n);
 			return this.functionCreate(n, parentTyp);
 		}
-		
-		public Accessible<? extends T> functionCreate(CodeNode n, Complex parentTyp) throws AbstractInterpreterException{
+
+		public Accessible<? extends T> functionCreate(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
 			return null;
 		}
-		
+
 		final Value<?> valueCreateThis(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			this.checkMeaning(n);
 			return this.valueCreate(n, parentTyp, parentData);
 		}
-		
-		public Value<?> valueCreate(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException{
+
+		public Value<?> valueCreate(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			return null;
 		}
-		
+
 		final Complex complexCreateThis(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
 			this.checkMeaning(n);
 			return this.complexCreate(n, parent, unformedComplexTypes);
 		}
-		
+
 		public Complex complexCreate(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
 			return null;
 		}
-				
+
 		final Set<String> keySet() {
 			return this.meaning;
 		}
 
 		public final void means(String theOperationName) throws DublicateOperation {
-			if (this.meaning.contains(theOperationName)) {
-				throw new DublicateOperation( "duplicate operation '" + theOperationName + "' in " + this.getName() );
+			if(this.meaning.contains(theOperationName)){
+				throw new DublicateOperation("duplicate operation '" + theOperationName + "' in " + this.getName());
 			}
 			this.meaning.add(theOperationName);
 			List<Egg<?>> instanceList = Egg.getInstance(theOperationName);
@@ -170,44 +169,44 @@ public class CodeModel {
 				instanceList = new LinkedList<>();
 				Egg.instances.put(theOperationName, instanceList);
 			}
-			instanceList.add(this);			
+			instanceList.add(this);
 		}
 
 		public final void means(String[] theOperationNames) throws DublicateOperation {
-			for (String theOperationName : theOperationNames) {
+			for(String theOperationName : theOperationNames){
 				this.means(theOperationName);
 			}
 		}
-		
+
 		public final void registerParameters(String[] theParameterNames) {
-			if (this.parameterNames != null) {
+			if(this.parameterNames != null){
 				System.err.println("duplicate Param call");
 			}
 			this.parameterNames = theParameterNames;
 		}
 
 		public final int getParameterIndex(String p) {
-			for (int j = 0; j < this.parameterNames.length; j++) {
-				if (this.parameterNames[j] == p) {
+			for(int j = 0; j < this.parameterNames.length; j++){
+				if(this.parameterNames[j] == p){
 					return j;
 				}
 			}
 			return -1;
 		}
-		
+
 		public final String[] getParameters() {
 			return this.parameterNames;
 		}
-				
+
 		public final int getParameterCount() {
 			if(this.parameterNames == null){
 				return 0;
 			}
 			return this.parameterNames.length;
 		}
-		
+
 	}
-	
+
 	static void buildBool() throws AbstractInterpreterException {
 		Expression.boolExpression.contains(Expression.boolExpression);
 		Expression.boolExpression.contains(Expression.boolComparsion);
@@ -272,9 +271,9 @@ public class CodeModel {
 		Fun.structure.contains(Expression.boolComparsion);// TODO eigentlich nur
 															// hinter Zuweisung
 		Fun.whatEver.contains(Expression.boolExpression);// TODO eigentlich nur
-														// hinter Zuweisung
+															// hinter Zuweisung
 		Fun.whatEver.contains(Expression.boolComparsion);// TODO eigentlich nur
-														// hinter Zuweisung
+															// hinter Zuweisung
 	}
 
 	static void buildNumber() throws AbstractInterpreterException {
@@ -380,29 +379,29 @@ public class CodeModel {
 		Fun.whatEver.contains(FunReturn.whatEverReturn);
 		Fun.whatEver.contains(Control.loop);
 		Fun.whatEver.contains(Control.when);
-		
+
 		Fun.whatEver.contains(Data.attribute);
 		Fun.whatEver.contains(Data.value);
 		Fun.whatEver.contains(Data.valueVirtComp);
 		Fun.whatEver.contains(Data.complex);
 		Fun.whatEver.contains(Fun.whatEver);
-		
+
 		Fun.noReturn.contains(Assign.whatEverAssigment);
 		Fun.noReturn.contains(FunCall.whatEverCall);
 		Fun.noReturn.contains(Control.loop);
 		Fun.noReturn.contains(Control.when);
 
 	}
-		
+
 	public static void build() throws AbstractInterpreterException {
 
-		Expression.numberExpession.means(new String[] { Symbols.comPlus(), Symbols.comMinus(), Symbols.comTimes(), Symbols.comDividedBy(), Symbols.comRemains() });
+		Expression.numberExpession
+				.means(new String[] { Symbols.comPlus(), Symbols.comMinus(), Symbols.comTimes(), Symbols.comDividedBy(), Symbols.comRemains() });
 		Expression.boolNullCheck.means(Symbols.comIsNull());
 		Expression.boolComparsion.means(new String[] { Symbols.comSmaller(), Symbols.comGreater(), Symbols.comEqual() });
 		Expression.boolExpression.means(new String[] { Symbols.comAnd(), Symbols.comOr(), Symbols.comXOr(), Symbols.comNot() });
-		
-		
-		String[] params4Reference = new String[]{ Symbols.paramValue() };
+
+		String[] params4Reference = new String[] { Symbols.paramValue() };
 		Reference.structureRef.means(Symbols.comReference());
 		Reference.structureRef.registerParameters(params4Reference);
 		Reference.numberRef.means(Symbols.comReference());
@@ -411,10 +410,8 @@ public class CodeModel {
 		Reference.boolRef.registerParameters(params4Reference);
 		Reference.whatEverRef.means(Symbols.comReference());
 		Reference.whatEverRef.registerParameters(params4Reference);
-		
-		
-		
-		String[] params4Const = new String[]{ Symbols.paramName(), Symbols.paramValue() };
+
+		String[] params4Const = new String[] { Symbols.paramName(), Symbols.paramValue() };
 		Constant.numberConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng() });
 		Constant.numberConst.registerParameters(params4Const);
 		Constant.boolConst.means(Symbols.comBool());
@@ -423,27 +420,20 @@ public class CodeModel {
 		Constant.objConst.registerParameters(params4Const);
 		Constant.whatEverConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng(), Symbols.comBool(), Symbols.comStructure() });
 		Constant.whatEverConst.registerParameters(params4Const);
-		
-		
-		
+
 		Assign.whatEverAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
 		Assign.structureAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
 		Assign.numberAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
 		Assign.boolAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
-		
-		
-		
+
 		Control.when.means(Symbols.comWhen());
 		Control.loop.means(Symbols.comLoop());
-		
-		
-		
+
 		FunReturn.whatEverReturn.means(Symbols.comReturn());
 		FunReturn.structureReturn.means(Symbols.comReturn());
 		FunReturn.numberReturn.means(Symbols.comReturn());
 		FunReturn.boolReturn.means(Symbols.comReturn());
-		
-		
+
 		String[] params4Function = { Symbols.paramName(), Symbols.paramType() };
 		Fun.noReturn.means(Symbols.comFunction());
 		Fun.noReturn.registerParameters(params4Function);
@@ -456,7 +446,6 @@ public class CodeModel {
 		Fun.whatEver.means(Symbols.comFunction());
 		Fun.whatEver.registerParameters(params4Function);
 
-		
 		String[] params4Call = { Symbols.paramName(), Symbols.paramType() };
 		FunCall.structureCall.means(Symbols.comCall());
 		FunCall.structureCall.registerParameters(params4Call);
@@ -468,52 +457,43 @@ public class CodeModel {
 		FunCall.voidCall.registerParameters(params4Call);
 		FunCall.whatEverCall.means(Symbols.comCall());
 		FunCall.whatEverCall.registerParameters(params4Call);
-		
-		
-		
+
 		Data.complex.means(Symbols.comComplex());
-		Data.complex.registerParameters(new String[]{ Symbols.paramName() });
+		Data.complex.registerParameters(new String[] { Symbols.paramName() });
 
-		
 		// Attribute
-		Data.attribute.means(Symbols.comAttribute());	// isAttribute //Symbol.ATTRIBUTE               , 
-		Data.attribute.registerParameters(new String[]{ Symbols.paramName(), Symbols.paramType() }); 
-		
-		// TODO this box-object is only a dummy ...
-		Data.value.means( Symbols.comValue() );	// isAttributeInitialized //Symbol.VALUE 
-		Data.value.registerParameters(new String[]{ Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() }); 
+		Data.attribute.means(Symbols.comAttribute()); // isAttribute //Symbol.ATTRIBUTE               , 
+		Data.attribute.registerParameters(new String[] { Symbols.paramName(), Symbols.paramType() });
 
 		// TODO this box-object is only a dummy ...
-		Data.valueVirtPrim.means( Symbols.comvirtualPrimValue() );	// isAttributeInitialized //Symbol.VALUE 
-		Data.valueVirtPrim.registerParameters(new String[]{ Symbols.paramName(), Symbols.paramValue() }); 
-		
+		Data.value.means(Symbols.comValue()); // isAttributeInitialized //Symbol.VALUE 
+		Data.value.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
+
 		// TODO this box-object is only a dummy ...
-		Data.valueVirtComp.means( Symbols.comVirtualCompValue() );	// isAttributeInitialized //Symbol.VALUE 
-		Data.valueVirtComp.registerParameters(new String[]{ Symbols.paramName() }); 
-		
+		Data.valueVirtPrim.means(Symbols.comvirtualPrimValue()); // isAttributeInitialized //Symbol.VALUE 
+		Data.valueVirtPrim.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue() });
+
 		// TODO this box-object is only a dummy ...
-		Data.contract.means( Symbols.comContract() );	// isAttributeInitialized //Symbol.VALUE 
-		Data.contract.registerParameters(new String[]{ Symbols.paramName() }); 		
+		Data.valueVirtComp.means(Symbols.comVirtualCompValue()); // isAttributeInitialized //Symbol.VALUE 
+		Data.valueVirtComp.registerParameters(new String[] { Symbols.paramName() });
+
+		// TODO this box-object is only a dummy ...
+		Data.contract.means(Symbols.comContract()); // isAttributeInitialized //Symbol.VALUE 
+		Data.contract.registerParameters(new String[] { Symbols.paramName() });
 
 		// TODO this box-object is only a dummy ...
 		Control.then.means(Symbols.comThen());
 		// TODO this box-object is only a dummy ...
 		Control.otherwise.means(Symbols.comOtherwise());
 
-		
-		
-		
 		CodeModel.buildBool();
 		CodeModel.buildNumber();
 		CodeModel.buildStruct();
 		CodeModel.buildUnknown();
 
-
-		
-		
 		Data.complex.contains(Data.complex);
 		Data.complex.contains(Fun.whatEver);
-		
+
 		Data.complex.contains(Data.attribute);
 		Data.complex.contains(Data.value);
 		Data.complex.contains(Data.valueVirtComp);
@@ -522,13 +502,13 @@ public class CodeModel {
 		Data.complex.contains(Assign.whatEverAssigment);
 		Data.complex.contains(Control.loop);
 		Data.complex.contains(Control.when);
-		Data.complex.contains(FunReturn.whatEverReturn);		
+		Data.complex.contains(FunReturn.whatEverReturn);
 		Data.complex.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
 		Data.complex.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
 		Data.complex.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
-		
+
 		Data.complex.contains(Data.valueVirtPrim);
-		
+
 	}
-	
+
 }

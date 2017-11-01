@@ -11,10 +11,10 @@ import com.conetex.contract.lang.math.ElementaryArithmetic;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
+public class SetableValue<T> extends AccessibleValue<T> implements Setable<T>{
 
 	public static <T> SetableValue<T> create(String thePath, Class<T> theClass) {
-		if (thePath == null) {
+		if(thePath == null){
 			return null;
 		}
 		return new SetableValue<>(thePath, theClass);
@@ -26,7 +26,7 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T> {
 
 	public T setTo(Structure thisObject, T newValue) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
-		if (value == null) {
+		if(value == null){
 			return null;
 		}
 		// just 4 debug:

@@ -17,40 +17,39 @@ import com.conetex.contract.data.value.Lng;
 import com.conetex.contract.data.value.MailAddress64;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
+public class Primitive<T> extends AbstractType<T>{
 
-public class Primitive<T> extends AbstractType<T> {
-
-	public static Primitive<?>[] types = { new Primitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>() {
+	public static Primitive<?>[] types = { new Primitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>(){
 		@Override
 		public Bool createValueImp() {
 			return new Bool();
 		}
-	}), new Primitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>() {
+	}), new Primitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
 		@Override
 		public Int createValueImp() {
 			return new Int();
 		}
-	}), new Primitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>() {
+	}), new Primitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>(){
 		@Override
 		public Lng createValueImp() {
 			return new Lng();
 		}
-	}), new Primitive<>(ASCII8.class, String.class, new PrimitiveValueFactory<String>() {
+	}), new Primitive<>(ASCII8.class, String.class, new PrimitiveValueFactory<String>(){
 		@Override
 		public ASCII8 createValueImp() {
 			return new ASCII8();
 		}
-	}), new Primitive<>(Label.class, String.class, new PrimitiveValueFactory<String>() {
+	}), new Primitive<>(Label.class, String.class, new PrimitiveValueFactory<String>(){
 		@Override
 		public Label createValueImp() {
 			return new Label();
 		}
-	}), new Primitive<>(Base64_256.class, String.class, new PrimitiveValueFactory<String>() {
+	}), new Primitive<>(Base64_256.class, String.class, new PrimitiveValueFactory<String>(){
 		@Override
 		public Base64_256 createValueImp() {
 			return new Base64_256();
 		}
-	}), new Primitive<>(MailAddress64.class, String.class, new PrimitiveValueFactory<String>() {
+	}), new Primitive<>(MailAddress64.class, String.class, new PrimitiveValueFactory<String>(){
 		@Override
 		public MailAddress64 createValueImp() {
 			return new MailAddress64();
@@ -71,7 +70,7 @@ public class Primitive<T> extends AbstractType<T> {
 
 		Class<?> theClass = getValueImplementClass(dataType);
 		Primitive<?> re = getInstanceWild(theClass);
-		if (re != null) {
+		if(re != null){
 			return re;
 		}
 		return null;
@@ -83,16 +82,16 @@ public class Primitive<T> extends AbstractType<T> {
 		Class<?> theClass = null;
 
 		String className = Bool.class.getPackage().getName() + "." + dataType;
-		try {
+		try{
 			theClass = Class.forName(className);
 		}
-		catch (ClassNotFoundException e) {
+		catch(ClassNotFoundException e){
 			// TODO Auto-generated catch block
 			System.err.println("can not find " + className);
 			// e.printStackTrace();
 			return null;
 		}
-		catch (NoClassDefFoundError e) {
+		catch(NoClassDefFoundError e){
 			// TODO Auto-generated catch block
 			System.err.println("can not find " + className);
 			// e.printStackTrace();
@@ -104,8 +103,8 @@ public class Primitive<T> extends AbstractType<T> {
 	}
 
 	public static <W> Primitive<W> getInstance(Class<?> theClass, Class<W> rawType) throws AbstractTypException {
-		for (int i = 0; i < types.length; i++) {
-			if (types[i].getValueImplementClass() == theClass) {
+		for(int i = 0; i < types.length; i++){
+			if(types[i].getValueImplementClass() == theClass){
 				return Cast.<W>toTypedPrimitive(Primitive.types[i], rawType);
 			}
 		}
@@ -113,12 +112,12 @@ public class Primitive<T> extends AbstractType<T> {
 	}
 
 	public static <W> Primitive<W> getInstanceAtRunTime(Class<?> theClass, Class<W> rawType) {
-		for (int i = 0; i < types.length; i++) {
-			if (types[i].getValueImplementClass() == theClass) {
-				try {
+		for(int i = 0; i < types.length; i++){
+			if(types[i].getValueImplementClass() == theClass){
+				try{
 					return Cast.<W>toTypedPrimitive(Primitive.types[i], rawType);
 				}
-				catch (AbstractTypException e) {
+				catch(AbstractTypException e){
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -128,8 +127,8 @@ public class Primitive<T> extends AbstractType<T> {
 	}
 
 	public static Primitive<?> getInstanceWild(Class<?> theClass) {
-		for (int i = 0; i < types.length; i++) {
-			if (types[i].getValueImplementClass() == theClass) {
+		for(int i = 0; i < types.length; i++){
+			if(types[i].getValueImplementClass() == theClass){
 				return Primitive.types[i];
 			}
 		}
@@ -138,32 +137,32 @@ public class Primitive<T> extends AbstractType<T> {
 
 	public static Attribute<?> createAttribute(String attributeName, String typeName) throws EmptyLabelException, NullLabelException {
 		// SimpleType
-		if (typeName == null || typeName.length() == 0) {
+		if(typeName == null || typeName.length() == 0){
 			// TODO exception
 			return null;
 		}
-		if (attributeName == null || attributeName.length() == 0) {
+		if(attributeName == null || attributeName.length() == 0){
 			// TODO exception
 			return null;
 		}
 
 		Primitive<?> simpleType = Primitive.getInstanceWild(typeName);
-		if (simpleType == null) {
+		if(simpleType == null){
 			System.err.println("unknown simple Type " + typeName);
 			return null;
 		}
 		Label str = new Label();
-		try {
+		try{
 			str.set(attributeName);
 		}
-		catch (Invalid e) {
+		catch(Invalid e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 		Attribute<?> re = null;
 		re = simpleType.createAttribute(str);
-		
+
 		System.out.println("Primitive.createIdentifier " + attributeName + " " + typeName + " ==> " + re);
 		return re;
 	}
@@ -217,7 +216,7 @@ public class Primitive<T> extends AbstractType<T> {
 	public static Class<?> getRawTypeClass(AbstractType<?> t) throws UnknownType {
 		Class<? extends Value<?>> clazzChild = t.getValueImplementClass();
 		Primitive<?> pri = Primitive.getInstanceWild(clazzChild);
-		if (pri == null) {
+		if(pri == null){
 			// System.err.println("ERR: can not get type of '" + n.getValue() +
 			// "'");
 			throw new UnknownType(clazzChild.toString());

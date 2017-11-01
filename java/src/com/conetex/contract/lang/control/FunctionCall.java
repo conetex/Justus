@@ -11,20 +11,20 @@ import com.conetex.contract.lang.assign.AbstractAssigment;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
+public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 
 	public static <SV> FunctionCall<SV> create(Function<SV> theFunction, AccessibleValue<Structure> theReference,
 			List<AbstractAssigment<? extends Object>> assig) {
 		// TODO drop this
-		if (theFunction == null) {
+		if(theFunction == null){
 			System.err.println("theFunction is null");
 			return null;
 		}
-		if (theReference == null) {
+		if(theReference == null){
 			System.err.println("theReference is null");
 			return null;
 		}
-		if (assig == null) {
+		if(assig == null){
 			System.err.println("params is null");
 			return null;
 		}
@@ -53,7 +53,7 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 		// block hier ...
 
 		Structure obj = this.reference.getFrom(thisObject);
-		if (obj == null) {
+		if(obj == null){
 			System.err.println("Call getFrom ERROR");
 			return null;
 		}
@@ -74,13 +74,13 @@ public class FunctionCall<V> extends Accessible<V> { // V extends Value<?>
 
 		Structure thisObject = z.utilizeStructure(obj); // .prototype;//thisObject.getStructure(this.name);
 
-		if (thisObject == null) {
+		if(thisObject == null){
 			System.err.println("Function Structure getFrom: no access to data for function " + this.function.getName());
 			return null;
 		}
 		// thisObjectB = thisObjectB.copy();
 
-		for (AbstractAssigment<? extends Object> a : this.paramAssigments) {
+		for(AbstractAssigment<? extends Object> a : this.paramAssigments){
 			a.getFrom(thisObject);
 		}
 

@@ -21,30 +21,30 @@ public abstract class AbstractType<T> {
 	public abstract Attribute<?> getSubAttribute(String aName);
 
 	public static <V> Attribute<V> createIdentifier(Label theName, Primitive<V> thisObj) throws NullLabelException, EmptyLabelException {
-		if (theName == null || theName.get() == null) {
+		if(theName == null || theName.get() == null){
 			throw new NullLabelException(AbstractType.class.getName() + ".createIdentifier()");
 		}
-		if (theName.get().length() < 1) {
+		if(theName.get().length() < 1){
 			throw new EmptyLabelException(AbstractType.class.getName() + ".createIdentifier()");
 		}
 		return AttributePrimitive.<V>create(theName, thisObj);
 	}
 
 	public static Attribute<Value<?>[]> _createAttribute2(Label theName, Complex thisObj) throws NullLabelException, EmptyLabelException {
-		if (theName == null || theName.get() == null) {
+		if(theName == null || theName.get() == null){
 			throw new NullLabelException(AbstractType.class.getName() + "._createAttribute2()");
 		}
-		if (theName.get().length() < 1) {
+		if(theName.get().length() < 1){
 			throw new EmptyLabelException(AbstractType.class.getName() + "._createAttribute2()");
 		}
 		return null;// AttributeComplex.create(theName, thisObj);
 	}
 
 	public static Attribute<Structure> createAttribute(Label theName, Complex thisObj) throws NullLabelException, EmptyLabelException {
-		if (theName == null || theName.get() == null) {
+		if(theName == null || theName.get() == null){
 			throw new NullLabelException(AbstractType.class.getName() + ".createAttribute()");
 		}
-		if (theName.get().length() < 1) {
+		if(theName.get().length() < 1){
 			throw new EmptyLabelException(AbstractType.class.getName() + ".createAttribute()");
 		}
 		return AttributeComplex.create(theName, thisObj);

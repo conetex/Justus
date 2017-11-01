@@ -10,7 +10,7 @@ import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Structure implements Value<Structure> {// { Value<Value<?>[]>
+public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 
 	private final Complex type;
 
@@ -19,7 +19,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	private Value<?>[] values;
 
 	public static Structure create(final Complex theAttributeTuple, final Structure theParent) {
-		if (theAttributeTuple != null) {
+		if(theAttributeTuple != null){
 			return new Structure(theAttributeTuple, theParent);
 		}
 		return null;
@@ -38,13 +38,13 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	public void fillMissingValues() {
-		for (int i = 0; i < this.values.length; i++) {
-			if (this.values[i] == null) {
+		for(int i = 0; i < this.values.length; i++){
+			if(this.values[i] == null){
 				Attribute<?> a = this.type.getSubAttribute(i);
-				if (a == null) {
+				if(a == null){
 					System.err.println("no getSubAttribute " + i);
 				}
-				else {
+				else{
 					this.values[i] = a.createValue(this);
 				}
 			}
@@ -53,13 +53,13 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	public static String[] split(String aName) {
 		String[] re = new String[2];
-		if (aName == null) {
+		if(aName == null){
 			return re;
 		}
 		int i = aName.indexOf(Label.NAME_SEPERATOR);
-		if (i > -1 && i < aName.length()) {
+		if(i > -1 && i < aName.length()){
 			re[0] = aName.substring(0, i);
-			if (i + Label.NAME_SEPERATOR.length() < aName.length()) {
+			if(i + Label.NAME_SEPERATOR.length() < aName.length()){
 				re[1] = aName.substring(i + Label.NAME_SEPERATOR.length());
 			}
 		}
@@ -69,34 +69,34 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	public Structure getStructure(String aName) throws ValueCastException {
 		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
 		// TODO do xpath syntax. access parent objects ???
-		if (this.type.getName().equals(aName)) {
+		if(this.type.getName().equals(aName)){
 			return this;
 		}
 		int idIndex = this.type.getSubAttributeIndex(aName);
-		if (idIndex > -1) {
+		if(idIndex > -1){
 			Value<Structure> v = getValue(idIndex, Structure.class);
-			if (v == null) {
+			if(v == null){
 				return null;
 			}
 			return v.get();
 		}
-		else {
+		else{
 			String[] names = Structure.split(aName);
-			if (names[0] != null) {
-				if (names[1] != null) {
+			if(names[0] != null){
+				if(names[1] != null){
 					idIndex = this.type.getSubAttributeIndex(names[0]);
 					// TODO wenn hier die typen nicht passen und keine structure
 					// da liegt, sondern
 					// was anderes...
 					// sollte das vernünftig gemeldet werden!!!
 					Value<Structure> subStructure = getValue(idIndex, Structure.class);
-					if (subStructure != null) {
+					if(subStructure != null){
 						return subStructure.get().getStructure(names[1]);
 					}
 				}
 			}
-			else {
-				if (this.parent != null) {
+			else{
+				if(this.parent != null){
 					return this.parent.getStructure(aName);
 				}
 			}
@@ -107,56 +107,56 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	public Value<?> getValue(String aName) {
 		int i = this.type.getSubAttributeIndex(aName);
-		if (i > -1) {
+		if(i > -1){
 			return getValue(i);
 		}
 		return null;
 	}
-	
+
 	public <R> Value<R> getValue(String aName, Class<R> clazz) throws ValueCastException {
 		// TODO hier erst getStructure...
 
 		// public <V extends Value<?>> V getValue (String aName, Class<V> c){
 		// TODO do xpath syntax. access parent objects ???
-		if (this.type.getName().equals(aName)) {
-			if (clazz == Structure.class) {
+		if(this.type.getName().equals(aName)){
+			if(clazz == Structure.class){
 				return RtCast.<R>toTypedValue(this, clazz);// (Value<R>) this;
 			}
-			else {
+			else{
 				System.err.println("Cast not possible: " + clazz + " != " + this.getClass());
 				return null;
 			}
 		}
 		int idIndex = this.type.getSubAttributeIndex(aName);
-		if (idIndex > -1) {
+		if(idIndex > -1){
 			return getValue(idIndex, clazz);
 		}
-		else {
+		else{
 			String[] names = Structure.split(aName);
-			if (names[0] != null) {
-				if (names[1] != null) {
+			if(names[0] != null){
+				if(names[1] != null){
 					idIndex = this.type.getSubAttributeIndex(names[0]);
 					// TODO wenn hier die typen nicht passen und keine structure
 					// da liegt, sondern
 					// was anderes...
 					// sollte das vernünftig gemeldet werden!!!
 					Value<Structure> subStructure = getValue(idIndex, Structure.class);
-					if (subStructure != null) {
+					if(subStructure != null){
 						return subStructure.get().getValue(names[1], clazz);
 					}
 					/* Todo so machen wirs nich! scon bei call reservieren! */
-					else {
+					else{
 						FunctionAttributes z = FunctionAttributes.getInstance(this.type.getName() + "." + names[0]);
 						// ComplexFunction z = this.type.getComplexFunction(names[0]);
-						if (z != null) {
+						if(z != null){
 							return z.<R>getValue(names[1], clazz);
 						}
 					}
 
 				}
 			}
-			else {
-				if (this.parent != null) {
+			else{
+				if(this.parent != null){
 					return this.parent.getValue(aName, clazz);
 				}
 			}
@@ -167,11 +167,11 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	private <R> Value<R> getValue(int i, Class<R> c) throws ValueCastException {
 		Value<?> v = getValue(i);
-		if (v != null) {
-			if (v.getRawTypeClass() == c) {
+		if(v != null){
+			if(v.getRawTypeClass() == c){
 				return RtCast.<R>toTypedValue(v, c);
 			}
-			else {
+			else{
 				System.err.println("Cast not possible: " + c + " != " + v.getRawTypeClass());
 			}
 		}
@@ -179,7 +179,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	}
 
 	private Value<?> getValue(int i) {
-		if (i > -1 && i < this.values.length) {
+		if(i > -1 && i < this.values.length){
 			return this.values[i];
 		}
 		return null;
@@ -187,7 +187,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	private static <T> Value<T> clone(Value<T> src) throws Invalid {
 		Primitive<T> type = Primitive.<T>getInstanceAtRunTime(src.getClass(), src.getRawTypeClass());
-		if (type == null) {
+		if(type == null){
 			// TODO ERROR
 			return null;
 		}
@@ -199,13 +199,12 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	public boolean set(String id, Value<?> value) throws Invalid {
 		int i = this.type.getSubAttributeIndex(id);
-		if (i > -1 && i < this.values.length) {
+		if(i > -1 && i < this.values.length){
 			this.values[i] = value;
 			return true;
 		}
 		return false;
 	}
-
 
 	@Override
 	public Structure get() {
@@ -214,11 +213,11 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 
 	@Override
 	public Structure copy() throws Invalid {
-		if (this.values == null) {
+		if(this.values == null){
 			return null;
 		}
 		Value<?>[] theValues = new Value<?>[this.values.length];
-		for (int i = 0; i < theValues.length; i++) {
+		for(int i = 0; i < theValues.length; i++){
 			theValues[i] = clone(this.values[i]);
 		}
 
@@ -230,7 +229,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	@Override
 	public Structure set(Structure other) throws Invalid {
 		// TODO typcheck ...
-		if (this.values == null || this.values.length == other.values.length) {
+		if(this.values == null || this.values.length == other.values.length){
 			this.values = other.values;
 		}
 		return this;
@@ -241,7 +240,7 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 		Structure v = RtCast.cast(value, Structure.class);
 		return this.set(v);
 	}
-	
+
 	@Override
 	public Structure setConverted(String value) throws Inconvertible, Invalid {
 		throw new Inconvertible("can not create Structure from String!");
@@ -263,6 +262,5 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	public void setParent(Structure theParent) {
 		this.parent = theParent;
 	}
-
 
 }

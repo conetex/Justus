@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.conetex.contract.lang.access.Accessible;
 
-public class Program {
+public class Program{
 
 	public static List<Accessible<?>> assignments = new LinkedList<>();
 

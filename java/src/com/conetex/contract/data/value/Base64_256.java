@@ -1,6 +1,6 @@
 package com.conetex.contract.data.value;
 
-public class Base64_256 extends Base64 {
+public class Base64_256 extends Base64{
 	// How to calculate the memory for Base64-encoded data? See
 	// https://de.wikipedia.org/wiki/Base64
 	// 4 * ( ceil (256 / 3) ) = 344

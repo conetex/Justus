@@ -5,10 +5,10 @@ import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.value.Label;
 import com.conetex.contract.data.value.Structure;
 
-public class AttributeComplex extends Attribute<Structure> {// Attribute<Value<?>[]>
+public class AttributeComplex extends Attribute<Structure>{// Attribute<Value<?>[]>
 
 	public static AttributeComplex create(Label theLabel, Complex theType) {
-		if (theLabel != null && theType != null) {
+		if(theLabel != null && theType != null){
 			return new AttributeComplex(theLabel, theType);
 		}
 		return null;

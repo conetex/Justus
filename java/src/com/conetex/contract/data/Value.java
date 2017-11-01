@@ -11,7 +11,7 @@ public interface Value<T> {
 	public T copy() throws Invalid;
 
 	public T set(T value) throws Invalid;
-	
+
 	public T setObject(Object value) throws Invalid, ValueCastException;
 
 	public T setConverted(String value) throws Inconvertible, Invalid;

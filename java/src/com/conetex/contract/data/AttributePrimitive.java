@@ -7,10 +7,10 @@ import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class AttributePrimitive<T> extends Attribute<T> {
+public class AttributePrimitive<T> extends Attribute<T>{
 
 	public static <V> AttributePrimitive<V> create(Label theLabel, Primitive<V> theType) {
-		if (theLabel != null && theType != null) {
+		if(theLabel != null && theType != null){
 			return new AttributePrimitive<>(theLabel, theType);
 		}
 		return null;
@@ -53,10 +53,10 @@ public class AttributePrimitive<T> extends Attribute<T> {
 
 	public Value<T> createValue(String value, Structure theParent) {
 		Value<T> v = this.createValue(theParent);
-		try {
+		try{
 			v.setConverted(value);
 		}
-		catch (Inconvertible | Invalid e) {
+		catch(Inconvertible | Invalid e){
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 			// e.printStackTrace();
@@ -67,10 +67,10 @@ public class AttributePrimitive<T> extends Attribute<T> {
 
 	public Value<T> _createValue(String value) {
 		Value<T> v = this._createValue();
-		try {
+		try{
 			v.setConverted(value);
 		}
-		catch (Inconvertible | Invalid e) {
+		catch(Inconvertible | Invalid e){
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 			// e.printStackTrace();
@@ -85,10 +85,10 @@ public class AttributePrimitive<T> extends Attribute<T> {
 		// Complex() ; } } )
 		Value<T> v = this._createValue();
 		// Structure value = ct.construct(theValues);
-		try {
+		try{
 			v.set(theValues);
 		}
-		catch (Invalid e) {
+		catch(Invalid e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

@@ -5,11 +5,11 @@ import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class Return<V> extends ReturnAbstract<V> {
+public class Return<V> extends ReturnAbstract<V>{
 
 	public static <SV> Return<SV> create2(Accessible<SV> theExpression) {
 		// TODO drop this
-		if (theExpression == null) {
+		if(theExpression == null){
 			System.err.println("theExpression is null");
 			return null;
 		}
@@ -17,7 +17,7 @@ public class Return<V> extends ReturnAbstract<V> {
 	}
 
 	public static <SV> Return<SV> create(Accessible<SV> theExpression) {
-		if (theExpression == null) {
+		if(theExpression == null){
 			System.err.println("theExpression is null");
 			return null;
 		}
@@ -25,7 +25,7 @@ public class Return<V> extends ReturnAbstract<V> {
 	}
 
 	public static <T extends Number> Return<T> createNum(Accessible<T> theExpression, Class<T> theClass) {
-		if (theExpression == null) {
+		if(theExpression == null){
 			System.err.println("theExpression is null");
 			return null;
 		}
@@ -33,7 +33,7 @@ public class Return<V> extends ReturnAbstract<V> {
 	}
 
 	public static <SV extends Number> Return<SV> createNum(Accessible<SV> theExpression) {
-		if (theExpression == null) {
+		if(theExpression == null){
 			System.err.println("theExpression is null");
 			return null;
 		}

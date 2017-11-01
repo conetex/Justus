@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionLang;
 
-public class OperationMeansNotCalled extends AbstractInterpreterException {
+public class OperationMeansNotCalled extends AbstractInterpreterException{
 
 	private static final long serialVersionUID = 1L;
 

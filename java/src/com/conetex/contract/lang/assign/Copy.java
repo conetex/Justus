@@ -5,16 +5,16 @@ import com.conetex.contract.build.exceptionLang.CastException;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
 
-public class Copy<T> extends AbstractAssigment<T> {
+public class Copy<T> extends AbstractAssigment<T>{
 
 	public static <T> Copy<T> _createFromClass(Setable<?> trg, Accessible<?> src, Class<T> rawType) throws CastException {
-		if (src == null || trg == null) {
+		if(src == null || trg == null){
 			return null;
 		}
 		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);// src.as(rawType);
-		if (srcCasted != null) {
+		if(srcCasted != null){
 			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);// trg.asSetable(rawType);
-			if (trgCasted != null) {
+			if(trgCasted != null){
 				return new Copy<>(trgCasted, srcCasted);
 			}
 		}
@@ -22,13 +22,13 @@ public class Copy<T> extends AbstractAssigment<T> {
 	}
 
 	public static <T> Copy<T> _createFromTrg(Setable<T> trg, Accessible<?> src) throws CastException {
-		if (src == null || trg == null) {
+		if(src == null || trg == null){
 			return null;
 		}
 		Class<T> trgRawType = trg.getRawTypeClass();
-		if (trgRawType == src.getRawTypeClass()) {
+		if(trgRawType == src.getRawTypeClass()){
 			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);// src.as(trgRawType);
-			if (srcCasted != null) {
+			if(srcCasted != null){
 				return new Copy<>(trg, srcCasted);
 			}
 		}
@@ -36,13 +36,13 @@ public class Copy<T> extends AbstractAssigment<T> {
 	}
 
 	public static <T> Copy<T> _createFromSrc(Setable<?> trg, Accessible<T> src) throws CastException {
-		if (src == null || trg == null) {
+		if(src == null || trg == null){
 			return null;
 		}
 		Class<T> srcRawType = src.getRawTypeClass();
-		if (srcRawType == trg.getRawTypeClass()) {
+		if(srcRawType == trg.getRawTypeClass()){
 			Setable<T> trgCasted = Cast.toTypedSetable(trg, srcRawType);// trg.asSetable(srcRawType);
-			if (trgCasted != null) {
+			if(trgCasted != null){
 				return new Copy<>(trgCasted, src);
 			}
 		}
@@ -50,7 +50,7 @@ public class Copy<T> extends AbstractAssigment<T> {
 	}
 
 	public static <T> Copy<T> _create(Setable<T> trg, Accessible<T> src) {
-		if (src == null || trg == null) {
+		if(src == null || trg == null){
 			return null;
 		}
 		return new Copy<>(trg, src);

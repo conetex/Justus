@@ -8,15 +8,15 @@ import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class BigInt implements Value<BigInteger> {
+public class BigInt implements Value<BigInteger>{
 
 	private BigInteger actual;
 
 	@Override
 	public BigInteger setObject(Object value) throws Invalid, ValueCastException {
-		return this.set( RtCast.cast(value, BigInteger.class) );
+		return this.set(RtCast.cast(value, BigInteger.class));
 	}
-	
+
 	@Override
 	public BigInteger set(BigInteger aValue) {
 		this.actual = aValue;
@@ -30,11 +30,11 @@ public class BigInt implements Value<BigInteger> {
 
 	@Override
 	public BigInteger setConverted(String value) throws Inconvertible {
-		try {
+		try{
 			BigInteger v = new BigInteger(value);
 			return this.set(v);
 		}
-		catch (NumberFormatException e) {
+		catch(NumberFormatException e){
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}

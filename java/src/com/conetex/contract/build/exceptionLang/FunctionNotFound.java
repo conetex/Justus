@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionLang;
 
-public class FunctionNotFound extends AbstractInterpreterException {
+public class FunctionNotFound extends AbstractInterpreterException{
 
 	private static final long serialVersionUID = 1L;
 

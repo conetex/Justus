@@ -1,6 +1,6 @@
 package com.conetex.contract.build;
 
-public class Symbols {
+public class Symbols{
 
 	private static final String SIMPLE_TYPE_NS = "t:";
 

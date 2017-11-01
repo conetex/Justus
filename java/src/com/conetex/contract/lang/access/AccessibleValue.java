@@ -11,10 +11,10 @@ import com.conetex.contract.lang.math.ElementaryArithmetic;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class AccessibleValue<T> extends Accessible<T> {
+public class AccessibleValue<T> extends Accessible<T>{
 
 	public static <T> AccessibleValue<T> create(String thePath, Class<T> theClass) {
-		if (thePath == null) {
+		if(thePath == null){
 			return null;
 		}
 		return new AccessibleValue<>(thePath, theClass);
@@ -36,7 +36,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 	@Override
 	public T getFrom(Structure thisObject) throws ValueCastException {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
-		if (value == null) {
+		if(value == null){
 			return null;
 		}
 		return value.get();
@@ -44,7 +44,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 
 	public T setTo(Structure thisObject, T newValue) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
-		if (value == null) {
+		if(value == null){
 			return null;
 		}
 		return value.set(newValue);
@@ -53,7 +53,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 	@Override
 	public T copyFrom(Structure thisObject) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
-		if (value == null) {
+		if(value == null){
 			return null;
 		}
 		return value.copy();

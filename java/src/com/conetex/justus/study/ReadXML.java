@@ -28,7 +28,7 @@ import com.conetex.contract.build.exceptionLang.UnknownCommand;
 import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class ReadXML {
+public class ReadXML{
 
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException {
@@ -36,8 +36,8 @@ public class ReadXML {
 		Main main = null;
 
 		CodeModel.build();
-		
-		try (FileInputStream is = new FileInputStream("input02.xml")) {
+
+		try(FileInputStream is = new FileInputStream("input02.xml")){
 
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -48,15 +48,15 @@ public class ReadXML {
 			// List<Accessible<?>> functions = null;
 
 			NodeList children = document.getChildNodes();
-			for (int i = 0; i < children.getLength(); i++) {
+			for(int i = 0; i < children.getLength(); i++){
 				Node r = children.item(i);
 				short typOfNode = children.item(i).getNodeType();
-				if (typOfNode == Node.ELEMENT_NODE) {
-					if (main == null) {
+				if(typOfNode == Node.ELEMENT_NODE){
+					if(main == null){
 						CodeNode r2 = createSyntaxNode(r);
 						main = Build.create(r2);
 					}
-					else {
+					else{
 						System.err.println("more than one root element! can not proceed!");
 					}
 				}
@@ -65,67 +65,65 @@ public class ReadXML {
 			is.close();
 		}
 
-		if (main != null) {
+		if(main != null){
 			main.run();
 		}
 
 	}
-	
+
 	public static CodeNode createSyntaxNode(Node n) throws UnknownCommandParameter, UnknownCommand {
 
 		short typOfNode = n.getNodeType();
-		if (typOfNode != Node.ELEMENT_NODE) {
+		if(typOfNode != Node.ELEMENT_NODE){
 			return null;
 		}
 
 		List<CodeNode> children = new ArrayList<>();
 		NodeList xmlChildren = n.getChildNodes();
-		for (int i = 0; i < xmlChildren.getLength(); i++) {
+		for(int i = 0; i < xmlChildren.getLength(); i++){
 			Node c = xmlChildren.item(i);
 			CodeNode child = createSyntaxNode(c);
-			if (child != null) {
+			if(child != null){
 				children.add(child);
 			}
 		}
-		
+
 		String commandStr = n.getNodeName();
 		String errors = commandStr + " missing params: ";
 		NamedNodeMap attributes = n.getAttributes();
 		List<Egg<?>> commands = CodeModel.Egg.getInstance(commandStr);
 		if(commands == null){
 			String theValue = ReadXMLtools.getNodeValue(n);
-			if (theValue == null) {
-				return new CodeNode(Symbols.comVirtualCompValue(), new String[]{ commandStr           }, children);
+			if(theValue == null){
+				return new CodeNode(Symbols.comVirtualCompValue(), new String[] { commandStr }, children);
 			}
-			else {
-				return new CodeNode(Symbols.comvirtualPrimValue(), new String[]{ commandStr, theValue }, children);
+			else{
+				return new CodeNode(Symbols.comvirtualPrimValue(), new String[] { commandStr, theValue }, children);
 			}
 		}
-		
+
 		// TODO Sortierung ist nicht getestet...
 		commands.sort(
-			new Comparator<Egg<?>>(){
-				@Override
-				public int compare(Egg<?> o1, Egg<?> o2) {
-					if( o1.getParameterCount() < o2.getParameterCount() ){
-						return -1;
-					}
-					else{
-						if( o1.getParameterCount() == o2.getParameterCount() ){
-							return 0;
+				new Comparator<Egg<?>>(){
+					@Override
+					public int compare(Egg<?> o1, Egg<?> o2) {
+						if(o1.getParameterCount() < o2.getParameterCount()){
+							return -1;
 						}
 						else{
-							return 1;
-						}						
+							if(o1.getParameterCount() == o2.getParameterCount()){
+								return 0;
+							}
+							else{
+								return 1;
+							}
+						}
 					}
-				}
-			}  
-		);
+				});
 		List<String> attributeList = new LinkedList<>();
-		outerLoop:
-		for(Egg<?> command : commands) {
+		outerLoop: for(Egg<?> command : commands){
 			String[] paramNames = command.getParameters();
-			if(paramNames != null) {
+			if(paramNames != null){
 				for(String paramName : paramNames){
 					Node a = attributes.getNamedItem(paramName);
 					if(a == null){
@@ -134,7 +132,7 @@ public class ReadXML {
 							if(value == null){
 								errors = errors + paramName + ", ";
 								attributeList.clear();
-								continue outerLoop;								
+								continue outerLoop;
 							}
 							else{
 								attributeList.add(value);
@@ -154,13 +152,13 @@ public class ReadXML {
 				attributeList.toArray(theParams);
 				return new CodeNode(commandStr, theParams, children);
 			}
-			else {
+			else{
 				return new CodeNode(commandStr, new String[0], children);
 			}
 		}
 		System.err.println(errors);
 		return null;
-		
+
 	}
 
 }

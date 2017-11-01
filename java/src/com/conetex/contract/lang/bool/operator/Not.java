@@ -5,10 +5,10 @@ import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 //Unary operation
-public class Not extends Accessible<Boolean> {
+public class Not extends Accessible<Boolean>{
 
 	public static Not create(Accessible<? extends Boolean> theSub) {
-		if (theSub == null) {
+		if(theSub == null){
 			return null;
 		}
 		return new Not(theSub);
@@ -23,10 +23,10 @@ public class Not extends Accessible<Boolean> {
 	@Override
 	public Boolean getFrom(Structure thisObject) throws AbstractRuntimeException {
 		Boolean b = this.sub.getFrom(thisObject);
-		if (b == null) {
+		if(b == null){
 			return null;
 		}
-		if (b.booleanValue()) {
+		if(b.booleanValue()){
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;

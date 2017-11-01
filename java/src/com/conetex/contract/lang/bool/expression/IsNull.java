@@ -4,10 +4,10 @@ import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class IsNull extends Accessible<Boolean> {
+public class IsNull extends Accessible<Boolean>{
 
 	public static IsNull create(Accessible<?> theSub) {
-		if (theSub == null) {
+		if(theSub == null){
 			return null;
 		}
 		return new IsNull(theSub);
@@ -22,7 +22,7 @@ public class IsNull extends Accessible<Boolean> {
 	@Override
 	public Boolean getFrom(Structure thisObject) throws AbstractRuntimeException {
 		Object b = this.sub.getFrom(thisObject);
-		if (b == null) {
+		if(b == null){
 			return Boolean.TRUE;
 		}
 		return Boolean.FALSE;

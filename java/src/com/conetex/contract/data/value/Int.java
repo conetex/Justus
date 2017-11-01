@@ -6,7 +6,7 @@ import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Int implements Value<Integer> {
+public class Int implements Value<Integer>{
 
 	private Integer actual;
 
@@ -18,9 +18,9 @@ public class Int implements Value<Integer> {
 
 	@Override
 	public Integer setObject(Object value) throws Invalid, ValueCastException {
-		return this.set( RtCast.cast(value, Integer.class) );			
+		return this.set(RtCast.cast(value, Integer.class));
 	}
-	
+
 	@Override
 	public final Integer get() {
 		return this.actual;
@@ -28,11 +28,11 @@ public class Int implements Value<Integer> {
 
 	@Override
 	public Integer setConverted(String value) throws Inconvertible {
-		try {
+		try{
 			Integer v = Integer.valueOf(Integer.parseInt(value));
 			return this.set(v);
 		}
-		catch (NumberFormatException e) {
+		catch(NumberFormatException e){
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}

@@ -6,7 +6,7 @@ import com.conetex.contract.lang.access.Setable;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{//
+public abstract class AbstractAssigment<T> extends Accessible<T>{// Computable{//
 																	// extends
 																	// ComputablePair<T>{
 
@@ -24,19 +24,19 @@ public abstract class AbstractAssigment<T> extends Accessible<T> {// Computable{
 	@Override
 	public T getFrom(Structure thisObject) throws AbstractRuntimeException {
 		T value = null;
-		try {
+		try{
 
-			if (this.doCopy()) {
+			if(this.doCopy()){
 				value = this.source.copyFrom(thisObject);
 			}
-			else {
+			else{
 				value = this.source.getFrom(thisObject);
 			}
 
 			value = this.target.setTo(thisObject, value);
 
 		}
-		catch (Invalid e) {
+		catch(Invalid e){
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;

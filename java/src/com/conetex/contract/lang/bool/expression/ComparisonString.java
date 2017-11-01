@@ -5,7 +5,7 @@ import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class ComparisonString extends Accessible<Boolean> {
+public class ComparisonString extends Accessible<Boolean>{
 
 	public static final int	SMALLER	= -1;
 	public static final int	EQUAL	= 0;
@@ -16,26 +16,26 @@ public class ComparisonString extends Accessible<Boolean> {
 	}
 
 	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, String operation) {
-		if (theA == null || theB == null) {
+		if(theA == null || theB == null){
 			return null;
 		}
-		if (operation.equals(Symbols.comSmaller())) {
+		if(operation.equals(Symbols.comSmaller())){
 			return create(theA, theB, ComparisonString.SMALLER);
 		}
-		if (operation.equals(Symbols.comEqual())) {
+		if(operation.equals(Symbols.comEqual())){
 			return create(theA, theB, ComparisonString.EQUAL);
 		}
-		if (operation.equals(Symbols.comGreater())) {
+		if(operation.equals(Symbols.comGreater())){
 			return create(theA, theB, ComparisonString.GREATER);
 		}
 		return null;
 	}
 
 	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation) {
-		if (theA == null || theB == null) {
+		if(theA == null || theB == null){
 			return null;
 		}
-		if (operation < ComparisonString.SMALLER || operation > ComparisonString.GREATER) {
+		if(operation < ComparisonString.SMALLER || operation > ComparisonString.GREATER){
 			return null;
 		}
 		return new ComparisonString(theA, theB, operation);
@@ -67,13 +67,13 @@ public class ComparisonString extends Accessible<Boolean> {
 	public Boolean getFrom(Structure thisObject) throws AbstractRuntimeException {
 		String aN = this.a.getFrom(thisObject);
 		String bN = this.b.getFrom(thisObject);
-		if (aN == null) {
-			if (bN == null && this.operator == ComparisonString.EQUAL) {
+		if(aN == null){
+			if(bN == null && this.operator == ComparisonString.EQUAL){
 				return Boolean.TRUE;
 			}
 			return null;
 		}
-		else if (bN == null) {
+		else if(bN == null){
 			return null;
 		}
 
@@ -81,20 +81,20 @@ public class ComparisonString extends Accessible<Boolean> {
 	}
 
 	private <T extends Comparable<T>> Boolean comp(T aA, T aB) {
-		if (this.operator == ComparisonString.GREATER) {
-			if (aA.compareTo(aB) > 0) {
+		if(this.operator == ComparisonString.GREATER){
+			if(aA.compareTo(aB) > 0){
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;
 		}
-		if (this.operator == ComparisonString.SMALLER) {
-			if (aA.compareTo(aB) < 0) {
+		if(this.operator == ComparisonString.SMALLER){
+			if(aA.compareTo(aB) < 0){
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;
 		}
-		if (this.operator == ComparisonString.EQUAL) {
-			if (aA.compareTo(aB) == 0) {
+		if(this.operator == ComparisonString.EQUAL){
+			if(aA.compareTo(aB) == 0){
 				return Boolean.TRUE;
 			}
 			return Boolean.FALSE;

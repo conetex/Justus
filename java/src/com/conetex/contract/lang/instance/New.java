@@ -1,5 +1,5 @@
 package com.conetex.contract.lang.instance;
 
-public class New {
+public class New{
 	// TODO implement
 }

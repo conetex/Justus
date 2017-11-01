@@ -6,7 +6,7 @@ import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Bool implements Value<Boolean> {
+public class Bool implements Value<Boolean>{
 
 	private Boolean actual;
 
@@ -18,28 +18,28 @@ public class Bool implements Value<Boolean> {
 
 	@Override
 	public Boolean setObject(Object value) throws Invalid, ValueCastException {
-		return this.set( RtCast.cast(value, Boolean.class) );
+		return this.set(RtCast.cast(value, Boolean.class));
 	}
-	
+
 	@Override
 	public final Boolean get() {
 		return this.actual;
 	}
 
 	public static Boolean getTrans(String value) {
-		if (value.equalsIgnoreCase("true")) {
+		if(value.equalsIgnoreCase("true")){
 			return Boolean.TRUE;
 		}
-		else if (value.equalsIgnoreCase("false")) {
+		else if(value.equalsIgnoreCase("false")){
 			return Boolean.FALSE;
 		}
-		else if (value.equals("1")) {
+		else if(value.equals("1")){
 			return Boolean.TRUE;
 		}
-		else if (value.equals("0")) {
+		else if(value.equals("0")){
 			return Boolean.FALSE;
 		}
-		else {
+		else{
 			return null;
 		}
 	}
@@ -47,7 +47,7 @@ public class Bool implements Value<Boolean> {
 	@Override
 	public Boolean setConverted(String value) throws Inconvertible {
 		Boolean v = getTrans(value);
-		if (v == null) {
+		if(v == null){
 			throw new Inconvertible("can not convert '" + value + "' to Boolean!");
 		}
 		return this.set(v);

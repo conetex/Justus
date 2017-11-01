@@ -8,7 +8,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
-public class ReadJson {
+public class ReadJson{
 
 	public static void main(String[] args) {
 
@@ -23,16 +23,16 @@ public class ReadJson {
 				+ "    }                                                                                              " +
 				// " ] " +
 				"}                                                                                                  ";
-		try (JsonReader rdr = Json.createReader(new StringReader(json))) {
+		try(JsonReader rdr = Json.createReader(new StringReader(json))){
 			JsonObject obj = rdr.readObject();
 			rdr.close();
 
 			// System.out.println(obj.getJsonObject("social"));
-			for (JsonValue v : obj.values()) {
+			for(JsonValue v : obj.values()){
 				System.out.println(v.toString());
 			}
 
-			for (Entry<String, JsonValue> e : obj.entrySet()) {
+			for(Entry<String, JsonValue> e : obj.entrySet()){
 				System.out.println(e.getKey() + " === " + e.getValue().getValueType());
 			}
 		}

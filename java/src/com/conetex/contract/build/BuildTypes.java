@@ -13,19 +13,19 @@ import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.FunctionAttributes;
 
-public class BuildTypes {
+public class BuildTypes{
 
 	private static class Recursive<I> {
 
-		public Recursive() {
+		public Recursive( ) {
 		}
 
 		public I function;
 
 	}
 
-	private static interface Run {
-		public void run(CodeNode node, Complex parent)  throws AbstractInterpreterException;
+	private static interface Run{
+		public void run(CodeNode node, Complex parent) throws AbstractInterpreterException;
 	}
 
 	public static List<Complex> createComplexTypes(CodeNode n) throws AbstractInterpreterException {
@@ -36,27 +36,27 @@ public class BuildTypes {
 
 		Recursive<Run> recursive = new Recursive<>();
 		recursive.function = (CodeNode node, Complex parent) -> {
-			for (CodeNode c : node.getChildNodes()) {
+			for(CodeNode c : node.getChildNodes()){
 				Complex complexType = Data.complex.complexCreateChild(c, parent, unformedComplexTypes);
-				if (complexType != null) {
+				if(complexType != null){
 					re.add(complexType);
 					recursive.function.run(c, complexType);
 				}
 			}
 		};
 		Complex complexTypeRoot = createComplexType(n, null, unformedComplexTypes, referringComplexTypeNames);
-		if (complexTypeRoot != null) {
+		if(complexTypeRoot != null){
 			re.add(complexTypeRoot);
 			recursive.function.run(n, complexTypeRoot);
 		}
 
-		for (String createdComplex : Complex.getInstanceNames()) {
+		for(String createdComplex : Complex.getInstanceNames()){
 			System.out.println("createComplexList known: " + createdComplex);
 		}
 
-		if (unformedComplexTypes.size() > 0) {
+		if(unformedComplexTypes.size() > 0){
 			Complex.clearInstances();
-			for (String unformedComplex : unformedComplexTypes.keySet()) {
+			for(String unformedComplex : unformedComplexTypes.keySet()){
 				System.err.println("createComplexList unknown Complex: " + unformedComplex);
 			}
 			// TODO throw Exception: wir konnten nicht alles kompilieren!!!
@@ -64,43 +64,44 @@ public class BuildTypes {
 		}
 
 		boolean error = false;
-		for (String typeName : referringComplexTypeNames) {
+		for(String typeName : referringComplexTypeNames){
 			System.out.println("createComplexList referenced complex Type " + typeName);
-			if (Complex.getInstance(typeName) == null) {
+			if(Complex.getInstance(typeName) == null){
 				error = true;
 				System.err.println("createComplexList unkown Complex: " + typeName);
 				// TODO throw Exception: wir kennen einen Typen nicht ...
 			}
 		}
-		if (error) {
+		if(error){
 			Complex.clearInstances();
 			return null;
 		}
 
 		return re;
 	}
-	
-	public static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> _referringComplexTypeNames) throws AbstractInterpreterException {
+
+	public static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> _referringComplexTypeNames)
+			throws AbstractInterpreterException {
 		String typeName = n.getParameter(Symbols.paramName());
-		if (typeName == null) {
+		if(typeName == null){
 			// TODO Exception
 			System.err.println("no typeName for complex");
 			return null;
 		}
-		if (parent != null) {
+		if(parent != null){
 			typeName = parent.getName() + "." + typeName;
 		}
 
 		System.out.println("createComplexType " + typeName);
-		if (typeName.endsWith("contract4u")) {
+		if(typeName.endsWith("contract4u")){
 			System.out.println("createComplexType " + typeName);
 		}
 		List<Attribute<?>> identifiers = new LinkedList<>();
 		// Map<String, Attribute<?>> functions = new HashMap<>();
-		
-		for (CodeNode c : n.getChildNodes()) {
+
+		for(CodeNode c : n.getChildNodes()){
 			Attribute<?> id = Data.complex.attributeCreateChild(c, unformedComplexTypes);
-			if (id != null) {
+			if(id != null){
 				identifiers.add(id);
 			}
 		}
@@ -109,31 +110,30 @@ public class BuildTypes {
 
 		// TODO doppelte definitionen abfangen ...
 		Complex complexType = unformedComplexTypes.get(typeName);
-		if (complexType == null) {
-			
-				if (n.getCommand() == Symbols.comFunction()) {
-					complexType = FunctionAttributes.createInit(typeName, theOrderedIdentifiers);
-				}
-				else {
-					complexType = Complex.createInit(typeName, theOrderedIdentifiers);
-				}
+		if(complexType == null){
 
-				// TODO
-				// theOrderedIdentifiers
-				// müssen
-				// elemente
-				// enthalten,
-				// sonst
-				// gibts
-				// keinen
-				// typ
-			
-			
+			if(n.getCommand() == Symbols.comFunction()){
+				complexType = FunctionAttributes.createInit(typeName, theOrderedIdentifiers);
+			}
+			else{
+				complexType = Complex.createInit(typeName, theOrderedIdentifiers);
+			}
+
+			// TODO
+			// theOrderedIdentifiers
+			// müssen
+			// elemente
+			// enthalten,
+			// sonst
+			// gibts
+			// keinen
+			// typ
+
 			return complexType;
 		}
-		else {
+		else{
 			complexType.init(typeName, theOrderedIdentifiers);
-			
+
 			unformedComplexTypes.remove(typeName);
 			return complexType;
 		}

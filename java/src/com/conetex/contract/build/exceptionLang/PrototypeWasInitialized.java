@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionLang;
 
-public class PrototypeWasInitialized extends AbstractInterpreterException {
+public class PrototypeWasInitialized extends AbstractInterpreterException{
 
 	private static final long serialVersionUID = 1L;
 

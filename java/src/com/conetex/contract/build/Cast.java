@@ -9,11 +9,11 @@ import com.conetex.contract.lang.access.Setable;
 import com.conetex.contract.lang.access.SetableValue;
 import com.conetex.contract.lang.control.ReturnAbstract;
 
-public class Cast {
+public class Cast{
 
 	@SuppressWarnings("unchecked")
 	public static <X> Primitive<X> toTypedPrimitive(Primitive<?> thisObj, Class<X> rawType) throws AbstractTypException {
-		if (rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
+		if(rawType.isAssignableFrom(thisObj.getRawTypeClass())){
 			return (Primitive<X>) thisObj;
 		}
 		throw new TypException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());
@@ -21,7 +21,7 @@ public class Cast {
 
 	@SuppressWarnings("unchecked")
 	public static <X> Accessible<X> toTypedAccessible(Accessible<?> thisObj, Class<X> rawType) throws CastException {
-		if (rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
+		if(rawType.isAssignableFrom(thisObj.getRawTypeClass())){
 			return (Accessible<X>) thisObj;
 		}
 		throw new CastException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());
@@ -29,7 +29,7 @@ public class Cast {
 
 	@SuppressWarnings("unchecked")
 	public static <X> ReturnAbstract<X> toTypedReturn(Accessible<?> thisObj, Class<X> rawType) throws CastException {
-		if (thisObj instanceof ReturnAbstract && rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
+		if(thisObj instanceof ReturnAbstract && rawType.isAssignableFrom(thisObj.getRawTypeClass())){
 			return (ReturnAbstract<X>) thisObj;
 		}
 		throw new CastException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());
@@ -37,7 +37,7 @@ public class Cast {
 
 	@SuppressWarnings("unchecked")
 	public static <X> Setable<X> toTypedSetable(Setable<?> thisObj, Class<X> rawType) throws CastException {
-		if (rawType.isAssignableFrom(thisObj.getRawTypeClass())) {
+		if(rawType.isAssignableFrom(thisObj.getRawTypeClass())){
 			return (SetableValue<X>) thisObj;
 		}
 		throw new CastException(thisObj.getRawTypeClass().getName() + " can not be casted to " + rawType.getName());

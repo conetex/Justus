@@ -6,7 +6,7 @@ import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Lng implements Value<Long> {
+public class Lng implements Value<Long>{
 
 	private Long actual;
 
@@ -18,9 +18,9 @@ public class Lng implements Value<Long> {
 
 	@Override
 	public Long setObject(Object value) throws Invalid, ValueCastException {
-		return this.set( RtCast.cast(value, Long.class) );
+		return this.set(RtCast.cast(value, Long.class));
 	}
-	
+
 	@Override
 	public final Long get() {
 		return this.actual;
@@ -28,11 +28,11 @@ public class Lng implements Value<Long> {
 
 	@Override
 	public Long setConverted(String value) throws Inconvertible, NumberFormatException {
-		try {
+		try{
 			Long v = Long.valueOf(Long.parseLong(value));
 			return this.set(v);
 		}
-		catch (NumberFormatException e) {
+		catch(NumberFormatException e){
 			throw new Inconvertible("can not convert " + value + " to Long", e);
 		}
 	}

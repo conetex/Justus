@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionLang;
 
-public class NullIdentifierException extends AbstractInterpreterException {
+public class NullIdentifierException extends AbstractInterpreterException{
 
 	private static final long serialVersionUID = 1L;
 

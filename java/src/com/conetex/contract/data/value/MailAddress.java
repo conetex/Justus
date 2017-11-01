@@ -2,7 +2,7 @@ package com.conetex.contract.data.value;
 
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public abstract class MailAddress extends SizedASCII {
+public abstract class MailAddress extends SizedASCII{
 
 	// See
 	// http://stackoverflow.com/questions/7717573/what-is-the-longest-possible-email-address
@@ -11,19 +11,19 @@ public abstract class MailAddress extends SizedASCII {
 
 	@Override
 	public String set(String aValueIn) throws Invalid {
-		if (aValueIn == null) {
+		if(aValueIn == null){
 			super.actual = null;
 		}
-		else {
+		else{
 			String aValue = aValueIn.trim();
-			if (aValue.length() > this.getMaxSize()) {
+			if(aValue.length() > this.getMaxSize()){
 				throw new Invalid("'" + aValue + "' is longer than " + this.getMaxSize());
 			}
-			if (aValue.matches(
-					"\\A[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\z")) {
+			if(aValue.matches(
+					"\\A[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\z")){
 				super.actual = aValue;
 			}
-			else {
+			else{
 				throw new Invalid("'" + aValue + "' is no valid mail-Address");
 			}
 		}

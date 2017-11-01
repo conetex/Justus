@@ -1,6 +1,6 @@
 package com.conetex.contract.data.value;
 
-public class Label extends SizedASCII {
+public class Label extends SizedASCII{
 
 	public static final String NAME_SEPERATOR = ".";
 
