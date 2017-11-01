@@ -40,17 +40,15 @@ public class BuildTypes {
 		Recursive<Run> recursive = new Recursive<>();
 		recursive.function = (CodeNode node, Complex parent) -> {
 			for (CodeNode c : node.getChildNodes()) {
-				
-				// TODO
-				  hier we go ...
-				  
-				if (c.isType() || c.isFunction()) {
-					Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);
+				// TODO  hier we go ...
+				//if (c.isType() || c.isFunction()) {
+					//Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);	
+					Complex complexType = Data.complex.complexCreateChild(c, parent, unformedComplexTypes);
 					if (complexType != null) {
 						re.add(complexType);
 						recursive.function.run(c, complexType);
 					}
-				}
+				//}
 			}
 		};
 		Complex complexTypeRoot = createComplexType(n, null, unformedComplexTypes, referringComplexTypeNames);
@@ -90,7 +88,7 @@ public class BuildTypes {
 		return re;
 	}
 	
-	private static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> _referringComplexTypeNames) throws AbstractInterpreterException {
+	public static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> _referringComplexTypeNames) throws AbstractInterpreterException {
 		String typeName = n.getName();
 		if (typeName == null) {
 			// TODO Exception

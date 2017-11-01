@@ -428,6 +428,13 @@ public class BuildFunctions {
 				//return null;
 			}
 			
+			public Complex complexCreate(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+				if ( !(n._isType() || n._isFunction()) ) {
+					System.err.println("this call is not valid ... " + n.getCommand());
+				}
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+			}
+			
 		};
 
 	}
@@ -634,35 +641,15 @@ public class BuildFunctions {
 
 		static Box<Structure, Object> complex = new Box<Structure, Object>("complex") {
 			
-			@Override
-			public Accessible<Structure> functionCreate(CodeNode n, Complex type) throws AbstractInterpreterException {
 
-				String name = n.getCommand();
-				if (type == null) {
-					System.err.println("can not recognize type of " + name);
-					return null;
+			
+			public Complex complexCreate(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+				if ( !(n._isType() || n._isFunction()) ) {
+					System.err.println("this call is not valid ... " + n.getCommand());
 				}
-
-				List<CodeNode> children = n.getChildNodes();
-				for (CodeNode c : children) {
-					if (c.isType() || c.isFunction()) {
-						String cname = c.getName();
-						Complex ctype = Complex.getInstance(type.getName() + "." + cname);
-						/*
-						 * if(ctype == null) { ctype = ComplexFunction.getInstance(type.getName() + "."
-						 * + cname); }
-						 */
-						if (ctype == null) {
-							System.err.println("createFunctions: can not identify " + type.getName() + "." + cname);
-						}
-						else {
-							// createFunctions(c, ctype);
-							this.functionCreateChild(c, ctype);
-						}
-					}
-				}
-				return null;
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
 			}
+			
 		};
 
 		static Box<Object, Object> attribute = new Box<Object, Object>("attribute", 1) {
@@ -764,7 +751,38 @@ public class BuildFunctions {
 		};
 		
 		static Box<Object, Object> contract = new Box<Object, Object>("contract") {
+			@Override
+			public Accessible<Structure> functionCreate(CodeNode n, Complex type) throws AbstractInterpreterException {
 
+				String name = n.getCommand();
+				if (type == null) {
+					System.err.println("can not recognize type of " + name);
+					return null;
+				}
+
+				List<CodeNode> children = n.getChildNodes();
+				for (CodeNode c : children) {
+					
+					// TODO dieser shit wird aufgerufen...
+					if (! (c._isType() || c._isFunction()) ) {
+						System.err.println("bad call " + c.getCommand());
+					}
+					else {
+						System.err.println("good call " + c.getName());	
+					}
+					
+					String cname = c.getName();
+					Complex ctype = Complex.getInstance(type.getName() + "." + cname);
+					if (ctype == null) {
+						System.err.println("createFunctions: can not identify " + type.getName() + "." + cname);
+					}
+					else {
+						// createFunctions(c, ctype);
+						this.functionCreateChild(c, ctype);
+					}
+				}
+				return null;
+			}
 		};
 	}
 
@@ -772,8 +790,8 @@ public class BuildFunctions {
 
 		
 
-		Data.complex.functionCreate(n, type);
-		return Fun.unknown.createFunctionImpl(n, type);
+		Data.contract.functionCreate(n, type); hier die functions
+		return Fun.unknown.createFunctionImpl(n, type); hier die calls
 
 	}
 

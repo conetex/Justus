@@ -14,17 +14,28 @@ public class CodeNode {
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
+		if(  thisObj.parameters == null  ) {
+			throw new UnknownCommandParameter( c + "." + p);
+		}
 		String error = "";
 		for(Egg<?> command : commands) {
-			if ( command.getParameters().length == thisObj.parameters.length ) {
-				int idx = command.getParameterIndex(p);
-				if(idx > -1){
-					//error += c + "." + p + ", ";
-					return thisObj.parameters[idx];
-				}
+			if ( command == null ) {
+				error += ", " + c + " - " + p;
 			}
-			else{
-				error += ", " + command.getParameters().length + " != " + thisObj.parameters.length;
+			if ( command.getParameters() == null ) {
+				error += ", 0 != " + thisObj.parameters.length;
+			}
+			else {
+				if ( command.getParameters().length == thisObj.parameters.length ) {
+					int idx = command.getParameterIndex(p);
+					if(idx > -1){
+						//error += c + "." + p + ", ";
+						return thisObj.parameters[idx];
+					}
+				}
+				else{
+					error += ", " + command.getParameters().length + " != " + thisObj.parameters.length;
+				}
 			}
 		}
 		throw new UnknownCommandParameter( c + "." + p + " " + error);
@@ -202,7 +213,7 @@ public class CodeNode {
 		//return this._type;
 	}
 
-	public boolean isType() {
+	public boolean _isType() {
 		return isType(this.command);
 	}
 
@@ -213,7 +224,7 @@ public class CodeNode {
 		return false;
 	}
 
-	public boolean isFunction() {
+	public boolean _isFunction() {
 		return isFunction(this.command);
 	}
 

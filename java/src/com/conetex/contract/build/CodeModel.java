@@ -88,6 +88,11 @@ public class CodeModel {
 			return cb.valueCreateThis(child, parentTyp, parentData);
 		}
 		
+		public final Complex complexCreateChild(CodeNode child, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+			Egg<? extends S> cb = this.getChildBuilder(child);
+			return cb.complexCreateThis(child, parent, unformedComplexTypes);
+		}
+		
 	}
 
 
@@ -144,10 +149,22 @@ public class CodeModel {
 		}
 		
 		public Value<?> valueCreate(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException{
-			if (n._isAttributeInitialized() || n.isFunction() || n._isValue()) {
+			if (n._isAttributeInitialized() || n._isFunction() || n._isValue()) {
 				System.err.println("this call should go to a concret implementation of build " + n.getCommand());
 			}
 			return null;
+		}
+		
+		final Complex complexCreateThis(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+			this.checkMeaning(n);
+			return this.complexCreate(n, parent, unformedComplexTypes);
+		}
+		
+		public Complex complexCreate(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+			if (n._isType() || n._isFunction()) {
+				System.err.println("this call should go to a concret implementation of build " + n.getCommand());
+			}
+			return null;//BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
 		}
 				
 		final Set<String> keySet() {
@@ -492,8 +509,24 @@ public class CodeModel {
 		CodeModel.buildStruct();
 		CodeModel.buildUnknown();
 
-		Data.complex.contains(Fun.unknown);
+		Data.contract.contains(Data.complex);
+		Data.contract.contains(Fun.unknown);
+		Data.contract.contains(FunCall.whatEverCall);
+		Data.contract.contains(Assign.whatEverAssigment);
+		Data.contract.contains(Control.unknownLoop);
+		Data.contract.contains(Control.unknownIf);
+		Data.contract.contains(FunReturn.whatEverReturn);		
+		//Data.contract.contains(Control.unknownIf);		
+		Data.contract.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
+		Data.contract.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
+		Data.contract.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
+		
+		Data.contract.contains(Data.valueVirtPrim);
+
+		
+		
 		Data.complex.contains(Data.complex);
+		Data.complex.contains(Fun.unknown);
 		
 		Data.complex.contains(Data.attribute);
 		Data.complex.contains(Data.value);
