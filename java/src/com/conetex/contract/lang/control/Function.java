@@ -250,15 +250,6 @@ public class Function<V> extends Accessible<V> {
 		return returns;
 	}
 
-	/*
-	 * public static <SV extends Value<?>> Function<SV> create(Structure theData,
-	 * Accessible<?>[] theSteps){ if(theData == null || theSteps == null){ return
-	 * null; } return new Function<SV>(theData, theSteps); }
-	 */
-	// private Value<?>[] values;
-	// private String[] valueNames;
-	// private Structure data;
-
 	private String name;
 
 	public String getName() {
@@ -277,7 +268,6 @@ public class Function<V> extends Accessible<V> {
 	private Accessible<?>[] steps;
 
 	private Function(Accessible<?>[] theSteps, List<ReturnAbstract<V>> theReturns, String theName, Class<V> theRawTypeClass) {
-		// this.data = theData;
 		this.steps = theSteps;
 		this.returns = theReturns;
 		this.name = theName;
@@ -296,21 +286,12 @@ public class Function<V> extends Accessible<V> {
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
 			return null;
 		}
-		// thisObjectB = thisObjectB.copy();
 		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
 	}
 
 	@Override
 	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
-
 		return Function.doSteps(this.steps, this.returns, new Result(), thisObject);
-
-		/*
-		 * System.out.println("Function getFrom " + this.name); Complex x =
-		 * thisObject.getComplex();//.getInstance(this.name); Attribute<?> y =
-		 * x.functions.get(this.name); // TODO der cast ist scheiﬂﬂﬂe ComplexFunction z
-		 * = (ComplexFunction)(y.getType()); return getFrom(z);
-		 */
 	}
 
 	@Override

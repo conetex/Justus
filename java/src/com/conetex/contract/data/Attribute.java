@@ -55,8 +55,6 @@ public abstract class Attribute<T> {
 	public abstract AbstractType<T> getType();
 
 	public static Attribute<?> getID(String idName, Complex parentTyp) throws UnknownAttribute {
-		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
-		// + ")");
 		String typName = parentTyp.getName();
 		Complex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);
@@ -73,7 +71,6 @@ public abstract class Attribute<T> {
 			id = pTyp.getSubAttribute(idName);
 		}
 		if (id == null) {
-			// System.err.println("ERR: can not find '" + idName + "'");
 			throw new UnknownAttribute(idName + "@" + typName);
 		}
 		return id;

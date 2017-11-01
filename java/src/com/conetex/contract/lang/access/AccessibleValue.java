@@ -35,9 +35,6 @@ public class AccessibleValue<T> extends Accessible<T> {
 
 	@Override
 	public T getFrom(Structure thisObject) throws ValueCastException {
-
-		// return thisObject.getValueNewNew(this.path, this.clazz);
-
 		Value<T> value = thisObject.getValue(this.path, this.clazz);
 		if (value == null) {
 			return null;
@@ -50,14 +47,7 @@ public class AccessibleValue<T> extends Accessible<T> {
 		if (value == null) {
 			return null;
 		}
-		// just 4 debug:
-		// T valueOld = value.get();
 		return value.set(newValue);
-		// just 4 debug:
-		// value = thisObject.getValueNew(this.path, this.clazz);
-		// System.out.println(valueOld + " setTo " + newValue + " -> " +
-		// value.get());
-		// return newValue;
 	}
 
 	@Override
@@ -75,26 +65,18 @@ public class AccessibleValue<T> extends Accessible<T> {
 	}
 
 	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected) throws AbstractInterpreterException {
-		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
-		// + ")");
 		BuildFunctions.checkType(Primitive.getRawTypeClass(Attribute.getID(path, parentTyp)), expected);
-		// String path = n.getValue();
 		AccessibleValue<R> re = AccessibleValue.create(path, expected);
 		return re;
 	}
 
 	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp) throws AbstractInterpreterException {
-		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
-		// + ")");
 		Class<?> rawType = Primitive.getRawTypeClass(Attribute.getID(path, parentTyp));
-		// String path = n.getValue();
 		AccessibleValue<?> re = AccessibleValue.create(path, rawType);
 		return re;
 	}
 
 	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp) throws AbstractInterpreterException {
-		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
-		// + ")");
 		Attribute<?> id = Attribute.getID(path, parentTyp);
 		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Primitive.getRawTypeClass(id));
 		AccessibleValue<? extends Number> re = AccessibleValue.create(path, rawType);

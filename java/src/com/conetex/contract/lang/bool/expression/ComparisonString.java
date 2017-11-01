@@ -1,6 +1,6 @@
 package com.conetex.contract.lang.bool.expression;
 
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -19,13 +19,13 @@ public class ComparisonString extends Accessible<Boolean> {
 		if (theA == null || theB == null) {
 			return null;
 		}
-		if (operation.equals(Symbol.SMALLER)) {
+		if (operation.equals(Symbols.comSmaller())) {
 			return create(theA, theB, ComparisonString.SMALLER);
 		}
-		if (operation.equals(Symbol.EQUAL)) {
+		if (operation.equals(Symbols.comEqual())) {
 			return create(theA, theB, ComparisonString.EQUAL);
 		}
-		if (operation.equals(Symbol.GREATER)) {
+		if (operation.equals(Symbols.comGreater())) {
 			return create(theA, theB, ComparisonString.GREATER);
 		}
 		return null;

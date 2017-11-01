@@ -24,15 +24,10 @@ import com.conetex.contract.build.exceptionLang.UnknownCommand;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.FunctionAttributes;
-import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 
 public class CodeModel {
-
-	
-	
 	
 	public static abstract class Box<T, S> extends Egg<T> {
 
@@ -149,9 +144,6 @@ public class CodeModel {
 		}
 		
 		public Value<?> valueCreate(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException{
-			if (n._isAttributeInitialized() || n._isFunction() || n._isValue()) {
-				System.err.println("this call should go to a concret implementation of build " + n.getCommand());
-			}
 			return null;
 		}
 		
@@ -161,10 +153,7 @@ public class CodeModel {
 		}
 		
 		public Complex complexCreate(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
-			if (n._isType() || n._isFunction()) {
-				System.err.println("this call should go to a concret implementation of build " + n.getCommand());
-			}
-			return null;//BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+			return null;
 		}
 				
 		final Set<String> keySet() {
@@ -173,7 +162,6 @@ public class CodeModel {
 
 		public final void means(String theOperationName) throws DublicateOperation {
 			if (this.meaning.contains(theOperationName)) {
-				//System.err.println("duplicate operation '" + theOperationName + "' in " + this.getName());
 				throw new DublicateOperation( "duplicate operation '" + theOperationName + "' in " + this.getName() );
 			}
 			this.meaning.add(theOperationName);
@@ -210,9 +198,13 @@ public class CodeModel {
 		public final String[] getParameters() {
 			return this.parameterNames;
 		}
-		
-		
-
+				
+		public final int getParameterCount() {
+			if(this.parameterNames == null){
+				return 0;
+			}
+			return this.parameterNames.length;
+		}
 		
 	}
 	
@@ -256,13 +248,13 @@ public class CodeModel {
 		// FunReturn.whatEverReturn.contains(FunCall.boolCall); // done by
 		// FunCall.whatEverCall
 
-		Control.unknownLoop.contains(Expression.boolExpression);
-		Control.unknownLoop.contains(Expression.boolComparsion);
-		Control.unknownLoop.contains(Expression.boolNullCheck);
+		Control.loop.contains(Expression.boolExpression);
+		Control.loop.contains(Expression.boolComparsion);
+		Control.loop.contains(Expression.boolNullCheck);
 
-		Control.unknownIf.contains(Expression.boolExpression);
-		Control.unknownIf.contains(Expression.boolComparsion);
-		Control.unknownIf.contains(Expression.boolNullCheck);
+		Control.when.contains(Expression.boolExpression);
+		Control.when.contains(Expression.boolComparsion);
+		Control.when.contains(Expression.boolNullCheck);
 		// Control.unknownIf.contains(Reference.boolRef);// done by
 		// Reference.whatEverRef
 		// Control.unknownIf.contains(Constant.boolConst);// done by
@@ -279,9 +271,9 @@ public class CodeModel {
 															// hinter Zuweisung
 		Fun.structure.contains(Expression.boolComparsion);// TODO eigentlich nur
 															// hinter Zuweisung
-		Fun.unknown.contains(Expression.boolExpression);// TODO eigentlich nur
+		Fun.whatEver.contains(Expression.boolExpression);// TODO eigentlich nur
 														// hinter Zuweisung
-		Fun.unknown.contains(Expression.boolComparsion);// TODO eigentlich nur
+		Fun.whatEver.contains(Expression.boolComparsion);// TODO eigentlich nur
 														// hinter Zuweisung
 	}
 
@@ -295,8 +287,8 @@ public class CodeModel {
 		Expression.numberExpession.contains(Constant.numberConst);
 		Expression.numberExpession.contains(FunCall.numberCall);
 
-		Control.unknownLoop.contains(Expression.numberExpession);
-		Control.unknownIf.contains(Expression.numberExpession);
+		Control.loop.contains(Expression.numberExpession);
+		Control.when.contains(Expression.numberExpession);
 		// Control.unknownIf.contains(Reference.numberRef);// done by
 		// Reference.whatEverRef
 		// Control.unknownIf.contains(Constant.numberConst);// done by
@@ -337,20 +329,20 @@ public class CodeModel {
 															// Zuweisung
 		Fun.noReturn.contains(Expression.numberExpession);// TODO eigentlich nur
 															// hinter Zuweisung
-		Fun.unknown.contains(Expression.numberExpession);// TODO eigentlich nur
+		Fun.whatEver.contains(Expression.numberExpession);// TODO eigentlich nur
 															// hinter Zuweisung
 	}
 
 	static void buildStruct() throws AbstractInterpreterException {
-		Assign.objAssigment.contains(Reference.objRef);
-		Assign.objAssigment.contains(Constant.objConst);
-		Assign.objAssigment.contains(FunCall.objCall);
+		Assign.structureAssigment.contains(Reference.structureRef);
+		Assign.structureAssigment.contains(Constant.objConst);
+		Assign.structureAssigment.contains(FunCall.structureCall);
 
-		FunReturn.objReturn.contains(Reference.objRef);
-		FunReturn.objReturn.contains(Constant.objConst);
-		FunReturn.objReturn.contains(FunCall.objCall);
+		FunReturn.structureReturn.contains(Reference.structureRef);
+		FunReturn.structureReturn.contains(Constant.objConst);
+		FunReturn.structureReturn.contains(FunCall.structureCall);
 
-		Fun.structure.contains(FunReturn.objReturn);
+		Fun.structure.contains(FunReturn.structureReturn);
 	}
 
 	static void buildUnknown() throws AbstractInterpreterException {
@@ -358,13 +350,13 @@ public class CodeModel {
 		Assign.whatEverAssigment.contains(Constant.whatEverConst);
 		Assign.whatEverAssigment.contains(FunCall.whatEverCall);
 
-		Control.unknownLoop.contains(Assign.whatEverAssigment);
-		Control.unknownLoop.contains(FunCall.whatEverCall);
-		Control.unknownLoop.contains(FunReturn.whatEverReturn);
+		Control.loop.contains(Assign.whatEverAssigment);
+		Control.loop.contains(FunCall.whatEverCall);
+		Control.loop.contains(FunReturn.whatEverReturn);
 
-		Control.unknownIf.contains(Assign.whatEverAssigment);
-		Control.unknownIf.contains(FunCall.whatEverCall);
-		Control.unknownIf.contains(FunReturn.whatEverReturn);
+		Control.when.contains(Assign.whatEverAssigment);
+		Control.when.contains(FunCall.whatEverCall);
+		Control.when.contains(FunReturn.whatEverReturn);
 
 		// whatEverReturn.contains(whatEverCall);
 		FunReturn.whatEverReturn.contains(Reference.whatEverRef);
@@ -373,133 +365,140 @@ public class CodeModel {
 
 		Fun.bool.contains(Assign.whatEverAssigment);
 		Fun.bool.contains(FunCall.whatEverCall);
-		Fun.bool.contains(Control.unknownLoop);
-		Fun.bool.contains(Control.unknownIf);
+		Fun.bool.contains(Control.loop);
+		Fun.bool.contains(Control.when);
 		Fun.number.contains(Assign.whatEverAssigment);
 		Fun.number.contains(FunCall.whatEverCall);
-		Fun.number.contains(Control.unknownLoop);
-		Fun.number.contains(Control.unknownIf);
+		Fun.number.contains(Control.loop);
+		Fun.number.contains(Control.when);
 		Fun.structure.contains(Assign.whatEverAssigment);
 		Fun.structure.contains(FunCall.whatEverCall);
-		Fun.structure.contains(Control.unknownLoop);
-		Fun.structure.contains(Control.unknownIf);
-		Fun.unknown.contains(Assign.whatEverAssigment);
-		Fun.unknown.contains(FunCall.whatEverCall);
-		Fun.unknown.contains(FunReturn.whatEverReturn);
-		Fun.unknown.contains(Control.unknownLoop);
-		Fun.unknown.contains(Control.unknownIf);
+		Fun.structure.contains(Control.loop);
+		Fun.structure.contains(Control.when);
+		Fun.whatEver.contains(Assign.whatEverAssigment);
+		Fun.whatEver.contains(FunCall.whatEverCall);
+		Fun.whatEver.contains(FunReturn.whatEverReturn);
+		Fun.whatEver.contains(Control.loop);
+		Fun.whatEver.contains(Control.when);
+		
+		Fun.whatEver.contains(Data.attribute);
+		Fun.whatEver.contains(Data.value);
+		Fun.whatEver.contains(Data.valueVirtComp);
+		Fun.whatEver.contains(Data.complex);
+		Fun.whatEver.contains(Fun.whatEver);
+		
 		Fun.noReturn.contains(Assign.whatEverAssigment);
 		Fun.noReturn.contains(FunCall.whatEverCall);
-		Fun.noReturn.contains(Control.unknownLoop);
-		Fun.noReturn.contains(Control.unknownIf);
+		Fun.noReturn.contains(Control.loop);
+		Fun.noReturn.contains(Control.when);
 
 	}
 		
 	public static void build() throws AbstractInterpreterException {
 
-		Expression.numberExpession.means(new String[] { Symbol.PLUS, Symbol.MINUS, Symbol.TIMES, Symbol.DIVIDED_BY, Symbol.REMAINS });
-		Expression.boolNullCheck.means(Symbol.ISNULL);
-		Expression.boolComparsion.means(new String[] { Symbol.SMALLER, Symbol.GREATER, Symbol.EQUAL });
-		Expression.boolExpression.means(new String[] { Symbol.AND, Symbol.OR, Symbol.XOR, Symbol.NOT });
+		Expression.numberExpession.means(new String[] { Symbols.comPlus(), Symbols.comMinus(), Symbols.comTimes(), Symbols.comDividedBy(), Symbols.comRemains() });
+		Expression.boolNullCheck.means(Symbols.comIsNull());
+		Expression.boolComparsion.means(new String[] { Symbols.comSmaller(), Symbols.comGreater(), Symbols.comEqual() });
+		Expression.boolExpression.means(new String[] { Symbols.comAnd(), Symbols.comOr(), Symbols.comXOr(), Symbols.comNot() });
 		
 		
-		String[] params4Reference = new String[]{ CommandParameterSymbols.VALUE };
-		Reference.objRef.means(Symbol.REFERENCE);
-		Reference.objRef.registerParameters(params4Reference);
-		Reference.numberRef.means(Symbol.REFERENCE);
+		String[] params4Reference = new String[]{ Symbols.paramValue() };
+		Reference.structureRef.means(Symbols.comReference());
+		Reference.structureRef.registerParameters(params4Reference);
+		Reference.numberRef.means(Symbols.comReference());
 		Reference.numberRef.registerParameters(params4Reference);
-		Reference.boolRef.means(Symbol.REFERENCE);
+		Reference.boolRef.means(Symbols.comReference());
 		Reference.boolRef.registerParameters(params4Reference);
-		Reference.whatEverRef.means(Symbol.REFERENCE);
+		Reference.whatEverRef.means(Symbols.comReference());
 		Reference.whatEverRef.registerParameters(params4Reference);
 		
 		
 		
-		String[] params4Const = new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE };
-		Constant.numberConst.means(new String[] { Symbol.BINT, Symbol.INT, Symbol.LNG });
+		String[] params4Const = new String[]{ Symbols.paramName(), Symbols.paramValue() };
+		Constant.numberConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng() });
 		Constant.numberConst.registerParameters(params4Const);
-		Constant.boolConst.means(Symbol.BOOL);
+		Constant.boolConst.means(Symbols.comBool());
 		Constant.boolConst.registerParameters(params4Const);
-		Constant.objConst.means(Symbol.STRUCT);
+		Constant.objConst.means(Symbols.comStructure());
 		Constant.objConst.registerParameters(params4Const);
-		Constant.whatEverConst.means(new String[] { Symbol.BINT, Symbol.INT, Symbol.LNG, Symbol.BOOL, Symbol.STRUCT });
+		Constant.whatEverConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng(), Symbols.comBool(), Symbols.comStructure() });
 		Constant.whatEverConst.registerParameters(params4Const);
 		
 		
 		
-		Assign.whatEverAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
-		Assign.objAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
-		Assign.numberAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
-		Assign.boolAssigment.means(new String[] { Symbol.COPY, Symbol.REFER });
+		Assign.whatEverAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
+		Assign.structureAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
+		Assign.numberAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
+		Assign.boolAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
 		
 		
 		
-		Control.unknownIf.means(Symbol.IF);
-		Control.unknownLoop.means(Symbol.LOOP);
+		Control.when.means(Symbols.comWhen());
+		Control.loop.means(Symbols.comLoop());
 		
 		
 		
-		FunReturn.whatEverReturn.means(Symbol.RETURN);
-		FunReturn.objReturn.means(Symbol.RETURN);
-		FunReturn.numberReturn.means(Symbol.RETURN);
-		FunReturn.boolReturn.means(Symbol.RETURN);
+		FunReturn.whatEverReturn.means(Symbols.comReturn());
+		FunReturn.structureReturn.means(Symbols.comReturn());
+		FunReturn.numberReturn.means(Symbols.comReturn());
+		FunReturn.boolReturn.means(Symbols.comReturn());
 		
 		
-		String[] params4Function = { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE };
-		Fun.noReturn.means(Symbol.FUNCTION);
+		String[] params4Function = { Symbols.paramName(), Symbols.paramType() };
+		Fun.noReturn.means(Symbols.comFunction());
 		Fun.noReturn.registerParameters(params4Function);
-		Fun.structure.means(Symbol.FUNCTION);
+		Fun.structure.means(Symbols.comFunction());
 		Fun.structure.registerParameters(params4Function);
-		Fun.number.means(Symbol.FUNCTION);
+		Fun.number.means(Symbols.comFunction());
 		Fun.number.registerParameters(params4Function);
-		Fun.bool.means(Symbol.FUNCTION);
+		Fun.bool.means(Symbols.comFunction());
 		Fun.bool.registerParameters(params4Function);
-		Fun.unknown.means(Symbol.FUNCTION);
-		Fun.unknown.registerParameters(params4Function);
+		Fun.whatEver.means(Symbols.comFunction());
+		Fun.whatEver.registerParameters(params4Function);
 
 		
-		String[] params4Call = { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE };
-		FunCall.objCall.means(Symbol.CALL);
-		FunCall.objCall.registerParameters(params4Call);
-		FunCall.numberCall.means(Symbol.CALL);
+		String[] params4Call = { Symbols.paramName(), Symbols.paramType() };
+		FunCall.structureCall.means(Symbols.comCall());
+		FunCall.structureCall.registerParameters(params4Call);
+		FunCall.numberCall.means(Symbols.comCall());
 		FunCall.numberCall.registerParameters(params4Call);
-		FunCall.boolCall.means(Symbol.CALL);
+		FunCall.boolCall.means(Symbols.comCall());
 		FunCall.boolCall.registerParameters(params4Call);
-		FunCall.voidCall.means(Symbol.CALL);
+		FunCall.voidCall.means(Symbols.comCall());
 		FunCall.voidCall.registerParameters(params4Call);
-		FunCall.whatEverCall.means(Symbol.CALL);
+		FunCall.whatEverCall.means(Symbols.comCall());
 		FunCall.whatEverCall.registerParameters(params4Call);
 		
 		
 		
-		Data.complex.means(Symbol.COMPLEX);
-		Data.complex.registerParameters(new String[]{ CommandParameterSymbols.NAME });
+		Data.complex.means(Symbols.comComplex());
+		Data.complex.registerParameters(new String[]{ Symbols.paramName() });
 
 		
 		// Attribute
-		Data.attribute.means(Symbol.ATTRIBUTE);	// isAttribute //Symbol.ATTRIBUTE               , 
-		Data.attribute.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE }); 
+		Data.attribute.means(Symbols.comAttribute());	// isAttribute //Symbol.ATTRIBUTE               , 
+		Data.attribute.registerParameters(new String[]{ Symbols.paramName(), Symbols.paramType() }); 
 		
 		// TODO this box-object is only a dummy ...
-		Data.value.means( Symbol.VALUE );	// isAttributeInitialized //Symbol.VALUE 
-		Data.value.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE }); 
+		Data.value.means( Symbols.comValue() );	// isAttributeInitialized //Symbol.VALUE 
+		Data.value.registerParameters(new String[]{ Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() }); 
 
 		// TODO this box-object is only a dummy ...
-		Data.valueVirtPrim.means( CommandSymbols.VIRTUAL_PRIM_VALUE );	// isAttributeInitialized //Symbol.VALUE 
-		Data.valueVirtPrim.registerParameters(new String[]{ CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE }); 
+		Data.valueVirtPrim.means( Symbols.comvirtualPrimValue() );	// isAttributeInitialized //Symbol.VALUE 
+		Data.valueVirtPrim.registerParameters(new String[]{ Symbols.paramName(), Symbols.paramValue() }); 
 		
 		// TODO this box-object is only a dummy ...
-		Data.valueVirtComp.means( CommandSymbols.VIRTUAL_COMP_VALUE );	// isAttributeInitialized //Symbol.VALUE 
-		Data.valueVirtComp.registerParameters(new String[]{ CommandParameterSymbols.NAME }); 
+		Data.valueVirtComp.means( Symbols.comVirtualCompValue() );	// isAttributeInitialized //Symbol.VALUE 
+		Data.valueVirtComp.registerParameters(new String[]{ Symbols.paramName() }); 
 		
 		// TODO this box-object is only a dummy ...
-		Data.contract.means( CommandSymbols.CONTRACT );	// isAttributeInitialized //Symbol.VALUE 
-		Data.contract.registerParameters(new String[]{ CommandParameterSymbols.NAME }); 		
+		Data.contract.means( Symbols.comContract() );	// isAttributeInitialized //Symbol.VALUE 
+		Data.contract.registerParameters(new String[]{ Symbols.paramName() }); 		
 
 		// TODO this box-object is only a dummy ...
-		Control.then.means(Symbol.THEN);
+		Control.then.means(Symbols.comThen());
 		// TODO this box-object is only a dummy ...
-		Control.otherwise.means(Symbol.OTHERWISE);
+		Control.otherwise.means(Symbols.comOtherwise());
 
 		
 		
@@ -509,24 +508,11 @@ public class CodeModel {
 		CodeModel.buildStruct();
 		CodeModel.buildUnknown();
 
-		Data.contract.contains(Data.complex);
-		Data.contract.contains(Fun.unknown);
-		Data.contract.contains(FunCall.whatEverCall);
-		Data.contract.contains(Assign.whatEverAssigment);
-		Data.contract.contains(Control.unknownLoop);
-		Data.contract.contains(Control.unknownIf);
-		Data.contract.contains(FunReturn.whatEverReturn);		
-		//Data.contract.contains(Control.unknownIf);		
-		Data.contract.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
-		Data.contract.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
-		Data.contract.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
-		
-		Data.contract.contains(Data.valueVirtPrim);
 
 		
 		
 		Data.complex.contains(Data.complex);
-		Data.complex.contains(Fun.unknown);
+		Data.complex.contains(Fun.whatEver);
 		
 		Data.complex.contains(Data.attribute);
 		Data.complex.contains(Data.value);
@@ -534,17 +520,15 @@ public class CodeModel {
 
 		Data.complex.contains(FunCall.whatEverCall);
 		Data.complex.contains(Assign.whatEverAssigment);
-		Data.complex.contains(Control.unknownLoop);
-		Data.complex.contains(Control.unknownIf);
+		Data.complex.contains(Control.loop);
+		Data.complex.contains(Control.when);
 		Data.complex.contains(FunReturn.whatEverReturn);		
-		//Data.complex.contains(Control.unknownIf);		
 		Data.complex.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
 		Data.complex.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
 		Data.complex.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
 		
 		Data.complex.contains(Data.valueVirtPrim);
 		
-		//Data.contract.contains( Data.valueVirtComp );
 	}
 	
 }

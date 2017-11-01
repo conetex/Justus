@@ -39,26 +39,9 @@ public class CodeNode {
 			}
 		}
 		throw new UnknownCommandParameter( c + "." + p + " " + error);
-		
-		/*
-		for (int i = 0; i < CodeNode.commandNames.length; i++) {
-			if (CodeNode.commandNames[i] == c) {
-				
-				for (int j = 0; j < CodeNode.parameterNames[i].length; j++) {
-					if (CodeNode.parameterNames[i][j] == p) {
-						if (j < thisObj.parameters.length) {
-							return thisObj.parameters[j];
-						}
-					}
-				}
-				throw new UnknownCommandParameter(c + "." + p);
-			}
-		}
-		throw new UnknownCommand(c);
-		*/
 	}
 
-	private String getParameter(String p) throws UnknownCommandParameter, UnknownCommand {
+	public String getParameter(String p) throws UnknownCommandParameter, UnknownCommand {
 		return CodeNode.getParameter(this.getCommand(), p, this);
 	}
 
@@ -89,31 +72,7 @@ public class CodeNode {
 			}
 		}
 		throw new UnknownCommandParameter(error);
-		
-		/*
-		boolean commandNotFound = true;
-		for (int i = 0; i < CodeNode.commandNames.length; i++) {
-			if (CodeNode.commandNames[i] == c) {
-				commandNotFound = false;
-				if (CodeNode.parameterNames[i].length == p.length) {
-					for (int j = 0; j < CodeNode.parameterNames[i].length; j++) {
-						if (CodeNode.parameterNames[i][j] != p[j]) {
-							throw new UnknownCommandParameter(CodeNode.parameterNames[i][j] + " != " + p[j]);
-						}
-					}
-				}
-				else {
-					throw new UnknownCommandParameter(CodeNode.parameterNames[i].length + " != " + p.length);
-				}
-			}
-		}
-		if (commandNotFound) {
-			throw new UnknownCommand(c);
-		}
-		*/
 	}
-
-	
 
 	private String command;
 
@@ -121,27 +80,30 @@ public class CodeNode {
 
 	private List<CodeNode> children;
 
-	public static CodeNode create(String theName, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {
-		return create(theName, theNameAttribute, theValue, theType, new LinkedList<CodeNode>());
+	public static CodeNode _create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {
+		return _create(command, theNameAttribute, theValue, theType, new LinkedList<CodeNode>());
 	}
 
-	public static CodeNode create(String theNameOrg, String theNameAttributeOrg, String theValue, String theType, List<CodeNode> theChildren)
+	public static CodeNode _create(String commandOrg, String theNameAttributeOrg, String theValue, String theType, List<CodeNode> theChildren)
 			throws UnknownCommandParameter, UnknownCommand {
 
-		String theName = theNameOrg;
+		String command = commandOrg;
 		String theNameAttribute = theNameAttributeOrg;
 
-		if (theName == null || theName.length() == 0) {
+		if (command == null || command.length() == 0) {
 			return null;
 		}
-		if (!(isType(theName) || isFunction(theName) || isAttribute(theName) || isAttributeInitialized(theName) || isBuildInFunction(theName))) {
-			if (theNameAttribute == null) {
-				theNameAttribute = theName;
+		
+		List<Egg<?>> x = Egg.getInstance(commandOrg);
+		if (x == null) {
+		//if (!(isType(theName) || isFunction(theName) || isAttribute(theName) || isAttributeInitialized(theName) || isBuildInFunction(theName))) {
+			if (theNameAttribute == null) {				
+				theNameAttribute = command;
 				if (theValue == null) {
-					theName = CommandSymbols.VIRTUAL_COMP_VALUE;
+					command = Symbols.comVirtualCompValue();
 				}
 				else {
-					theName = CommandSymbols.VIRTUAL_PRIM_VALUE;
+					command = Symbols.comvirtualPrimValue();
 				}
 			}
 		}
@@ -149,72 +111,64 @@ public class CodeNode {
 		if (theNameAttribute == null) {
 			if (theValue == null) {
 				if (theType == null) {
-					checkParameter(theName, null);
-					return new CodeNode(theName, null, theChildren);
+					checkParameter(command, null);
+					return new CodeNode(command, null, theChildren);
 				}
 				else {
-					checkParameter(theName, new String[] { CommandParameterSymbols.TYPE });
-					return new CodeNode(theName, new String[] { theType }, theChildren);
+					checkParameter(command, new String[] { Symbols.paramType() });
+					return new CodeNode(command, new String[] { theType }, theChildren);
 				}
 			}
 			else if (theType == null) {
-				checkParameter(theName, new String[] { CommandParameterSymbols.VALUE });
-				return new CodeNode(theName, new String[] { theValue }, theChildren);
+				checkParameter(command, new String[] { Symbols.paramValue() });
+				return new CodeNode(command, new String[] { theValue }, theChildren);
 			}
 			else {
-				checkParameter(theName, new String[] { CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE });
-				return new CodeNode(theName, new String[] { theValue, theType }, theChildren);
+				checkParameter(command, new String[] { Symbols.paramValue(), Symbols.paramType() });
+				return new CodeNode(command, new String[] { theValue, theType }, theChildren);
 			}
 		}
 		else if (theValue == null) {
 			if (theType == null) {
-				checkParameter(theName, new String[] { CommandParameterSymbols.NAME });
-				return new CodeNode(theName, new String[] { theNameAttribute }, theChildren);
+				checkParameter(command, new String[] { Symbols.paramName() });
+				return new CodeNode(command, new String[] { theNameAttribute }, theChildren);
 			}
 			else {
-				checkParameter(theName, new String[] { CommandParameterSymbols.NAME, CommandParameterSymbols.TYPE });
-				return new CodeNode(theName, new String[] { theNameAttribute, theType }, theChildren);
+				checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramType() });
+				return new CodeNode(command, new String[] { theNameAttribute, theType }, theChildren);
 			}
 		}
 		else if (theType == null) {
-			checkParameter(theName, new String[] { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE });
-			return new CodeNode(theName, new String[] { theNameAttribute, theValue }, theChildren);
+			checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue() });
+			return new CodeNode(command, new String[] { theNameAttribute, theValue }, theChildren);
 		}
 		else {
-			checkParameter(theName, new String[] { CommandParameterSymbols.NAME, CommandParameterSymbols.VALUE, CommandParameterSymbols.TYPE });
-			return new CodeNode(theName, new String[] { theNameAttribute, theValue, theType }, theChildren);
+			checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
+			return new CodeNode(command, new String[] { theNameAttribute, theValue, theType }, theChildren);
 		}
 	}
 
-	private CodeNode(String theCommand, String[] theParams, List<CodeNode> theChildren) {
+	public CodeNode(String theCommand, String[] theParams, List<CodeNode> theChildren) {
 		this.command = theCommand;
 		this.parameters = theParams;
 		this.children = theChildren;
-
-		//this._type = theType;
 	}
 
 	public String getCommand() {
 		return this.command;
 	}
 
-	public String getName() throws UnknownCommandParameter, UnknownCommand {
+	/*
+	public String _getName() throws UnknownCommandParameter, UnknownCommand {
 		return this.getParameter(CommandParameterSymbols.NAME);
-		// return this.name;
 	}
 
-	public String getValue() throws UnknownCommandParameter, UnknownCommand {
+	public String _getValue() throws UnknownCommandParameter, UnknownCommand {
 		return this.getParameter(CommandParameterSymbols.VALUE);
-		// return this.value;
 	}
 
-	public String getType() throws UnknownCommandParameter, UnknownCommand {
+	public String _getType() throws UnknownCommandParameter, UnknownCommand {
 		return this.getParameter(CommandParameterSymbols.TYPE);
-		//return this._type;
-	}
-
-	public boolean _isType() {
-		return isType(this.command);
 	}
 
 	private static boolean isType(String theCommand) {
@@ -224,10 +178,6 @@ public class CodeNode {
 		return false;
 	}
 
-	public boolean _isFunction() {
-		return isFunction(this.command);
-	}
-
 	private static boolean isFunction(String theCommand) {
 		if (theCommand.equals(Symbol.FUNCTION)) {
 			return true;
@@ -235,24 +185,12 @@ public class CodeNode {
 		return false;
 	}
 
-	public boolean _isAttribute() {
-		return isAttribute(this.command);
-	}
-
 	private static boolean isAttribute(String theCommand) {
 		return theCommand.equals(Symbol.ATTRIBUTE);
 	}
 
-	public boolean _isAttributeInitialized() {
-		return isAttributeInitialized(this.command);
-	}
-
 	private static boolean isAttributeInitialized(String theCommand) {
 		return theCommand.equals(Symbol.VALUE);
-	}
-
-	public boolean isBuildInFunction() {
-		return isBuildInFunction(this.command);
 	}
 
 	private static boolean isBuildInFunction(String thiscommand) {
@@ -265,10 +203,6 @@ public class CodeNode {
 			return true;
 		}
 		return false;
-	}
-
-	public boolean _isValue() {
-		return isValue(this.command);
 	}
 
 	private static boolean isValue(String thiscommand) {
@@ -284,6 +218,8 @@ public class CodeNode {
 		}
 	}
 
+	*/
+	
 	public CodeNode getChildElementByIndex(int index) {
 		if (this.children == null) {
 			return null;

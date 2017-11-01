@@ -16,39 +16,27 @@ public class Build {
 	}
 
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
-		
-		
-		
 		List<Complex> complexTyps = BuildTypes.createComplexTypes(code);
 		System.out.println("Builder " + code.getCommand());
 		if (complexTyps != null) {
-			Complex complexTypeRoot = Complex.getInstance(code.getName());
+			Complex complexTypeRoot = Complex.getInstance(code.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
 			if (rootStructure != null) {
 				BuildValues.createValues(code, complexTypeRoot, rootStructure);
 				rootStructure.fillMissingValues();
-
 				FunctionAttributes.fillMissingPrototypeValues();
-
 				Function<?> mainFunction = BuildFunctions.build(code, complexTypeRoot);
 				if (mainFunction != null) {
 					return new Main() {
 						@Override
 						public void run() throws AbstractRuntimeException {
 							mainFunction.getFromRoot(rootStructure);
-							// mainFunction.getFrom(rootStructure);
 						}
 					};
 				}
 			}
 		}
-
 		return null;
-
 	}
-
-	
-	
-
 	
 }

@@ -3,7 +3,7 @@ package com.conetex.contract.lang.access;
 import java.math.BigInteger;
 
 import com.conetex.contract.build.CodeNode;
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionLang.TypeNotDeterminated;
 import com.conetex.contract.build.exceptionLang.UnknownCommand;
 import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
@@ -26,37 +26,37 @@ public class AccessibleConstant<T> extends Accessible<T> {
 	public static Accessible<? extends Number> createNumConst(CodeNode n, Complex parentTyp) throws UnknownType, TypeNotDeterminated, UnknownCommandParameter, UnknownCommand {
 		Accessible<? extends Number> re = try2CreateNumConst(n, parentTyp);
 		if (re == null) {
-			throw new TypeNotDeterminated("number const-Type: " + n.getName());
+			throw new TypeNotDeterminated("number const-Type: " + n.getParameter(Symbols.paramName()));
 		}
 		return re;
 	}
 
 	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
-		if (name.equals(Symbol.BINT)) {
-			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getValue());
+		if (name.equals(Symbols.comBigInt())) {
+			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getParameter(Symbols.paramValue()));
 		}
-		else if (name.equals(Symbol.INT)) {
-			return AccessibleConstant.<Integer>create2(Integer.class, n.getValue());
+		else if (name.equals(Symbols.comInt())) {
+			return AccessibleConstant.<Integer>create2(Integer.class, n.getParameter(Symbols.paramValue()));
 		}
-		else if (name.equals(Symbol.LNG)) {
-			return AccessibleConstant.<Long>create2(Long.class, n.getValue());
+		else if (name.equals(Symbols.comLng())) {
+			return AccessibleConstant.<Long>create2(Long.class, n.getParameter(Symbols.paramValue()));
 		}
 		return null;
 	}
 
 	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
-		if (name.equals(Symbol.BOOL)) {
-			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getValue());
+		if (name.equals(Symbols.comBool())) {
+			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getParameter(Symbols.paramValue()));
 		}
 		return null;
 	}
 
 	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
-		if (name.equals(Symbol.STRUCT)) {
-			return AccessibleConstant.<Structure>create2(Structure.class, n.getValue());
+		if (name.equals(Symbols.comStructure())) {
+			return AccessibleConstant.<Structure>create2(Structure.class, n.getParameter(Symbols.paramValue()));
 		}
 		return null;
 	}

@@ -7,7 +7,7 @@ import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class Loop<V> extends If<V> {
+public class Loop<V> extends When<V> {
 
 	public static <SV> Loop<SV> create(Accessible<?>[] theStepsIf, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass) throws CastException {
 		if (theStepsIf == null) {

@@ -9,12 +9,9 @@ import java.util.TreeSet;
 
 import com.conetex.contract.build.BuildFunctions.Data;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
-import com.conetex.contract.build.exceptionLang.UnknownCommand;
-import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.FunctionAttributes;
-import com.conetex.contract.data.type.Primitive;
 
 public class BuildTypes {
 
@@ -40,23 +37,18 @@ public class BuildTypes {
 		Recursive<Run> recursive = new Recursive<>();
 		recursive.function = (CodeNode node, Complex parent) -> {
 			for (CodeNode c : node.getChildNodes()) {
-				// TODO  hier we go ...
-				//if (c.isType() || c.isFunction()) {
-					//Complex complexType = createComplexType(c, parent, unformedComplexTypes, referringComplexTypeNames);	
-					Complex complexType = Data.complex.complexCreateChild(c, parent, unformedComplexTypes);
-					if (complexType != null) {
-						re.add(complexType);
-						recursive.function.run(c, complexType);
-					}
-				//}
+				Complex complexType = Data.complex.complexCreateChild(c, parent, unformedComplexTypes);
+				if (complexType != null) {
+					re.add(complexType);
+					recursive.function.run(c, complexType);
+				}
 			}
 		};
 		Complex complexTypeRoot = createComplexType(n, null, unformedComplexTypes, referringComplexTypeNames);
 		if (complexTypeRoot != null) {
 			re.add(complexTypeRoot);
-			recursive.function.run(n, complexTypeRoot);// root == null
+			recursive.function.run(n, complexTypeRoot);
 		}
-		// recursive.function.run(n, null);
 
 		for (String createdComplex : Complex.getInstanceNames()) {
 			System.out.println("createComplexList known: " + createdComplex);
@@ -89,7 +81,7 @@ public class BuildTypes {
 	}
 	
 	public static Complex createComplexType(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes, Set<String> _referringComplexTypeNames) throws AbstractInterpreterException {
-		String typeName = n.getName();
+		String typeName = n.getParameter(Symbols.paramName());
 		if (typeName == null) {
 			// TODO Exception
 			System.err.println("no typeName for complex");
@@ -108,52 +100,9 @@ public class BuildTypes {
 		
 		for (CodeNode c : n.getChildNodes()) {
 			Attribute<?> id = Data.complex.attributeCreateChild(c, unformedComplexTypes);
-			//Attribute<?> id = createAttribute(c, unformedComplexTypes);
 			if (id != null) {
 				identifiers.add(id);
 			}
-			/*
-			String idTypeName = null;
-			String idName = null;
-			if (c.isAttribute() || c.isAttributeInitialized()) {
-				Attribute<?> id = null;
-				idTypeName = c.getType();
-				idName = c.getName();
-				if (idTypeName == null) {
-					System.err.println("can not get Type of " + c.getCommand() + " " + idName);
-				}
-				else {
-					if (idTypeName.startsWith(Symbol.SIMPLE_TYPE_NS)) {
-						// Simple
-						id = Primitive.createAttribute(idName, idTypeName.substring(Symbol.SIMPLE_TYPE_NS.length()));
-					}
-					else {
-						// Complex
-						// referringComplexTypeNames.add(idTypeName);
-						id = Complex.createAttribute(idName, idTypeName, unformedComplexTypes);
-					}
-				}
-				if (id != null) {
-					identifiers.add(id);
-				}
-				else {
-					// TODO Exception
-					System.err.println("createComplexType can not create Identifier " + idName + " (" + idTypeName + ")");
-				}
-			}
-			else if (c.getCommand() == Symbol.FUNCTION) {
-				// Complex
-				idTypeName = c.getType();
-				idName = c.getName();
-				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
-				// TODO BUG !!!
-				// Attribute<?> fun =
-				FunctionAttributes.createAttribute(idName, idTypeName, unformedComplexTypes);
-			}
-			else {
-				continue;
-			}
-		    */
 		}
 		Attribute<?>[] theOrderedIdentifiers = new Attribute<?>[identifiers.size()];
 		identifiers.toArray(theOrderedIdentifiers);
@@ -162,7 +111,7 @@ public class BuildTypes {
 		Complex complexType = unformedComplexTypes.get(typeName);
 		if (complexType == null) {
 			
-				if (n.getCommand() == Symbol.FUNCTION) {
+				if (n.getCommand() == Symbols.comFunction()) {
 					complexType = FunctionAttributes.createInit(typeName, theOrderedIdentifiers);
 				}
 				else {

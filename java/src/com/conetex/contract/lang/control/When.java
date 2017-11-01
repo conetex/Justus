@@ -8,7 +8,7 @@ import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class If<V> extends ReturnAbstract<V> {
+public class When<V> extends ReturnAbstract<V> {
 
 	Accessible<Boolean> condition;
 
@@ -18,7 +18,7 @@ public class If<V> extends ReturnAbstract<V> {
 
 	private Class<V> rawTypeClass;
 
-	public static <SV> If<SV> create(Accessible<?>[] theStepsIf, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass) throws CastException {
+	public static <SV> When<SV> create(Accessible<?>[] theStepsIf, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass) throws CastException {
 		if (theStepsIf == null) {
 			System.err.println("theStepsIf is null");
 			return null;
@@ -28,11 +28,11 @@ public class If<V> extends ReturnAbstract<V> {
 			return null;
 		}
 		List<ReturnAbstract<SV>> returns = Function.getReturns(theStepsIf, theRawTypeClass);
-		If<SV> re = new If<>(theStepsIf, returns, theCondition, theRawTypeClass);
+		When<SV> re = new When<>(theStepsIf, returns, theCondition, theRawTypeClass);
 		return re;
 	}
 
-	If(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
+	When(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
 		this.stepsIf = theStepsIf;
 		this.returnsIf = returns;
 		this.condition = theCondition;

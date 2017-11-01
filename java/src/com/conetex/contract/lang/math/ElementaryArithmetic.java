@@ -2,7 +2,7 @@ package com.conetex.contract.lang.math;
 
 import java.math.BigInteger;
 
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
@@ -21,19 +21,19 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		if (theA == null || theB == null) {
 			return null;
 		}
-		if (operation.equals(Symbol.PLUS)) {
+		if (operation.equals(Symbols.comPlus())) {
 			return createNew(theA, theB, ElementaryArithmetic.PLUS);
 		}
-		if (operation.equals(Symbol.MINUS)) {
+		if (operation.equals(Symbols.comMinus())) {
 			return createNew(theA, theB, ElementaryArithmetic.MINUS);
 		}
-		if (operation.equals(Symbol.TIMES)) {
+		if (operation.equals(Symbols.comTimes())) {
 			return createNew(theA, theB, ElementaryArithmetic.TIMES);
 		}
-		if (operation.equals(Symbol.DIVIDED_BY)) {
+		if (operation.equals(Symbols.comDividedBy())) {
 			return createNew(theA, theB, ElementaryArithmetic.DIVIDED_BY);
 		}
-		if (operation.equals(Symbol.REMAINS)) {
+		if (operation.equals(Symbols.comRemains())) {
 			return createNew(theA, theB, ElementaryArithmetic.REMAINS);
 		}
 		return null;

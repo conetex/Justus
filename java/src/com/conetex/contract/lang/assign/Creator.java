@@ -1,7 +1,7 @@
 package com.conetex.contract.lang.assign;
 
 import com.conetex.contract.build.Cast;
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionLang.CastException;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.lang.access.Setable;
@@ -90,10 +90,10 @@ public abstract class Creator {
 	}
 
 	private static Creator getCreator(String name) {
-		if (name.equals(Symbol.COPY)) {
+		if (name.equals(Symbols.comCopy())) {
 			return Creator.copy;
 		}
-		if (name.equals(Symbol.REFER)) {
+		if (name.equals(Symbols.comRefer())) {
 			return Creator.refer;
 		}
 		return null;

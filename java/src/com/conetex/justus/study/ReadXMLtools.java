@@ -4,7 +4,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 
 public class ReadXMLtools {
 
@@ -18,10 +18,14 @@ public class ReadXMLtools {
 	}
 
 	public static String getNodeValue(Node n) {
-		String re = ReadXMLtools.getAttribute(n, Symbol.VALUE);
+		String re = ReadXMLtools.getAttribute(n, Symbols.comValue());
 		if (re != null) {
 			return re;
 		}
+		return getNodeContent(n);
+	}
+	
+	public static String getNodeContent(Node n) {
 		NodeList children = n.getChildNodes();
 		if (children != null && children.getLength() == 1) {
 			Node textValueNode = children.item(0);
@@ -33,16 +37,12 @@ public class ReadXMLtools {
 		return null;
 	}
 
-	public static String getRootType(Node n) {
-		return ReadXMLtools.getAttribute(n, Symbol.TYPE_NAME);
-	}
-
 	public static boolean isType(Node n) {
 		if (n.getNodeType() != Node.ELEMENT_NODE) {
 			return false;
 		}
 		String name = n.getNodeName();
-		if (name.equals(Symbol.COMPLEX) || name.equals(Symbol.FUNCTION)) {
+		if (name.equals(Symbols.comComplex()) || name.equals(Symbols.comFunction())) {
 			// System.out.println("isType Y " + name + " - " +
 			// ReadXMLtools.getAttribute(n,
 			// Symbol.IDENTIFIER_NAME) );
@@ -59,7 +59,7 @@ public class ReadXMLtools {
 			return false;
 		}
 		String name = n.getNodeName();
-		if (name.equals(Symbol.ATTRIBUTE)) {
+		if (name.equals(Symbols.comAttribute())) {
 			return true;
 		}
 		return false;
@@ -70,10 +70,10 @@ public class ReadXMLtools {
 			return false;
 		}
 		String name = n.getNodeName();
-		if (name.equals(Symbol.PLUS) || name.equals(Symbol.MINUS) || name.equals(Symbol.TIMES) || name.equals(Symbol.DIVIDED_BY) || name.equals(Symbol.REMAINS)
-				|| name.equals(Symbol.SMALLER) || name.equals(Symbol.GREATER) || name.equals(Symbol.EQUAL) || name.equals(Symbol.AND) || name.equals(Symbol.OR)
-				|| name.equals(Symbol.XOR) || name.equals(Symbol.NOT) || name.equals(Symbol.REFERENCE) || name.equals(Symbol.COPY)
-				|| name.equals(Symbol.FUNCTION) || name.equals(Symbol.RETURN) || name.equals(Symbol.CALL)) {
+		if (name.equals(Symbols.comPlus()) || name.equals(Symbols.comMinus()) || name.equals(Symbols.comTimes()) || name.equals(Symbols.comDividedBy()) || name.equals(Symbols.comRemains())
+				|| name.equals(Symbols.comSmaller()) || name.equals(Symbols.comGreater()) || name.equals(Symbols.comEqual()) || name.equals(Symbols.comAnd()) || name.equals(Symbols.comOr())
+				|| name.equals(Symbols.comXOr()) || name.equals(Symbols.comNot()) || name.equals(Symbols.comReference()) || name.equals(Symbols.comCopy())
+				|| name.equals(Symbols.comFunction()) || name.equals(Symbols.comReturn()) || name.equals(Symbols.comCall())) {
 			return true;
 		}
 		return false;
@@ -84,7 +84,7 @@ public class ReadXMLtools {
 			return false;
 		}
 		String name = n.getNodeName();
-		if (name.equals(Symbol.ATTRIBUTE)) {
+		if (name.equals(Symbols.comAttribute())) {
 			String valueNode = ReadXMLtools.getNodeValue(n);
 			if (valueNode == null) {
 				// System.out.println("isValue N " + name + " - " +
@@ -100,7 +100,7 @@ public class ReadXMLtools {
 			}
 		}
 		else {
-			if (name.equals(Symbol.FUNCTION)) {
+			if (name.equals(Symbols.comFunction())) {
 				// System.out.println("isValue Y " + name + " - " +
 				// ReadXMLtools.getAttribute(n,
 				// Symbol.IDENTIFIER_NAME) );

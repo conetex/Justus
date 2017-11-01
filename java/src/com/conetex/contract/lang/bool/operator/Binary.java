@@ -1,6 +1,6 @@
 package com.conetex.contract.lang.bool.operator;
 
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.access.Accessible;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -12,7 +12,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 		if (theA == null || theB == null) {
 			return null;
 		}
-		if (operation.equals(Symbol.AND)) {
+		if (operation.equals(Symbols.comAnd())) {
 			return new Binary(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
@@ -23,7 +23,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 				}
 			};
 		}
-		else if (operation.equals(Symbol.OR)) {
+		else if (operation.equals(Symbols.comOr())) {
 			return new Binary(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
@@ -34,7 +34,7 @@ public abstract class Binary extends Accessible<Boolean> {// implements
 				}
 			};
 		}
-		else if (operation.equals(Symbol.XOR)) {
+		else if (operation.equals(Symbols.comXOr())) {
 			return new Binary(theA, theB) {
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {

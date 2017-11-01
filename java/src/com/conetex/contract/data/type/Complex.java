@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.conetex.contract.build.Symbol;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.ComplexWasInitializedExeption;
 import com.conetex.contract.build.exceptionLang.DublicateComplexException;
@@ -300,11 +300,11 @@ public class Complex extends AbstractType<Structure> { // AbstractType<Value<?>[
 		if (aName == null) {
 			return re;
 		}
-		int i = aName.lastIndexOf(Symbol.TYPE_SEPERATOR);
+		int i = aName.lastIndexOf(Symbols.litTypeSeperator());
 		if (i > -1 && i < aName.length()) {
 			re[0] = aName.substring(0, i);
-			if (i + Symbol.TYPE_SEPERATOR.length() < aName.length()) {
-				re[1] = aName.substring(i + Symbol.TYPE_SEPERATOR.length());
+			if (i + Symbols.litTypeSeperator().length() < aName.length()) {
+				re[1] = aName.substring(i + Symbols.litTypeSeperator().length());
 			}
 		}
 		return re;
