@@ -1,5 +1,9 @@
 package com.conetex.contract.build;
 
+import java.math.BigInteger;
+
+import com.conetex.contract.data.type.Primitive;
+
 public class Symbols{
 
 	private static final String SIMPLE_TYPE_NS = "t:";
@@ -13,6 +17,8 @@ public class Symbols{
 	public static final String litTypeSeperator() {
 		return TYPE_SEPERATOR;
 	}
+	
+	public static final String[] PARAM_AFFIXES = new String[]{"(", ")", "_", "-"};
 
 	// data command
 	private static final String COM_CONTRACT = "contract";
@@ -52,6 +58,21 @@ public class Symbols{
 	}
 
 	// def of data (const)
+	
+	public static final String CLASS_BINT = "BigInt";
+	
+	public static final String CLASS_LNG = "Lng";
+	
+	public static final String CLASS_INT = "Int";
+	
+	public static final String CLASS_SIZED_ASCII = "SizedASCII";
+	
+	public static final String CLASS_BOOL = "Bool";
+	
+	public static final String CLASS_MAIL_ADDRESS = "MailAddress";
+	
+	
+	
 	private static final String COM_STRUCT = "struct";
 
 	public static final String comStructure() {

@@ -38,13 +38,19 @@ public class Int implements Value<Integer>{
 	}
 
 	@Override
-	public Integer copy() {
+	public Integer getCopy() {
 		return this.get();
 	}
 
 	@Override
 	public Class<Integer> getRawTypeClass() {
 		return Integer.class;
+	}
+
+	@Override
+	public Value<Integer> cloneValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

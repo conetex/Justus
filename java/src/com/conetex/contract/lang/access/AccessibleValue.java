@@ -56,7 +56,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 		if(value == null){
 			return null;
 		}
-		return value.copy();
+		return value.getCopy();
 	}
 
 	@Override
@@ -65,20 +65,19 @@ public class AccessibleValue<T> extends Accessible<T>{
 	}
 
 	public static <R> Accessible<R> createFunctionRef(String path, Complex parentTyp, Class<R> expected) throws AbstractInterpreterException {
-		BuildFunctions.checkType(Primitive.getRawTypeClass(Attribute.getID(path, parentTyp)), expected);
+		BuildFunctions.checkType(Attribute.getRawTypeClass(path, parentTyp), expected);
 		AccessibleValue<R> re = AccessibleValue.create(path, expected);
 		return re;
 	}
 
 	public static Accessible<?> createFunctionRefWhatEver(String path, Complex parentTyp) throws AbstractInterpreterException {
-		Class<?> rawType = Primitive.getRawTypeClass(Attribute.getID(path, parentTyp));
+		Class<?> rawType = Attribute.getRawTypeClass(path, parentTyp);
 		AccessibleValue<?> re = AccessibleValue.create(path, rawType);
 		return re;
 	}
 
 	public static Accessible<? extends Number> createFunctionRefNum(String path, Complex parentTyp) throws AbstractInterpreterException {
-		Attribute<?> id = Attribute.getID(path, parentTyp);
-		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Primitive.getRawTypeClass(id));
+		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Attribute.getRawTypeClass(path, parentTyp));
 		AccessibleValue<? extends Number> re = AccessibleValue.create(path, rawType);
 		return re;
 	}

@@ -185,18 +185,6 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		return null;
 	}
 
-	private static <T> Value<T> clone(Value<T> src) throws Invalid {
-		Primitive<T> type = Primitive.<T>getInstanceAtRunTime(src.getClass(), src.getRawTypeClass());
-		if(type == null){
-			// TODO ERROR
-			return null;
-		}
-		Value<T> re = type.createValue();
-		T val = src.copy();
-		re.set(val); // throws the Exception
-		return re;
-	}
-
 	public boolean set(String id, Value<?> value) throws Invalid {
 		int i = this.type.getSubAttributeIndex(id);
 		if(i > -1 && i < this.values.length){
@@ -212,18 +200,23 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public Structure copy() throws Invalid {
+	public Structure getCopy() throws Invalid {
 		if(this.values == null){
 			return null;
 		}
 		Value<?>[] theValues = new Value<?>[this.values.length];
 		for(int i = 0; i < theValues.length; i++){
-			theValues[i] = clone(this.values[i]);
+			theValues[i] = this.values[i].cloneValue();
 		}
 
 		Structure StructureNew = new Structure(this.type, this.parent);
 		StructureNew.values = theValues;
 		return StructureNew;
+	}
+	
+	@Override
+	public Value<Structure> cloneValue() throws Invalid {
+		return this.getCopy();
 	}
 
 	@Override
@@ -262,5 +255,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	public void setParent(Structure theParent) {
 		this.parent = theParent;
 	}
+
+
 
 }

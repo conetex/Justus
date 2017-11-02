@@ -1,5 +1,7 @@
 package com.conetex.contract.data.value;
 
+import com.conetex.contract.data.Value;
+
 public class Base64_256 extends Base64{
 	// How to calculate the memory for Base64-encoded data? See
 	// https://de.wikipedia.org/wiki/Base64
@@ -9,6 +11,12 @@ public class Base64_256 extends Base64{
 	@Override
 	public int getMaxSize() {
 		return 344;
+	}
+
+	@Override
+	public Value<String> cloneValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

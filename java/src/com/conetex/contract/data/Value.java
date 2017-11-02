@@ -8,7 +8,7 @@ public interface Value<T> {
 
 	public T get();
 
-	public T copy() throws Invalid;
+	public T getCopy() throws Invalid;
 
 	public T set(T value) throws Invalid;
 
@@ -17,5 +17,7 @@ public interface Value<T> {
 	public T setConverted(String value) throws Inconvertible, Invalid;
 
 	public Class<T> getRawTypeClass();
+
+	public Value<T> cloneValue() throws Invalid;
 
 }

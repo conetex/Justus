@@ -67,23 +67,23 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		try{
 
 			if(expectedBaseTyp == BigInteger.class){
-				theClass = Primitive.<RE>getInstance(BigInt.class, expectedBaseTyp);
+				theClass = Primitive.<RE>getInstance(Symbols.CLASS_BINT, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Long.class){
-				theClass = Primitive.<RE>getInstance(Lng.class, expectedBaseTyp);
+				theClass = Primitive.<RE>getInstance(Symbols.CLASS_LNG, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Integer.class){
-				theClass = Primitive.<RE>getInstance(Int.class, expectedBaseTyp);
+				theClass = Primitive.<RE>getInstance(Symbols.CLASS_INT, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Byte.class){
 				// TODO Typen klären ...
 				return null;
 			}
 			else if(expectedBaseTyp == String.class){
-				theClass = Primitive.<RE>getInstance(SizedASCII.class, expectedBaseTyp);
+				theClass = Primitive.<RE>getInstance(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Boolean.class){
-				theClass = Primitive.<RE>getInstance(Bool.class, expectedBaseTyp);
+				theClass = Primitive.<RE>getInstance(Symbols.CLASS_BOOL, expectedBaseTyp);
 			}
 
 		}
@@ -139,7 +139,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 
 	@Override
 	public T copyFrom(Structure thisObject) throws Invalid {
-		return this.value.copy();
+		return this.value.getCopy();
 	}
 
 	@Override

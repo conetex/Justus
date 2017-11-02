@@ -14,6 +14,8 @@ public abstract class AbstractType<T> {
 	public abstract Attribute<T> createAttribute(Label theName) throws NullLabelException, EmptyLabelException;
 
 	public abstract Class<? extends Value<T>> getValueImplementClass();
+	
+	public abstract Class<T> getRawTypeClass();
 
 	public abstract String getName();
 	// public abstract Value<T> createValue();

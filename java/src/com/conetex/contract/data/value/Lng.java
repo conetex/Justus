@@ -38,13 +38,19 @@ public class Lng implements Value<Long>{
 	}
 
 	@Override
-	public Long copy() {
+	public Long getCopy() {
 		return this.get();
 	}
 
 	@Override
 	public Class<Long> getRawTypeClass() {
 		return Long.class;
+	}
+
+	@Override
+	public Value<Long> cloneValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

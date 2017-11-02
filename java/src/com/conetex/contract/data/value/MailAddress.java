@@ -1,13 +1,22 @@
 package com.conetex.contract.data.value;
 
+import com.conetex.contract.data.Value;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public abstract class MailAddress extends SizedASCII{
+public class MailAddress extends SizedASCII{
 
+	private int maxSize;
+	
 	// See
-	// http://stackoverflow.com/questions/7717573/what-is-the-longest-possible-email-address
-	@Override
-	public abstract int getMaxSize(); // longest email-address is 254
+	// http://stackoverflow.com/questions/7717573/what-is-the-longest-possible-email-address 
+	// longest email-address is 254
+	public MailAddress(int theMaxSize){
+		this.maxSize = theMaxSize;
+	}
+	
+	public int getMaxSize(){
+		return this.maxSize;
+	}
 
 	@Override
 	public String set(String aValueIn) throws Invalid {
@@ -28,5 +37,12 @@ public abstract class MailAddress extends SizedASCII{
 			}
 		}
 		return super.actual;
+	}
+
+	@Override
+	public Value<String> cloneValue() throws Invalid {
+		MailAddress re = new MailAddress(this.maxSize);
+		re.actual = super.actual;
+		return re;
 	}
 }

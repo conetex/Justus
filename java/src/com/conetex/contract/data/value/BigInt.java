@@ -40,13 +40,19 @@ public class BigInt implements Value<BigInteger>{
 	}
 
 	@Override
-	public BigInteger copy() {
+	public BigInteger getCopy() {
 		return this.get();
 	}
 
 	@Override
 	public Class<BigInteger> getRawTypeClass() {
 		return BigInteger.class;
+	}
+
+	@Override
+	public Value<BigInteger> cloneValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

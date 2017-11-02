@@ -121,7 +121,7 @@ public abstract class SizedASCII implements Value<String>{
 	}
 
 	@Override
-	public String copy() {
+	public String getCopy() {
 		return this.get();
 	}
 

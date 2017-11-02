@@ -2,6 +2,7 @@ package com.conetex.contract.data;
 
 import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionLang.UnknownAttribute;
+import com.conetex.contract.build.exceptionLang.UnknownType;
 import com.conetex.contract.data.type.AbstractType;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.value.SizedASCII;
@@ -54,7 +55,7 @@ public abstract class Attribute<T> {
 
 	public abstract AbstractType<T> getType();
 
-	public static Attribute<?> getID(String idName, Complex parentTyp) throws UnknownAttribute {
+	private static Attribute<?> getAttribute(String idName, Complex parentTyp) throws UnknownAttribute {
 		String typName = parentTyp.getName();
 		Complex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);
@@ -75,5 +76,11 @@ public abstract class Attribute<T> {
 		}
 		return id;
 	}
-
+	
+	public static Class<?> getRawTypeClass(String idName, Complex parentTyp) throws UnknownType, UnknownAttribute {
+		Attribute<?> id = getAttribute(idName, parentTyp);
+		AbstractType<?> t = id.getType();
+		return t.getRawTypeClass();
+	}
+	
 }

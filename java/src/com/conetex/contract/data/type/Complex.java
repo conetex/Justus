@@ -310,4 +310,9 @@ public class Complex extends AbstractType<Structure>{ // AbstractType<Value<?>[]
 		return re;
 	}
 
+	@Override
+	public Class<Structure> getRawTypeClass() {
+		return Structure.class;
+	}
+
 }

@@ -54,13 +54,19 @@ public class Bool implements Value<Boolean>{
 	}
 
 	@Override
-	public Boolean copy() {
+	public Boolean getCopy() {
 		return this.get();
 	}
 
 	@Override
 	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
+	}
+
+	@Override
+	public Value<Boolean> cloneValue() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
