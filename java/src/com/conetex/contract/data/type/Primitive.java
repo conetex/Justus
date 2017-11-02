@@ -56,7 +56,7 @@ public class Primitive<T> extends AbstractType<T> {
 
 	private static <T> Primitive<?> createInstanceX(String className, String valueImplementClassStr, String unifiedName, Class<? extends Value<T>> ValueClass,
 			Class<T> baseTypeClass, PrimitiveValueFactory<T> theFactory) {
-
+ 
 		Primitive<?> re = Primitive.instances.get(unifiedName);
 		if (re == null) {
 			re = new Primitive<>(ValueClass, baseTypeClass, theFactory);
