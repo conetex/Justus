@@ -4,7 +4,6 @@ import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
 import com.conetex.contract.data.type.FunctionAttributes;
-import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
@@ -213,7 +212,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		StructureNew.values = theValues;
 		return StructureNew;
 	}
-	
+
 	@Override
 	public Value<Structure> cloneValue() throws Invalid {
 		return this.getCopy();
@@ -255,7 +254,5 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	public void setParent(Structure theParent) {
 		this.parent = theParent;
 	}
-
-
 
 }

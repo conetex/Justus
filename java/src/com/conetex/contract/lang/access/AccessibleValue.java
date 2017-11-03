@@ -5,7 +5,6 @@ import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
 import com.conetex.contract.data.Attribute;
 import com.conetex.contract.data.Value;
 import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.Primitive;
 import com.conetex.contract.data.value.Structure;
 import com.conetex.contract.lang.math.ElementaryArithmetic;
 import com.conetex.contract.run.exceptionValue.Invalid;

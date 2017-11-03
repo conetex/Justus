@@ -8,9 +8,15 @@ import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public abstract class SizedASCII implements Value<String>{
+public class SizedASCII implements Value<String>{
 
-	protected String actual;
+	int maxSize;
+
+	String actual;
+
+	public SizedASCII(int theMaxSize) {
+		this.maxSize = theMaxSize;
+	}
 
 	@Override
 	public String setObject(Object value) throws Invalid, ValueCastException {
@@ -130,6 +136,15 @@ public abstract class SizedASCII implements Value<String>{
 		return String.class;
 	}
 
-	public abstract int getMaxSize();
+	public int getMaxSize() {
+		return this.maxSize;
+	}
+
+	@Override
+	public Value<String> cloneValue() throws Invalid {
+		SizedASCII re = new SizedASCII(this.maxSize);
+		re.actual = this.actual;
+		return re;
+	}
 
 }

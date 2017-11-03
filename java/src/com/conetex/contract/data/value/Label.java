@@ -1,15 +1,15 @@
 package com.conetex.contract.data.value;
 
+import com.conetex.contract.build.Constants;
 import com.conetex.contract.data.Value;
 
 public class Label extends SizedASCII{
 
-	public static final String NAME_SEPERATOR = ".";
-
-	@Override
-	public int getMaxSize() {
-		return 8;
+	public Label( ) {
+		super(Constants.labelSize());
 	}
+
+	public static final String NAME_SEPERATOR = ".";
 
 	@Override
 	public Value<String> cloneValue() {

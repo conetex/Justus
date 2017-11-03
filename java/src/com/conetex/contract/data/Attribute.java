@@ -76,11 +76,11 @@ public abstract class Attribute<T> {
 		}
 		return id;
 	}
-	
+
 	public static Class<?> getRawTypeClass(String idName, Complex parentTyp) throws UnknownType, UnknownAttribute {
 		Attribute<?> id = getAttribute(idName, parentTyp);
 		AbstractType<?> t = id.getType();
 		return t.getRawTypeClass();
 	}
-	
+
 }
