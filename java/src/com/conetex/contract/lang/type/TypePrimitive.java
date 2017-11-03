@@ -1,4 +1,4 @@
-package com.conetex.contract.data.type;
+package com.conetex.contract.lang.type;
 
 import java.math.BigInteger;
 import java.util.Map;
@@ -6,24 +6,24 @@ import java.util.TreeMap;
 
 import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.build.exceptionLang.EmptyLabelException;
-import com.conetex.contract.build.exceptionLang.NullLabelException;
+import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
+import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
-import com.conetex.contract.data.Attribute;
-import com.conetex.contract.data.Value;
-import com.conetex.contract.data.value.Base64;
-import com.conetex.contract.data.value.BigInt;
-import com.conetex.contract.data.value.Bool;
-import com.conetex.contract.data.value.Int;
-import com.conetex.contract.data.value.Label;
-import com.conetex.contract.data.value.Lng;
-import com.conetex.contract.data.value.MailAddress;
-import com.conetex.contract.data.value.SizedASCII;
+import com.conetex.contract.lang.value.PrimitiveValueFactory;
+import com.conetex.contract.lang.value.Value;
+import com.conetex.contract.lang.value.implementation.Base64;
+import com.conetex.contract.lang.value.implementation.BigInt;
+import com.conetex.contract.lang.value.implementation.Bool;
+import com.conetex.contract.lang.value.implementation.Int;
+import com.conetex.contract.lang.value.implementation.Label;
+import com.conetex.contract.lang.value.implementation.Lng;
+import com.conetex.contract.lang.value.implementation.MailAddress;
+import com.conetex.contract.lang.value.implementation.SizedASCII;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class Primitive<T> extends AbstractType<T>{
+public class TypePrimitive<T> extends Type<T>{
 
-	public static Map<String, Primitive<?>> instances = new TreeMap<>();
+	public static Map<String, TypePrimitive<?>> instances = new TreeMap<>();
 
 	private static String createGetMaxSizeStr(String className, String valueImplementClassStr) {
 		String maxSizeStr = valueImplementClassStr.substring(className.length());
@@ -52,85 +52,85 @@ public class Primitive<T> extends AbstractType<T>{
 		}
 	}
 
-	private static void createPut(String valImplClass, String unifiedName, Primitive<?> re) {
+	private static void createPut(String valImplClass, String unifiedName, TypePrimitive<?> re) {
 		if(!(unifiedName.equals(valImplClass))){
-			Primitive.instances.put(unifiedName, re);
+			TypePrimitive.instances.put(unifiedName, re);
 		}
-		Primitive.instances.put(valImplClass, re);
+		TypePrimitive.instances.put(valImplClass, re);
 	}
 
-	private static Primitive<?> create(String valImplClass) {
+	private static TypePrimitive<?> create(String valImplClass) {
 
-		Primitive<?> re = null;
+		TypePrimitive<?> re = null;
 		if(valImplClass.startsWith(Symbols.CLASS_SIZED_ASCII)){
-			String maxSizeStr = Primitive.createGetMaxSizeStr(Symbols.CLASS_SIZED_ASCII, valImplClass);
+			String maxSizeStr = TypePrimitive.createGetMaxSizeStr(Symbols.CLASS_SIZED_ASCII, valImplClass);
 			String unifiedName = Symbols.CLASS_SIZED_ASCII + maxSizeStr;
-			if((re = Primitive.instances.get(unifiedName)) == null){
-				final int maxSize = Primitive.createGetMaxSize(maxSizeStr);
-				re = new Primitive<>(SizedASCII.class, String.class, new PrimitiveValueFactory<String>(){
+			if((re = TypePrimitive.instances.get(unifiedName)) == null){
+				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
+				re = new TypePrimitive<>(SizedASCII.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
 					public Value<String> createValueImp() {
 						return new SizedASCII(maxSize);
 					}
 				});
 			}
-			Primitive.createPut(valImplClass, unifiedName, re);
+			TypePrimitive.createPut(valImplClass, unifiedName, re);
 		}
 		else if(valImplClass.startsWith(Symbols.CLASS_MAIL_ADDRESS)){
-			String maxSizeStr = Primitive.createGetMaxSizeStr(Symbols.CLASS_MAIL_ADDRESS, valImplClass);
+			String maxSizeStr = TypePrimitive.createGetMaxSizeStr(Symbols.CLASS_MAIL_ADDRESS, valImplClass);
 			String unifiedName = Symbols.CLASS_MAIL_ADDRESS + maxSizeStr;
-			if((re = Primitive.instances.get(unifiedName)) == null){
-				final int maxSize = Primitive.createGetMaxSize(maxSizeStr);
-				re = new Primitive<>(MailAddress.class, String.class, new PrimitiveValueFactory<String>(){
+			if((re = TypePrimitive.instances.get(unifiedName)) == null){
+				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
+				re = new TypePrimitive<>(MailAddress.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
 					public Value<String> createValueImp() {
 						return new MailAddress(maxSize);
 					}
 				});
 			}
-			Primitive.createPut(valImplClass, unifiedName, re);
+			TypePrimitive.createPut(valImplClass, unifiedName, re);
 		}
 		else if(valImplClass.startsWith(Symbols.CLASS_BASE64)){
-			String maxSizeStr = Primitive.createGetMaxSizeStr(Symbols.CLASS_BASE64, valImplClass);
+			String maxSizeStr = TypePrimitive.createGetMaxSizeStr(Symbols.CLASS_BASE64, valImplClass);
 			String unifiedName = Symbols.CLASS_BASE64 + maxSizeStr;
-			if((re = Primitive.instances.get(unifiedName)) == null){
-				final int maxSize = Primitive.createGetMaxSize(maxSizeStr);
-				re = new Primitive<>(Base64.class, String.class, new PrimitiveValueFactory<String>(){
+			if((re = TypePrimitive.instances.get(unifiedName)) == null){
+				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
+				re = new TypePrimitive<>(Base64.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
 					public Value<String> createValueImp() {
 						return new Base64(maxSize);
 					}
 				});
 			}
-			Primitive.createPut(valImplClass, unifiedName, re);
+			TypePrimitive.createPut(valImplClass, unifiedName, re);
 		}
 
 		return re;
 	}
 
 	public static void init() {
-		Primitive.instances.put(Symbols.CLASS_BINT, new Primitive<>(BigInt.class, BigInteger.class, new PrimitiveValueFactory<BigInteger>(){
+		TypePrimitive.instances.put(Symbols.CLASS_BINT, new TypePrimitive<>(BigInt.class, BigInteger.class, new PrimitiveValueFactory<BigInteger>(){
 			@Override
 			public Value<BigInteger> createValueImp() {
 				return new BigInt();
 			}
 		}));
 
-		Primitive.instances.put(Symbols.CLASS_LNG, new Primitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>(){
+		TypePrimitive.instances.put(Symbols.CLASS_LNG, new TypePrimitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>(){
 			@Override
 			public Lng createValueImp() {
 				return new Lng();
 			}
 		}));
 
-		Primitive.instances.put(Symbols.CLASS_INT, new Primitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
+		TypePrimitive.instances.put(Symbols.CLASS_INT, new TypePrimitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
 			@Override
 			public Int createValueImp() {
 				return new Int();
 			}
 		}));
 
-		Primitive.instances.put(Symbols.CLASS_BOOL, new Primitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>(){
+		TypePrimitive.instances.put(Symbols.CLASS_BOOL, new TypePrimitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>(){
 			@Override
 			public Bool createValueImp() {
 				return new Bool();
@@ -146,9 +146,9 @@ public class Primitive<T> extends AbstractType<T>{
 
 	final PrimitiveValueFactory<T> factory;
 
-	public static <W> Primitive<W> getInstanceAtRunTime(String valueImplementClassStr, Class<W> rawType) {
+	public static <W> TypePrimitive<W> getInstanceAtRunTime(String valueImplementClassStr, Class<W> rawType) {
 		try{
-			return Primitive.getInstance(valueImplementClassStr, rawType);
+			return TypePrimitive.getInstance(valueImplementClassStr, rawType);
 		}
 		catch(AbstractTypException e){
 			// TODO throw run-time-exception
@@ -157,16 +157,16 @@ public class Primitive<T> extends AbstractType<T>{
 		}
 	}
 
-	public static <W> Primitive<W> getInstance(String valueImplementClassStr, Class<W> rawType) throws AbstractTypException {
-		Primitive<?> re = Primitive.getInstanceWild(valueImplementClassStr);
+	public static <W> TypePrimitive<W> getInstance(String valueImplementClassStr, Class<W> rawType) throws AbstractTypException {
+		TypePrimitive<?> re = TypePrimitive.getInstanceWild(valueImplementClassStr);
 		if(re != null){
 			return Cast.<W>toTypedPrimitive(re, rawType);
 		}
 		return null;
 	}
 
-	private static Primitive<?> getInstanceWild(String valueImplementClassStr) {
-		Primitive<?> re = Primitive.instances.get(valueImplementClassStr);
+	private static TypePrimitive<?> getInstanceWild(String valueImplementClassStr) {
+		TypePrimitive<?> re = TypePrimitive.instances.get(valueImplementClassStr);
 		if(re != null){
 			return re;
 		}
@@ -190,7 +190,7 @@ public class Primitive<T> extends AbstractType<T>{
 			return null;
 		}
 
-		Primitive<?> simpleType = Primitive.getInstanceWild(typeName);
+		TypePrimitive<?> simpleType = TypePrimitive.getInstanceWild(typeName);
 		if(simpleType == null){
 			System.err.println("unknown simple Type " + typeName);
 			return null;
@@ -213,7 +213,7 @@ public class Primitive<T> extends AbstractType<T>{
 
 	// private PrimitiveDataType(Class<Value.Interface<T>> theClass,
 	// ValueFactory<T> theFactory){
-	private Primitive(Class<? extends Value<T>> theImplementClass, Class<T> theRawTypeClass, PrimitiveValueFactory<T> theFactory) {
+	private TypePrimitive(Class<? extends Value<T>> theImplementClass, Class<T> theRawTypeClass, PrimitiveValueFactory<T> theFactory) {
 		this.valueImplementClass = theImplementClass;
 		this.rawTypeClass = theRawTypeClass;
 		this.factory = theFactory;
@@ -235,7 +235,7 @@ public class Primitive<T> extends AbstractType<T>{
 		 * throw new Identifier.EmptyLabelException(); } return
 		 * Identifier.<T>create(theName, this);
 		 */
-		return AbstractType.<T>createIdentifier(theName, this);
+		return Type.<T>createIdentifier(theName, this);
 	}
 
 	@Override

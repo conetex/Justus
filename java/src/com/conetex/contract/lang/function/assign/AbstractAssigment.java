@@ -1,8 +1,8 @@
-package com.conetex.contract.lang.assign;
+package com.conetex.contract.lang.function.assign;
 
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.lang.access.Setable;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.access.Setable;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 

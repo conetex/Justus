@@ -1,4 +1,4 @@
-package com.conetex.contract.build.exceptionLang;
+package com.conetex.contract.build.exceptionFunction;
 
 public class NullIdentifierException extends AbstractInterpreterException{
 

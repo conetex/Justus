@@ -1,6 +1,6 @@
 package com.conetex.contract.run;
 
-import com.conetex.contract.data.Value;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class RtCast{

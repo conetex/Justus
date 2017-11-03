@@ -1,6 +1,6 @@
-package com.conetex.contract.lang.access;
+package com.conetex.contract.lang.function.access;
 
-import com.conetex.contract.data.value.Structure;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 

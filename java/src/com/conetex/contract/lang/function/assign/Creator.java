@@ -1,10 +1,10 @@
-package com.conetex.contract.lang.assign;
+package com.conetex.contract.lang.function.assign;
 
 import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.lang.access.Setable;
+import com.conetex.contract.build.exceptionFunction.CastException;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.access.Setable;
 
 public abstract class Creator{
 

@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.conetex.contract.build.CodeModel.Egg;
-import com.conetex.contract.build.exceptionLang.UnknownCommand;
-import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 
 public class CodeNode{
 

@@ -1,13 +1,11 @@
-package com.conetex.contract.data;
+package com.conetex.contract.lang.type;
 
-import com.conetex.contract.data.type.AbstractType;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.value.Label;
-import com.conetex.contract.data.value.Structure;
+import com.conetex.contract.lang.value.implementation.Label;
+import com.conetex.contract.lang.value.implementation.Structure;
 
 public class AttributeComplex extends Attribute<Structure>{// Attribute<Value<?>[]>
 
-	public static AttributeComplex create(Label theLabel, Complex theType) {
+	public static AttributeComplex create(Label theLabel, TypeComplex theType) {
 		if(theLabel != null && theType != null){
 			return new AttributeComplex(theLabel, theType);
 		}
@@ -18,20 +16,20 @@ public class AttributeComplex extends Attribute<Structure>{// Attribute<Value<?>
 
 	// private final ValueFactory<T> factory;
 
-	private final Complex type;
+	private final TypeComplex type;
 
 	/*
 	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
 	 * theLabel; this.factory = theFactory; }
 	 */
-	private AttributeComplex(Label theLabel, Complex theType) {
+	private AttributeComplex(Label theLabel, TypeComplex theType) {
 		this.label = theLabel;
 		// this.factory = theFactory;
 		this.type = theType;
 	}
 
 	@Override
-	public AbstractType<Structure> getType() {
+	public Type<Structure> getType() {
 		return this.type;
 	}
 

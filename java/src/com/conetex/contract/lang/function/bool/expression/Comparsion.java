@@ -1,8 +1,8 @@
-package com.conetex.contract.lang.bool.expression;
+package com.conetex.contract.lang.function.bool.expression;
 
 import com.conetex.contract.build.Cast;
-import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.build.exceptionFunction.CastException;
+import com.conetex.contract.lang.function.access.Accessible;
 
 public class Comparsion{
 

@@ -1,4 +1,4 @@
-package com.conetex.contract.lang.instance;
+package com.conetex.contract.lang.function.instance;
 
 public class New{
 	// TODO implement

@@ -1,12 +1,11 @@
-package com.conetex.contract.data;
+package com.conetex.contract.lang.type;
 
-import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
-import com.conetex.contract.build.exceptionLang.UnknownAttribute;
-import com.conetex.contract.build.exceptionLang.UnknownType;
-import com.conetex.contract.data.type.AbstractType;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.value.SizedASCII;
-import com.conetex.contract.data.value.Structure;
+import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.UnknownAttribute;
+import com.conetex.contract.build.exceptionFunction.UnknownType;
+import com.conetex.contract.lang.value.Value;
+import com.conetex.contract.lang.value.implementation.SizedASCII;
+import com.conetex.contract.lang.value.implementation.Structure;
 
 public abstract class Attribute<T> {
 
@@ -53,19 +52,19 @@ public abstract class Attribute<T> {
 
 	public abstract Value<T> createValue(Structure theParent);
 
-	public abstract AbstractType<T> getType();
+	public abstract Type<T> getType();
 
-	private static Attribute<?> getAttribute(String idName, Complex parentTyp) throws UnknownAttribute {
+	private static Attribute<?> getAttribute(String idName, TypeComplex parentTyp) throws UnknownAttribute {
 		String typName = parentTyp.getName();
-		Complex pTyp = parentTyp;
+		TypeComplex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);
 		while(id == null){// suche nach oben ...
-			String[] names = Complex.splitRight(typName);
+			String[] names = TypeComplex.splitRight(typName);
 			if(names[0] == null){
 				break;
 			}
 			typName = names[0];
-			pTyp = Complex.getInstance(typName);
+			pTyp = TypeComplex.getInstance(typName);
 			if(pTyp == null){
 				break;
 			}
@@ -77,9 +76,9 @@ public abstract class Attribute<T> {
 		return id;
 	}
 
-	public static Class<?> getRawTypeClass(String idName, Complex parentTyp) throws UnknownType, UnknownAttribute {
+	public static Class<?> getRawTypeClass(String idName, TypeComplex parentTyp) throws UnknownType, UnknownAttribute {
 		Attribute<?> id = getAttribute(idName, parentTyp);
-		AbstractType<?> t = id.getType();
+		Type<?> t = id.getType();
 		return t.getRawTypeClass();
 	}
 

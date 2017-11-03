@@ -1,9 +1,9 @@
-package com.conetex.contract.data.value;
+package com.conetex.contract.lang.value.implementation;
 
-import com.conetex.contract.data.Attribute;
-import com.conetex.contract.data.Value;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.FunctionAttributes;
+import com.conetex.contract.lang.type.Attribute;
+import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
@@ -11,13 +11,13 @@ import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 
-	private final Complex type;
+	private final TypeComplex type;
 
 	private Structure parent;
 
 	private Value<?>[] values;
 
-	public static Structure create(final Complex theAttributeTuple, final Structure theParent) {
+	public static Structure create(final TypeComplex theAttributeTuple, final Structure theParent) {
 		if(theAttributeTuple != null){
 			return new Structure(theAttributeTuple, theParent);
 		}
@@ -30,7 +30,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	 * this.values = theValues; this.parent = theParent; }
 	 */
 
-	private Structure(final Complex theAttributeTuple, final Structure theParent) {
+	private Structure(final TypeComplex theAttributeTuple, final Structure theParent) {
 		this.type = theAttributeTuple;
 		this.values = new Value<?>[theAttributeTuple.getAttributesSize()];
 		this.parent = theParent;
@@ -145,7 +145,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 					}
 					/* Todo so machen wirs nich! scon bei call reservieren! */
 					else{
-						FunctionAttributes z = FunctionAttributes.getInstance(this.type.getName() + "." + names[0]);
+						TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(this.type.getName() + "." + names[0]);
 						// ComplexFunction z = this.type.getComplexFunction(names[0]);
 						if(z != null){
 							return z.<R>getValue(names[1], clazz);
@@ -243,7 +243,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		return Structure.class;
 	}
 
-	public Complex getComplex() {
+	public TypeComplex getComplex() {
 		return this.type;
 	}
 

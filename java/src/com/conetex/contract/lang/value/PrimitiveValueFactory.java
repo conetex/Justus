@@ -1,6 +1,4 @@
-package com.conetex.contract.data.type;
-
-import com.conetex.contract.data.Value;
+package com.conetex.contract.lang.value;
 
 public interface PrimitiveValueFactory<T> {
 

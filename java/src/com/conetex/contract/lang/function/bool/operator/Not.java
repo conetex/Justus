@@ -1,7 +1,7 @@
-package com.conetex.contract.lang.bool.operator;
+package com.conetex.contract.lang.function.bool.operator;
 
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 //Unary operation

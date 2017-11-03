@@ -10,22 +10,23 @@ import java.util.Set;
 import com.conetex.contract.build.BuildFunctions.Assign;
 import com.conetex.contract.build.BuildFunctions.Constant;
 import com.conetex.contract.build.BuildFunctions.Control;
-import com.conetex.contract.build.BuildFunctions.Data;
+import com.conetex.contract.build.BuildTypes.Types;
+import com.conetex.contract.build.BuildValues.Values;
+import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.DublicateOperation;
+import com.conetex.contract.build.exceptionFunction.OperationMeansNotCalled;
+import com.conetex.contract.build.exceptionFunction.UnexpectedSubOperation;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.type.Attribute;
+import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.value.Value;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.build.BuildFunctions.Expression;
 import com.conetex.contract.build.BuildFunctions.Fun;
 import com.conetex.contract.build.BuildFunctions.FunCall;
 import com.conetex.contract.build.BuildFunctions.FunReturn;
 import com.conetex.contract.build.BuildFunctions.Reference;
-import com.conetex.contract.build.exceptionLang.AbstractInterpreterException;
-import com.conetex.contract.build.exceptionLang.DublicateOperation;
-import com.conetex.contract.build.exceptionLang.OperationMeansNotCalled;
-import com.conetex.contract.build.exceptionLang.UnexpectedSubOperation;
-import com.conetex.contract.build.exceptionLang.UnknownCommand;
-import com.conetex.contract.data.Attribute;
-import com.conetex.contract.data.Value;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
 
 public class CodeModel{
 
@@ -68,22 +69,22 @@ public class CodeModel{
 			return s;
 		}
 
-		public final Accessible<? extends S> functionCreateChild(CodeNode child, Complex parentTyp) throws AbstractInterpreterException {
+		public final Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.functionCreateThis(child, parentTyp);
 		}
 
-		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.attributeCreateThis(child, unformedComplexTypes);
 		}
 
-		public final Value<?> valueCreateChild(CodeNode child, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
+		public final Value<?> valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.valueCreateThis(child, parentTyp, parentData);
 		}
 
-		public final Complex complexCreateChild(CodeNode child, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
 			return cb.complexCreateThis(child, parent, unformedComplexTypes);
 		}
@@ -119,39 +120,39 @@ public class CodeModel{
 			}
 		}
 
-		final Attribute<?> attributeCreateThis(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+		final Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 			this.checkMeaning(c);
 			return this.attributeCreate(c, unformedComplexTypes);
 		}
 
-		public Attribute<?> attributeCreate(CodeNode c, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+		public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 			return null;
 		}
 
-		final Accessible<? extends T> functionCreateThis(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+		final Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
 			this.checkMeaning(n);
 			return this.functionCreate(n, parentTyp);
 		}
 
-		public Accessible<? extends T> functionCreate(CodeNode n, Complex parentTyp) throws AbstractInterpreterException {
+		public Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
 			return null;
 		}
 
-		final Value<?> valueCreateThis(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
+		final Value<?> valueCreateThis(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			this.checkMeaning(n);
 			return this.valueCreate(n, parentTyp, parentData);
 		}
 
-		public Value<?> valueCreate(CodeNode n, Complex parentTyp, Structure parentData) throws AbstractInterpreterException {
+		public Value<?> valueCreate(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			return null;
 		}
 
-		final Complex complexCreateThis(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+		final TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 			this.checkMeaning(n);
 			return this.complexCreate(n, parent, unformedComplexTypes);
 		}
 
-		public Complex complexCreate(CodeNode n, Complex parent, Map<String, Complex> unformedComplexTypes) throws AbstractInterpreterException {
+		public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 			return null;
 		}
 
@@ -380,10 +381,10 @@ public class CodeModel{
 		Fun.whatEver.contains(Control.loop);
 		Fun.whatEver.contains(Control.when);
 
-		Fun.whatEver.contains(Data.attribute);
-		Fun.whatEver.contains(Data.value);
-		Fun.whatEver.contains(Data.valueVirtComp);
-		Fun.whatEver.contains(Data.complex);
+		Fun.whatEver.contains(Types.attribute);
+		Fun.whatEver.contains(Values.value);
+		Fun.whatEver.contains(Values.valueVirtComp);
+		Fun.whatEver.contains(Types.complex);
 		Fun.whatEver.contains(Fun.whatEver);
 
 		Fun.noReturn.contains(Assign.whatEverAssigment);
@@ -458,28 +459,28 @@ public class CodeModel{
 		FunCall.whatEverCall.means(Symbols.comCall());
 		FunCall.whatEverCall.registerParameters(params4Call);
 
-		Data.complex.means(Symbols.comComplex());
-		Data.complex.registerParameters(new String[] { Symbols.paramName() });
+		Types.complex.means(Symbols.comComplex());
+		Types.complex.registerParameters(new String[] { Symbols.paramName() });
 
 		// Attribute
-		Data.attribute.means(Symbols.comAttribute()); // isAttribute //Symbol.ATTRIBUTE               , 
-		Data.attribute.registerParameters(new String[] { Symbols.paramName(), Symbols.paramType() });
+		Types.attribute.means(Symbols.comAttribute()); // isAttribute //Symbol.ATTRIBUTE               , 
+		Types.attribute.registerParameters(new String[] { Symbols.paramName(), Symbols.paramType() });
 
 		// TODO this box-object is only a dummy ...
-		Data.value.means(Symbols.comValue()); // isAttributeInitialized //Symbol.VALUE 
-		Data.value.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
+		Values.value.means(Symbols.comValue()); // isAttributeInitialized //Symbol.VALUE 
+		Values.value.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
 
 		// TODO this box-object is only a dummy ...
-		Data.valueVirtPrim.means(Symbols.comvirtualPrimValue()); // isAttributeInitialized //Symbol.VALUE 
-		Data.valueVirtPrim.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue() });
+		Values.valueVirtPrim.means(Symbols.comvirtualPrimValue()); // isAttributeInitialized //Symbol.VALUE 
+		Values.valueVirtPrim.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue() });
 
 		// TODO this box-object is only a dummy ...
-		Data.valueVirtComp.means(Symbols.comVirtualCompValue()); // isAttributeInitialized //Symbol.VALUE 
-		Data.valueVirtComp.registerParameters(new String[] { Symbols.paramName() });
+		Values.valueVirtComp.means(Symbols.comVirtualCompValue()); // isAttributeInitialized //Symbol.VALUE 
+		Values.valueVirtComp.registerParameters(new String[] { Symbols.paramName() });
 
 		// TODO this box-object is only a dummy ...
-		Data.contract.means(Symbols.comContract()); // isAttributeInitialized //Symbol.VALUE 
-		Data.contract.registerParameters(new String[] { Symbols.paramName() });
+		Values.contract.means(Symbols.comContract()); // isAttributeInitialized //Symbol.VALUE 
+		Values.contract.registerParameters(new String[] { Symbols.paramName() });
 
 		// TODO this box-object is only a dummy ...
 		Control.then.means(Symbols.comThen());
@@ -491,23 +492,23 @@ public class CodeModel{
 		CodeModel.buildStruct();
 		CodeModel.buildUnknown();
 
-		Data.complex.contains(Data.complex);
-		Data.complex.contains(Fun.whatEver);
+		Types.complex.contains(Types.complex);
+		Types.complex.contains(Fun.whatEver);
 
-		Data.complex.contains(Data.attribute);
-		Data.complex.contains(Data.value);
-		Data.complex.contains(Data.valueVirtComp);
+		Types.complex.contains(Types.attribute);
+		Types.complex.contains(Values.value);
+		Types.complex.contains(Values.valueVirtComp);
 
-		Data.complex.contains(FunCall.whatEverCall);
-		Data.complex.contains(Assign.whatEverAssigment);
-		Data.complex.contains(Control.loop);
-		Data.complex.contains(Control.when);
-		Data.complex.contains(FunReturn.whatEverReturn);
-		Data.complex.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
-		Data.complex.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
-		Data.complex.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
+		Types.complex.contains(FunCall.whatEverCall);
+		Types.complex.contains(Assign.whatEverAssigment);
+		Types.complex.contains(Control.loop);
+		Types.complex.contains(Control.when);
+		Types.complex.contains(FunReturn.whatEverReturn);
+		Types.complex.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
+		Types.complex.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
+		Types.complex.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
 
-		Data.complex.contains(Data.valueVirtPrim);
+		Types.complex.contains(Values.valueVirtPrim);
 
 	}
 

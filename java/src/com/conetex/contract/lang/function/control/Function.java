@@ -1,4 +1,4 @@
-package com.conetex.contract.lang.control;
+package com.conetex.contract.lang.function.control;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.conetex.contract.build.Cast;
-import com.conetex.contract.build.exceptionLang.CastException;
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.lang.control.ReturnAbstract.Result;
-import com.conetex.contract.lang.math.ElementaryArithmetic;
+import com.conetex.contract.build.exceptionFunction.CastException;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
+import com.conetex.contract.lang.function.math.ElementaryArithmetic;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 

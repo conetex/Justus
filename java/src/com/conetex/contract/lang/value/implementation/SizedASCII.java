@@ -1,9 +1,9 @@
-package com.conetex.contract.data.value;
+package com.conetex.contract.lang.value.implementation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.conetex.contract.data.Value;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;

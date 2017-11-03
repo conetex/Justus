@@ -1,10 +1,10 @@
-package com.conetex.contract.lang.bool.expression;
+package com.conetex.contract.lang.function.bool.expression;
 
 import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class ComparisonNumber extends Accessible<Boolean>{

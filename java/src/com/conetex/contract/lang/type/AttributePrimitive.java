@@ -1,15 +1,14 @@
-package com.conetex.contract.data;
+package com.conetex.contract.lang.type;
 
-import com.conetex.contract.data.type.AbstractType;
-import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.data.value.Label;
-import com.conetex.contract.data.value.Structure;
+import com.conetex.contract.lang.value.Value;
+import com.conetex.contract.lang.value.implementation.Label;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class AttributePrimitive<T> extends Attribute<T>{
 
-	public static <V> AttributePrimitive<V> create(Label theLabel, Primitive<V> theType) {
+	public static <V> AttributePrimitive<V> create(Label theLabel, TypePrimitive<V> theType) {
 		if(theLabel != null && theType != null){
 			return new AttributePrimitive<>(theLabel, theType);
 		}
@@ -20,20 +19,20 @@ public class AttributePrimitive<T> extends Attribute<T>{
 
 	// private final ValueFactory<T> factory;
 
-	private final Primitive<T> type;
+	private final TypePrimitive<T> type;
 
 	/*
 	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =
 	 * theLabel; this.factory = theFactory; }
 	 */
-	private AttributePrimitive(Label theLabel, Primitive<T> theType) {
+	private AttributePrimitive(Label theLabel, TypePrimitive<T> theType) {
 		this.label = theLabel;
 		// this.factory = theFactory;
 		this.type = theType;
 	}
 
 	@Override
-	public AbstractType<T> getType() {
+	public Type<T> getType() {
 		return this.type;
 	}
 

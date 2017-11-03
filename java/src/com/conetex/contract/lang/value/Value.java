@@ -1,4 +1,4 @@
-package com.conetex.contract.data;
+package com.conetex.contract.lang.value;
 
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;

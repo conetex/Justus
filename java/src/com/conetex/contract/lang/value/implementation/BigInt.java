@@ -1,8 +1,8 @@
-package com.conetex.contract.data.value;
+package com.conetex.contract.lang.value.implementation;
 
 import java.math.BigInteger;
 
-import com.conetex.contract.data.Value;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;

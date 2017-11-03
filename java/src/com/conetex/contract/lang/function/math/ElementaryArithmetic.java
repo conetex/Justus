@@ -1,11 +1,11 @@
-package com.conetex.contract.lang.math;
+package com.conetex.contract.lang.function.math;
 
 import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.build.exceptionLang.TypesDoNotMatch;
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.build.exceptionFunction.TypesDoNotMatch;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R>{

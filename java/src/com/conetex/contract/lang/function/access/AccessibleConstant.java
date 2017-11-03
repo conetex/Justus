@@ -1,24 +1,24 @@
-package com.conetex.contract.lang.access;
+package com.conetex.contract.lang.function.access;
 
 import java.math.BigInteger;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.build.exceptionLang.TypeNotDeterminated;
-import com.conetex.contract.build.exceptionLang.UnknownCommand;
-import com.conetex.contract.build.exceptionLang.UnknownCommandParameter;
-import com.conetex.contract.build.exceptionLang.UnknownType;
+import com.conetex.contract.build.exceptionFunction.TypeNotDeterminated;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
+import com.conetex.contract.build.exceptionFunction.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
-import com.conetex.contract.data.Value;
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.Primitive;
-import com.conetex.contract.data.value.Structure;
+import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.type.TypePrimitive;
+import com.conetex.contract.lang.value.Value;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class AccessibleConstant<T> extends Accessible<T>{
 
-	public static Accessible<? extends Number> createNumConst(CodeNode n, Complex parentTyp)
+	public static Accessible<? extends Number> createNumConst(CodeNode n, TypeComplex parentTyp)
 			throws UnknownType, TypeNotDeterminated, UnknownCommandParameter, UnknownCommand {
 		Accessible<? extends Number> re = try2CreateNumConst(n, parentTyp);
 		if(re == null){
@@ -27,7 +27,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return re;
 	}
 
-	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBigInt())){
 			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getParameter(Symbols.paramValue()));
@@ -41,7 +41,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return null;
 	}
 
-	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBool())){
 			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getParameter(Symbols.paramValue()));
@@ -49,7 +49,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return null;
 	}
 
-	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, Complex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comStructure())){
 			return AccessibleConstant.<Structure>create2(Structure.class, n.getParameter(Symbols.paramValue()));
@@ -58,27 +58,27 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	}
 
 	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value) throws UnknownType {
-		Primitive<RE> theClass = null;
+		TypePrimitive<RE> theClass = null;
 		try{
 
 			if(expectedBaseTyp == BigInteger.class){
-				theClass = Primitive.<RE>getInstance(Symbols.CLASS_BINT, expectedBaseTyp);
+				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_BINT, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Long.class){
-				theClass = Primitive.<RE>getInstance(Symbols.CLASS_LNG, expectedBaseTyp);
+				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_LNG, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Integer.class){
-				theClass = Primitive.<RE>getInstance(Symbols.CLASS_INT, expectedBaseTyp);
+				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_INT, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Byte.class){
 				// TODO Typen klären ...
 				return null;
 			}
 			else if(expectedBaseTyp == String.class){
-				theClass = Primitive.<RE>getInstance(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
+				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Boolean.class){
-				theClass = Primitive.<RE>getInstance(Symbols.CLASS_BOOL, expectedBaseTyp);
+				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_BOOL, expectedBaseTyp);
 			}
 
 		}

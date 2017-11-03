@@ -3,7 +3,7 @@ package com.conetex.contract.run;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conetex.contract.lang.access.Accessible;
+import com.conetex.contract.lang.function.access.Accessible;
 
 public class Program{
 

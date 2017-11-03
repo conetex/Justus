@@ -1,13 +1,13 @@
-package com.conetex.contract.lang.control;
+package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
-import com.conetex.contract.data.type.Complex;
-import com.conetex.contract.data.type.FunctionAttributes;
-import com.conetex.contract.data.value.Structure;
-import com.conetex.contract.lang.access.Accessible;
-import com.conetex.contract.lang.access.AccessibleValue;
-import com.conetex.contract.lang.assign.AbstractAssigment;
+import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.access.AccessibleValue;
+import com.conetex.contract.lang.function.assign.AbstractAssigment;
+import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
@@ -59,18 +59,18 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		}
 
 		System.out.println("Function getFrom " + this.function.getName() + " - " + this.reference.getPath());
-		Complex x = obj.getComplex();// .getInstance(this.name);
+		TypeComplex x = obj.getComplex();// .getInstance(this.name);
 		// Attribute<?> y = x.getFunctionAttribute(this.function.name);
 		// TODO der cast ist scheiﬂﬂﬂe
 		// ComplexFunction z =
 		// x.getComplexFunction(this.function.name);//(ComplexFunction)(y.getType());
-		FunctionAttributes z = FunctionAttributes.getInstance(x.getName() + "." + this.function.getName());
+		TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(x.getName() + "." + this.function.getName());
 		return getFromComplexFun(z, obj);
 
 		// return this.function.getFrom(thisObject);
 	}
 
-	public V getFromComplexFun(FunctionAttributes z, Structure obj) throws AbstractRuntimeException {
+	public V getFromComplexFun(TypeComplexOfFunction z, Structure obj) throws AbstractRuntimeException {
 
 		Structure thisObject = z.utilizeStructure(obj); // .prototype;//thisObject.getStructure(this.name);
 

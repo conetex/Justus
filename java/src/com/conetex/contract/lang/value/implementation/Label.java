@@ -1,7 +1,7 @@
-package com.conetex.contract.data.value;
+package com.conetex.contract.lang.value.implementation;
 
 import com.conetex.contract.build.Constants;
-import com.conetex.contract.data.Value;
+import com.conetex.contract.lang.value.Value;
 
 public class Label extends SizedASCII{
 
