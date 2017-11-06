@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.value.implementation;
 
+import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
@@ -8,8 +9,8 @@ public class MailAddress extends SizedASCII{
 	// See
 	// http://stackoverflow.com/questions/7717573/what-is-the-longest-possible-email-address 
 	// longest email-address is 254
-	public MailAddress(int theMaxSize) {
-		super(theMaxSize);
+	public MailAddress(CodeNode theNode, int theMaxSize) {
+		super(theNode, theMaxSize);
 	}
 
 	@Override
@@ -34,9 +35,10 @@ public class MailAddress extends SizedASCII{
 	}
 
 	@Override
-	public Value<String> cloneValue() throws Invalid {
-		MailAddress re = new MailAddress(super.maxSize);
+	public MailAddress cloneValue() {
+		MailAddress re = new MailAddress(super.node.cloneNode(), super.maxSize);
 		re.actual = super.actual;
 		return re;
 	}
+	
 }

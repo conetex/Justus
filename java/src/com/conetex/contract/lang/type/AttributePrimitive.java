@@ -1,5 +1,9 @@
 package com.conetex.contract.lang.type;
 
+import java.util.LinkedList;
+
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Label;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -37,21 +41,25 @@ public class AttributePrimitive<T> extends Attribute<T>{
 	}
 
 	@Override
-	public Value<T> createValue(Structure theParent) {
-		return this.type.createValue();
+	public Value<T> createValue(Structure theParent, CodeNode theNode) {
+		return this.type.createValue(theNode);
 	}
 
-	public Value<T> _createValue() {
-		return this.type.createValue();
+	public Value<T> createNewValue(Structure theParent) {
+		String name = this.label.get();
+		String type = this.type.getName();
+		String[] p = new String[] { name, null, type };
+		CodeNode cn = new CodeNode(Symbols.comValue(), p, new LinkedList<>());
+		return this.type.createValue(cn);
 	}
-
+	
 	@Override
 	public Label getLabel() {
 		return this.label;
 	}
 
-	public Value<T> createValue(String value, Structure theParent) {
-		Value<T> v = this.createValue(theParent);
+	public Value<T> createValue(CodeNode theNode, String value, Structure theParent) {
+		Value<T> v = this.createValue(theParent, theNode);
 		try{
 			v.setConverted(value);
 		}
@@ -59,37 +67,6 @@ public class AttributePrimitive<T> extends Attribute<T>{
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 			// e.printStackTrace();
-			return null;
-		}
-		return v;
-	}
-
-	public Value<T> _createValue(String value) {
-		Value<T> v = this._createValue();
-		try{
-			v.setConverted(value);
-		}
-		catch(Inconvertible | Invalid e){
-			// TODO Auto-generated catch block
-			System.err.println(e.getMessage());
-			// e.printStackTrace();
-			return null;
-		}
-		return v;
-	}
-
-	public Value<T> _createValue(T theValues) {
-		// new PrimitiveDataType< Complex , State > ( Complex.class , new
-		// ValueFactory<State>() { public Complex createValueImp() { return new
-		// Complex() ; } } )
-		Value<T> v = this._createValue();
-		// Structure value = ct.construct(theValues);
-		try{
-			v.set(theValues);
-		}
-		catch(Invalid e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			return null;
 		}
 		return v;

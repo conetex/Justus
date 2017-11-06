@@ -220,7 +220,8 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		// PrimitiveDataType.getInstance(
 		// Value.Implementation.Struct.class.getSimpleName() );
 
-		Label str = new Label();
+		//		// TODO new
+		Label str = new Label(null);
 		try{
 			str.set(aName);
 		}

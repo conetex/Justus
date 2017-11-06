@@ -3,6 +3,8 @@ package com.conetex.contract.build;
 import java.util.List;
 
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
@@ -13,7 +15,7 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 public class Build{
 
 	public abstract static class Main{
-		public abstract void run() throws AbstractRuntimeException;
+		public abstract void run() throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand;
 	}
 
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
@@ -31,8 +33,9 @@ public class Build{
 				if(mainFunction != null){
 					return new Main(){
 						@Override
-						public void run() throws AbstractRuntimeException {
+						public void run() throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
 							mainFunction.getFromRoot(rootStructure);
+							rootStructure.persist(); here we are ...
 						}
 					};
 				}

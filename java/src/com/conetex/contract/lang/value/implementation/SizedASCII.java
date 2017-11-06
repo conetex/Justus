@@ -3,18 +3,21 @@ package com.conetex.contract.lang.value.implementation;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.lang.value.PersistableValue;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class SizedASCII implements Value<String>{
+public class SizedASCII extends PersistableValue<String>{
 
 	int maxSize;
 
 	String actual;
 
-	public SizedASCII(int theMaxSize) {
+	public SizedASCII(CodeNode theNode, int theMaxSize) {
+		super(theNode);
 		this.maxSize = theMaxSize;
 	}
 
@@ -141,8 +144,8 @@ public class SizedASCII implements Value<String>{
 	}
 
 	@Override
-	public Value<String> cloneValue() throws Invalid {
-		SizedASCII re = new SizedASCII(this.maxSize);
+	public SizedASCII cloneValue() {
+		SizedASCII re = new SizedASCII(super.node.cloneNode(), this.maxSize);
 		re.actual = this.actual;
 		return re;
 	}

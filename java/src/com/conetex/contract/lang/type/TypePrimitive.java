@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.conetex.contract.build.Cast;
+import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
 import com.conetex.contract.build.exceptionFunction.NullLabelException;
@@ -69,8 +70,9 @@ public class TypePrimitive<T> extends Type<T>{
 				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
 				re = new TypePrimitive<>(SizedASCII.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
-					public Value<String> createValueImp() {
-						return new SizedASCII(maxSize);
+					public Value<String> createValueImp(CodeNode theNode) {
+						// TODO new
+						return new SizedASCII(theNode, maxSize);
 					}
 				});
 			}
@@ -83,8 +85,9 @@ public class TypePrimitive<T> extends Type<T>{
 				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
 				re = new TypePrimitive<>(MailAddress.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
-					public Value<String> createValueImp() {
-						return new MailAddress(maxSize);
+					public Value<String> createValueImp(CodeNode theNode) {
+						// TODO new
+						return new MailAddress(theNode, maxSize);
 					}
 				});
 			}
@@ -97,8 +100,9 @@ public class TypePrimitive<T> extends Type<T>{
 				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
 				re = new TypePrimitive<>(Base64.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
-					public Value<String> createValueImp() {
-						return new Base64(maxSize);
+					public Value<String> createValueImp(CodeNode theNode) {
+						// TODO new
+						return new Base64(theNode, maxSize);
 					}
 				});
 			}
@@ -111,29 +115,33 @@ public class TypePrimitive<T> extends Type<T>{
 	public static void init() {
 		TypePrimitive.instances.put(Symbols.CLASS_BINT, new TypePrimitive<>(BigInt.class, BigInteger.class, new PrimitiveValueFactory<BigInteger>(){
 			@Override
-			public Value<BigInteger> createValueImp() {
-				return new BigInt();
+			public Value<BigInteger> createValueImp(CodeNode theNode) {
+				// TODO new
+				return new BigInt(theNode);
 			}
 		}));
 
 		TypePrimitive.instances.put(Symbols.CLASS_LNG, new TypePrimitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>(){
 			@Override
-			public Lng createValueImp() {
-				return new Lng();
+			public Lng createValueImp(CodeNode theNode) {
+				// TODO new
+				return new Lng(theNode);
 			}
 		}));
 
 		TypePrimitive.instances.put(Symbols.CLASS_INT, new TypePrimitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
 			@Override
-			public Int createValueImp() {
-				return new Int();
+			public Int createValueImp(CodeNode theNode) {
+				// TODO new
+				return new Int(theNode);
 			}
 		}));
 
 		TypePrimitive.instances.put(Symbols.CLASS_BOOL, new TypePrimitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>(){
 			@Override
-			public Bool createValueImp() {
-				return new Bool();
+			public Bool createValueImp(CodeNode theNode) {
+				// TODO new
+				return new Bool(theNode);
 			}
 		}));
 	}
@@ -195,7 +203,8 @@ public class TypePrimitive<T> extends Type<T>{
 			System.err.println("unknown simple Type " + typeName);
 			return null;
 		}
-		Label str = new Label();
+		// TODO new
+		Label str = new Label(null);
 		try{
 			str.set(attributeName);
 		}
@@ -223,8 +232,8 @@ public class TypePrimitive<T> extends Type<T>{
 		return Symbols.litSimpleTypeNS() + this.getValueImplementClass().getSimpleName();
 	}
 
-	public Value<T> createValue() {
-		return this.factory.createValueImp();
+	public Value<T> createValue(CodeNode theNode) {
+		return this.factory.createValueImp(theNode);
 	}
 
 	@Override

@@ -110,7 +110,7 @@ public class BuildValues{
 		if(type.getClass() == TypeComplex.class){
 			// TODO: ok wir sind uns sicher, dass id den typ Attribute<Structur> hat. Trotzdem, warum funktioniert der cast ohne warnung?
 			// Siehe auch den else-zweig...
-			Structure re = ((AttributeComplex) id).createValue(parentData);
+			Structure re = ((AttributeComplex) id).createValue(parentData, n);
 			
 			// new
 			createValues(n, (TypeComplex) type, re);
@@ -127,7 +127,7 @@ public class BuildValues{
 			String valueNode = n.getParameter(Symbols.paramValue());
 			System.out.println("createValue " + name + " " + valueNode);
 			if(valueNode != null){
-				Value<?> re = ((AttributePrimitive<?>) id).createValue(valueNode, parentData);
+				Value<?> re = ((AttributePrimitive<?>) id).createValue(n, valueNode, parentData);
 				try{
 					parentData.set(name, re);
 				}

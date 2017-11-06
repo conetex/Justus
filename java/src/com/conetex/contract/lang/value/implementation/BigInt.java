@@ -2,13 +2,19 @@ package com.conetex.contract.lang.value.implementation;
 
 import java.math.BigInteger;
 
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.lang.value.PersistableValue;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class BigInt implements Value<BigInteger>{
+public class BigInt extends PersistableValue<BigInteger>{
+
+	public BigInt(CodeNode theNode) {
+		super(theNode);
+	}
 
 	private BigInteger actual;
 
@@ -50,9 +56,10 @@ public class BigInt implements Value<BigInteger>{
 	}
 
 	@Override
-	public Value<BigInteger> cloneValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public BigInt cloneValue() {
+		BigInt re = new BigInt(super.node.cloneNode());
+		re.actual = this.actual;
+		return re;
 	}
 
 }

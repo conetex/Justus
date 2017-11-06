@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.value.implementation;
 
+import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
@@ -10,8 +11,8 @@ public class Base64 extends SizedASCII{
 	// 4 * ( ceil (256 / 3) ) = 344
 	// 4 * ( ceil (128 / 3) ) = 172
 	// 4 * ( ceil (64 / 3) ) = 88	
-	public Base64(int theMaxSize) {
-		super(theMaxSize);
+	public Base64(CodeNode theNode, int theMaxSize) {
+		super(theNode, theMaxSize);
 	}
 
 	@Override
@@ -31,8 +32,8 @@ public class Base64 extends SizedASCII{
 	}
 
 	@Override
-	public Value<String> cloneValue() throws Invalid {
-		Base64 re = new Base64(super.maxSize);
+	public Base64 cloneValue() {
+		Base64 re = new Base64(super.node.cloneNode(), super.maxSize);
 		re.actual = this.actual;
 		return re;
 	}

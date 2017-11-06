@@ -135,7 +135,7 @@ public class BuildFunctions{
 		static Egg<Structure> objConst = new Egg<Structure>("objConst"){
 			@Override
 			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws UnknownType, UnknownCommandParameter, UnknownCommand {
-				return AccessibleConstant.<Structure>create2(Structure.class, thisNode.getParameter(Symbols.paramValue()));
+				return AccessibleConstant.<Structure>create2(Structure.class, thisNode);
 			}
 		};
 
@@ -171,7 +171,7 @@ public class BuildFunctions{
 		static Egg<Boolean> boolConst = new Egg<Boolean>("boolConst"){
 			@Override
 			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws UnknownType, UnknownCommandParameter, UnknownCommand {
-				return AccessibleConstant.<Boolean>create2(Boolean.class, thisNode.getParameter(Symbols.paramValue()));
+				return AccessibleConstant.<Boolean>create2(Boolean.class, thisNode);
 			}
 		};
 

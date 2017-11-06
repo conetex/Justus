@@ -78,7 +78,7 @@ public class ReadXML{
 			return null;
 		}
 
-		List<CodeNode> children = new ArrayList<>();
+		List<CodeNode> children = new LinkedList<>();
 		NodeList xmlChildren = n.getChildNodes();
 		for(int i = 0; i < xmlChildren.getLength(); i++){
 			Node c = xmlChildren.item(i);

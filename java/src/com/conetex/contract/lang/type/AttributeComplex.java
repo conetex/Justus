@@ -1,5 +1,10 @@
 package com.conetex.contract.lang.type;
 
+import java.util.LinkedList;
+
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbols;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Label;
 import com.conetex.contract.lang.value.implementation.Structure;
 
@@ -34,10 +39,15 @@ public class AttributeComplex extends Attribute<Structure>{// Attribute<Value<?>
 	}
 
 	@Override
-	public Structure createValue(Structure parent) {
+	public Structure createValue(Structure parent, CodeNode theNode) {
 		return this.type.createValue(parent);
 	}
 
+	public Structure createNewValue(Structure theParent) {
+		// TODO implement
+		return null;
+	}
+	
 	@Override
 	public Label getLabel() {
 		return this.label;

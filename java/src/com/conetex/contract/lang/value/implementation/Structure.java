@@ -1,5 +1,9 @@
 package com.conetex.contract.lang.value.implementation;
 
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbols;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
@@ -44,7 +48,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 					System.err.println("no getSubAttribute " + i);
 				}
 				else{
-					this.values[i] = a.createValue(this);
+					this.values[i] = a.createNewValue(this);
 				}
 			}
 		}
@@ -214,7 +218,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public Value<Structure> cloneValue() throws Invalid {
+	public Structure cloneValue() throws Invalid {
 		return this.getCopy();
 	}
 
@@ -253,6 +257,13 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 
 	public void setParent(Structure theParent) {
 		this.parent = theParent;
+	}
+
+	@Override
+	public void persist() throws UnknownCommandParameter, UnknownCommand {
+		for(Value<?> v : this.values){
+			v.persist();
+		}
 	}
 
 }

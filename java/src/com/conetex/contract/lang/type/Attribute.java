@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.type;
 
+import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.UnknownAttribute;
 import com.conetex.contract.build.exceptionFunction.UnknownType;
@@ -50,8 +51,10 @@ public abstract class Attribute<T> {
 
 	public abstract SizedASCII getLabel();
 
-	public abstract Value<T> createValue(Structure theParent);
+	public abstract Value<T> createValue(Structure theParent, CodeNode theNode);
 
+	public abstract Value<T> createNewValue(Structure theParent);
+	
 	public abstract Type<T> getType();
 
 	private static Attribute<?> getAttribute(String idName, TypeComplex parentTyp) throws UnknownAttribute {

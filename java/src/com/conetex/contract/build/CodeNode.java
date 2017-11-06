@@ -1,5 +1,6 @@
 package com.conetex.contract.build;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,10 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 public class CodeNode{
 
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
+		return thisObj.parameters[ getParameterIdx(c, p, thisObj) ];
+	}
+
+	private static int getParameterIdx(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		List<Egg<?>> commands = CodeModel.Egg.getInstance(c);
 		if(commands == null){
 			throw new UnknownCommand(c);
@@ -27,11 +32,7 @@ public class CodeNode{
 			}
 			else{
 				if(command.getParameters().length == thisObj.parameters.length){
-					int idx = command.getParameterIndex(p);
-					if(idx > -1){
-						//error += c + "." + p + ", ";
-						return thisObj.parameters[idx];
-					}
+					return command.getParameterIndex(p);
 				}
 				else{
 					error += ", " + command.getParameters().length + " != " + thisObj.parameters.length;
@@ -40,7 +41,7 @@ public class CodeNode{
 		}
 		throw new UnknownCommandParameter(c + "." + p + " " + error);
 	}
-
+	
 	public String getParameter(String p) throws UnknownCommandParameter, UnknownCommand {
 		return CodeNode.getParameter(this.getCommand(), p, this);
 	}
@@ -238,6 +239,24 @@ public class CodeNode{
 			return 0;
 		}
 		return this.children.size();
+	}
+	
+	public CodeNode cloneNode(){
+		String[] parameters = this.parameters;
+		List<CodeNode> children = new LinkedList<>();;
+		for(CodeNode c : this.children){
+			children.add( c.cloneNode() );
+		}
+		return new CodeNode(this.command, parameters, children);
+	}
+
+	public void setParameter(String p, Object x) throws UnknownCommandParameter, UnknownCommand {
+		if(x == null){
+			this.parameters[ getParameterIdx(this.command, p, this) ] = null;
+		}
+		else{
+			this.parameters[ getParameterIdx(this.command, p, this) ] = x.toString();			
+		}
 	}
 
 }

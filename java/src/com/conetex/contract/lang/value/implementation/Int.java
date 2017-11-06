@@ -1,14 +1,20 @@
 package com.conetex.contract.lang.value.implementation;
 
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.lang.value.PersistableValue;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class Int implements Value<Integer>{
+public class Int extends PersistableValue<Integer>{
 
 	private Integer actual;
+
+	public Int(CodeNode theNode) {
+		super(theNode);
+	}
 
 	@Override
 	public Integer set(Integer aValue) {
@@ -48,9 +54,10 @@ public class Int implements Value<Integer>{
 	}
 
 	@Override
-	public Value<Integer> cloneValue() {
-		// TODO Auto-generated method stub
-		return null;
+	public Int cloneValue() {
+		Int re = new Int(super.node.cloneNode());
+		re.actual = this.actual;
+		return re;
 	}
-
+	
 }

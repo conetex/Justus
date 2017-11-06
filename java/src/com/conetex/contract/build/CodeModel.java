@@ -17,6 +17,7 @@ import com.conetex.contract.build.exceptionFunction.DublicateOperation;
 import com.conetex.contract.build.exceptionFunction.OperationMeansNotCalled;
 import com.conetex.contract.build.exceptionFunction.UnexpectedSubOperation;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.function.access.Accessible;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
@@ -186,13 +187,13 @@ public class CodeModel{
 			this.parameterNames = theParameterNames;
 		}
 
-		public final int getParameterIndex(String p) {
+		public final int getParameterIndex(String p) throws UnknownCommandParameter {
 			for(int j = 0; j < this.parameterNames.length; j++){
 				if(this.parameterNames[j] == p){
 					return j;
 				}
 			}
-			return -1;
+			throw new UnknownCommandParameter(p);
 		}
 
 		public final String[] getParameters() {

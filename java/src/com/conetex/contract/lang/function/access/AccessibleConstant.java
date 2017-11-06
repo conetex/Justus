@@ -30,13 +30,13 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBigInt())){
-			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n.getParameter(Symbols.paramValue()));
+			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n);
 		}
 		else if(name.equals(Symbols.comInt())){
-			return AccessibleConstant.<Integer>create2(Integer.class, n.getParameter(Symbols.paramValue()));
+			return AccessibleConstant.<Integer>create2(Integer.class, n);
 		}
 		else if(name.equals(Symbols.comLng())){
-			return AccessibleConstant.<Long>create2(Long.class, n.getParameter(Symbols.paramValue()));
+			return AccessibleConstant.<Long>create2(Long.class, n);
 		}
 		return null;
 	}
@@ -44,7 +44,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBool())){
-			return AccessibleConstant.<Boolean>create2(Boolean.class, n.getParameter(Symbols.paramValue()));
+			return AccessibleConstant.<Boolean>create2(Boolean.class, n);
 		}
 		return null;
 	}
@@ -52,12 +52,12 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comStructure())){
-			return AccessibleConstant.<Structure>create2(Structure.class, n.getParameter(Symbols.paramValue()));
+			return AccessibleConstant.<Structure>create2(Structure.class, n);
 		}
 		return null;
 	}
 
-	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, String value) throws UnknownType {
+	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, CodeNode thisNode) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		TypePrimitive<RE> theClass = null;
 		try{
 
@@ -88,9 +88,10 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		}
 
 		if(theClass != null){
-			Value<RE> constVal = theClass.createValue();
+			Value<RE> constVal = theClass.createValue(thisNode);
+			
 			try{
-				constVal.setConverted(value);
+				constVal.setConverted( thisNode.getParameter(Symbols.paramValue()) );
 			}
 			catch(Inconvertible | Invalid e){
 				// TODO convert runtime exceptions to build Lang Exception
