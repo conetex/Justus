@@ -21,6 +21,7 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.function.access.Accessible;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.value.PrimitiveValue;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.build.BuildFunctions.Expression;
@@ -469,7 +470,7 @@ public class CodeModel{
 
 		// TODO this box-object is only a dummy ...
 		Values.value.means(Symbols.comValue()); // isAttributeInitialized //Symbol.VALUE 
-		Values.value.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
+		Values.value.registerParameters(PrimitiveValue.params);
 
 		// TODO this box-object is only a dummy ...
 		Values.valueVirtPrim.means(Symbols.comvirtualPrimValue()); // isAttributeInitialized //Symbol.VALUE 

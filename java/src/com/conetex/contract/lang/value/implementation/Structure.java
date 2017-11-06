@@ -1,10 +1,13 @@
 package com.conetex.contract.lang.value.implementation;
 
+import java.util.LinkedList;
+
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
+import com.conetex.contract.lang.type.Type;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.Value;
@@ -260,9 +263,11 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public void persist() throws UnknownCommandParameter, UnknownCommand {
+	public void persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+		int i = 0;
 		for(Value<?> v : this.values){
-			v.persist();
+			v.persist(this.type.getSubAttribute(i));
+			i++;
 		}
 	}
 

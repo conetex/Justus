@@ -35,7 +35,7 @@ public class Build{
 						@Override
 						public void run() throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
 							mainFunction.getFromRoot(rootStructure);
-							rootStructure.persist(); here we are ...
+							rootStructure.persist(null);
 						}
 					};
 				}
