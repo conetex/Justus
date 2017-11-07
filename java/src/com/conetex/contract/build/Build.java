@@ -11,12 +11,10 @@ import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
+import com.conetex.contract.runNew.Main;
+import com.conetex.contract.runNew.Writer;
 
 public class Build{
-
-	public abstract static class Main{
-		public abstract void run() throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand;
-	}
 
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
 		TypePrimitive.init();
@@ -33,9 +31,14 @@ public class Build{
 				if(mainFunction != null){
 					return new Main(){
 						@Override
-						public void run() throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
+						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
 							mainFunction.getFromRoot(rootStructure);
-							rootStructure.persist(null);
+							if(w != null){
+								rootStructure.persist(w, null);
+							}
+							else{
+								// TODO exception ...
+							}
 						}
 					};
 				}

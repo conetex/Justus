@@ -15,6 +15,7 @@ import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.runNew.Writer;
 
 public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 
@@ -263,10 +264,16 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public void persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+		String name = a == null ? "n.a." : a.getLabel().get();
+		Type<?> t = a == null ? null : a.getType();
+		String type = t == null ? "n.a." : t.getName();
+		CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, type}, new LinkedList<>());
+		w.write(cn);
+		
 		int i = 0;
 		for(Value<?> v : this.values){
-			v.persist(this.type.getSubAttribute(i));
+			v.persist(w, this.type.getSubAttribute(i));
 			i++;
 		}
 	}

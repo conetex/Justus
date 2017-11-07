@@ -1,6 +1,7 @@
 package com.conetex.justus.study;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,15 +11,24 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.conetex.contract.build.Build;
-import com.conetex.contract.build.Build.Main;
 import com.conetex.contract.build.CodeModel;
 import com.conetex.contract.build.CodeModel.Egg;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
@@ -27,17 +37,21 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
+import com.conetex.contract.runNew.Main;
+import com.conetex.contract.runNew.Writer;
+import com.sun.xml.internal.ws.policy.sourcemodel.ModelNode;
 
 public class ReadXML{
 
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException {
 
+		CodeModel.build();// TODO das sollte woanders gemacht werden, denn hier ist alles xml-driven...
+
+		String fileExtension = ".xml";
+		String inFile = "input02";
 		Main main = null;
-
-		CodeModel.build();
-
-		try(FileInputStream is = new FileInputStream("input02.xml")){
+		try(FileInputStream is = new FileInputStream(inFile + fileExtension)){
 
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -64,9 +78,52 @@ public class ReadXML{
 
 			is.close();
 		}
+		
+		
+		FileOutputStream os = new FileOutputStream(inFile + "_out" + fileExtension);
+		StreamResult res = new StreamResult(os);
+		DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
+		Document odoc = odocumentBuilder.newDocument();
+		Element root = odoc.createElement("contractOut");
+		odoc.appendChild(root);
+		
+		Writer w = new Writer(){
+
+			@Override
+			public void write(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
+				// TODO Auto-generated method stub
+				Element e = odoc.createElement(n.getCommand());
+				root.appendChild(e);
+				String[] parameters = n.getParameters();
+				int i = 0;
+				for(String p : n.getParameterNames()){
+					e.setAttribute(p, parameters[i++]);
+					//Attr a = odoc.createAttribute(p);
+					//e.appendChild(a);
+				}
+				
+				System.out.println("write " + n.getCommand());
+			}
+			
+		};
 
 		if(main != null){
-			main.run();
+			main.run(w);
+			Transformer t;
+			try {
+				t = TransformerFactory.newInstance().newTransformer();
+				t.setOutputProperty(OutputKeys.INDENT, "yes");
+				t.transform(new DOMSource(odoc), res);
+			}
+			catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}
 
 	}
@@ -122,7 +179,7 @@ public class ReadXML{
 				});
 		List<String> attributeList = new LinkedList<>();
 		outerLoop: for(Egg<?> command : commands){
-			String[] paramNames = command.getParameters();
+			String[] paramNames = command.getParameterNames();
 			if(paramNames != null){
 				for(String paramName : paramNames){
 					Node a = attributes.getNamedItem(paramName);

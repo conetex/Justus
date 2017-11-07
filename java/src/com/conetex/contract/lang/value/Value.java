@@ -7,6 +7,7 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.runNew.Writer;
 
 public interface Value<T> {
 
@@ -24,6 +25,6 @@ public interface Value<T> {
 
 	public Value<T> cloneValue() throws Invalid;
 
-	public void persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
+	public void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
 	
 }

@@ -197,7 +197,7 @@ public class CodeModel{
 			throw new UnknownCommandParameter(p);
 		}
 
-		public final String[] getParameters() {
+		public final String[] getParameterNames() {
 			return this.parameterNames;
 		}
 

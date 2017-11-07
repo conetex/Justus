@@ -13,33 +13,42 @@ public class CodeNode{
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		return thisObj.parameters[ getParameterIdx(c, p, thisObj) ];
 	}
-
+	
 	private static int getParameterIdx(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
+		Egg<?> command = getParameters(c, thisObj);
+		return command.getParameterIndex(p);
+	}
+	
+	private static Egg<?> getParameters(String c, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		List<Egg<?>> commands = CodeModel.Egg.getInstance(c);
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
 		if(thisObj.parameters == null){
-			throw new UnknownCommandParameter(c + "." + p);
+			throw new UnknownCommandParameter(c);
 		}
 		String error = "";
 		for(Egg<?> command : commands){
 			if(command == null){
-				error += ", " + c + " - " + p;
+				error += ", " + c;
 			}
-			if(command.getParameters() == null){
+			if(command.getParameterNames() == null){
 				error += ", 0 != " + thisObj.parameters.length;
 			}
 			else{
-				if(command.getParameters().length == thisObj.parameters.length){
-					return command.getParameterIndex(p);
+				if(command.getParameterNames().length == thisObj.parameters.length){
+					return command;
 				}
 				else{
-					error += ", " + command.getParameters().length + " != " + thisObj.parameters.length;
+					error += ", " + command.getParameterNames().length + " != " + thisObj.parameters.length;
 				}
 			}
 		}
-		throw new UnknownCommandParameter(c + "." + p + " " + error);
+		throw new UnknownCommandParameter(c + "." + error);
+	}
+	
+	public String[] getParameterNames() throws UnknownCommandParameter, UnknownCommand {
+		return CodeNode.getParameters(this.getCommand(), this).getParameterNames();
 	}
 	
 	public String getParameter(String p) throws UnknownCommandParameter, UnknownCommand {
@@ -54,7 +63,7 @@ public class CodeNode{
 		}
 		String error = "";
 		outerLoop: for(Egg<?> command : commands){
-			String[] paramNames = command.getParameters();
+			String[] paramNames = command.getParameterNames();
 			if(paramNames != null && !(p == null || p.length == 0)){
 				if(paramNames.length == p.length){
 					for(int j = 0; j < paramNames.length; j++){
@@ -77,6 +86,10 @@ public class CodeNode{
 	private String command;
 
 	private String[] parameters;
+
+	public String[] getParameters() {
+		return this.parameters;
+	}
 
 	private List<CodeNode> children;
 

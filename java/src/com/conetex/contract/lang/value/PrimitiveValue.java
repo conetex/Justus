@@ -16,10 +16,12 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.runNew.Writer;
 import com.conetex.contract.lang.value.Value;
 
 public abstract class PrimitiveValue<T> implements Value<T>{
 	
+	// TODO dies wird hoffentlich nicht gebraucht. Löschen!
 	protected CodeNode node;
 	
 	protected PrimitiveValue(CodeNode theNode){
@@ -29,18 +31,18 @@ public abstract class PrimitiveValue<T> implements Value<T>{
 	public static final String[] params = new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() };
 	
 	@Override
-	public void persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a.getLabel().get();
 		Type<?> t = a.getType();
 		String type = t.getName();
 		T value = this.get();
 		if(value == null) {
 			CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, type}, new LinkedList<>());
-			//return this.type.createValue(cn);
+			w.write(cn);
 		}
 		else {
 			CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, value.toString(), type}, new LinkedList<>());
-			//return this.type.createValue(cn);			
+			w.write(cn);
 		}
 	}
 
