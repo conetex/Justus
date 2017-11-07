@@ -24,7 +24,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class TypePrimitive<T> extends Type<T>{
 
-	public static Map<String, TypePrimitive<?>> instances = new TreeMap<>();
+	private static final Map<String, TypePrimitive<?>> instances = new TreeMap<>();
 
 	private static String createGetMaxSizeStr(String className, String valueImplementClassStr) {
 		String maxSizeStr = valueImplementClassStr.substring(className.length());
@@ -113,21 +113,11 @@ public class TypePrimitive<T> extends Type<T>{
 	}
 
 	public static void init() {
-		TypePrimitive.instances.put(Symbols.CLASS_BINT, new TypePrimitive<>(BigInt.class, BigInteger.class, new PrimitiveValueFactory<BigInteger>(){
-			@Override
-			public Value<BigInteger> createValueImp(CodeNode theNode) {
-				// TODO new
-				return new BigInt(theNode);
-			}
-		}));
+		// TODO new
+		TypePrimitive.instances.put(Symbols.CLASS_BINT, new TypePrimitive<>(BigInt.class, BigInteger.class, BigInt::new));
 
-		TypePrimitive.instances.put(Symbols.CLASS_LNG, new TypePrimitive<>(Lng.class, Long.class, new PrimitiveValueFactory<Long>(){
-			@Override
-			public Lng createValueImp(CodeNode theNode) {
-				// TODO new
-				return new Lng(theNode);
-			}
-		}));
+		// TODO new
+		TypePrimitive.instances.put(Symbols.CLASS_LNG, new TypePrimitive<>(Lng.class, Long.class, Lng::new));
 
 		TypePrimitive.instances.put(Symbols.CLASS_INT, new TypePrimitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
 			@Override
@@ -152,7 +142,7 @@ public class TypePrimitive<T> extends Type<T>{
 
 	// private final Class<Value.Interface<T>> clazz;
 
-	final PrimitiveValueFactory<T> factory;
+	private final PrimitiveValueFactory<T> factory;
 
 	public static <W> TypePrimitive<W> getInstanceAtRunTime(String valueImplementClassStr, Class<W> rawType) {
 		try{
@@ -168,7 +158,7 @@ public class TypePrimitive<T> extends Type<T>{
 	public static <W> TypePrimitive<W> getInstance(String valueImplementClassStr, Class<W> rawType) throws AbstractTypException {
 		TypePrimitive<?> re = TypePrimitive.getInstanceWild(valueImplementClassStr);
 		if(re != null){
-			return Cast.<W>toTypedPrimitive(re, rawType);
+			return Cast.toTypedPrimitive(re, rawType);
 		}
 		return null;
 	}
@@ -244,7 +234,7 @@ public class TypePrimitive<T> extends Type<T>{
 		 * throw new Identifier.EmptyLabelException(); } return
 		 * Identifier.<T>create(theName, this);
 		 */
-		return Type.<T>createIdentifier(theName, this);
+		return Type.createIdentifier(theName, this);
 	}
 
 	@Override

@@ -95,7 +95,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 					// TODO wenn hier die typen nicht passen und keine structure
 					// da liegt, sondern
 					// was anderes...
-					// sollte das vernünftig gemeldet werden!!!
+					// sollte das vernuenftig gemeldet werden!!!
 					Value<Structure> subStructure = getValue(idIndex, Structure.class);
 					if(subStructure != null){
 						return subStructure.get().getStructure(names[1]);
@@ -127,7 +127,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		// TODO do xpath syntax. access parent objects ???
 		if(this.type.getName().equals(aName)){
 			if(clazz == Structure.class){
-				return RtCast.<R>toTypedValue(this, clazz);// (Value<R>) this;
+				return RtCast.toTypedValue(this, clazz);// (Value<R>) this;
 			}
 			else{
 				System.err.println("Cast not possible: " + clazz + " != " + this.getClass());
@@ -146,7 +146,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 					// TODO wenn hier die typen nicht passen und keine structure
 					// da liegt, sondern
 					// was anderes...
-					// sollte das vernünftig gemeldet werden!!!
+					// sollte das vernuenftig gemeldet werden!!!
 					Value<Structure> subStructure = getValue(idIndex, Structure.class);
 					if(subStructure != null){
 						return subStructure.get().getValue(names[1], clazz);
@@ -156,7 +156,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 						TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(this.type.getName() + "." + names[0]);
 						// ComplexFunction z = this.type.getComplexFunction(names[0]);
 						if(z != null){
-							return z.<R>getValue(names[1], clazz);
+							return z.getValue(names[1], clazz);
 						}
 					}
 
@@ -176,7 +176,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		Value<?> v = getValue(i);
 		if(v != null){
 			if(v.getRawTypeClass() == c){
-				return RtCast.<R>toTypedValue(v, c);
+				return RtCast.toTypedValue(v, c);
 			}
 			else{
 				System.err.println("Cast not possible: " + c + " != " + v.getRawTypeClass());
@@ -192,14 +192,12 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		return null;
 	}
 
-	public boolean set(String id, Value<?> value) throws Invalid {
+	public void set(String id, Value<?> value) {
 		int i = this.type.getSubAttributeIndex(id);
 		if(i > -1 && i < this.values.length){
 			this.values[i] = value;
-			return true;
-		}
-		return false;
-	}
+        }
+    }
 
 	@Override
 	public Structure get() {
@@ -236,13 +234,13 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public Structure setObject(Object value) throws Invalid, ValueCastException {
+	public void setObject(Object value) throws Invalid, ValueCastException {
 		Structure v = RtCast.cast(value, Structure.class);
-		return this.set(v);
-	}
+        this.set(v);
+    }
 
 	@Override
-	public Structure setConverted(String value) throws Inconvertible, Invalid {
+	public void setConverted(String value) throws Inconvertible, Invalid {
 		throw new Inconvertible("can not create Structure from String!");
 	}
 
@@ -267,8 +265,8 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	public void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a == null ? "n.a." : a.getLabel().get();
 		Type<?> t = a == null ? null : a.getType();
-		String type = t == null ? "n.a." : t.getName();
-		CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, type}, new LinkedList<>());
+		String ttype = t == null ? "n.a." : t.getName();
+		CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, ttype}, new LinkedList<>());
 		w.write(cn);
 		
 		int i = 0;

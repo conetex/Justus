@@ -18,9 +18,9 @@ public class BigInt extends PrimitiveValue<BigInteger>{
 	private BigInteger actual;
 
 	@Override
-	public BigInteger setObject(Object value) throws Invalid, ValueCastException {
-		return this.set(RtCast.cast(value, BigInteger.class));
-	}
+	public void setObject(Object value) throws Invalid, ValueCastException {
+        this.set(RtCast.cast(value, BigInteger.class));
+    }
 
 	@Override
 	public BigInteger set(BigInteger aValue) {
@@ -34,11 +34,11 @@ public class BigInt extends PrimitiveValue<BigInteger>{
 	}
 
 	@Override
-	public BigInteger setConverted(String value) throws Inconvertible {
+	public void setConverted(String value) throws Inconvertible {
 		try{
 			BigInteger v = new BigInteger(value);
-			return this.set(v);
-		}
+            this.set(v);
+        }
 		catch(NumberFormatException e){
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}

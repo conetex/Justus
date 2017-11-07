@@ -40,7 +40,7 @@ public class Return<V> extends ReturnAbstract<V>{
 		return new Return<>(theExpression);
 	}
 
-	private Accessible<V> expression;
+	private final Accessible<V> expression;
 
 	private Return(Accessible<V> theExpression) {
 		this.expression = theExpression;

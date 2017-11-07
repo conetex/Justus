@@ -11,7 +11,7 @@ import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public class SizedASCII extends PrimitiveValue<String>{
 
-	int maxSize;
+	final int maxSize;
 
 	String actual;
 
@@ -21,11 +21,11 @@ public class SizedASCII extends PrimitiveValue<String>{
 	}
 
 	@Override
-	public String setObject(Object value) throws Invalid, ValueCastException {
-		return this.set(RtCast.cast(value, String.class));
+	public void setObject(Object value) throws Invalid, ValueCastException {
+		this.set(RtCast.cast(value, String.class));
 	}
 
-	protected boolean check(String aValue, String allowedChars) throws Invalid {
+	boolean check(String aValue, String allowedChars) throws Invalid {
 		if(aValue == null){
 			return true;
 		}
@@ -119,8 +119,8 @@ public class SizedASCII extends PrimitiveValue<String>{
 	}
 
 	@Override
-	public String setConverted(String newValue) throws Invalid {
-		return this.set(newValue);
+	public void setConverted(String newValue) throws Invalid {
+		this.set(newValue);
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class SizedASCII extends PrimitiveValue<String>{
 		return String.class;
 	}
 
-	public int getMaxSize() {
+	int getMaxSize() {
 		return this.maxSize;
 	}
 

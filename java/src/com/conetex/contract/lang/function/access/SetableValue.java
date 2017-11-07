@@ -43,8 +43,7 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T>{
 		// + ")");
 		BuildFunctions.checkType(Attribute.getRawTypeClass(path, parentTyp), expected);
 		// String path = n.getValue();
-		SetableValue<R> re = SetableValue.create(path, expected);
-		return re;
+        return SetableValue.create(path, expected);
 	}
 
 	public static SetableValue<?> createFunctionSetableWhatEver(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
@@ -52,15 +51,13 @@ public class SetableValue<T> extends AccessibleValue<T> implements Setable<T>{
 		// + ")");
 		Class<?> rawType = Attribute.getRawTypeClass(path, parentTyp);
 		// String path = n.getValue();
-		SetableValue<?> re = SetableValue.create(path, rawType);
-		return re;
+        return SetableValue.create(path, rawType);
 	}
 
 	public static SetableValue<? extends Number> createFunctionSetableNumber(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Attribute.getRawTypeClass(path, parentTyp));
-		SetableValue<? extends Number> re = SetableValue.create(path, rawType);
-		return re;
+        return SetableValue.create(path, rawType);
 	}
 }

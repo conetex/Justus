@@ -1,5 +1,5 @@
 package com.conetex.contract.lang.function.instance;
 
-public class Delete{
+class Delete{
 	// TODO implement
 }

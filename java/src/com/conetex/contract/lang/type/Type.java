@@ -17,16 +17,16 @@ public abstract class Type<T> {
 	public abstract String getName();
 	// public abstract Value<T> createValue();
 
-	public abstract Attribute<?> getSubAttribute(String aName);
+	protected abstract Attribute<?> getSubAttribute(String aName);
 
-	public static <V> Attribute<V> createIdentifier(Label theName, TypePrimitive<V> thisObj) throws NullLabelException, EmptyLabelException {
+	static <V> Attribute<V> createIdentifier(Label theName, TypePrimitive<V> thisObj) throws NullLabelException, EmptyLabelException {
 		if(theName == null || theName.get() == null){
 			throw new NullLabelException(Type.class.getName() + ".createIdentifier()");
 		}
 		if(theName.get().length() < 1){
 			throw new EmptyLabelException(Type.class.getName() + ".createIdentifier()");
 		}
-		return AttributePrimitive.<V>create(theName, thisObj);
+		return AttributePrimitive.create(theName, thisObj);
 	}
 
 	public static Attribute<Value<?>[]> _createAttribute2(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
@@ -39,7 +39,7 @@ public abstract class Type<T> {
 		return null;// AttributeComplex.create(theName, thisObj);
 	}
 
-	public static Attribute<Structure> createAttribute(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
+	static Attribute<Structure> createAttribute(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
 		if(theName == null || theName.get() == null){
 			throw new NullLabelException(Type.class.getName() + ".createAttribute()");
 		}

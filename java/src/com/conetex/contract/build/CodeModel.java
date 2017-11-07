@@ -34,7 +34,7 @@ public class CodeModel{
 
 	public static abstract class Box<T, S> extends Egg<T>{
 
-		private Map<String, Egg<? extends S>> childBuilder = new HashMap<>();
+		private final Map<String, Egg<? extends S>> childBuilder = new HashMap<>();
 
 		public Box(String theName) {
 			super(theName);
@@ -45,14 +45,14 @@ public class CodeModel{
 			super(theName);
 		}
 
-		public final void contains(String theOperationName, Egg<? extends S> b) {
+		final void contains(String theOperationName, Egg<? extends S> b) {
 			if(this.childBuilder.containsKey(theOperationName)){
 				System.err.println("duplicate inner operation '" + theOperationName + "' in " + this.getName());
 			}
 			this.childBuilder.put(theOperationName, b);
 		}
 
-		public final void contains(Egg<? extends S> b) throws OperationMeansNotCalled {
+		final void contains(Egg<? extends S> b) throws OperationMeansNotCalled {
 			Set<String> keySet = b.keySet();
 			if(keySet.size() == 0){
 				throw new OperationMeansNotCalled(b.getName());
@@ -62,7 +62,7 @@ public class CodeModel{
 			}
 		}
 
-		private final Egg<? extends S> getChildBuilder(CodeNode n) throws AbstractInterpreterException {
+		private Egg<? extends S> getChildBuilder(CodeNode n) throws AbstractInterpreterException {
 			String name = n.getCommand();
 			Egg<? extends S> s = this.childBuilder.get(name);
 			if(s == null){
@@ -81,9 +81,9 @@ public class CodeModel{
 			return cb.attributeCreateThis(child, unformedComplexTypes);
 		}
 
-		public final Value<?> valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+		public final void valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			Egg<? extends S> cb = this.getChildBuilder(child);
-			return cb.valueCreateThis(child, parentTyp, parentData);
+			cb.valueCreateThis(child, parentTyp, parentData);
 		}
 
 		public final TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
@@ -95,27 +95,27 @@ public class CodeModel{
 
 	public static abstract class Egg<T> {
 
-		private static Map<String, List<Egg<?>>> instances = new HashMap<>();
+		private static final Map<String, List<Egg<?>>> instances = new HashMap<>();
 
 		public static List<Egg<?>> getInstance(String command) {
 			return Egg.instances.get(command);
 		}
 
-		private String name;
+		private final String name;
 
 		private String[] parameterNames;
 
-		private Set<String> meaning = new HashSet<>();
+		private final Set<String> meaning = new HashSet<>();
 
-		protected Egg(String theName) {
+		Egg(String theName) {
 			this.name = theName;
 		}
 
-		public final String getName() {
+		final String getName() {
 			return this.name;
 		}
 
-		private final void checkMeaning(CodeNode c) throws AbstractInterpreterException {
+		private void checkMeaning(CodeNode c) throws AbstractInterpreterException {
 			if(!this.meaning.contains(c.getCommand())){
 				System.err.println("Operation " + c.getCommand() + " not found!");
 				throw new UnknownCommand("Operation " + c.getCommand() + " not found!");
@@ -162,7 +162,7 @@ public class CodeModel{
 			return this.meaning;
 		}
 
-		public final void means(String theOperationName) throws DublicateOperation {
+		final void means(String theOperationName) throws DublicateOperation {
 			if(this.meaning.contains(theOperationName)){
 				throw new DublicateOperation("duplicate operation '" + theOperationName + "' in " + this.getName());
 			}
@@ -175,13 +175,13 @@ public class CodeModel{
 			instanceList.add(this);
 		}
 
-		public final void means(String[] theOperationNames) throws DublicateOperation {
+		final void means(String[] theOperationNames) throws DublicateOperation {
 			for(String theOperationName : theOperationNames){
 				this.means(theOperationName);
 			}
 		}
 
-		public final void registerParameters(String[] theParameterNames) {
+		final void registerParameters(String[] theParameterNames) {
 			if(this.parameterNames != null){
 				System.err.println("duplicate Param call");
 			}
@@ -210,7 +210,7 @@ public class CodeModel{
 
 	}
 
-	static void buildBool() throws AbstractInterpreterException {
+	private static void buildBool() throws AbstractInterpreterException {
 		Expression.boolExpression.contains(Expression.boolExpression);
 		Expression.boolExpression.contains(Expression.boolComparsion);
 		Expression.boolExpression.contains(Expression.boolNullCheck);
@@ -279,7 +279,7 @@ public class CodeModel{
 															// hinter Zuweisung
 	}
 
-	static void buildNumber() throws AbstractInterpreterException {
+	private static void buildNumber() throws AbstractInterpreterException {
 		Expression.boolComparsion.contains(Expression.numberExpession);
 		Expression.boolComparsion.contains(Reference.numberRef);
 		Expression.boolComparsion.contains(Constant.numberConst);
@@ -335,7 +335,7 @@ public class CodeModel{
 															// hinter Zuweisung
 	}
 
-	static void buildStruct() throws AbstractInterpreterException {
+	private static void buildStruct() throws AbstractInterpreterException {
 		Assign.structureAssigment.contains(Reference.structureRef);
 		Assign.structureAssigment.contains(Constant.objConst);
 		Assign.structureAssigment.contains(FunCall.structureCall);
@@ -347,7 +347,7 @@ public class CodeModel{
 		Fun.structure.contains(FunReturn.structureReturn);
 	}
 
-	static void buildUnknown() throws AbstractInterpreterException {
+	private static void buildUnknown() throws AbstractInterpreterException {
 		Assign.whatEverAssigment.contains(Reference.whatEverRef);
 		Assign.whatEverAssigment.contains(Constant.whatEverConst);
 		Assign.whatEverAssigment.contains(FunCall.whatEverCall);

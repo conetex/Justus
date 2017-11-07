@@ -17,15 +17,15 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class Function<V> extends Accessible<V>{
 
-	private static Map<String, Function<? extends Number>> instancesNum = new HashMap<>();
+	private static final Map<String, Function<? extends Number>> instancesNum = new HashMap<>();
 
-	private static Map<String, Function<Boolean>> instancesBoolean = new HashMap<>();
+	private static final Map<String, Function<Boolean>> instancesBoolean = new HashMap<>();
 
-	private static Map<String, Function<String>> instancesString = new HashMap<>();
+	private static final Map<String, Function<String>> instancesString = new HashMap<>();
 
-	private static Map<String, Function<? extends Structure>> instancesStructure = new HashMap<>();
+	private static final Map<String, Function<? extends Structure>> instancesStructure = new HashMap<>();
 
-	private static Map<String, Function<?>> instancesVoid = new HashMap<>();
+	private static final Map<String, Function<?>> instancesVoid = new HashMap<>();
 
 	public static Function<Boolean> getInstanceBool(String name) {
 		Function<Boolean> f = instancesBoolean.get(name);
@@ -51,8 +51,8 @@ public class Function<V> extends Accessible<V>{
 		return f;
 	}
 
-	public static Function<? extends Object> getInstanceVoid(String name) {
-		Function<? extends Object> fn = instancesVoid.get(name);
+	public static Function<?> getInstanceVoid(String name) {
+		Function<?> fn = instancesVoid.get(name);
 		if(fn != null){
 			return fn;
 		}
@@ -76,7 +76,7 @@ public class Function<V> extends Accessible<V>{
 		if(fstruct != null){
 			return fstruct;
 		}
-		Function<? extends Object> fvoid = instancesVoid.get(name);
+		Function<?> fvoid = instancesVoid.get(name);
 		if(fvoid != null){
 			return fvoid;
 		}
@@ -183,26 +183,25 @@ public class Function<V> extends Accessible<V>{
 		return re;
 	}
 
-	public static final <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject)
+	public static <V> V doSteps(Accessible<?>[] steps, List<ReturnAbstract<V>> returns, Result ret, Structure thisObject)
 			throws AbstractRuntimeException {
-		loopOverSteps: for(int i = 0; i < steps.length; i++){
-			if(steps[i] instanceof ReturnAbstract){
-				for(ReturnAbstract<V> r : returns){
-					if(r == steps[i]){
+		loopOverSteps:
+		for (Accessible<?> step : steps) {
+			if (step instanceof ReturnAbstract) {
+				for (ReturnAbstract<V> r : returns) {
+					if (r == step) {
 						V re = r.getFrom(thisObject.get(), ret);// TODO get() weg
-						if(ret.toReturn){
+						if (ret.toReturn) {
 							System.out.println("MOCK return: " + re);
 							return re;
-						}
-						else{
+						} else {
 							continue loopOverSteps;
 						}
 					}
 				}
-				System.err.println("not able to return... " + steps[i]);
-			}
-			else{
-				Object stepResult = steps[i].getFrom(thisObject.get());
+				System.err.println("not able to return... " + step);
+			} else {
+				Object stepResult = step.getFrom(thisObject.get());
 				System.out.println("MOCK stepResult: " + stepResult);
 			}
 		}
@@ -250,22 +249,22 @@ public class Function<V> extends Accessible<V>{
 		return returns;
 	}
 
-	private String name;
+	private final String name;
 
 	public String getName() {
 		return this.name;
 	}
 
-	private Class<V> rawTypeClass;
+	private final Class<V> rawTypeClass;
 
-	private List<ReturnAbstract<V>> returns;
+	private final List<ReturnAbstract<V>> returns;
 
 	@Override
 	public String toString() {
 		return "function " + this.name;
 	}
 
-	private Accessible<?>[] steps;
+	private final Accessible<?>[] steps;
 
 	private Function(Accessible<?>[] theSteps, List<ReturnAbstract<V>> theReturns, String theName, Class<V> theRawTypeClass) {
 		this.steps = theSteps;
@@ -274,7 +273,7 @@ public class Function<V> extends Accessible<V>{
 		this.rawTypeClass = theRawTypeClass;
 	}
 
-	public V getFromRoot(Structure thisObject) throws AbstractRuntimeException {
+	public void getFromRoot(Structure thisObject) throws AbstractRuntimeException {
 		System.out.println("Function getFrom " + this.name);
 
 		Structure thisObjectB = thisObject.getStructure(this.name);
@@ -284,9 +283,9 @@ public class Function<V> extends Accessible<V>{
 
 		if(thisObjectB == null){
 			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
-			return null;
+			return;
 		}
-		return Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
+		Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
 	}
 
 	@Override

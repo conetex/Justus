@@ -1,6 +1,6 @@
 package com.conetex.contract.lang.function.instance;
 
-public class Copy{
+class Copy{
 	// TODO: dies sollte assignment Copy ersetzen. alles sollte per Reference
-	// übergeben werden!!!
+	// uebergeben werden!!!
 }

@@ -10,13 +10,13 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class When<V> extends ReturnAbstract<V>{
 
-	Accessible<Boolean> condition;
+	final Accessible<Boolean> condition;
 
-	Accessible<?>[] stepsIf;
+	final Accessible<?>[] stepsIf;
 
-	List<ReturnAbstract<V>> returnsIf;
+	final List<ReturnAbstract<V>> returnsIf;
 
-	private Class<V> rawTypeClass;
+	private final Class<V> rawTypeClass;
 
 	public static <SV> When<SV> create(Accessible<?>[] theStepsIf, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass) throws CastException {
 		if(theStepsIf == null){
@@ -28,8 +28,7 @@ public class When<V> extends ReturnAbstract<V>{
 			return null;
 		}
 		List<ReturnAbstract<SV>> returns = Function.getReturns(theStepsIf, theRawTypeClass);
-		When<SV> re = new When<>(theStepsIf, returns, theCondition, theRawTypeClass);
-		return re;
+        return new When<>(theStepsIf, returns, theCondition, theRawTypeClass);
 	}
 
 	When(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
@@ -56,11 +55,8 @@ public class When<V> extends ReturnAbstract<V>{
 	}
 
 	public boolean returns() {
-		if(this.returnsIf.size() > 0){
-			return true;
-		}
-		return false;
-	}
+        return this.returnsIf.size() > 0;
+    }
 
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
@@ -69,7 +65,7 @@ public class When<V> extends ReturnAbstract<V>{
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
 		}
-		if(res.booleanValue()){
+		if(res){
 			return Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);
 		}
 		return null;

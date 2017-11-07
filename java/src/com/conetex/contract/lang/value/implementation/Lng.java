@@ -22,9 +22,9 @@ public class Lng extends PrimitiveValue<Long>{
 	}
 
 	@Override
-	public Long setObject(Object value) throws Invalid, ValueCastException {
-		return this.set(RtCast.cast(value, Long.class));
-	}
+	public void setObject(Object value) throws Invalid, ValueCastException {
+        this.set(RtCast.cast(value, Long.class));
+    }
 
 	@Override
 	public final Long get() {
@@ -32,11 +32,11 @@ public class Lng extends PrimitiveValue<Long>{
 	}
 
 	@Override
-	public Long setConverted(String value) throws Inconvertible, NumberFormatException {
+	public void setConverted(String value) throws Inconvertible, NumberFormatException {
 		try{
 			Long v = Long.valueOf(Long.parseLong(value));
-			return this.set(v);
-		}
+            this.set(v);
+        }
 		catch(NumberFormatException e){
 			throw new Inconvertible("can not convert " + value + " to Long", e);
 		}

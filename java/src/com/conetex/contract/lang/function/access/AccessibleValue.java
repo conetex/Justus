@@ -19,15 +19,15 @@ public class AccessibleValue<T> extends Accessible<T>{
 		return new AccessibleValue<>(thePath, theClass);
 	}
 
-	protected String path;
+	final String path;
 
 	public String getPath() {
 		return this.path;
 	}
 
-	protected final Class<T> clazz;
+	final Class<T> clazz;
 
-	protected AccessibleValue(String thePath, Class<T> theClass) {
+	AccessibleValue(String thePath, Class<T> theClass) {
 		this.path = thePath;
 		this.clazz = theClass;
 	}
@@ -65,20 +65,17 @@ public class AccessibleValue<T> extends Accessible<T>{
 
 	public static <R> Accessible<R> createFunctionRef(String path, TypeComplex parentTyp, Class<R> expected) throws AbstractInterpreterException {
 		BuildFunctions.checkType(Attribute.getRawTypeClass(path, parentTyp), expected);
-		AccessibleValue<R> re = AccessibleValue.create(path, expected);
-		return re;
+        return AccessibleValue.create(path, expected);
 	}
 
 	public static Accessible<?> createFunctionRefWhatEver(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
 		Class<?> rawType = Attribute.getRawTypeClass(path, parentTyp);
-		AccessibleValue<?> re = AccessibleValue.create(path, rawType);
-		return re;
+		return AccessibleValue.create(path, rawType);
 	}
 
 	public static Accessible<? extends Number> createFunctionRefNum(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
 		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Attribute.getRawTypeClass(path, parentTyp));
-		AccessibleValue<? extends Number> re = AccessibleValue.create(path, rawType);
-		return re;
+		return AccessibleValue.create(path, rawType);
 	}
 
 }

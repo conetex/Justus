@@ -38,7 +38,7 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.runNew.Main;
 import com.conetex.contract.runNew.Writer;
 
-public class ReadXML{
+class ReadXML{
 
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException {
@@ -113,19 +113,15 @@ public class ReadXML{
 				t.setOutputProperty(OutputKeys.INDENT, "yes");
 				t.transform(new DOMSource(odoc), res);
 			}
-			catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
+			catch (TransformerFactoryConfigurationError | TransformerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			catch (TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
 		}
 
 	}
 
-	public static CodeNode createSyntaxNode(Node n) throws UnknownCommandParameter, UnknownCommand {
+	private static CodeNode createSyntaxNode(Node n) {
 
 		short typOfNode = n.getNodeType();
 		if(typOfNode != Node.ELEMENT_NODE){
@@ -143,7 +139,7 @@ public class ReadXML{
 		}
 
 		String commandStr = n.getNodeName();
-		String errors = commandStr + " missing params: ";
+		StringBuilder errors = new StringBuilder(commandStr + " missing params: ");
 		NamedNodeMap attributes = n.getAttributes();
 		List<Egg<?>> commands = CodeModel.Egg.getInstance(commandStr);
 		if(commands == null){
@@ -158,22 +154,19 @@ public class ReadXML{
 
 		// TODO Sortierung ist nicht getestet...
 		commands.sort(
-				new Comparator<Egg<?>>(){
-					@Override
-					public int compare(Egg<?> o1, Egg<?> o2) {
-						if(o1.getParameterCount() < o2.getParameterCount()){
-							return -1;
-						}
-						else{
-							if(o1.getParameterCount() == o2.getParameterCount()){
-								return 0;
-							}
-							else{
-								return 1;
-							}
-						}
-					}
-				});
+				(o1, o2) -> {
+                    if(o1.getParameterCount() < o2.getParameterCount()){
+                        return -1;
+                    }
+                    else{
+                        if(o1.getParameterCount() == o2.getParameterCount()){
+                            return 0;
+                        }
+                        else{
+                            return 1;
+                        }
+                    }
+                });
 		List<String> attributeList = new LinkedList<>();
 		outerLoop: for(Egg<?> command : commands){
 			String[] paramNames = command.getParameterNames();
@@ -184,7 +177,7 @@ public class ReadXML{
 						if(paramName == Symbols.comValue()){
 							String value = ReadXMLtools.getNodeContent(n);
 							if(value == null){
-								errors = errors + paramName + ", ";
+								errors.append(paramName).append(", ");
 								attributeList.clear();
 								continue outerLoop;
 							}
@@ -193,7 +186,7 @@ public class ReadXML{
 							}
 						}
 						else{
-							errors = errors + paramName + ", ";
+							errors.append(paramName).append(", ");
 							attributeList.clear();
 							continue outerLoop;
 						}

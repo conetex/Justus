@@ -4,7 +4,7 @@ public class Constants{
 
 	private static final int LABEL_SIZE = 8;
 
-	public static final int labelSize() {
+	public static int labelSize() {
 		return LABEL_SIZE;
 	}
 

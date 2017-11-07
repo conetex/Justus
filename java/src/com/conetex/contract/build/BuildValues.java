@@ -1,6 +1,5 @@
 package com.conetex.contract.build;
 
-import java.util.List;
 import java.util.Map;
 
 import com.conetex.contract.build.BuildTypes.Types;
@@ -17,11 +16,11 @@ import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class BuildValues{
+class BuildValues{
 
 	static class Values{
 		
-		static Box<Object, Object> value = new Box<Object, Object>("value", 2){
+		static final Box<Object, Object> value = new Box<Object, Object>("value", 2){
 
 			@Override
 			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
@@ -53,39 +52,36 @@ public class BuildValues{
 
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
-				Value<?> v = BuildValues.createValue(thisNode, parentType, parentData);
-				return v;
+				return BuildValues.createValue(thisNode, parentType, parentData);
 			}
 
 		};
 		
-		static Box<Object, Object> valueVirtComp = new Box<Object, Object>("VIRTUAL_COMP_VALUE"){
+		static final Box<Object, Object> valueVirtComp = new Box<Object, Object>("VIRTUAL_COMP_VALUE"){
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
-				Value<?> v = BuildValues.createValue(thisNode, parentType, parentData);
-				return v;
+				return BuildValues.createValue(thisNode, parentType, parentData);
 			}
 		};
 
-		static Box<Object, Object> valueVirtPrim = new Box<Object, Object>("VIRTUAL_PRIM_VALUE"){
+		static final Box<Object, Object> valueVirtPrim = new Box<Object, Object>("VIRTUAL_PRIM_VALUE"){
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
-				Value<?> v = BuildValues.createValue(thisNode, parentType, parentData);
-				return v;
+				return BuildValues.createValue(thisNode, parentType, parentData);
 			}
 		};
 		
-		static Box<Object, Object> contract = new Box<Object, Object>("contract"){
+		static final Box<Object, Object> contract = new Box<Object, Object>("contract"){
 
 		};
 		
 	}
 		
-	public static List<Value<?>> createValues(CodeNode n, TypeComplex type, Structure data) throws AbstractInterpreterException {
+	public static void createValues(CodeNode n, TypeComplex type, Structure data) throws AbstractInterpreterException {
 		String name = n.getCommand();
 		if(type == null){
 			System.err.println("can not recognize type of " + name);
-			return null;
+			return;
 		}
 
 		for(CodeNode c : n.getChildNodes()){
@@ -93,7 +89,6 @@ public class BuildValues{
 		}
 
 		data.fillMissingValues();
-		return null;
 	}
 
 	private static Value<?> createValue(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
@@ -114,13 +109,7 @@ public class BuildValues{
 			
 			// new
 			createValues(n, (TypeComplex) type, re);
-			try{
-				parentData.set(name, re);
-			}
-			catch(Invalid e){
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			parentData.set(name, re);
 			return re;
 		}
 		else{
@@ -128,13 +117,7 @@ public class BuildValues{
 			System.out.println("createValue " + name + " " + valueNode);
 			if(valueNode != null){
 				Value<?> re = ((AttributePrimitive<?>) id).createValue(n, valueNode, parentData);
-				try{
-					parentData.set(name, re);
-				}
-				catch(Invalid e){
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				parentData.set(name, re);
 				return re;
 			}
 		}
@@ -151,14 +134,8 @@ public class BuildValues{
 			Structure re = Structure.create(type, null);
 			// new
 			createValues(n, type, re);
-			try{
-				// TODO hier passier garnix weil parentData keinen platz für die funktion hat...
-				parentData.set(name, re);
-			}
-			catch(Invalid e){
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// TODO hier passier garnix weil parentData keinen platz fuer die funktion hat...
+			parentData.set(name, re);
 			
 			type.setPrototype(re);
 

@@ -23,9 +23,9 @@ public class TypeComplexOfFunction extends TypeComplex{
 
 	private Structure runtimeCopyNotInUse;
 
-	private static Map<String, Attribute<?>> functions = new HashMap<>();
+	private static final Map<String, Attribute<?>> functions = new HashMap<>();
 
-	private static Map<String, TypeComplexOfFunction> instances = new HashMap<>();
+	private static final Map<String, TypeComplexOfFunction> instances = new HashMap<>();
 
 	public static TypeComplexOfFunction getInstance(String typeName) {
 		return instances.get(typeName);
@@ -79,7 +79,7 @@ public class TypeComplexOfFunction extends TypeComplex{
 		this.runtimeCopyInUse = null;
 	}
 
-	TypeComplexOfFunction(String theName, Map<String, Integer> theIndex, Attribute<?>[] theOrderedIdentifiers) {
+	private TypeComplexOfFunction(String theName, Map<String, Integer> theIndex, Attribute<?>[] theOrderedIdentifiers) {
 		super(theName, theIndex, theOrderedIdentifiers);
 	}
 
@@ -101,7 +101,7 @@ public class TypeComplexOfFunction extends TypeComplex{
 		return null;
 	}
 
-	public static TypeComplex create(final String theName) {
+	private static TypeComplex create(final String theName) {
 		Map<String, Integer> index = new HashMap<>();
 		Attribute<?>[] idents = new Attribute<?>[0];
 		return TypeComplexOfFunction.createImpl(theName, index, idents);
@@ -124,16 +124,16 @@ public class TypeComplexOfFunction extends TypeComplex{
 		return re;
 	}
 
-	public static Attribute<?> createAttribute(String attributeName, String typeName, Map<String, TypeComplex> unformedComplexTypes)
+	public static void createAttributeFun(String attributeName, String typeName, Map<String, TypeComplex> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		// ComplexType
 		if(typeName == null || typeName.length() == 0){
 			// TODO exception
-			return null;
+			return;
 		}
 		if(attributeName == null || attributeName.length() == 0){
 			// TODO exception
-			return null;
+			return;
 		}
 		TypeComplex c = TypeComplex.getInstance(typeName);
 		if(c == null){
@@ -146,8 +146,7 @@ public class TypeComplexOfFunction extends TypeComplex{
 		Attribute<Structure> re = c.createComplexAttribute(attributeName);
 		TypeComplexOfFunction.functions.put(typeName, re);
 		System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
-		return re;
-	}
+    }
 
 	public static void fillMissingPrototypeValues() throws PrototypeWasInitialized {
 		for(TypeComplexOfFunction cf : TypeComplexOfFunction.instances.values()){

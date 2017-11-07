@@ -22,9 +22,9 @@ public class Int extends PrimitiveValue<Integer>{
 	}
 
 	@Override
-	public Integer setObject(Object value) throws Invalid, ValueCastException {
-		return this.set(RtCast.cast(value, Integer.class));
-	}
+	public void setObject(Object value) throws Invalid, ValueCastException {
+        this.set(RtCast.cast(value, Integer.class));
+    }
 
 	@Override
 	public final Integer get() {
@@ -32,11 +32,11 @@ public class Int extends PrimitiveValue<Integer>{
 	}
 
 	@Override
-	public Integer setConverted(String value) throws Inconvertible {
+	public void setConverted(String value) throws Inconvertible {
 		try{
 			Integer v = Integer.valueOf(Integer.parseInt(value));
-			return this.set(v);
-		}
+            this.set(v);
+        }
 		catch(NumberFormatException e){
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}

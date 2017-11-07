@@ -6,9 +6,9 @@ import com.conetex.contract.run.exceptionValue.ValueCastException;
 
 public interface Setable<T> {
 
-	public Class<T> getRawTypeClass();
+	Class<T> getRawTypeClass();
 
-	public T setTo(Structure thisObject, T value) throws Invalid, ValueCastException;
+	T setTo(Structure thisObject, T value) throws Invalid, ValueCastException;
 
 	// public <X> Setable<X> asSetable(Setable<?> thisObj, Class<X> rawType);
 

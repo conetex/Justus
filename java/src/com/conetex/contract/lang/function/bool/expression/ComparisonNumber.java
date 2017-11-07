@@ -8,12 +8,12 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class ComparisonNumber extends Accessible<Boolean>{
-	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit über den
-	// tatsächlichen typ entschieden wird.
+	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit ueber den
+	// tatsï¿½chlichen typ entschieden wird.
 
-	public static final int	SMALLER	= -1;
-	public static final int	EQUAL	= 0;
-	public static final int	GREATER	= 1;
+	private static final int	SMALLER	= -1;
+	private static final int	EQUAL	= 0;
+	private static final int	GREATER	= 1;
 
 	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, String operation) {
 		if(theA == null || theB == null){
@@ -31,7 +31,7 @@ public class ComparisonNumber extends Accessible<Boolean>{
 		return null;
 	}
 
-	public static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int operation) {
+	private static ComparisonNumber create(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int operation) {
 		if(theA == null || theB == null){
 			return null;
 		}
@@ -41,11 +41,11 @@ public class ComparisonNumber extends Accessible<Boolean>{
 		return new ComparisonNumber(theA, theB, operation);
 	}
 
-	private int operator;
+	private final int operator;
 
-	private Accessible<? extends Number> a;
+	private final Accessible<? extends Number> a;
 
-	private Accessible<? extends Number> b;
+	private final Accessible<? extends Number> b;
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
@@ -104,19 +104,19 @@ public class ComparisonNumber extends Accessible<Boolean>{
 					}
 					else{
 						Long aConcret = (Long) aN;
-						Long bConcret = Long.valueOf(bN.longValue());
+						Long bConcret = bN.longValue();
 						return comp(aConcret, bConcret);
 					}
 				}
 				else{
 					if(bN.getClass() == Long.class){
-						Long aConcret = Long.valueOf(aN.longValue());
+						Long aConcret = aN.longValue();
 						Long bConcret = (Long) bN;
 						return comp(aConcret, bConcret);
 					}
 					else{
-						Integer aConcret = Integer.valueOf(aN.intValue());
-						Integer bConcret = Integer.valueOf(bN.intValue());
+						Integer aConcret = aN.intValue();
+						Integer bConcret = bN.intValue();
 						return comp(aConcret, bConcret);
 					}
 				}

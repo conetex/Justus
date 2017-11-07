@@ -13,7 +13,7 @@ public class IsNull extends Accessible<Boolean>{
 		return new IsNull(theSub);
 	}
 
-	private Accessible<?> sub;
+	private final Accessible<?> sub;
 
 	private IsNull(Accessible<?> theSub) {
 		this.sub = theSub;

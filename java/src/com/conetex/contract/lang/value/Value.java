@@ -10,20 +10,20 @@ import com.conetex.contract.runNew.Writer;
 
 public interface Value<T> {
 
-	public T get();
+	T get();
 
-	public T getCopy() throws Invalid;
+	T getCopy() throws Invalid;
 
-	public T set(T value) throws Invalid;
+	T set(T value) throws Invalid;
 
-	public T setObject(Object value) throws Invalid, ValueCastException;
+	void setObject(Object value) throws Invalid, ValueCastException;
 
-	public T setConverted(String value) throws Inconvertible, Invalid;
+	void setConverted(String value) throws Inconvertible, Invalid;
 
-	public Class<T> getRawTypeClass();
+	Class<T> getRawTypeClass();
 
-	public Value<T> cloneValue() throws Invalid;
+	Value<T> cloneValue() throws Invalid;
 
-	public void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
+	void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
 	
 }

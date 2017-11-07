@@ -22,16 +22,16 @@ public class Bool extends PrimitiveValue<Boolean>{
 	}
 
 	@Override
-	public Boolean setObject(Object value) throws Invalid, ValueCastException {
-		return this.set(RtCast.cast(value, Boolean.class));
-	}
+	public void setObject(Object value) throws Invalid, ValueCastException {
+        this.set(RtCast.cast(value, Boolean.class));
+    }
 
 	@Override
 	public final Boolean get() {
 		return this.actual;
 	}
 
-	public static Boolean getTrans(String value) {
+	private static Boolean getTrans(String value) {
 		// TODO make "true"... a symbol...
 		if(value.equalsIgnoreCase("true")){
 			return Boolean.TRUE;
@@ -51,13 +51,13 @@ public class Bool extends PrimitiveValue<Boolean>{
 	}
 
 	@Override
-	public Boolean setConverted(String value) throws Inconvertible {
+	public void setConverted(String value) throws Inconvertible {
 		Boolean v = getTrans(value);
 		if(v == null){
 			throw new Inconvertible("can not convert '" + value + "' to Boolean!");
 		}
-		return this.set(v);
-	}
+        this.set(v);
+    }
 
 	@Override
 	public Boolean getCopy() {

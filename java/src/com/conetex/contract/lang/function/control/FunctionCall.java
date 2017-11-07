@@ -14,7 +14,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 
 	public static <SV> FunctionCall<SV> create(Function<SV> theFunction, AccessibleValue<Structure> theReference,
-			List<AbstractAssigment<? extends Object>> assig) {
+			List<AbstractAssigment<?>> assig) {
 		// TODO drop this
 		if(theFunction == null){
 			System.err.println("theFunction is null");
@@ -31,18 +31,18 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		return new FunctionCall<>(theFunction, theReference, assig);
 	}
 
-	private Function<V> function;
+	private final Function<V> function;
 
-	private AccessibleValue<Structure> reference;
+	private final AccessibleValue<Structure> reference;
 
-	private List<AbstractAssigment<? extends Object>> paramAssigments;
+	private final List<AbstractAssigment<?>> paramAssigments;
 
 	@Override
 	public String toString() {
 		return "call function " + this.function;
 	}
 
-	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<? extends Object>> assig) {
+	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<?>> assig) {
 		this.function = theExpression;
 		this.reference = theReference;
 		this.paramAssigments = assig;
@@ -61,7 +61,7 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		System.out.println("Function getFrom " + this.function.getName() + " - " + this.reference.getPath());
 		TypeComplex x = obj.getComplex();// .getInstance(this.name);
 		// Attribute<?> y = x.getFunctionAttribute(this.function.name);
-		// TODO der cast ist scheiﬂﬂﬂe
+		// TODO der cast ist scheisse
 		// ComplexFunction z =
 		// x.getComplexFunction(this.function.name);//(ComplexFunction)(y.getType());
 		TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(x.getName() + "." + this.function.getName());
@@ -70,7 +70,7 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		// return this.function.getFrom(thisObject);
 	}
 
-	public V getFromComplexFun(TypeComplexOfFunction z, Structure obj) throws AbstractRuntimeException {
+	private V getFromComplexFun(TypeComplexOfFunction z, Structure obj) throws AbstractRuntimeException {
 
 		Structure thisObject = z.utilizeStructure(obj); // .prototype;//thisObject.getStructure(this.name);
 
@@ -80,7 +80,7 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		}
 		// thisObjectB = thisObjectB.copy();
 
-		for(AbstractAssigment<? extends Object> a : this.paramAssigments){
+		for(AbstractAssigment<?> a : this.paramAssigments){
 			a.getFrom(thisObject);
 		}
 

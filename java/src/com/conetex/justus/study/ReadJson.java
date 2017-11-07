@@ -8,7 +8,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
-public class ReadJson{
+class ReadJson{
 
 	public static void main(String[] args) {
 

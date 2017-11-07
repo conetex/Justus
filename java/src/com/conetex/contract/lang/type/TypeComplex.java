@@ -20,7 +20,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
-	private static Map<String, TypeComplex> instances = new HashMap<>();
+	private static final Map<String, TypeComplex> instances = new HashMap<>();
 
 	public static TypeComplex getInstance(String typeName) {
 		return instances.get(typeName);
@@ -44,7 +44,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 												// nicht doch final
 												// werden?
 
-	private String name;
+	private final String name;
 
 	public String getName() {
 		return this.name;
@@ -57,7 +57,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return null;
 	}
 
-	public static TypeComplex create(final String theName) {
+	private static TypeComplex create(final String theName) {
 		Map<String, Integer> index = new HashMap<>();
 		Attribute<?>[] idents = new Attribute<?>[0];
 		return TypeComplex.createImpl(theName, index, idents);
@@ -79,14 +79,13 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return re;
 	}
 
-	static TypeComplex put(TypeComplex re) throws DublicateComplexException {
+	static void put(TypeComplex re) throws DublicateComplexException {
 		String typeName = re.name;
 		if(TypeComplex.instances.containsKey(typeName)){
 			throw new DublicateComplexException(typeName);
 		}
 		TypeComplex.instances.put(typeName, re);
-		return re;
-	}
+    }
 
 	static void buildIndex(Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers)
 			throws DuplicateIdentifierNameExeption, NullIdentifierException {
@@ -98,7 +97,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 			if(theIndex.containsKey(label)){
 				throw new DuplicateIdentifierNameExeption(label);
 			}
-			theIndex.put(label, Integer.valueOf(i));
+			theIndex.put(label, i);
 		}
 	}
 
@@ -131,7 +130,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return this.orderedAttributes.length;
 	}
 
-	public Set<String> getSubAttributeNames() {
+	Set<String> getSubAttributeNames() {
 		return this.index.keySet();
 	}
 
@@ -140,7 +139,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		if(i == null){
 			return -1;
 		}
-		return i.intValue();
+		return i;
 	}
 
 	public Attribute<?> getSubAttribute(int i) {
@@ -166,7 +165,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 		Integer i = this.index.get(aName);
 		if(i != null){
-			int iv = i.intValue();
+			int iv = i;
 			if(iv < 0 || iv >= this.orderedAttributes.length){
 				// TODO i < this.orderedAttributes.length darf auf keinen fall
 				// vorkommen! hier
@@ -193,7 +192,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 					i = this.index.get(names[0]);
 					if(i != null){
-						int iv = i.intValue();
+						int iv = i;
 						if(iv < 0 || iv >= this.orderedAttributes.length){
 							// TODO i < this.orderedAttributes.length darf auf
 							// keinen fall vorkommen! hier
@@ -215,7 +214,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return null;
 	}
 
-	public Attribute<Structure> createComplexAttribute(String aName) throws NullLabelException, EmptyLabelException {
+	Attribute<Structure> createComplexAttribute(String aName) throws NullLabelException, EmptyLabelException {
 		// PrimitiveDataType<Structure> simpleType =
 		// PrimitiveDataType.getInstance(
 		// Value.Implementation.Struct.class.getSimpleName() );
@@ -276,23 +275,6 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	// }
 	public Structure createValue(Structure theParent) {//
 		return Structure.create(this, theParent);// ,
-	}
-
-	public static class _ComplexWasInitializedExeption extends AbstractInterpreterException{
-		public _ComplexWasInitializedExeption(String msg) {
-			super(msg);
-			// TODO Auto-generated constructor stub
-		}
-
-		private static final long serialVersionUID = 1L;
-	}
-
-	public static class _DublicateComplexException extends AbstractInterpreterException{
-		public _DublicateComplexException(String name) {
-			super(name);
-		}
-
-		private static final long serialVersionUID = 1L;
 	}
 
 	public static String[] splitRight(String aName) {

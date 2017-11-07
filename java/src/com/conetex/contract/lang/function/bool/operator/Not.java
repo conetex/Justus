@@ -14,7 +14,7 @@ public class Not extends Accessible<Boolean>{
 		return new Not(theSub);
 	}
 
-	private Accessible<? extends Boolean> sub;
+	private final Accessible<? extends Boolean> sub;
 
 	private Not(Accessible<? extends Boolean> theSub) {
 		this.sub = theSub;
@@ -26,7 +26,7 @@ public class Not extends Accessible<Boolean>{
 		if(b == null){
 			return null;
 		}
-		if(b.booleanValue()){
+		if(b){
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;

@@ -10,7 +10,7 @@ import javax.mail.Store;
 /**
  * Created by Matthias on 17.02.2017.
  */
-public class ReadMail{
+class ReadMail{
 
 	public static void main(String[] args) {
 		// Properties props = new Properties();

@@ -10,9 +10,9 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class WhenOtherwise<V> extends When<V>{
 
-	private Accessible<?>[] stepsElse;
+	private final Accessible<?>[] stepsElse;
 
-	private List<ReturnAbstract<V>> returnsElse;
+	private final List<ReturnAbstract<V>> returnsElse;
 
 	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition,
 			Class<SV> theRawTypeClass)
@@ -31,8 +31,7 @@ public class WhenOtherwise<V> extends When<V>{
 		}
 		List<ReturnAbstract<SV>> returnsIf = Function.getReturns(theStepsIf, theRawTypeClass);
 		List<ReturnAbstract<SV>> returnsElse = Function.getReturns(theStepsElse, theRawTypeClass);
-		WhenOtherwise<SV> re = new WhenOtherwise<>(theStepsIf, returnsIf, theStepsElse, returnsElse, theCondition, theRawTypeClass);
-		return re;
+        return new WhenOtherwise<>(theStepsIf, returnsIf, theStepsElse, returnsElse, theCondition, theRawTypeClass);
 	}
 
 	private WhenOtherwise(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> theReturnsIf, Accessible<?>[] theStepsElse,
@@ -50,7 +49,7 @@ public class WhenOtherwise<V> extends When<V>{
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
 		}
-		if(res.booleanValue()){
+		if(res){
 			return Function.doSteps(super.stepsIf, super.returnsIf, r, thisObject);
 		}
 		else{

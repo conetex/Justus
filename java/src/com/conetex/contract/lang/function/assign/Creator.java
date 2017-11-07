@@ -8,27 +8,27 @@ import com.conetex.contract.lang.function.access.Setable;
 
 public abstract class Creator{
 
-	public static final Creator copy = new Creator(){
+	private static final Creator copy = new Creator(){
 		@Override
 		public <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src) {
 			return new Copy<>(trg, src);
 		}
 	};
 
-	public static final Creator refer = new Creator(){
+	private static final Creator refer = new Creator(){
 		@Override
 		public <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src) {
 			return new Reference<>(trg, src);
 		}
 	};
 
-	public abstract <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src);
+	protected abstract <T> AbstractAssigment<T> create(Setable<T> trg, Accessible<T> src);
 
 	public static <T> AbstractAssigment<T> createFromUnqualified(Setable<?> trg, Accessible<?> src, Class<T> rawType, String name) throws CastException {
 		if(src == null || trg == null){
 			return null;
 		}
-		Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, rawType);// src.as(rawType);
+		Accessible<T> srcCasted = Cast.toTypedAccessible(src, rawType);// src.as(rawType);
 		if(srcCasted != null){
 			Setable<T> trgCasted = Cast.toTypedSetable(trg, rawType);// trg.asSetable(rawType);
 			if(trgCasted != null){
@@ -36,7 +36,7 @@ public abstract class Creator{
 				if(c == null){
 					return null;
 				}
-				return c.<T>create(trgCasted, srcCasted);
+				return c.create(trgCasted, srcCasted);
 			}
 		}
 		return null;
@@ -48,13 +48,13 @@ public abstract class Creator{
 		}
 		Class<T> trgRawType = trg.getRawTypeClass();
 		if(trgRawType == src.getRawTypeClass()){
-			Accessible<T> srcCasted = Cast.<T>toTypedAccessible(src, trgRawType);// src.as(trgRawType);
+			Accessible<T> srcCasted = Cast.toTypedAccessible(src, trgRawType);// src.as(trgRawType);
 			if(srcCasted != null){
 				Creator c = Creator.getCreator(name);
 				if(c == null){
 					return null;
 				}
-				return c.<T>create(trg, srcCasted);
+				return c.create(trg, srcCasted);
 			}
 		}
 		return null;
@@ -72,7 +72,7 @@ public abstract class Creator{
 				if(c == null){
 					return null;
 				}
-				return c.<T>create(trgCasted, src);
+				return c.create(trgCasted, src);
 			}
 		}
 		return null;
@@ -86,7 +86,7 @@ public abstract class Creator{
 		if(c == null){
 			return null;
 		}
-		return c.<T>create(trg, src);
+		return c.create(trg, src);
 	}
 
 	private static Creator getCreator(String name) {

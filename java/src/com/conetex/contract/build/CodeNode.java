@@ -26,20 +26,20 @@ public class CodeNode{
 		if(thisObj.parameters == null){
 			throw new UnknownCommandParameter(c);
 		}
-		String error = "";
+		StringBuilder error = new StringBuilder();
 		for(Egg<?> command : commands){
 			if(command == null){
-				error += ", " + c;
+				error.append(", ").append(c);
 			}
 			if(command.getParameterNames() == null){
-				error += ", 0 != " + thisObj.parameters.length;
+				error.append(", 0 != ").append(thisObj.parameters.length);
 			}
 			else{
 				if(command.getParameterNames().length == thisObj.parameters.length){
 					return command;
 				}
 				else{
-					error += ", " + command.getParameterNames().length + " != " + thisObj.parameters.length;
+					error.append(", ").append(command.getParameterNames().length).append(" != ").append(thisObj.parameters.length);
 				}
 			}
 		}
@@ -60,43 +60,43 @@ public class CodeNode{
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
-		String error = "";
+		StringBuilder error = new StringBuilder();
 		outerLoop: for(Egg<?> command : commands){
 			String[] paramNames = command.getParameterNames();
 			if(paramNames != null && !(p == null || p.length == 0)){
 				if(paramNames.length == p.length){
 					for(int j = 0; j < paramNames.length; j++){
 						if(paramNames[j] != p[j]){
-							error += paramNames[j] + " != " + p[j] + ", ";
+							error.append(paramNames[j]).append(" != ").append(p[j]).append(", ");
 							continue outerLoop;
 						}
 					}
 					return;
 				}
-				error += paramNames.length + " != " + p.length + ", ";
+				error.append(paramNames.length).append(" != ").append(p.length).append(", ");
 			}
 			else{
 				return;
 			}
 		}
-		throw new UnknownCommandParameter(error);
+		throw new UnknownCommandParameter(error.toString());
 	}
 
-	private String command;
+	private final String command;
 
-	private String[] parameters;
+	private final String[] parameters;
 
 	public String[] getParameters() {
 		return this.parameters;
 	}
 
-	private List<CodeNode> children;
+	private final List<CodeNode> children;
 
 	public static CodeNode _create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {
-		return _create(command, theNameAttribute, theValue, theType, new LinkedList<CodeNode>());
+		return _create(command, theNameAttribute, theValue, theType, new LinkedList<>());
 	}
 
-	public static CodeNode _create(String commandOrg, String theNameAttributeOrg, String theValue, String theType, List<CodeNode> theChildren)
+	private static CodeNode _create(String commandOrg, String theNameAttributeOrg, String theValue, String theType, List<CodeNode> theChildren)
 			throws UnknownCommandParameter, UnknownCommand {
 
 		String command = commandOrg;
@@ -255,8 +255,8 @@ public class CodeNode{
 	
 	public CodeNode cloneNode(){
 		String[] parameters = this.parameters;
-		List<CodeNode> children = new LinkedList<>();;
-		for(CodeNode c : this.children){
+		List<CodeNode> children = new LinkedList<>();
+        for(CodeNode c : this.children){
 			children.add( c.cloneNode() );
 		}
 		return new CodeNode(this.command, parameters, children);

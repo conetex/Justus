@@ -12,8 +12,8 @@ import com.conetex.contract.runNew.Writer;
 
 public abstract class PrimitiveValue<T> implements Value<T>{
 	
-	// TODO dies wird hoffentlich nicht gebraucht. Löschen!
-	protected CodeNode node;
+	// TODO dies wird hoffentlich nicht gebraucht. Loeschen!
+	protected final CodeNode node;
 	
 	protected PrimitiveValue(CodeNode theNode){
 		this.node = theNode;

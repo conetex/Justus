@@ -30,13 +30,13 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBigInt())){
-			return AccessibleConstant.<BigInteger>create2(BigInteger.class, n);
+			return AccessibleConstant.create2(BigInteger.class, n);
 		}
 		else if(name.equals(Symbols.comInt())){
-			return AccessibleConstant.<Integer>create2(Integer.class, n);
+			return AccessibleConstant.create2(Integer.class, n);
 		}
 		else if(name.equals(Symbols.comLng())){
-			return AccessibleConstant.<Long>create2(Long.class, n);
+			return AccessibleConstant.create2(Long.class, n);
 		}
 		return null;
 	}
@@ -44,7 +44,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBool())){
-			return AccessibleConstant.<Boolean>create2(Boolean.class, n);
+			return AccessibleConstant.create2(Boolean.class, n);
 		}
 		return null;
 	}
@@ -52,7 +52,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comStructure())){
-			return AccessibleConstant.<Structure>create2(Structure.class, n);
+			return AccessibleConstant.create2(Structure.class, n);
 		}
 		return null;
 	}
@@ -62,23 +62,23 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		try{
 
 			if(expectedBaseTyp == BigInteger.class){
-				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_BINT, expectedBaseTyp);
+				theClass = TypePrimitive.getInstance(Symbols.CLASS_BINT, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Long.class){
-				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_LNG, expectedBaseTyp);
+				theClass = TypePrimitive.getInstance(Symbols.CLASS_LNG, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Integer.class){
-				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_INT, expectedBaseTyp);
+				theClass = TypePrimitive.getInstance(Symbols.CLASS_INT, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Byte.class){
-				// TODO Typen klären ...
+				// TODO Typen klaeren ...
 				return null;
 			}
 			else if(expectedBaseTyp == String.class){
-				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
+				theClass = TypePrimitive.getInstance(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
 			}
 			else if(expectedBaseTyp == Boolean.class){
-				theClass = TypePrimitive.<RE>getInstance(Symbols.CLASS_BOOL, expectedBaseTyp);
+				theClass = TypePrimitive.getInstance(Symbols.CLASS_BOOL, expectedBaseTyp);
 			}
 
 		}
@@ -98,8 +98,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 				e.printStackTrace();
 				return null;
 			}
-			AccessibleConstant<RE> re = AccessibleConstant.<RE>create(constVal);
-			return re;
+			return AccessibleConstant.<RE>create(constVal);
 		}
 		else{
 			// TODO error ... Primitive.<RE>getInstance can return null ...
@@ -114,7 +113,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return new AccessibleConstant<>(theValue);
 	}
 
-	private Value<T> value;
+	private final Value<T> value;
 
 	private AccessibleConstant(Value<T> theValue) {
 		this.value = theValue;

@@ -29,7 +29,7 @@ public class Loop<V> extends When<V>{
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = this.condition.getFrom(thisObject);
-		while(res != null && res.booleanValue()){
+		while(res != null && res){
 			V re = Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);
 			if(r.toReturn){
 				return re;

@@ -22,7 +22,7 @@ public class BuildTypes{
 
 		public static abstract class CompBox extends Box<Structure, Object>{
 
-			public CompBox(String name) {
+			CompBox(String name) {
 				super(name);
 			}
 
@@ -33,7 +33,7 @@ public class BuildTypes{
 
 		}
 
-		static CompBox complex = new CompBox("complex"){
+		static final CompBox complex = new CompBox("complex"){
 
 			@Override
 			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
@@ -58,7 +58,7 @@ public class BuildTypes{
 
 		};
 
-		static Box<Object, Object> attribute = new Box<Object, Object>("attribute", 1){
+		static final Box<Object, Object> attribute = new Box<Object, Object>("attribute", 1){
 
 			@Override
 			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
@@ -94,15 +94,15 @@ public class BuildTypes{
 	
 	private static class Recursive<I> {
 
-		public Recursive( ) {
+		Recursive() {
 		}
 
-		public I function;
+		I function;
 
 	}
 
-	private static interface Run{
-		public void run(CodeNode node, TypeComplex parent) throws AbstractInterpreterException;
+	private interface Run{
+		void run(CodeNode node, TypeComplex parent) throws AbstractInterpreterException;
 	}
 
 	public static List<TypeComplex> createComplexTypes(CodeNode n) throws AbstractInterpreterException {
@@ -198,7 +198,7 @@ public class BuildTypes{
 
 			// TODO
 			// theOrderedIdentifiers
-			// müssen
+			// mï¿½ssen
 			// elemente
 			// enthalten,
 			// sonst

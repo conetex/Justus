@@ -10,16 +10,16 @@ public abstract class AbstractAssigment<T> extends Accessible<T>{// Computable{/
 																	// extends
 																	// ComputablePair<T>{
 
-	private Setable<T> target;
+	private final Setable<T> target;
 
-	private Accessible<T> source;
+	private final Accessible<T> source;
 
-	protected AbstractAssigment(Setable<T> trg, Accessible<T> src) {
+	AbstractAssigment(Setable<T> trg, Accessible<T> src) {
 		this.target = trg;
 		this.source = src;
 	}
 
-	public abstract boolean doCopy();
+	protected abstract boolean doCopy();
 
 	@Override
 	public T getFrom(Structure thisObject) throws AbstractRuntimeException {

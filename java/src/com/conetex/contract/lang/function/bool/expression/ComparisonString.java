@@ -7,9 +7,9 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public class ComparisonString extends Accessible<Boolean>{
 
-	public static final int	SMALLER	= -1;
-	public static final int	EQUAL	= 0;
-	public static final int	GREATER	= 1;
+	private static final int	SMALLER	= -1;
+	private static final int	EQUAL	= 0;
+	private static final int	GREATER	= 1;
 
 	public static Accessible<Boolean> _createNew(Accessible<String> theA, Accessible<String> theB, String name) {
 		return create(theA, theB, name);
@@ -31,7 +31,7 @@ public class ComparisonString extends Accessible<Boolean>{
 		return null;
 	}
 
-	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation) {
+	private static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation) {
 		if(theA == null || theB == null){
 			return null;
 		}
@@ -41,11 +41,11 @@ public class ComparisonString extends Accessible<Boolean>{
 		return new ComparisonString(theA, theB, operation);
 	}
 
-	private int operator;
+	private final int operator;
 
-	private Accessible<String> a;
+	private final Accessible<String> a;
 
-	private Accessible<String> b;
+	private final Accessible<String> b;
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){

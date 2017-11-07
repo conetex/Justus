@@ -1,53 +1,12 @@
 package com.conetex.contract.lang.type;
 
 import com.conetex.contract.build.CodeNode;
-import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.UnknownAttribute;
-import com.conetex.contract.build.exceptionFunction.UnknownType;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.SizedASCII;
 import com.conetex.contract.lang.value.implementation.Structure;
 
 public abstract class Attribute<T> {
-
-	public static class _NullLabelException extends AbstractInterpreterException{
-		public _NullLabelException(String msg) {
-			super(msg);
-			// TODO Auto-generated constructor stub
-		}
-
-		private static final long serialVersionUID = 1L;
-
-	}
-
-	public static class _EmptyLabelException extends AbstractInterpreterException{
-		public _EmptyLabelException(String msg) {
-			super(msg);
-			// TODO Auto-generated constructor stub
-		}
-
-		private static final long serialVersionUID = 1L;
-
-	}
-
-	public static class _DuplicateIdentifierNameExeption extends AbstractInterpreterException{
-		public _DuplicateIdentifierNameExeption(String msg) {
-			super(msg);
-		}
-
-		private static final long serialVersionUID = 1L;
-
-	}
-
-	public static class _NullIdentifierException extends AbstractInterpreterException{
-		public _NullIdentifierException(String msg) {
-			super(msg);
-			// TODO Auto-generated constructor stub
-		}
-
-		private static final long serialVersionUID = 1L;
-
-	}
 
 	public abstract SizedASCII getLabel();
 
@@ -79,7 +38,7 @@ public abstract class Attribute<T> {
 		return id;
 	}
 
-	public static Class<?> getRawTypeClass(String idName, TypeComplex parentTyp) throws UnknownType, UnknownAttribute {
+	public static Class<?> getRawTypeClass(String idName, TypeComplex parentTyp) throws UnknownAttribute {
 		Attribute<?> id = getAttribute(idName, parentTyp);
 		Type<?> t = id.getType();
 		return t.getRawTypeClass();

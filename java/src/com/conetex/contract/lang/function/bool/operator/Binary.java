@@ -16,7 +16,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return new Binary(theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
-					if(aA.booleanValue() && aB.booleanValue()){
+					if(aA && aB){
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -27,7 +27,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return new Binary(theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
-					if(aA.booleanValue() || aB.booleanValue()){
+					if(aA || aB){
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -38,7 +38,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return new Binary(theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
-					if(aA.booleanValue() ^ aB.booleanValue()){
+					if(aA ^ aB){
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -48,11 +48,11 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 		return null;
 	}
 
-	private Accessible<? extends Boolean> a;
+	private final Accessible<? extends Boolean> a;
 
-	private Accessible<? extends Boolean> b;
+	private final Accessible<? extends Boolean> b;
 
-	protected Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
+	private Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
 		this.a = theA;
 		this.b = theB;
 	}
