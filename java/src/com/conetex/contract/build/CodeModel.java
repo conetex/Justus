@@ -10,6 +10,11 @@ import java.util.Set;
 import com.conetex.contract.build.BuildFunctions.Assign;
 import com.conetex.contract.build.BuildFunctions.Constant;
 import com.conetex.contract.build.BuildFunctions.Control;
+import com.conetex.contract.build.BuildFunctions.Expression;
+import com.conetex.contract.build.BuildFunctions.Fun;
+import com.conetex.contract.build.BuildFunctions.FunCall;
+import com.conetex.contract.build.BuildFunctions.FunReturn;
+import com.conetex.contract.build.BuildFunctions.Reference;
 import com.conetex.contract.build.BuildTypes.Types;
 import com.conetex.contract.build.BuildValues.Values;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
@@ -24,11 +29,6 @@ import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.PrimitiveValue;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
-import com.conetex.contract.build.BuildFunctions.Expression;
-import com.conetex.contract.build.BuildFunctions.Fun;
-import com.conetex.contract.build.BuildFunctions.FunCall;
-import com.conetex.contract.build.BuildFunctions.FunReturn;
-import com.conetex.contract.build.BuildFunctions.Reference;
 
 public class CodeModel{
 

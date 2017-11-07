@@ -1,23 +1,14 @@
 package com.conetex.contract.lang.value;
 
-import java.math.BigInteger;
 import java.util.LinkedList;
-import java.util.List;
 
-import com.conetex.contract.build.CodeModel;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.build.CodeModel.Egg;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.Type;
-import com.conetex.contract.lang.value.implementation.Structure;
-import com.conetex.contract.run.exceptionValue.Inconvertible;
-import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.runNew.Writer;
-import com.conetex.contract.lang.value.Value;
 
 public abstract class PrimitiveValue<T> implements Value<T>{
 	

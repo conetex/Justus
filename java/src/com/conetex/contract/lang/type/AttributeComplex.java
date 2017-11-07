@@ -1,10 +1,6 @@
 package com.conetex.contract.lang.type;
 
-import java.util.LinkedList;
-
 import com.conetex.contract.build.CodeNode;
-import com.conetex.contract.build.Symbols;
-import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Label;
 import com.conetex.contract.lang.value.implementation.Structure;
 

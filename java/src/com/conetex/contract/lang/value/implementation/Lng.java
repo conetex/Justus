@@ -2,7 +2,6 @@ package com.conetex.contract.lang.value.implementation;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.lang.value.PrimitiveValue;
-import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;

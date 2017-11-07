@@ -3,7 +3,6 @@ package com.conetex.justus.study;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +19,6 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -31,15 +29,14 @@ import org.xml.sax.SAXException;
 import com.conetex.contract.build.Build;
 import com.conetex.contract.build.CodeModel;
 import com.conetex.contract.build.CodeModel.Egg;
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
-import com.conetex.contract.build.CodeNode;
-import com.conetex.contract.build.Symbols;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.runNew.Main;
 import com.conetex.contract.runNew.Writer;
-import com.sun.xml.internal.ws.policy.sourcemodel.ModelNode;
 
 public class ReadXML{
 
