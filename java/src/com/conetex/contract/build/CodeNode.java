@@ -255,12 +255,11 @@ public class CodeNode{
 	}
 	
 	public CodeNode cloneNode(){
-		String[] params = this.parameters;
 		List<CodeNode> clonedChildren = new LinkedList<>();
         for(CodeNode c : this.children){
         	clonedChildren.add( c.cloneNode() );
 		}
-		return new CodeNode(this.command, params, clonedChildren);
+		return new CodeNode(this.command, this.parameters, clonedChildren);
 	}
 
 	public void setParameter(String p, Object x) throws UnknownCommandParameter, UnknownCommand {
