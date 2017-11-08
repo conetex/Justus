@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 import com.conetex.contract.build.CodeModel.Box;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;

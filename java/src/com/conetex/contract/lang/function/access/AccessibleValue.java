@@ -2,6 +2,7 @@ package com.conetex.contract.lang.function.access;
 
 import com.conetex.contract.build.BuildFunctions;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.math.ElementaryArithmetic;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;

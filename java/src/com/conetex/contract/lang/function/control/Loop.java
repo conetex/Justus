@@ -3,7 +3,7 @@ package com.conetex.contract.lang.function.control;
 import java.util.List;
 
 import com.conetex.contract.build.exceptionFunction.CastException;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
@@ -29,7 +29,7 @@ public class Loop<V> extends When<V>{
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = this.condition.getFrom(thisObject);
-		while(res != null && res){
+		while(res != null && res.booleanValue()){
 			V re = Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);
 			if(r.toReturn){
 				return re;

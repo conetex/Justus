@@ -23,7 +23,7 @@ import com.conetex.contract.build.exceptionFunction.OperationMeansNotCalled;
 import com.conetex.contract.build.exceptionFunction.UnexpectedSubOperation;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.PrimitiveValue;

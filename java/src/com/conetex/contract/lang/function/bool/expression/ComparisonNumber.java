@@ -3,7 +3,7 @@ package com.conetex.contract.lang.function.bool.expression;
 import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
@@ -104,19 +104,19 @@ public class ComparisonNumber extends Accessible<Boolean>{
 					}
 					else{
 						Long aConcret = (Long) aN;
-						Long bConcret = bN.longValue();
+						Long bConcret = Long.valueOf(bN.longValue());
 						return comp(aConcret, bConcret);
 					}
 				}
 				else{
 					if(bN.getClass() == Long.class){
-						Long aConcret = aN.longValue();
+						Long aConcret = Long.valueOf(aN.longValue());
 						Long bConcret = (Long) bN;
 						return comp(aConcret, bConcret);
 					}
 					else{
-						Integer aConcret = aN.intValue();
-						Integer bConcret = bN.intValue();
+						Integer aConcret = Integer.valueOf(aN.intValue());
+						Integer bConcret = Integer.valueOf(bN.intValue());
 						return comp(aConcret, bConcret);
 					}
 				}

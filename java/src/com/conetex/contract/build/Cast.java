@@ -3,7 +3,7 @@ package com.conetex.contract.build;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.build.exceptionType.TypException;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.Setable;
 import com.conetex.contract.lang.function.access.SetableValue;
 import com.conetex.contract.lang.function.control.ReturnAbstract;

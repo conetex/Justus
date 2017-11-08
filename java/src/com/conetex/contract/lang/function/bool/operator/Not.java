@@ -1,6 +1,6 @@
 package com.conetex.contract.lang.function.bool.operator;
 
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
@@ -26,7 +26,7 @@ public class Not extends Accessible<Boolean>{
 		if(b == null){
 			return null;
 		}
-		if(b){
+		if(b.booleanValue()){
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;

@@ -14,7 +14,6 @@ import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
-import com.conetex.contract.run.exceptionValue.Invalid;
 
 class BuildValues{
 
@@ -72,7 +71,7 @@ class BuildValues{
 		};
 		
 		static final Box<Object, Object> contract = new Box<Object, Object>("contract"){
-
+			// TODO implement
 		};
 		
 	}
@@ -91,7 +90,7 @@ class BuildValues{
 		data.fillMissingValues();
 	}
 
-	private static Value<?> createValue(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+	static Value<?> createValue(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 		String name = n.getParameter(Symbols.paramName());
 
 		Attribute<?> id = parentTyp.getSubAttribute(name); //

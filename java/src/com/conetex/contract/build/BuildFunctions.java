@@ -17,7 +17,7 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionFunction.UnknownComplexType;
 import com.conetex.contract.build.exceptionFunction.UnknownType;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleConstant;
 import com.conetex.contract.lang.function.access.AccessibleValue;
 import com.conetex.contract.lang.function.access.SetableValue;
@@ -625,7 +625,7 @@ public class BuildFunctions{
 		return steps.toArray(theSteps);
 	}
 
-	private static void check1PartOperations(CodeNode n, Accessible<?> a) throws MissingSubOperation, UnexpectedSubOperation, UnknownCommandParameter, UnknownCommand {
+	static void check1PartOperations(CodeNode n, Accessible<?> a) throws MissingSubOperation, UnexpectedSubOperation, UnknownCommandParameter, UnknownCommand {
 		if(a == null){
 			throw new MissingSubOperation("");
 		}
@@ -649,7 +649,7 @@ public class BuildFunctions{
 		}
 	}
 
-	private static void checkAssigmentStructRawType(String ComplexTrgTyp, CodeNode srcNode, Class<?> srcRawType)
+	static void checkAssigmentStructRawType(String ComplexTrgTyp, CodeNode srcNode, Class<?> srcRawType)
 			throws TypesDoNotMatch, UnknownComplexType, UnknownCommandParameter, UnknownCommand {
 		if(srcRawType != Structure.class){
 			throw new TypesDoNotMatch(srcRawType.toString(), Structure.class.toString());
@@ -670,7 +670,7 @@ public class BuildFunctions{
 		}
 	}
 
-	private static void checkAssigmentNumRawType(Class<?> trgRawType, Class<?> srcRawType, CodeNode srcNode)
+	static void checkAssigmentNumRawType(Class<?> trgRawType, Class<?> srcRawType, CodeNode srcNode)
 			throws TypesDoNotMatch, UnknownCommandParameter, UnknownCommand {
 		Class<?> rawType;
 		if(trgRawType == srcRawType){
@@ -718,7 +718,7 @@ public class BuildFunctions{
 		return assig;
 	}
 
-	private static AbstractAssigment<Structure> createAssigComp(String command, CodeNode srcNode, Accessible<?> src, String ComplexTrgNodeTyp,
+	static AbstractAssigment<Structure> createAssigComp(String command, CodeNode srcNode, Accessible<?> src, String ComplexTrgNodeTyp,
 																SetableValue<?> trg) throws AbstractInterpreterException {
 
 		Class<?> trgRawType = trg.getRawTypeClass();
@@ -732,7 +732,7 @@ public class BuildFunctions{
 		}
 	}
 
-	private static AbstractAssigment<?> createAssig(String command, CodeNode srcNode, Accessible<?> src,
+	static AbstractAssigment<?> createAssig(String command, CodeNode srcNode, Accessible<?> src,
 													SetableValue<?> trg) throws AbstractInterpreterException {
 
 		Class<?> trgRawType = trg.getRawTypeClass();

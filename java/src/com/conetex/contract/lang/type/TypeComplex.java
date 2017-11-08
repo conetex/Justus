@@ -97,7 +97,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 			if(theIndex.containsKey(label)){
 				throw new DuplicateIdentifierNameExeption(label);
 			}
-			theIndex.put(label, i);
+			theIndex.put(label, Integer.valueOf(i));
 		}
 	}
 
@@ -139,7 +139,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		if(i == null){
 			return -1;
 		}
-		return i;
+		return i.intValue();
 	}
 
 	public Attribute<?> getSubAttribute(int i) {
@@ -165,7 +165,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 		Integer i = this.index.get(aName);
 		if(i != null){
-			int iv = i;
+			int iv = i.intValue();
 			if(iv < 0 || iv >= this.orderedAttributes.length){
 				// TODO i < this.orderedAttributes.length darf auf keinen fall
 				// vorkommen! hier
@@ -192,7 +192,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 					i = this.index.get(names[0]);
 					if(i != null){
-						int iv = i;
+						int iv = i.intValue();
 						if(iv < 0 || iv >= this.orderedAttributes.length){
 							// TODO i < this.orderedAttributes.length darf auf
 							// keinen fall vorkommen! hier

@@ -2,7 +2,7 @@ package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleValue;
 import com.conetex.contract.lang.function.assign.AbstractAssigment;
 import com.conetex.contract.lang.type.TypeComplex;

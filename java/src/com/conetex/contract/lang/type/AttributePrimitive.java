@@ -47,8 +47,8 @@ public class AttributePrimitive<T> extends Attribute<T>{
 
 	public Value<T> createNewValue(Structure theParent) {
 		String name = this.label.get();
-		String type = this.type.getName();
-		String[] p = new String[] { name, null, type };
+		String typeN = this.type.getName();
+		String[] p = new String[] { name, null, typeN };
 		CodeNode cn = new CodeNode(Symbols.comValue(), p, new LinkedList<>());
 		return this.type.createValue(cn);
 	}

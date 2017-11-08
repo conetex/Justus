@@ -3,7 +3,7 @@ package com.conetex.contract.lang.function.control;
 import java.util.List;
 
 import com.conetex.contract.build.exceptionFunction.CastException;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
@@ -65,7 +65,7 @@ public class When<V> extends ReturnAbstract<V>{
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
 		}
-		if(res){
+		if(res.booleanValue()){
 			return Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);
 		}
 		return null;

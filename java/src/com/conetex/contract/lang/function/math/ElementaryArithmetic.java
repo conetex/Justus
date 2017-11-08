@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.TypesDoNotMatch;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
@@ -144,11 +144,11 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 
 	private final Class<R> resultTyp;
 
-	private final Accessible<Ia> a;
+	final Accessible<Ia> a;
 
-	private final Accessible<Ib> b;
+	final Accessible<Ib> b;
 
-	private ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
+	ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
@@ -156,63 +156,64 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 	}
 
 	Byte calcByte(Number aA, Number aB) throws ArithmeticException {
-		Integer re = null;
+		int re = 0;
 		if(this.operator == ElementaryArithmetic.PLUS){
-			re = Math.addExact(aA.intValue(), aB.intValue());
+			re = (Math.addExact(aA.intValue(), aB.intValue()));
 		}
 		else if(this.operator == ElementaryArithmetic.MINUS){
-			re = Math.subtractExact(aA.intValue(), aB.intValue());
+			re = (Math.subtractExact(aA.intValue(), aB.intValue()));
 		}
 		else if(this.operator == ElementaryArithmetic.TIMES){
-			re = Math.multiplyExact(aA.intValue(), aB.intValue());
+			re = (Math.multiplyExact(aA.intValue(), aB.intValue()));
 		}
 		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
-			re = aA.intValue() / aB.intValue();
+			re = (aA.intValue() / aB.intValue());
 		}
 		else if(this.operator == ElementaryArithmetic.REMAINS){
-			re = aA.intValue() % aB.intValue();
+			re = (aA.intValue() % aB.intValue());
 		}
 		else{
 			return null;
 		}
-		return re.byteValue(); // TODO: convertiere nur, wenns
+		return Byte.valueOf( Integer.valueOf(re).byteValue() ); 
+		// TODO: convertiere nur, wenns
 												// wirklich passt...
 	}
 
 	Integer calcInt(int aA, int aB) throws ArithmeticException {
 		if(this.operator == ElementaryArithmetic.PLUS){
-			return Math.addExact(aA, aB);
+			return Integer.valueOf(Math.addExact(aA, aB));
 		}
 		else if(this.operator == ElementaryArithmetic.MINUS){
-			return Math.subtractExact(aA, aB);
+			return Integer.valueOf(Math.subtractExact(aA, aB));
 		}
 		else if(this.operator == ElementaryArithmetic.TIMES){
-			return Math.multiplyExact(aA, aB);
+			return Integer.valueOf(Math.multiplyExact(aA, aB));
 		}
 		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
-			return aA / aB;
+			return Integer.valueOf(aA / aB);
 		}
 		else if(this.operator == ElementaryArithmetic.REMAINS){
-			return aA % aB;
+			return Integer.valueOf(aA % aB);
 		}
 		return null;
 	}
 
 	Long calcLong(long aA, long aB) throws ArithmeticException {
 		if(this.operator == ElementaryArithmetic.PLUS){
-			return Math.addExact(aA, aB);
+			return Long.valueOf(Math.addExact(aA, aB));
 		}
 		else if(this.operator == ElementaryArithmetic.MINUS){
-			return Math.subtractExact(aA, aB);
+			return Long.valueOf(Math.subtractExact(aA, aB));
 		}
 		else if(this.operator == ElementaryArithmetic.TIMES){
-			return Math.multiplyExact(aA, aB);
+			return Long.valueOf(Math.multiplyExact(aA, aB));
 		}
 		else if(this.operator == ElementaryArithmetic.DIVIDED_BY){
-			return aA / aB;
+			return Long.valueOf(aA / aB);
 		}
 		else if(this.operator == ElementaryArithmetic.REMAINS){
-			return aA % aB;
+			return Long.valueOf(aA % aB);
 		}
 		return null;
 	}

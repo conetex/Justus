@@ -30,6 +30,7 @@ public class CodeNode{
 		for(Egg<?> command : commands){
 			if(command == null){
 				error.append(", ").append(c);
+				continue;
 			}
 			if(command.getParameterNames() == null){
 				error.append(", 0 != ").append(thisObj.parameters.length);
@@ -254,12 +255,12 @@ public class CodeNode{
 	}
 	
 	public CodeNode cloneNode(){
-		String[] parameters = this.parameters;
-		List<CodeNode> children = new LinkedList<>();
+		String[] params = this.parameters;
+		List<CodeNode> clonedChildren = new LinkedList<>();
         for(CodeNode c : this.children){
-			children.add( c.cloneNode() );
+        	clonedChildren.add( c.cloneNode() );
 		}
-		return new CodeNode(this.command, parameters, children);
+		return new CodeNode(this.command, params, clonedChildren);
 	}
 
 	public void setParameter(String p, Object x) throws UnknownCommandParameter, UnknownCommand {

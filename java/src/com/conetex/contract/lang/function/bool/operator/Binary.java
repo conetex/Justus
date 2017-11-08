@@ -1,7 +1,7 @@
 package com.conetex.contract.lang.function.bool.operator;
 
 import com.conetex.contract.build.Symbols;
-import com.conetex.contract.lang.function.access.Accessible;
+import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
@@ -16,7 +16,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return new Binary(theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
-					if(aA && aB){
+					if(aA.booleanValue() && aB.booleanValue()){
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -27,7 +27,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return new Binary(theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
-					if(aA || aB){
+					if(aA.booleanValue() || aB.booleanValue()){
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -38,7 +38,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return new Binary(theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
-					if(aA ^ aB){
+					if(aA.booleanValue() ^ aB.booleanValue()){
 						return Boolean.TRUE;
 					}
 					return Boolean.FALSE;
@@ -52,7 +52,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 
 	private final Accessible<? extends Boolean> b;
 
-	private Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
+	Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
 		this.a = theA;
 		this.b = theB;
 	}

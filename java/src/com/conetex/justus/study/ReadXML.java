@@ -3,7 +3,6 @@ package com.conetex.justus.study;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
@@ -76,49 +74,48 @@ class ReadXML{
 			is.close();
 		}
 		
-		
-		FileOutputStream os = new FileOutputStream(inFile + "_out" + fileExtension);
-		StreamResult res = new StreamResult(os);
-		DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
-		Document odoc = odocumentBuilder.newDocument();
-		Element root = odoc.createElement("contractOut");
-		odoc.appendChild(root);
-		
-		Writer w = new Writer(){
-
-			@Override
-			public void write(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
-				// TODO Auto-generated method stub
-				Element e = odoc.createElement(n.getCommand());
-				root.appendChild(e);
-				String[] parameters = n.getParameters();
-				int i = 0;
-				for(String p : n.getParameterNames()){
-					e.setAttribute(p, parameters[i++]);
-					//Attr a = odoc.createAttribute(p);
-					//e.appendChild(a);
+		try(FileOutputStream os = new FileOutputStream(inFile + "_out" + fileExtension)){
+			StreamResult res = new StreamResult(os);
+			DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
+			Document odoc = odocumentBuilder.newDocument();
+			Element root = odoc.createElement("contractOut");
+			odoc.appendChild(root);
+			
+			Writer w = new Writer(){
+	
+				@Override
+				public void write(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
+					// TODO Auto-generated method stub
+					Element e = odoc.createElement(n.getCommand());
+					root.appendChild(e);
+					String[] parameters = n.getParameters();
+					int i = 0;
+					for(String p : n.getParameterNames()){
+						e.setAttribute(p, parameters[i++]);
+						//Attr a = odoc.createAttribute(p);
+						//e.appendChild(a);
+					}
+					
+					System.out.println("write " + n.getCommand());
 				}
 				
-				System.out.println("write " + n.getCommand());
-			}
-			
-		};
-
-		if(main != null){
-			main.run(w);
-			Transformer t;
-			try {
-				t = TransformerFactory.newInstance().newTransformer();
-				t.setOutputProperty(OutputKeys.INDENT, "yes");
-				t.transform(new DOMSource(odoc), res);
-			}
-			catch (TransformerFactoryConfigurationError | TransformerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			};
+	
+			if(main != null){
+				main.run(w);
+				Transformer t;
+				try {
+					t = TransformerFactory.newInstance().newTransformer();
+					t.setOutputProperty(OutputKeys.INDENT, "yes");
+					t.transform(new DOMSource(odoc), res);
+				}
+				catch (TransformerFactoryConfigurationError | TransformerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-
 	}
 
 	private static CodeNode createSyntaxNode(Node n) {
