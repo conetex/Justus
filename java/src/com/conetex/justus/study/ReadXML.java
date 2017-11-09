@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 import com.conetex.contract.build.Build;
 import com.conetex.contract.build.CodeModel;
-import com.conetex.contract.build.CodeModel.Egg;
+import com.conetex.contract.build.CodeModel.EggAbstr;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
@@ -138,7 +138,7 @@ class ReadXML{
 		String commandStr = n.getNodeName();
 		StringBuilder errors = new StringBuilder(commandStr + " missing params: ");
 		NamedNodeMap attributes = n.getAttributes();
-		List<Egg<?>> commands = CodeModel.Egg.getInstance(commandStr);
+		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(commandStr);
 		if(commands == null){
 			String theValue = ReadXMLtools.getNodeValue(n);
 			if(theValue == null){
@@ -165,7 +165,7 @@ class ReadXML{
                     }
                 });
 		List<String> attributeList = new LinkedList<>();
-		outerLoop: for(Egg<?> command : commands){
+		outerLoop: for(EggAbstr<?> command : commands){
 			String[] paramNames = command.getParameterNames();
 			if(paramNames != null){
 				for(String paramName : paramNames){

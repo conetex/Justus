@@ -3,7 +3,8 @@ package com.conetex.contract.build;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.conetex.contract.build.CodeModel.Egg;
+import com.conetex.contract.build.CodeModel.EggAbstr;
+import com.conetex.contract.build.CodeModel.EggAbstrImp;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 
@@ -14,12 +15,12 @@ public class CodeNode{
 	}
 	
 	private static int getParameterIdx(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
-		Egg<?> command = getParameters(c, thisObj);
+		EggAbstr<?> command = getParameters(c, thisObj);
 		return command.getParameterIndex(p);
 	}
 	
-	private static Egg<?> getParameters(String c, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
-		List<Egg<?>> commands = CodeModel.Egg.getInstance(c);
+	private static EggAbstr<?> getParameters(String c, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
+		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(c);
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
@@ -27,7 +28,7 @@ public class CodeNode{
 			throw new UnknownCommandParameter(c);
 		}
 		StringBuilder error = new StringBuilder();
-		for(Egg<?> command : commands){
+		for(EggAbstr<?> command : commands){
 			if(command == null){
 				error.append(", ").append(c);
 				continue;
@@ -57,12 +58,12 @@ public class CodeNode{
 
 	private static void checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
 
-		List<Egg<?>> commands = CodeModel.Egg.getInstance(c);
+		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(c);
 		if(commands == null){
 			throw new UnknownCommand(c);
 		}
 		StringBuilder error = new StringBuilder();
-		outerLoop: for(Egg<?> command : commands){
+		outerLoop: for(EggAbstr<?> command : commands){
 			String[] paramNames = command.getParameterNames();
 			if(paramNames != null && !(p == null || p.length == 0)){
 				if(paramNames.length == p.length){
@@ -107,7 +108,7 @@ public class CodeNode{
 			return null;
 		}
 
-		List<Egg<?>> x = Egg.getInstance(commandOrg);
+		List<EggAbstr<?>> x = EggAbstrImp.getInstance(commandOrg);
 		if(x == null){
 			//if (!(isType(theName) || isFunction(theName) || isAttribute(theName) || isAttributeInitialized(theName) || isBuildInFunction(theName))) {
 			if(theNameAttribute == null){

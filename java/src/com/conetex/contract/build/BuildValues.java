@@ -3,7 +3,10 @@ package com.conetex.contract.build;
 import java.util.Map;
 
 import com.conetex.contract.build.BuildTypes.Types;
-import com.conetex.contract.build.CodeModel.Box;
+import com.conetex.contract.build.CodeModel.BoxValue;
+import com.conetex.contract.build.CodeModel.BoxType;
+import com.conetex.contract.build.CodeModel.BoxValueImp;
+import com.conetex.contract.build.CodeModel.BoxTypeImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.AttributeComplex;
@@ -19,7 +22,8 @@ class BuildValues{
 
 	static class Values{
 		
-		static final Box<Object, Object> value = new Box<Object, Object>("value", 2){
+		// TODO 1 anmelden... wie value...
+		static final BoxType<Object, Object> type_with_value = new BoxTypeImp<Object, Object>("value"){
 
 			@Override
 			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
@@ -49,6 +53,10 @@ class BuildValues{
 				return id;
 			}
 
+		};
+		
+		static final BoxValue<Object, Object> value = new BoxValueImp<Object, Object>("value"){
+
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
 				return BuildValues.createValue(thisNode, parentType, parentData);
@@ -56,21 +64,21 @@ class BuildValues{
 
 		};
 		
-		static final Box<Object, Object> valueVirtComp = new Box<Object, Object>("VIRTUAL_COMP_VALUE"){
+		static final BoxValue<Object, Object> valueVirtComp = new BoxValueImp<Object, Object>("VIRTUAL_COMP_VALUE"){
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
 				return BuildValues.createValue(thisNode, parentType, parentData);
 			}
 		};
 
-		static final Box<Object, Object> valueVirtPrim = new Box<Object, Object>("VIRTUAL_PRIM_VALUE"){
+		static final BoxValue<Object, Object> valueVirtPrim = new BoxValueImp<Object, Object>("VIRTUAL_PRIM_VALUE"){
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
 				return BuildValues.createValue(thisNode, parentType, parentData);
 			}
 		};
 		
-		static final Box<Object, Object> contract = new Box<Object, Object>("contract"){
+		static final BoxValue<Object, Object> contract = new BoxValueImp<Object, Object>("contract"){
 			// TODO implement
 		};
 		

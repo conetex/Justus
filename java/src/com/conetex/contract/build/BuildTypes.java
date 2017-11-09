@@ -7,20 +7,41 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.conetex.contract.build.CodeModel.Box;
+import com.conetex.contract.build.CodeModel.BoxType;
+import com.conetex.contract.build.CodeModel.BoxFun;
+import com.conetex.contract.build.CodeModel.BoxValue;
+import com.conetex.contract.build.CodeModel.BoxTypeImp;
+import com.conetex.contract.build.CodeModel.BoxFunImp;
+import com.conetex.contract.build.CodeModel.BoxValueImp;
+import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 
 public class BuildTypes{
 
 	static class Types{
 
-		public static abstract class CompBox extends Box<Structure, Object>{
+		public static abstract class ComplexImp extends BoxValueTypeFunImp<Structure, Object>{
+
+			ComplexImp(String name) {
+				super(name);
+			}
+
+			@Override
+			public abstract Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException;
+
+			public abstract Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException;
+
+		}
+		
+		public static abstract class CompBox extends BoxFunImp<Structure, Object>{
 
 			CompBox(String name) {
 				super(name);
@@ -33,7 +54,8 @@ public class BuildTypes{
 
 		}
 
-		static final CompBox complex = new CompBox("complex"){
+		// TODO 1 anmelden wie complex
+		static final CompBox _functions_in_complex = new CompBox("complex"){
 
 			@Override
 			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
@@ -52,13 +74,64 @@ public class BuildTypes{
 				return null;
 			}
 
+		};
+		
+		// TODO 1 anmelden wie complex
+		static final BoxValue<Structure, Object> _values_in_complex = new BoxValueImp<Structure, Object>("complex"){
+
+		};
+		
+		static final BoxType<Structure, Object> _complex = new BoxTypeImp<Structure, Object>("complex"){
+
+			@Override
 			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
 			}
 
 		};
+		
+		static final ComplexImp complex = new ComplexImp("complex"){
 
-		static final Box<Object, Object> attribute = new Box<Object, Object>("attribute", 1){
+			@Override
+			public Value<?> valueCreate(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+
+				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
+
+				return this.functionCreateImpl(thisNode, thisType);
+			}
+
+			// this is just to create functions of complex
+			@Override
+			public Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
+				List<CodeNode> children = thisNode.getChildNodes();
+				for(CodeNode c : children){
+					this.functionCreateChild(c, thisType);
+				}
+				return null;
+			}
+
+			@Override
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+			}
+
+	
+
+		};
+
+		static final BoxType<Object, Object> attribute = new BoxTypeImp<Object, Object>("attribute"){
 
 			@Override
 			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
