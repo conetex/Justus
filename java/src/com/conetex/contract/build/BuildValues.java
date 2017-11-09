@@ -22,7 +22,6 @@ class BuildValues{
 
 	static class Values{
 		
-		// TODO 1 anmelden... wie value...
 		static final BoxType<Object, Object> type_with_value = new BoxTypeImp<Object, Object>("value"){
 
 			@Override

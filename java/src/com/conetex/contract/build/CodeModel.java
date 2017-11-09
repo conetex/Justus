@@ -1033,7 +1033,11 @@ public class CodeModel{
 
 		// TODO this box-object is only a dummy ...
 		Values.value.means(Symbols.comValue()); // isAttributeInitialized //Symbol.VALUE 
-		Values.value.registerParameters(PrimitiveValue.params);
+		//Values.value.registerParameters(PrimitiveValue.params); TODO sync this
+		Values.value.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
+		
+		Values.type_with_value.means(Symbols.comValue());
+		Values.type_with_value.registerParameters(new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
 
 		// TODO this box-object is only a dummy ...
 		Values.valueVirtPrim.means(Symbols.comvirtualPrimValue()); // isAttributeInitialized //Symbol.VALUE 
@@ -1058,9 +1062,11 @@ public class CodeModel{
 		CodeModel.buildUnknown();
 
 		Types.complex.contains((BoxType<Structure, Object>) Types.complex);
+		Types.complex.contains((BoxFun<Structure, Object>) Types.complex);
 		Types.complex.contains(Fun.whatEver);
 
 		Types.complex.contains(Types.attribute);
+		Types.complex.contains(Values.type_with_value);
 		Types.complex.contains(Values.value);
 		Types.complex.contains(Values.valueVirtComp);
 		Types.complex.contains(Values.valueVirtPrim);
