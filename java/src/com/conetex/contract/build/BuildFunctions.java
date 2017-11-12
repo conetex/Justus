@@ -596,9 +596,8 @@ public class BuildFunctions{
 
 	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
 
-		//Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType)
-		return Types.complex.functionCreateImpl(thisNode, thisType); 
-		//return Fun.whatEver.functionCreateImpl(thisNode, thisType);
+		//return Types.complex.functionCreateImpl(thisNode, thisType); 
+		return Fun.whatEver.functionCreateImpl(thisNode, thisType);
 
 	}
 
