@@ -131,6 +131,74 @@ public class BuildTypes{
 
 		};
 
+		static class ContractClass extends BoxValueTypeFunImp<Object, Object>{
+			
+			ContractClass(String theName) {
+				super(theName);
+			}
+
+			@Override
+			public Value<?> valueCreate(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+
+				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
+
+				return this.functionCreateImpl(thisNode, thisType);
+			}
+
+			// this is just to create functions of complex
+			public Function<Structure> _functionCreateImpl_(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
+				List<CodeNode> children = thisNode.getChildNodes();
+				for(CodeNode c : children){
+					this.functionCreateChild(c, thisType);
+				}
+				return null;
+			}
+
+			public Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, thisType, this);
+				if(theSteps == null){
+					System.err.println("no steps ");
+				}
+				Class<?> returntype = Function.getReturnTyp(theSteps);
+				if(returntype == String.class){
+					return null;
+				}
+				else if(returntype == Boolean.class){
+					return Function.createBool(theSteps, thisNode.getParameter(Symbols.paramName()));
+				}
+				else if(Number.class.isAssignableFrom(returntype)){
+					return Function.createNum(theSteps, thisNode.getParameter(Symbols.paramName()), returntype);
+				}
+				else if(returntype == Structure.class){
+					return Function.createStructure(theSteps, thisNode.getParameter(Symbols.paramName()));
+				}
+				else if(returntype == Object.class){
+					return Function.createVoid(theSteps, thisNode.getParameter(Symbols.paramName()));
+				}
+				System.err.println("unknown return type " + returntype);
+				return null;
+			}
+			
+			@Override
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+			}
+		}
+		
+		static final BoxValueTypeFunImp<Object, Object> contract = new ContractClass("contract");
+		
 		static final BoxType<Object, Object> attribute = new BoxTypeImp<Object, Object>("attribute"){
 
 			@Override
