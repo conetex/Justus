@@ -1063,7 +1063,8 @@ public class CodeModel{
 
 		Types.complex.contains((BoxType<Structure, Object>) Types.complex);
 		Types.complex.contains((BoxFun<Structure, Object>) Types.complex);
-		Types.complex.contains(Fun.whatEver);
+		Types.complex.contains((BoxType<Object, Object>) Fun.whatEver);
+		Types.complex.contains((BoxFun<Object, Object>) Fun.whatEver);
 
 		Types.complex.contains(Types.attribute);
 		Types.complex.contains(Values.type_with_value);
@@ -1071,6 +1072,15 @@ public class CodeModel{
 		Types.complex.contains(Values.valueVirtComp);
 		Types.complex.contains(Values.valueVirtPrim);
 
+		Fun.whatEver.contains(Types.attribute);
+		Fun.whatEver.contains(Values.type_with_value);
+		Fun.whatEver.contains(Values.value);
+		Fun.whatEver.contains(Values.valueVirtComp);
+		Fun.whatEver.contains(Values.valueVirtPrim);
+		// TODO das gilt doch auch für alle anderen Functions ...
+
+		
+		
 		Types.complex.contains(FunCall.whatEverCall);
 		Types.complex.contains(Assign.whatEverAssigment);
 		Types.complex.contains(Control.loop);
@@ -1079,8 +1089,24 @@ public class CodeModel{
 		Types.complex.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
 		Types.complex.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
 		Types.complex.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
+		
+		Types.contract.contains(FunCall.whatEverCall);
+		Types.contract.contains(Assign.whatEverAssigment);
+		Types.contract.contains(Control.loop);
+		Types.contract.contains(Control.when);
+		Types.contract.contains(FunReturn.whatEverReturn);
+		Types.contract.contains(Expression.numberExpession);// TODO eigentlich nur hinter zuweisung
+		Types.contract.contains(Expression.boolComparsion);// TODO eigentlich nur hinter zuweisung
+		Types.contract.contains(Expression.boolExpression);// TODO eigentlich nur hinter zuweisung
 
-
+		
+		Types.contract.contains(Types.attribute);
+		Types.contract.contains(Values.value);
+		Types.contract.contains(Values.valueVirtComp);
+		Types.contract.contains((BoxType<Structure, Object>) Types.complex);
+		//Types.contract.contains((BoxFun<Structure, Object>) Types.complex);
+		Types.contract.contains((BoxFun<Object, Object>)Fun.whatEver);
+		
 	}
 
 }

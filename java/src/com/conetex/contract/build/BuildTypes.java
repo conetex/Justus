@@ -197,7 +197,7 @@ public class BuildTypes{
 			}
 		}
 		
-		static final BoxValueTypeFunImp<Object, Object> contract = new ContractClass("contract");
+		static final ContractClass contract = new ContractClass("contract");
 		
 		static final BoxType<Object, Object> attribute = new BoxTypeImp<Object, Object>("attribute"){
 

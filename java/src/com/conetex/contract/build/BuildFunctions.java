@@ -8,6 +8,7 @@ import com.conetex.contract.build.BuildTypes.Types;
 import com.conetex.contract.build.CodeModel.BoxFun;
 import com.conetex.contract.build.CodeModel.EggFun;
 import com.conetex.contract.build.CodeModel.BoxFunImp;
+import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
 import com.conetex.contract.build.CodeModel.EggFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.FunctionNotFound;
@@ -335,6 +336,68 @@ public class BuildFunctions{
 			}
 		};
 
+		static class FunctionClass extends BoxValueTypeFunImp<Object, Object>{
+
+			FunctionClass(String theName) {
+				super(theName);
+			}
+
+			@Override
+			public Value<?> valueCreate(CodeNode n, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
+				System.out.println("createValues " + n.getCommand());
+				return BuildValues.createValue4Function(n, parentType, parentData);
+			}
+
+			@Override
+			public Accessible<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
+
+				//return this.functionCreateImpl(thisNode, thisType);
+				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, thisType, this);
+				if(theSteps == null){
+					System.err.println("no steps ");
+				}
+				Class<?> returntype = Function.getReturnTyp(theSteps);
+				if(returntype == String.class){
+					return null;
+				}
+				else if(returntype == Boolean.class){
+					return Function.createBool(theSteps, thisNode.getParameter(Symbols.paramName()));
+				}
+				else if(Number.class.isAssignableFrom(returntype)){
+					return Function.createNum(theSteps, thisNode.getParameter(Symbols.paramName()), returntype);
+				}
+				else if(returntype == Structure.class){
+					return Function.createStructure(theSteps, thisNode.getParameter(Symbols.paramName()));
+				}
+				else if(returntype == Object.class){
+					return Function.createVoid(theSteps, thisNode.getParameter(Symbols.paramName()));
+				}
+				System.err.println("unknown return type " + returntype);
+				return null;
+			}
+
+			@Override
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+				String idTypeName = null;
+				String idName = null;
+				idTypeName = c.getParameter(Symbols.paramType());
+				idName = c.getParameter(Symbols.paramName());
+				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
+				// TODO BUG !!!
+				// Attribute<?> fun =
+				TypeComplexOfFunction.createAttributeFun(idName, idTypeName, unformedComplexTypes);
+				return null;
+			}
+
+			@Override
+			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes)
+					throws AbstractInterpreterException {
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+			}
+			
+		}
+		
 		public static abstract class FunBox extends BoxFunImp<Object, Object>{
 
 			FunBox(String name) {
@@ -353,7 +416,8 @@ public class BuildFunctions{
 
 		}
 
-		static final FunBox whatEver = new FunBox("whatEverFunction"){
+		static final FunctionClass whatEver = new FunctionClass("whatEverFunction");
+		static final FunBox _whatEver = new FunBox("whatEverFunction"){
 			@Override
 			public Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, thisType, this);
@@ -596,9 +660,11 @@ public class BuildFunctions{
 
 	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
 
-		//return Types.complex.functionCreateImpl(thisNode, thisType); 
-		return Fun.whatEver.functionCreateImpl(thisNode, thisType);
-
+		//return 
+		Types.complex.functionCreateImpl(thisNode, thisType); 
+		//return Fun.whatEver.functionCreateImpl(thisNode, thisType);
+		return Types.contract.functionCreateImpl(thisNode, thisType);
+		
 	}
 
 	static Accessible<?>[] getFunctionSteps(CodeNode n, TypeComplex type, BoxFun<?, ?> box) throws AbstractInterpreterException {
@@ -766,6 +832,7 @@ public class BuildFunctions{
 		TypeComplex type = TypeComplex.getInstance(parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
 		if(type == null){
 			// TODO throw
+			TypeComplex.getInstance(parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
 			System.err.println("createFunctions: can not identify " + parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
 			return null;
 		}
