@@ -1,6 +1,7 @@
 package com.conetex.contract.lang.value.implementation;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
@@ -262,18 +263,23 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public CodeNode persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a == null ? "n.a." : a.getLabel().get();
 		Type<?> t = a == null ? null : a.getType();
 		String ttype = t == null ? "n.a." : t.getName();
-		CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, ttype}, new LinkedList<>());
-		w.write(cn);
+		
+		List<CodeNode> children = new LinkedList<>();
+		//w.write(cn);
 		
 		int i = 0;
 		for(Value<?> v : this.values){
-			v.persist(w, this.type.getSubAttribute(i));
+			children.add( v.persist(w, this.type.getSubAttribute(i)) );
 			i++;
 		}
+		
+		CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, ttype}, children);
+		
+		return cn;
 	}
 
 }

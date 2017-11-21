@@ -38,6 +38,46 @@ import com.conetex.contract.runNew.Writer;
 
 class ReadXML{
 
+	public static class XmlWriter extends Writer{
+
+		Document odoc;
+		Element root;
+		
+		XmlWriter(Document theDoc, Element theRoot){
+			this.odoc = theDoc;
+			this.root = theRoot;
+		}
+		
+		public Element writeNode(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
+			// TODO Auto-generated method stub
+			// TODO Auto-generated method stub
+			Element e = odoc.createElement(n.getCommand());
+			
+			String[] parameters = n.getParameters();
+			int i = 0;
+			for(String p : n.getParameterNames()){
+				e.setAttribute(p, parameters[i++]);
+				//Attr a = odoc.createAttribute(p);
+				//e.appendChild(a);
+			}
+			
+			for(CodeNode c : n.getChildNodes()){
+				Element ec = this.writeNode(c);
+				e.appendChild(ec);
+			}
+			
+			System.out.println("write " + n.getCommand());
+			return e;
+		}
+		
+		@Override
+		public void write(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
+			Element e = this.writeNode(n);
+			this.root.appendChild(e);
+		}
+		
+	}
+	
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException {
 
@@ -82,25 +122,7 @@ class ReadXML{
 			Element root = odoc.createElement("contractOut");
 			odoc.appendChild(root);
 			
-			Writer w = new Writer(){
-	
-				@Override
-				public void write(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
-					// TODO Auto-generated method stub
-					Element e = odoc.createElement(n.getCommand());
-					root.appendChild(e);
-					String[] parameters = n.getParameters();
-					int i = 0;
-					for(String p : n.getParameterNames()){
-						e.setAttribute(p, parameters[i++]);
-						//Attr a = odoc.createAttribute(p);
-						//e.appendChild(a);
-					}
-					
-					System.out.println("write " + n.getCommand());
-				}
-				
-			};
+			Writer w = new XmlWriter(odoc, root);
 	
 			if(main != null){
 				main.run(w);

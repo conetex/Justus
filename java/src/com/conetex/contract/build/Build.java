@@ -34,7 +34,8 @@ public class Build{
 						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
 							mainFunction.getFromRoot(rootStructure);
 							if(w != null){
-								rootStructure.persist(w, null);
+								CodeNode cn = rootStructure.persist(w, null);
+								w.write(cn);
 							}
 							else{
 								// TODO exception ...

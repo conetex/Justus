@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.value;
 
+import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
@@ -24,6 +25,6 @@ public interface Value<T> {
 
 	Value<T> cloneValue() throws Invalid;
 
-	void persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
+	CodeNode persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
 	
 }

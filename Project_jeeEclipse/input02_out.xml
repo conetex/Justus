@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <contractOut>
-<value name="n.a." type="n.a." value=""/>
-<value name="instance" type="contract4u.root.credit" value=""/>
-<value name="glaeubig" type="contract4u.root.person" value=""/>
+<value name="n.a." type="n.a." value="">
+<value name="instance" type="contract4u.root.credit" value="">
+<value name="glaeubig" type="contract4u.root.person" value="">
 <value name="name" type="t:SizedASCII" value="hobo"/>
 <value name="mail" type="t:MailAddress" value="hobo@dida.de"/>
 <value name="nr" type="t:Int" value="111"/>
-<value name="schuldne" type="contract4u.root.person" value=""/>
+</value>
+<value name="schuldne" type="contract4u.root.person" value="">
 <value name="name" type="t:SizedASCII" value="biba"/>
 <value name="mail" type="t:MailAddress" value="biba@dida.de"/>
 <value name="nr" type="t:Int" value="222"/>
+</value>
 <value name="betrag" type="t:Int" value="1024"/>
 <value name="aktiv" type="t:Bool" value="true"/>
+</value>
 <value name="counter" type="t:Int" value="4"/>
 <value name="param" type="t:Int" value="12"/>
 <value name="aAddress" type="t:MailAddress" value="12@32543.com"/>
@@ -20,4 +23,5 @@
 <value name="bi" type="t:Int" value="4"/>
 <value name="bTrue" type="t:Bool" value="true"/>
 <value name="bFalse" type="t:Bool" value="false"/>
+</value>
 </contractOut>
