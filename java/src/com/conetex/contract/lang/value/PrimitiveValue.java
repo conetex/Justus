@@ -23,7 +23,7 @@ public abstract class PrimitiveValue<T> implements Value<T>{
 	public static final String[] params = new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() };
 	
 	@Override
-	public CodeNode persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public CodeNode persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a.getLabel().get();
 		Type<?> t = a.getType();
 		String type = t.getName();

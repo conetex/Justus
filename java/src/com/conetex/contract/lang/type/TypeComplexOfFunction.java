@@ -1,8 +1,13 @@
 package com.conetex.contract.lang.type;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
+import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.ComplexWasInitializedExeption;
 import com.conetex.contract.build.exceptionFunction.DublicateComplexException;
@@ -27,6 +32,10 @@ public class TypeComplexOfFunction extends TypeComplex{
 
 	private static final Map<String, TypeComplexOfFunction> instances = new HashMap<>();
 
+	public static Collection<TypeComplexOfFunction> getInstances() {
+		return TypeComplexOfFunction.instances.values();
+	}
+	
 	public static TypeComplexOfFunction getInstance(String typeName) {
 		return instances.get(typeName);
 	}
@@ -162,4 +171,28 @@ public class TypeComplexOfFunction extends TypeComplex{
 		return this.prototype.getValue(n, clazz);
 	}
 
+	@Override
+	public String getCommand() {
+		return TypeComplexOfFunction.staticGetCommand();
+	}
+	
+	public static String staticGetCommand() {
+		return Symbols.comFunction();
+	}
+	
+	public CodeNode persist() {
+		String name = super.name;
+		
+		List<CodeNode> children = new LinkedList<>();
+		
+		for(Attribute<?> a : super.orderedAttributes){
+			children.add( a.persist() );
+		}
+		String x = this.getCommand();
+		String y = Symbols.comFunction();
+		CodeNode cn = new CodeNode(y, new String[] {name, name}, children);
+		
+		return cn;
+	}
+	
 }

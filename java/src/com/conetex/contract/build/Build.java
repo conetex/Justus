@@ -34,8 +34,17 @@ public class Build{
 						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
 							mainFunction.getFromRoot(rootStructure);
 							if(w != null){
-								CodeNode cn = rootStructure.persist(w, null);
-								w.write(cn);
+								for(TypeComplex tc : TypeComplex.getInstances()){// ...
+									//...
+									CodeNode cnTyps = tc.persist();
+									w.write(cnTyps);
+								}
+								for(TypeComplexOfFunction tcf : TypeComplexOfFunction.getInstances()){
+									CodeNode cnTyps = tcf.persist();
+									w.write(cnTyps);
+								}								
+								CodeNode cnVals = rootStructure.persist(null);
+								w.write(cnVals);
 							}
 							else{
 								// TODO exception ...

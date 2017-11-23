@@ -2,9 +2,12 @@ package com.conetex.contract.lang.type;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.ComplexWasInitializedExeption;
@@ -34,17 +37,17 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return instances.keySet();
 	}
 
-	public static Collection<TypeComplex> getInstances() {
-		return instances.values();
+	public static Collection<? extends TypeComplex> getInstances() {
+		return TypeComplex.instances.values();
 	}
 
 	private final Map<String, Integer> index;
 
-	private Attribute<?>[] orderedAttributes; // TODO kann das
+	Attribute<?>[] orderedAttributes; // TODO kann das
 												// nicht doch final
 												// werden?
 
-	private final String name;
+	final String name;
 
 	public String getName() {
 		return this.name;
@@ -295,6 +298,29 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	@Override
 	public Class<Structure> getRawTypeClass() {
 		return Structure.class;
+	}
+
+	public String getCommand() {
+		return TypeComplex.staticGetCommand();
+	}
+	
+	public static String staticGetCommand() {
+		return Symbols.comComplex();
+	}
+	
+	public CodeNode persist() {
+		String name = this.name;
+		
+		List<CodeNode> children = new LinkedList<>();
+		
+		for(Attribute<?> a : this.orderedAttributes){
+			children.add( a.persist() );
+		}
+		String x = this.getCommand();
+		String y = Symbols.comComplex();
+		CodeNode cn = new CodeNode(y, new String[] {name}, children);
+		
+		return cn;
 	}
 
 }

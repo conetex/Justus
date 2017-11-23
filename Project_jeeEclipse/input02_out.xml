@@ -1,5 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <contractOut>
+<complexType name="contract4u.root.person.person">
+<attribute name="name" type="t:SizedASCII"/>
+<attribute name="mail" type="t:MailAddress"/>
+</complexType>
+<complexType name="contract4u">
+<attribute name="instance" type="contract4u.root.credit"/>
+<attribute name="counter" type="t:Int"/>
+<attribute name="param" type="t:Int"/>
+<attribute name="aAddress" type="t:MailAddress"/>
+<attribute name="a2Addres" type="t:MailAddress"/>
+<attribute name="ai" type="t:Int"/>
+<attribute name="bi" type="t:Int"/>
+<attribute name="bTrue" type="t:Bool"/>
+<attribute name="bFalse" type="t:Bool"/>
+</complexType>
+<complexType name="contract4u.root.person">
+<attribute name="name" type="t:SizedASCII"/>
+<attribute name="mail" type="t:MailAddress"/>
+<attribute name="nr" type="t:Int"/>
+</complexType>
+<function name="contract4u.root.person.tuWas" type="contract4u.root.person.tuWas">
+<attribute name="action" type="t:SizedASCII"/>
+</function>
+<complexType name="contract4u.root.credit">
+<attribute name="glaeubig" type="contract4u.root.person"/>
+<attribute name="schuldne" type="contract4u.root.person"/>
+<attribute name="betrag" type="t:Int"/>
+<attribute name="aktiv" type="t:Bool"/>
+</complexType>
+<function name="contract4u.foo2" type="contract4u.foo2">
+<attribute name="param" type="t:Int"/>
+<attribute name="param2" type="t:Int"/>
+</function>
+<function name="contract4u.foo" type="contract4u.foo">
+<attribute name="param" type="t:Int"/>
+</function>
+<complexType name="contract4u.root">
+<attribute name="dummy" type="t:SizedASCII"/>
+</complexType>
+<function name="contract4u.root.person.tuWas" type="contract4u.root.person.tuWas">
+<attribute name="action" type="t:SizedASCII"/>
+</function>
+<function name="contract4u.foo2" type="contract4u.foo2">
+<attribute name="param" type="t:Int"/>
+<attribute name="param2" type="t:Int"/>
+</function>
+<function name="contract4u.foo" type="contract4u.foo">
+<attribute name="param" type="t:Int"/>
+</function>
 <value name="n.a." type="n.a." value="">
 <value name="instance" type="contract4u.root.credit" value="">
 <value name="glaeubig" type="contract4u.root.person" value="">

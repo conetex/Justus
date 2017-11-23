@@ -330,10 +330,14 @@ public class BuildTypes{
 		TypeComplex complexType = unformedComplexTypes.get(typeName);
 		if(complexType == null){
 
-			if(n.getCommand() == Symbols.comFunction()){
+			if(n.getCommand() == TypeComplexOfFunction.staticGetCommand()){
 				complexType = TypeComplexOfFunction.createInit(typeName, theOrderedIdentifiers);
 			}
+			else if(n.getCommand() == TypeComplex.staticGetCommand()){
+				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+			}			
 			else{
+				// TODO error...
 				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
 			}
 

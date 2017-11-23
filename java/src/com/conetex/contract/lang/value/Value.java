@@ -25,6 +25,6 @@ public interface Value<T> {
 
 	Value<T> cloneValue() throws Invalid;
 
-	CodeNode persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
+	CodeNode persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
 	
 }

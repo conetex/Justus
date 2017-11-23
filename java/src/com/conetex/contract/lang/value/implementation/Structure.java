@@ -263,7 +263,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public CodeNode persist(Writer w, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public CodeNode persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a == null ? "n.a." : a.getLabel().get();
 		Type<?> t = a == null ? null : a.getType();
 		String ttype = t == null ? "n.a." : t.getName();
@@ -273,7 +273,7 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		
 		int i = 0;
 		for(Value<?> v : this.values){
-			children.add( v.persist(w, this.type.getSubAttribute(i)) );
+			children.add( v.persist(this.type.getSubAttribute(i)) );
 			i++;
 		}
 		

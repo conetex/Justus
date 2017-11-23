@@ -1,6 +1,10 @@
 package com.conetex.contract.lang.type;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.conetex.contract.build.CodeNode;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.UnknownAttribute;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.SizedASCII;
@@ -42,6 +46,15 @@ public abstract class Attribute<T> {
 		Attribute<?> id = getAttribute(idName, parentTyp);
 		Type<?> t = id.getType();
 		return t.getRawTypeClass();
+	}
+
+	public CodeNode persist() {
+		String name = this.getLabel().get();
+		String type = this.getType().getName();
+		
+		CodeNode cn = new CodeNode(Symbols.comAttribute(), new String[] {name, type}, new LinkedList<>());
+		
+		return cn;
 	}
 
 }
