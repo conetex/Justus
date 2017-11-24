@@ -119,7 +119,7 @@ class ReadXML{
 			DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
 			Document odoc = odocumentBuilder.newDocument();
-			Element root = odoc.createElement("contractOut");
+			Element root = odoc.createElement("contract4u");
 			odoc.appendChild(root);
 			
 			Writer w = new XmlWriter(odoc, root);
@@ -130,6 +130,7 @@ class ReadXML{
 				try {
 					t = TransformerFactory.newInstance().newTransformer();
 					t.setOutputProperty(OutputKeys.INDENT, "yes");
+					t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 					t.transform(new DOMSource(odoc), res);
 				}
 				catch (TransformerFactoryConfigurationError | TransformerException e) {

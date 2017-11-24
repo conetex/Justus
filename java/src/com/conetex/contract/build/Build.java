@@ -3,9 +3,12 @@ package com.conetex.contract.build;
 import java.util.List;
 
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
+import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.function.control.Function;
+import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
@@ -31,20 +34,35 @@ public class Build{
 				if(mainFunction != null){
 					return new Main(){
 						@Override
-						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand {
+						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException {
 							mainFunction.getFromRoot(rootStructure);
 							if(w != null){
-								for(TypeComplex tc : TypeComplex.getInstances()){// ...
-									//...
-									CodeNode cnTyps = tc.persist();
-									w.write(cnTyps);
+								CodeNode cnTyps = complexTypeRoot.createCodeNode();
+								w.write(cnTyps);
+								/*
+								for(TypeComplex tc : TypeComplex.getInstances()){
+									if( tc.getCommand().equals( TypeComplex.staticGetCommand() ) ){
+										CodeNode cnTyps = tc.createCodeNode();
+										w.write(cnTyps);
+									}
+									// else // functions are done by tc.createCodeNode() internal
 								}
+								*/
+								/*
 								for(TypeComplexOfFunction tcf : TypeComplexOfFunction.getInstances()){
 									CodeNode cnTyps = tcf.persist();
 									w.write(cnTyps);
-								}								
-								CodeNode cnVals = rootStructure.persist(null);
-								w.write(cnVals);
+								}
+								*/			
+								Attribute<?> r = complexTypeRoot.createComplexAttribute(complexTypeRoot.getName());
+								CodeNode cnVal = rootStructure.createCodeNode(r);
+								w.write(cnVal);								
+								/*
+								List<CodeNode> cnVals = rootStructure.createCodeNodes();
+								for(CodeNode cnVal : cnVals){
+									w.write(cnVal);
+								}
+								*/
 							}
 							else{
 								// TODO exception ...

@@ -4,31 +4,31 @@
 	
 	<complexType name="root"> 
 	
-	<attribute name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
-	<complexType name="credit">  
-		<attribute name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<attribute name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
-	</complexType>	
-	<complexType name="person">  
-		<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="dummy" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<complexType name="credit">  
+			<attribute name="glaeubig" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>        
+			<attribute name="schuldne" type="contract4u.root.person" minOccurs="1" maxOccurs="1" nillable="false"/>
+			<attribute name="betrag" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+			<attribute name="aktiv" type="t:Bool" minOccurs="1" maxOccurs="1" nillable="false"/>        
+		</complexType>	
 		<complexType name="person">  
 			<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
-			<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
-		</complexType> 		 
-		<function name="tuWas" type="contract4u.root.person.tuWas">  
-			<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
-			<if>
-			<equal><Integer name="egal">13</Integer><Integer name="egal">13</Integer></equal>
-			<then><return><ref>nr</ref></return></then>
-			<else><return><Integer name="egal">8</Integer></return></else>
-			</if>
-		    <return><ref>nr</ref></return>			        
-		</function>       
-	</complexType>	
+			<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
+			<attribute name="nr" type="t:Int" minOccurs="1" maxOccurs="1" nillable="false"/>
+			<complexType name="person">  
+				<attribute name="name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
+				<attribute name="mail" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>        
+			</complexType> 		 
+			<function name="tuWas" type="contract4u.root.person.tuWas">  
+				<attribute name="action" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+				<if>
+				<equal><Integer name="egal">13</Integer><Integer name="egal">13</Integer></equal>
+				<then><return><ref>nr</ref></return></then>
+				<else><return><Integer name="egal">8</Integer></return></else>
+				</if>
+				<return><ref>nr</ref></return>			        
+			</function>       
+		</complexType>	
 	
 	</complexType>
 

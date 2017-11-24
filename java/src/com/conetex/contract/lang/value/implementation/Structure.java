@@ -263,23 +263,29 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public CodeNode persist(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public CodeNode createCodeNode(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a == null ? "n.a." : a.getLabel().get();
 		Type<?> t = a == null ? null : a.getType();
 		String ttype = t == null ? "n.a." : t.getName();
 		
+		List<CodeNode> children = createCodeNodes();
+		
+		CodeNode cn = new CodeNode(Symbols.comVirtualCompValue(), new String[] {name}, children);
+		
+		return cn;
+	}
+	
+	public List<CodeNode> createCodeNodes() throws UnknownCommandParameter, UnknownCommand {
+		
 		List<CodeNode> children = new LinkedList<>();
-		//w.write(cn);
 		
 		int i = 0;
 		for(Value<?> v : this.values){
-			children.add( v.persist(this.type.getSubAttribute(i)) );
+			children.add( v.createCodeNode(this.type.getSubAttribute(i)) );
 			i++;
 		}
 		
-		CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, ttype}, children);
-		
-		return cn;
+		return children;
 	}
 
 }
