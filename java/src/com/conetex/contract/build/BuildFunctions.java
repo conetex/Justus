@@ -6,9 +6,9 @@ import java.util.Map;
 
 import com.conetex.contract.build.BuildTypes.Types;
 import com.conetex.contract.build.CodeModel.BoxFun;
-import com.conetex.contract.build.CodeModel.EggFun;
 import com.conetex.contract.build.CodeModel.BoxFunImp;
 import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
+import com.conetex.contract.build.CodeModel.EggFun;
 import com.conetex.contract.build.CodeModel.EggFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.FunctionNotFound;
@@ -661,7 +661,7 @@ public class BuildFunctions{
 	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
 
 		//return 
-		Types.complex.functionCreateImpl(thisNode, thisType); 
+		//Types.complex.functionCreateImpl(thisNode, thisType); 
 		//return Fun.whatEver.functionCreateImpl(thisNode, thisType);
 		return Types.contract.functionCreateImpl(thisNode, thisType);
 		
@@ -675,10 +675,11 @@ public class BuildFunctions{
 			return null;
 		}
 		List<Accessible<?>> steps = new LinkedList<>();
-
+		
 		List<CodeNode> children = n.getChildNodes();
 		for(CodeNode c : children){
 			//if (c.isBuildInFunction() && !c.getCommand().equals(Symbol.FUNCTION)) {
+			
 			Accessible<?> v = box.functionCreateChild(c, type);
 			if(v != null){
 				steps.add(v);
@@ -826,14 +827,15 @@ public class BuildFunctions{
 	public static TypeComplex getThisNodeType(CodeNode thisNode, TypeComplex parentTyp) throws AbstractInterpreterException {
 		if(parentTyp == null){
 			// TODO throw
-			System.err.println("createFunctions: can not identify " + thisNode.getParameter(Symbols.paramName()));
+			System.err.println("createFunctions: no parent for " + thisNode.getParameter(Symbols.paramName()));
 			return null;
 		}
-		TypeComplex type = TypeComplex.getInstance(parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
+		String typeName = CodeNode.getTypSubstr( thisNode.getParameter(Symbols.paramName()), parentTyp );
+		TypeComplex type = TypeComplex.getInstance(typeName);
 		if(type == null){
 			// TODO throw
-			TypeComplex.getInstance(parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
-			System.err.println("createFunctions: can not identify " + parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
+			//TypeComplex.getInstance(parentTyp.getName() + "." + thisNode.getParameter(Symbols.paramName()));
+			System.err.println("createFunctions: can not identify " + typeName);
 			return null;
 		}
 		return type;

@@ -1,7 +1,6 @@
 package com.conetex.contract.lang.type;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;

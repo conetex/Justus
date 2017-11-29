@@ -21,16 +21,20 @@ public class Build{
 
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
 		TypePrimitive.init();
-		List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
+		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
+		CodeNode complexRoot = BuildTypes.getComplexRoot(code);
+		List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(complexRoot);
+		
 		System.out.println("Builder " + code.getCommand());
 		if(complexTyps != null){
-			TypeComplex complexTypeRoot = TypeComplex.getInstance(code.getParameter(Symbols.paramName()));
+			CodeNode valueRoot = BuildTypes.getValueRoot(code);
+			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
 			if(rootStructure != null){
-				BuildValues.createValues(code, complexTypeRoot, rootStructure);
+				BuildValues.createValues(valueRoot, complexTypeRoot, rootStructure);
 				rootStructure.fillMissingValues();
 				TypeComplexOfFunction.fillMissingPrototypeValues();
-				Function<?> mainFunction = BuildFunctions.build(code, complexTypeRoot);
+				Function<?> mainFunction = BuildFunctions.build(complexRoot, complexTypeRoot);
 				if(mainFunction != null){
 					return new Main(){
 						@Override
@@ -67,6 +71,11 @@ public class Build{
 							else{
 								// TODO exception ...
 							}
+						}
+
+						@Override
+						public TypeComplex getRootTyp() {
+							return complexTypeRoot;
 						}
 					};
 				}

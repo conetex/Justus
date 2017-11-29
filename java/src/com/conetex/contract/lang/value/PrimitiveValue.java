@@ -1,15 +1,12 @@
 package com.conetex.contract.lang.value;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
-import com.conetex.contract.lang.type.Type;
-import com.conetex.contract.runNew.Writer;
 
 public abstract class PrimitiveValue<T> implements Value<T>{
 	
@@ -25,8 +22,8 @@ public abstract class PrimitiveValue<T> implements Value<T>{
 	@Override
 	public CodeNode createCodeNode(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a.getLabel().get();
-		Type<?> t = a.getType();
-		String type = t.getName();
+		//Type<?> t = a.getType();
+		//String type = t.getName();
 		T value = this.get();
 		if(value == null) {
 			//CodeNode cn = new CodeNode(Symbols.comValue(), new String[] {name, null, type}, new LinkedList<>());

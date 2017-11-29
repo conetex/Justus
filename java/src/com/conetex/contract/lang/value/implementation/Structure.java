@@ -8,7 +8,6 @@ import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
-import com.conetex.contract.lang.type.Type;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.Value;
@@ -16,7 +15,6 @@ import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
-import com.conetex.contract.runNew.Writer;
 
 public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 
@@ -265,8 +263,8 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	@Override
 	public CodeNode createCodeNode(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a == null ? "n.a." : a.getLabel().get();
-		Type<?> t = a == null ? null : a.getType();
-		String ttype = t == null ? "n.a." : t.getName();
+		//Type<?> t = a == null ? null : a.getType();
+		//String ttype = t == null ? "n.a." : t.getName();
 		
 		List<CodeNode> children = createCodeNodes();
 		
@@ -281,7 +279,15 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		
 		int i = 0;
 		for(Value<?> v : this.values){
-			children.add( v.createCodeNode(this.type.getSubAttribute(i)) );
+			//if(v == null){
+			//	System.err.println("v is null");
+			//}
+			if(this.type == null){
+				System.err.println("this.type is null");
+			}
+			if(v != null){
+				children.add( v.createCodeNode(this.type.getSubAttribute(i)) );
+			}
 			i++;
 		}
 		

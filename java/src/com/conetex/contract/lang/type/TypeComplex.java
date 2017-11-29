@@ -69,6 +69,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	public static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
 			throws AbstractInterpreterException {
 		if(theOrderedIdentifiers.length == 0){
+			//TODO Error
 			return null;
 		}
 		Map<String, Integer> theIndex = new HashMap<>();

@@ -3,10 +3,10 @@ package com.conetex.contract.build;
 import java.util.Map;
 
 import com.conetex.contract.build.BuildTypes.Types;
-import com.conetex.contract.build.CodeModel.BoxValue;
 import com.conetex.contract.build.CodeModel.BoxType;
-import com.conetex.contract.build.CodeModel.BoxValueImp;
 import com.conetex.contract.build.CodeModel.BoxTypeImp;
+import com.conetex.contract.build.CodeModel.BoxValue;
+import com.conetex.contract.build.CodeModel.BoxValueImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.AttributeComplex;

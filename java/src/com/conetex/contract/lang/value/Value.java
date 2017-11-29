@@ -7,7 +7,6 @@ import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
-import com.conetex.contract.runNew.Writer;
 
 public interface Value<T> {
 

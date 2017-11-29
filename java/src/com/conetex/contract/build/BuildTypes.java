@@ -7,11 +7,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.conetex.contract.build.CodeModel.BoxType;
-import com.conetex.contract.build.CodeModel.BoxFun;
-import com.conetex.contract.build.CodeModel.BoxValue;
-import com.conetex.contract.build.CodeModel.BoxTypeImp;
 import com.conetex.contract.build.CodeModel.BoxFunImp;
+import com.conetex.contract.build.CodeModel.BoxType;
+import com.conetex.contract.build.CodeModel.BoxTypeImp;
+import com.conetex.contract.build.CodeModel.BoxValue;
 import com.conetex.contract.build.CodeModel.BoxValueImp;
 import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
@@ -246,6 +245,37 @@ public class BuildTypes{
 		void run(CodeNode node, TypeComplex parent) throws AbstractInterpreterException;
 	}
 
+	public static CodeNode getComplexRoot(CodeNode n) throws AbstractInterpreterException {
+		String contractName = n.getParameter(Symbols.paramName());
+		for(CodeNode c : n.getChildNodes()){
+			if( c.getCommand() == Symbols.comComplex() && contractName.equals(c.getParameter(Symbols.paramName())) ){
+				return c;
+			}
+		}
+		return n;
+	}
+	public static CodeNode getValueRoot(CodeNode n) throws AbstractInterpreterException {
+		String contractName = n.getParameter(Symbols.paramName());
+		for(CodeNode c : n.getChildNodes()){
+			if( c.getCommand() == Symbols.comVirtualCompValue() && contractName.equals(c.getParameter(Symbols.paramName())) ){
+				return c;
+			}
+		}
+		return n;
+	}
+	
+	public static List<TypeComplex> _createContract(CodeNode n) throws AbstractInterpreterException {
+		String contractName = n.getParameter(Symbols.paramName());
+		CodeNode root = n;
+		for(CodeNode c : n.getChildNodes()){
+			if( c.getCommand() == Symbols.comComplex() && contractName.equals(c.getParameter(Symbols.paramName())) ){
+				root = c;
+				break;
+			}
+		}
+		return createComplexTypes(root);
+	}
+	
 	public static List<TypeComplex> createComplexTypes(CodeNode n) throws AbstractInterpreterException {
 		TypeComplex.clearInstances();
 		Map<String, TypeComplex> unformedComplexTypes = new HashMap<>();
@@ -300,20 +330,15 @@ public class BuildTypes{
 
 	public static TypeComplex createComplexType(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes, Set<String> _referringComplexTypeNames)
 			throws AbstractInterpreterException {
-		String typeName = n.getParameter(Symbols.paramName());
-		if(typeName == null){
+		if(n == null){
 			// TODO Exception
-			System.err.println("no typeName for complex");
+			System.err.println("no node");
 			return null;
-		}
-		if(parent != null){
-			typeName = parent.getName() + "." + typeName;
-		}
+		}		
+		String typeName = CodeNode.getTypSubstr( n.getParameter(Symbols.paramName()), parent );
 
 		System.out.println("createComplexType " + typeName);
-		if(typeName.endsWith("contract4u")){
-			System.out.println("createComplexType " + typeName);
-		}
+
 		List<Attribute<?>> identifiers = new LinkedList<>();
 		// Map<String, Attribute<?>> functions = new HashMap<>();
 
@@ -333,11 +358,27 @@ public class BuildTypes{
 			if(n.getCommand() == TypeComplexOfFunction.staticGetCommand()){
 				complexType = TypeComplexOfFunction.createInit(typeName, theOrderedIdentifiers);
 			}
-			else if(n.getCommand() == TypeComplex.staticGetCommand()){
+			/*
+			else if(n.getCommand() == Symbols.comvirtualPrimValue()){  
+				complexType = TypeComplexOfFunction.createInit(typeName, theOrderedIdentifiers);
+			}
+			*/
+			else if(n.getCommand() == TypeComplex.staticGetCommand()){  
 				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
 			}			
+			/*
+			else if(n.getCommand() == Symbols.comVirtualCompValue()){  
+				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+			}
+			*/
+			else if(n.getCommand() == Symbols.comContract()){
+				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+				//complexType = Types.contract.complexCreate(n, null, unformedComplexTypes);
+			}	
+			
 			else{
 				// TODO error...
+				System.err.println("mist unbekannter tag!");
 				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
 			}
 

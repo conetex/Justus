@@ -68,7 +68,7 @@ public class TypePrimitive<T> extends Type<T>{
 			String unifiedName = Symbols.CLASS_SIZED_ASCII + maxSizeStr;
 			if((re = TypePrimitive.instances.get(unifiedName)) == null){
 				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
-				re = new TypePrimitive<>(SizedASCII.class, String.class, new PrimitiveValueFactory<String>(){
+				re = new TypePrimitive<>(valImplClass, SizedASCII.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
 					public Value<String> createValueImp(CodeNode theNode) {
 						// TODO new
@@ -83,7 +83,7 @@ public class TypePrimitive<T> extends Type<T>{
 			String unifiedName = Symbols.CLASS_MAIL_ADDRESS + maxSizeStr;
 			if((re = TypePrimitive.instances.get(unifiedName)) == null){
 				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
-				re = new TypePrimitive<>(MailAddress.class, String.class, new PrimitiveValueFactory<String>(){
+				re = new TypePrimitive<>(valImplClass, MailAddress.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
 					public Value<String> createValueImp(CodeNode theNode) {
 						// TODO new
@@ -98,7 +98,7 @@ public class TypePrimitive<T> extends Type<T>{
 			String unifiedName = Symbols.CLASS_BASE64 + maxSizeStr;
 			if((re = TypePrimitive.instances.get(unifiedName)) == null){
 				final int maxSize = TypePrimitive.createGetMaxSize(maxSizeStr);
-				re = new TypePrimitive<>(Base64.class, String.class, new PrimitiveValueFactory<String>(){
+				re = new TypePrimitive<>(valImplClass, Base64.class, String.class, new PrimitiveValueFactory<String>(){
 					@Override
 					public Value<String> createValueImp(CodeNode theNode) {
 						// TODO new
@@ -109,17 +109,21 @@ public class TypePrimitive<T> extends Type<T>{
 			TypePrimitive.createPut(valImplClass, unifiedName, re);
 		}
 
+		if(re == null){
+			// TODO exception
+			System.err.println("Problem ...");
+		}
 		return re;
 	}
 
 	public static void init() {
 		// TODO new
-		TypePrimitive.instances.put(Symbols.CLASS_BINT, new TypePrimitive<>(BigInt.class, BigInteger.class, BigInt::new));
+		TypePrimitive.instances.put(Symbols.CLASS_BINT, new TypePrimitive<>(Symbols.CLASS_BINT, BigInt.class, BigInteger.class, BigInt::new));
 
 		// TODO new
-		TypePrimitive.instances.put(Symbols.CLASS_LNG, new TypePrimitive<>(Lng.class, Long.class, Lng::new));
+		TypePrimitive.instances.put(Symbols.CLASS_LNG, new TypePrimitive<>(Symbols.CLASS_LNG, Lng.class, Long.class, Lng::new));
 
-		TypePrimitive.instances.put(Symbols.CLASS_INT, new TypePrimitive<>(Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
+		TypePrimitive.instances.put(Symbols.CLASS_INT, new TypePrimitive<>(Symbols.CLASS_INT, Int.class, Integer.class, new PrimitiveValueFactory<Integer>(){
 			@Override
 			public Int createValueImp(CodeNode theNode) {
 				// TODO new
@@ -127,7 +131,7 @@ public class TypePrimitive<T> extends Type<T>{
 			}
 		}));
 
-		TypePrimitive.instances.put(Symbols.CLASS_BOOL, new TypePrimitive<>(Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>(){
+		TypePrimitive.instances.put(Symbols.CLASS_BOOL, new TypePrimitive<>(Symbols.CLASS_BOOL, Bool.class, Boolean.class, new PrimitiveValueFactory<Boolean>(){
 			@Override
 			public Bool createValueImp(CodeNode theNode) {
 				// TODO new
@@ -139,6 +143,8 @@ public class TypePrimitive<T> extends Type<T>{
 	private final Class<? extends Value<T>> valueImplementClass;
 
 	private final Class<T> rawTypeClass;
+	
+	private final String name;
 
 	// private final Class<Value.Interface<T>> clazz;
 
@@ -212,14 +218,15 @@ public class TypePrimitive<T> extends Type<T>{
 
 	// private PrimitiveDataType(Class<Value.Interface<T>> theClass,
 	// ValueFactory<T> theFactory){
-	private TypePrimitive(Class<? extends Value<T>> theImplementClass, Class<T> theRawTypeClass, PrimitiveValueFactory<T> theFactory) {
+	private TypePrimitive(String theName, Class<? extends Value<T>> theImplementClass, Class<T> theRawTypeClass, PrimitiveValueFactory<T> theFactory) {
 		this.valueImplementClass = theImplementClass;
 		this.rawTypeClass = theRawTypeClass;
 		this.factory = theFactory;
+		this.name = theName;
 	}
 
 	public String getName() {
-		return Symbols.litSimpleTypeNS() + this.getValueImplementClass().getSimpleName();
+		return Symbols.litSimpleTypeNS() + this.name;//this.getValueImplementClass().getSimpleName();
 	}
 
 	public Value<T> createValue(CodeNode theNode) {

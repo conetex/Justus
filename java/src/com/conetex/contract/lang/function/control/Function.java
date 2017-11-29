@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.conetex.contract.build.Cast;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
@@ -177,6 +178,7 @@ public class Function<V> extends Accessible<V>{
 			System.err.println("duplicate function " + theName);
 			return null;
 		}
+		
 		List<ReturnAbstract<Object>> returns = getReturns(theSteps, Object.class);
 		Function<Object> re = new Function<>(theSteps, returns, theName, Object.class);
 		Function.instancesVoid.put(theName, re);

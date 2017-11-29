@@ -7,6 +7,7 @@ import com.conetex.contract.build.CodeModel.EggAbstr;
 import com.conetex.contract.build.CodeModel.EggAbstrImp;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
+import com.conetex.contract.lang.type.TypeComplex;
 
 public class CodeNode{
 
@@ -56,6 +57,29 @@ public class CodeNode{
 		return CodeNode.getParameter(this.getCommand(), p, this);
 	}
 
+	public static String getTypSubstr(String typeName, TypeComplex parent){
+		if(typeName == null){
+			// TODO Exception
+			System.err.println("no typeName for complex");
+			return null;
+		}
+		if(parent != null){
+			String[] typeNames = TypeComplex.splitRight(typeName);
+			if(typeNames[1] != null && typeNames[0] != null){
+				if(typeNames[0].equals(parent.getName())){
+					typeName = typeNames[1];
+				}
+				else{
+					// TODO Error
+					System.err.println("typeName passt nicht zum parent");
+					return null;
+				}
+			}
+			return parent.getName() + "." + typeName;
+		}
+		return typeName;
+	}
+	
 	private static void checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
 
 		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(c);
