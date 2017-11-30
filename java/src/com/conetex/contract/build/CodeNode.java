@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.conetex.contract.build.CodeModel.EggAbstr;
-import com.conetex.contract.build.CodeModel.EggAbstrImp;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.TypeComplex;
@@ -80,7 +79,7 @@ public class CodeNode{
 		return typeName;
 	}
 	
-	private static void checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
+	private static void __checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
 
 		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(c);
 		if(commands == null){
@@ -118,74 +117,6 @@ public class CodeNode{
 
 	private final List<CodeNode> children;
 
-	public static CodeNode _create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {
-		return _create(command, theNameAttribute, theValue, theType, new LinkedList<>());
-	}
-
-	private static CodeNode _create(String commandOrg, String theNameAttributeOrg, String theValue, String theType, List<CodeNode> theChildren)
-			throws UnknownCommandParameter, UnknownCommand {
-
-		String command = commandOrg;
-		String theNameAttribute = theNameAttributeOrg;
-
-		if(command == null || command.length() == 0){
-			return null;
-		}
-
-		List<EggAbstr<?>> x = EggAbstrImp.getInstance(commandOrg);
-		if(x == null){
-			//if (!(isType(theName) || isFunction(theName) || isAttribute(theName) || isAttributeInitialized(theName) || isBuildInFunction(theName))) {
-			if(theNameAttribute == null){
-				theNameAttribute = command;
-				if(theValue == null){
-					command = Symbols.comVirtualCompValue();
-				}
-				else{
-					command = Symbols.comvirtualPrimValue();
-				}
-			}
-		}
-
-		if(theNameAttribute == null){
-			if(theValue == null){
-				if(theType == null){
-					checkParameter(command, null);
-					return new CodeNode(command, null, theChildren);
-				}
-				else{
-					checkParameter(command, new String[] { Symbols.paramType() });
-					return new CodeNode(command, new String[] { theType }, theChildren);
-				}
-			}
-			else if(theType == null){
-				checkParameter(command, new String[] { Symbols.paramValue() });
-				return new CodeNode(command, new String[] { theValue }, theChildren);
-			}
-			else{
-				checkParameter(command, new String[] { Symbols.paramValue(), Symbols.paramType() });
-				return new CodeNode(command, new String[] { theValue, theType }, theChildren);
-			}
-		}
-		else if(theValue == null){
-			if(theType == null){
-				checkParameter(command, new String[] { Symbols.paramName() });
-				return new CodeNode(command, new String[] { theNameAttribute }, theChildren);
-			}
-			else{
-				checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramType() });
-				return new CodeNode(command, new String[] { theNameAttribute, theType }, theChildren);
-			}
-		}
-		else if(theType == null){
-			checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue() });
-			return new CodeNode(command, new String[] { theNameAttribute, theValue }, theChildren);
-		}
-		else{
-			checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
-			return new CodeNode(command, new String[] { theNameAttribute, theValue, theType }, theChildren);
-		}
-	}
-
 	public CodeNode(String theCommand, String[] theParams, List<CodeNode> theChildren) {
 		this.command = theCommand;
 		this.parameters = theParams;
@@ -195,68 +126,6 @@ public class CodeNode{
 	public String getCommand() {
 		return this.command;
 	}
-
-	/*
-	public String _getName() throws UnknownCommandParameter, UnknownCommand {
-		return this.getParameter(CommandParameterSymbols.NAME);
-	}
-	
-	public String _getValue() throws UnknownCommandParameter, UnknownCommand {
-		return this.getParameter(CommandParameterSymbols.VALUE);
-	}
-	
-	public String _getType() throws UnknownCommandParameter, UnknownCommand {
-		return this.getParameter(CommandParameterSymbols.TYPE);
-	}
-	
-	private static boolean isType(String theCommand) {
-		if (theCommand.equals(Symbol.COMPLEX)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private static boolean isFunction(String theCommand) {
-		if (theCommand.equals(Symbol.FUNCTION)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private static boolean isAttribute(String theCommand) {
-		return theCommand.equals(Symbol.ATTRIBUTE);
-	}
-	
-	private static boolean isAttributeInitialized(String theCommand) {
-		return theCommand.equals(Symbol.VALUE);
-	}
-	
-	private static boolean isBuildInFunction(String thiscommand) {
-		if (thiscommand.equals(Symbol.PLUS) || thiscommand.equals(Symbol.MINUS) || thiscommand.equals(Symbol.TIMES) || thiscommand.equals(Symbol.DIVIDED_BY)
-				|| thiscommand.equals(Symbol.REMAINS) || thiscommand.equals(Symbol.SMALLER) || thiscommand.equals(Symbol.GREATER)
-				|| thiscommand.equals(Symbol.EQUAL) || thiscommand.equals(Symbol.AND) || thiscommand.equals(Symbol.OR) || thiscommand.equals(Symbol.XOR)
-				|| thiscommand.equals(Symbol.NOT) || thiscommand.equals(Symbol.REFERENCE) || thiscommand.equals(Symbol.COPY)
-				|| thiscommand.equals(Symbol.FUNCTION) || thiscommand.equals(Symbol.RETURN) || thiscommand.equals(Symbol.CALL) || thiscommand.equals(Symbol.IF)
-				|| thiscommand.equals(Symbol.LOOP) || thiscommand.equals("then") || thiscommand.equals("else") || thiscommand.equals(Symbol.INT)) {
-			return true;
-		}
-		return false;
-	}
-	
-	private static boolean isValue(String thiscommand) {
-		if (isType(thiscommand) ||
-		// isFunction(thiscommand) ||
-				isAttribute(thiscommand) ||
-				// isAttributeInitialized(thiscommand) ||
-				isBuildInFunction(thiscommand)) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-	
-	*/
 
 	public CodeNode getChildElementByIndex(int index) {
 		if(this.children == null){

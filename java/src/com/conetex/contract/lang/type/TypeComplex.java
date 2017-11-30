@@ -162,7 +162,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		System.out.println("complexname: " + this.name);
 
 		Attribute<?> aFun = TypeComplexOfFunction.getAttribute(this.name + "." + aName);
-		// Attribute<?> aFun1 = this._functions.get(aName);
+		
 		if(aFun != null){
 			return aFun;
 		}
@@ -186,7 +186,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 				if(names[1] != null){
 
 					aFun = TypeComplexOfFunction.getAttribute(this.name + "." + names[0]);
-					// Attribute<?> aFun2 = this._functions.get(names[0]);
+					
 					if(aFun != null){
 						Type<?> dt = aFun.getType();
 						if(dt != null){

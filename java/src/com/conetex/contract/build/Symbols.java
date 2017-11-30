@@ -2,6 +2,9 @@ package com.conetex.contract.build;
 
 public class Symbols{
 
+	public static final String NAME_SEPERATOR = ".";
+	
+	
 	private static final String SIMPLE_TYPE_NS = "t:";
 	private static final String TYPE_SEPERATOR = ".";
 	public static final String[] PARAM_AFFIXES = new String[] { "(", ")", "_", "-" };

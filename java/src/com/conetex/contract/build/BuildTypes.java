@@ -4,14 +4,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import com.conetex.contract.build.CodeModel.BoxFunImp;
 import com.conetex.contract.build.CodeModel.BoxType;
 import com.conetex.contract.build.CodeModel.BoxTypeImp;
-import com.conetex.contract.build.CodeModel.BoxValue;
-import com.conetex.contract.build.CodeModel.BoxValueImp;
 import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.lang.function.Accessible;
@@ -52,42 +48,6 @@ public class BuildTypes{
 			public abstract Accessible<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException;
 
 		}
-
-		// TODO 1 anmelden wie complex
-		static final CompBox _functions_in_complex = new CompBox("complex"){
-
-			@Override
-			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
-
-				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
-
-				return this.functionCreateImpl(thisNode, thisType);
-			}
-
-			// this is just to create functions of complex
-			public Accessible<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
-				List<CodeNode> children = thisNode.getChildNodes();
-				for(CodeNode c : children){
-					this.functionCreateChild(c, thisType);
-				}
-				return null;
-			}
-
-		};
-		
-		// TODO 1 anmelden wie complex
-		static final BoxValue<Structure, Object> _values_in_complex = new BoxValueImp<Structure, Object>("complex"){
-
-		};
-		
-		static final BoxType<Structure, Object> _complex = new BoxTypeImp<Structure, Object>("complex"){
-
-			@Override
-			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
-				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
-			}
-
-		};
 		
 		static final ComplexImp complex = new ComplexImp("complex"){
 
@@ -123,7 +83,7 @@ public class BuildTypes{
 
 			@Override
 			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
-				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
 
 	
@@ -149,16 +109,7 @@ public class BuildTypes{
 
 				return this.functionCreateImpl(thisNode, thisType);
 			}
-
-			// this is just to create functions of complex
-			public Function<Structure> _functionCreateImpl_(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
-				List<CodeNode> children = thisNode.getChildNodes();
-				for(CodeNode c : children){
-					this.functionCreateChild(c, thisType);
-				}
-				return null;
-			}
-
+			
 			public Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, thisType, this);
 				if(theSteps == null){
@@ -192,7 +143,7 @@ public class BuildTypes{
 
 			@Override
 			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
-				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
 		}
 		
@@ -264,22 +215,10 @@ public class BuildTypes{
 		return n;
 	}
 	
-	public static List<TypeComplex> _createContract(CodeNode n) throws AbstractInterpreterException {
-		String contractName = n.getParameter(Symbols.paramName());
-		CodeNode root = n;
-		for(CodeNode c : n.getChildNodes()){
-			if( c.getCommand() == Symbols.comComplex() && contractName.equals(c.getParameter(Symbols.paramName())) ){
-				root = c;
-				break;
-			}
-		}
-		return createComplexTypes(root);
-	}
-	
 	public static List<TypeComplex> createComplexTypes(CodeNode n) throws AbstractInterpreterException {
 		TypeComplex.clearInstances();
 		Map<String, TypeComplex> unformedComplexTypes = new HashMap<>();
-		Set<String> referringComplexTypeNames = new TreeSet<>();
+		//Set<String> referringComplexTypeNames = new TreeSet<>();
 		List<TypeComplex> re = new LinkedList<>();
 
 		Recursive<Run> recursive = new Recursive<>();
@@ -292,7 +231,7 @@ public class BuildTypes{
 				}
 			}
 		};
-		TypeComplex complexTypeRoot = createComplexType(n, null, unformedComplexTypes, referringComplexTypeNames);
+		TypeComplex complexTypeRoot = createComplexType(n, null, unformedComplexTypes);
 		if(complexTypeRoot != null){
 			re.add(complexTypeRoot);
 			recursive.function.run(n, complexTypeRoot);
@@ -311,24 +250,10 @@ public class BuildTypes{
 			return null;
 		}
 
-		boolean error = false;
-		for(String typeName : referringComplexTypeNames){
-			System.out.println("createComplexList referenced complex Type " + typeName);
-			if(TypeComplex.getInstance(typeName) == null){
-				error = true;
-				System.err.println("createComplexList unkown Complex: " + typeName);
-				// TODO throw Exception: wir kennen einen Typen nicht ...
-			}
-		}
-		if(error){
-			TypeComplex.clearInstances();
-			return null;
-		}
-
 		return re;
 	}
 
-	public static TypeComplex createComplexType(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes, Set<String> _referringComplexTypeNames)
+	public static TypeComplex createComplexType(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		if(n == null){
 			// TODO Exception

@@ -29,16 +29,6 @@ public abstract class Type<T> {
 		return AttributePrimitive.create(theName, thisObj);
 	}
 
-	public static Attribute<Value<?>[]> _createAttribute2(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
-		if(theName == null || theName.get() == null){
-			throw new NullLabelException(Type.class.getName() + "._createAttribute2()");
-		}
-		if(theName.get().length() < 1){
-			throw new EmptyLabelException(Type.class.getName() + "._createAttribute2()");
-		}
-		return null;// AttributeComplex.create(theName, thisObj);
-	}
-
 	static Attribute<Structure> createAttribute(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
 		if(theName == null || theName.get() == null){
 			throw new NullLabelException(Type.class.getName() + ".createAttribute()");

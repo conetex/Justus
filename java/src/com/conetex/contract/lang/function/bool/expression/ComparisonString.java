@@ -11,10 +11,6 @@ public class ComparisonString extends Accessible<Boolean>{
 	private static final int	EQUAL	= 0;
 	private static final int	GREATER	= 1;
 
-	public static Accessible<Boolean> _createNew(Accessible<String> theA, Accessible<String> theB, String name) {
-		return create(theA, theB, name);
-	}
-
 	public static ComparisonString create(Accessible<String> theA, Accessible<String> theB, String operation) {
 		if(theA == null || theB == null){
 			return null;

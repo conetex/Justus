@@ -62,11 +62,11 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		if(aName == null){
 			return re;
 		}
-		int i = aName.indexOf(Label.NAME_SEPERATOR);
+		int i = aName.indexOf(Symbols.NAME_SEPERATOR);
 		if(i > -1 && i < aName.length()){
 			re[0] = aName.substring(0, i);
-			if(i + Label.NAME_SEPERATOR.length() < aName.length()){
-				re[1] = aName.substring(i + Label.NAME_SEPERATOR.length());
+			if(i + Symbols.NAME_SEPERATOR.length() < aName.length()){
+				re[1] = aName.substring(i + Symbols.NAME_SEPERATOR.length());
 			}
 		}
 		return re;

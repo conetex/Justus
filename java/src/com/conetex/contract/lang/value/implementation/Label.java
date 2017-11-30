@@ -9,7 +9,7 @@ public class Label extends SizedASCII{
 		super(theNode, Constants.labelSize());
 	}
 
-	public static final String NAME_SEPERATOR = ".";
+	
 
 	@Override
 	public Label cloneValue() {

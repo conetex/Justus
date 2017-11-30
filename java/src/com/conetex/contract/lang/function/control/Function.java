@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.conetex.contract.build.Cast;
-import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.control.ReturnAbstract.Result;

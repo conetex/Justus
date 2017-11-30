@@ -393,79 +393,13 @@ public class BuildFunctions{
 			@Override
 			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes)
 					throws AbstractInterpreterException {
-				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
+				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
 			
 		}
 		
-		public static abstract class FunBox extends BoxFunImp<Object, Object>{
-
-			FunBox(String name) {
-				super(name);
-			}
-
-			@Override
-			public Function<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
-
-				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
-
-				return this.functionCreateImpl(thisNode, thisType);
-			}
-
-			protected abstract Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException;
-
-		}
-
 		static final FunctionClass whatEver = new FunctionClass("whatEverFunction");
-		static final FunBox _whatEver = new FunBox("whatEverFunction"){
-			@Override
-			public Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
-				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, thisType, this);
-				if(theSteps == null){
-					System.err.println("no steps ");
-				}
-				Class<?> returntype = Function.getReturnTyp(theSteps);
-				if(returntype == String.class){
-					return null;
-				}
-				else if(returntype == Boolean.class){
-					return Function.createBool(theSteps, thisNode.getParameter(Symbols.paramName()));
-				}
-				else if(Number.class.isAssignableFrom(returntype)){
-					return Function.createNum(theSteps, thisNode.getParameter(Symbols.paramName()), returntype);
-				}
-				else if(returntype == Structure.class){
-					return Function.createStructure(theSteps, thisNode.getParameter(Symbols.paramName()));
-				}
-				else if(returntype == Object.class){
-					return Function.createVoid(theSteps, thisNode.getParameter(Symbols.paramName()));
-				}
-				System.err.println("unknown return type " + returntype);
-				return null;
-			}
 
-			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
-				String idTypeName = null;
-				String idName = null;
-				idTypeName = c.getParameter(Symbols.paramType());
-				idName = c.getParameter(Symbols.paramName());
-				// referringComplexTypeNames.add(typeName + "." + idTypeName);//
-				// TODO BUG !!!
-				// Attribute<?> fun =
-				TypeComplexOfFunction.createAttributeFun(idName, idTypeName, unformedComplexTypes);
-				return null;
-			}
-
-			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
-				System.out.println("createValues " + thisNode.getCommand());
-				return BuildValues.createValue4Function(thisNode, parentType, parentData);
-			}
-
-			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
-				return BuildTypes.createComplexType(n, parent, unformedComplexTypes, null);
-			}
-
-		};
 
 	}
 
