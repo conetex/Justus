@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.conetex.contract.build.CodeModel.EggAbstr;
+import com.conetex.contract.build.CodeModel.EggAbstrImp;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.TypeComplex;
@@ -78,6 +79,74 @@ public class CodeNode{
 		}
 		return typeName;
 	}
+	
+	public static CodeNode __create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {
+		return __create(command, theNameAttribute, theValue, theType, new LinkedList<>());
+	}
+
+	private static CodeNode __create(String commandOrg, String theNameAttributeOrg, String theValue, String theType, List<CodeNode> theChildren)
+			throws UnknownCommandParameter, UnknownCommand {
+
+		String command = commandOrg;
+		String theNameAttribute = theNameAttributeOrg;
+
+		if(command == null || command.length() == 0){
+			return null;
+		}
+
+		List<EggAbstr<?>> x = EggAbstrImp.getInstance(commandOrg);
+		if(x == null){
+			//if (!(isType(theName) || isFunction(theName) || isAttribute(theName) || isAttributeInitialized(theName) || isBuildInFunction(theName))) {
+			if(theNameAttribute == null){
+				theNameAttribute = command;
+				if(theValue == null){
+					command = Symbols.comVirtualCompValue();
+				}
+				else{
+					command = Symbols.comvirtualPrimValue();
+				}
+			}
+		}
+
+		if(theNameAttribute == null){
+			if(theValue == null){
+				if(theType == null){
+					__checkParameter(command, null);
+					return new CodeNode(command, null, theChildren);
+				}
+				else{
+					__checkParameter(command, new String[] { Symbols.paramType() });
+					return new CodeNode(command, new String[] { theType }, theChildren);
+				}
+			}
+			else if(theType == null){
+				__checkParameter(command, new String[] { Symbols.paramValue() });
+				return new CodeNode(command, new String[] { theValue }, theChildren);
+			}
+			else{
+				__checkParameter(command, new String[] { Symbols.paramValue(), Symbols.paramType() });
+				return new CodeNode(command, new String[] { theValue, theType }, theChildren);
+			}
+		}
+		else if(theValue == null){
+			if(theType == null){
+				__checkParameter(command, new String[] { Symbols.paramName() });
+				return new CodeNode(command, new String[] { theNameAttribute }, theChildren);
+			}
+			else{
+				__checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramType() });
+				return new CodeNode(command, new String[] { theNameAttribute, theType }, theChildren);
+			}
+		}
+		else if(theType == null){
+			__checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue() });
+			return new CodeNode(command, new String[] { theNameAttribute, theValue }, theChildren);
+		}
+		else{
+			__checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
+			return new CodeNode(command, new String[] { theNameAttribute, theValue, theType }, theChildren);
+		}
+	}	
 	
 	private static void __checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
 
