@@ -49,7 +49,7 @@ public class AttributePrimitive<T> extends Attribute<T>{
 		String name = this.label.get();
 		String typeN = this.type.getName();
 		String[] p = new String[] { name, null, typeN };
-		CodeNode cn = new CodeNode(Symbols.comValue(), p, new LinkedList<>());
+		CodeNode cn = new CodeNode(theParent.getComplex(), Symbols.comValue(), p, new LinkedList<>());// TODO so korrekt?
 		return this.type.createValue(cn);
 	}
 	

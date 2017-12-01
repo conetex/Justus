@@ -16,6 +16,7 @@ import com.conetex.contract.build.exceptionFunction.DuplicateIdentifierNameExept
 import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
 import com.conetex.contract.build.exceptionFunction.NullIdentifierException;
 import com.conetex.contract.build.exceptionFunction.NullLabelException;
+import com.conetex.contract.build.exceptionFunction.UnknownComplexType;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Label;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -25,6 +26,14 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 	private static final Map<String, TypeComplex> allInstances = new HashMap<>();
 
+	public static TypeComplex getInstanceNoNull(String typeName) throws UnknownComplexType {
+		TypeComplex parentTypeOfFunction = allInstances.get(typeName);
+		if(parentTypeOfFunction == null){
+			throw new UnknownComplexType(typeName);						
+		}	
+		return parentTypeOfFunction;
+	}
+	
 	public static TypeComplex getInstance(String typeName) {
 		return allInstances.get(typeName);
 	}
@@ -281,21 +290,6 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return Structure.create(this, theParent);// ,
 	}
 
-	public static String[] splitRight(String aName) {
-		String[] re = new String[2];
-		if(aName == null){
-			return re;
-		}
-		int i = aName.lastIndexOf(Symbols.litTypeSeperator());
-		if(i > -1 && i < aName.length()){
-			re[0] = aName.substring(0, i);
-			if(i + Symbols.litTypeSeperator().length() < aName.length()){
-				re[1] = aName.substring(i + Symbols.litTypeSeperator().length());
-			}
-		}
-		return re;
-	}
-
 	@Override
 	public Class<Structure> getRawTypeClass() {
 		return Structure.class;
@@ -309,24 +303,24 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return Symbols.comComplex();
 	}
 	
-	public CodeNode createCodeNode() {
+	public CodeNode createCodeNode(TypeComplex parent) {
 		String name = this.name;
 		
 		List<CodeNode> children = new LinkedList<>();
 		
 		for(Attribute<?> a : this.orderedAttributes){
-			children.add( a.persist() );
+			children.add( a.persist(this) );
 		}
 		
 		for(TypeComplex tc : TypeComplex.getInstances()){
 			String typeName = tc.getName();
 			
-			String[] typeNameTokens = TypeComplex.splitRight(typeName);
-			if(typeNameTokens[0] == null){
+			String typeNameParent = Symbols.getParentName(typeName);
+			if(typeNameParent == null){
 				continue;
 			}
-			if(this.name.equals( typeNameTokens[0] )){
-				CodeNode cnTyps = tc.createCodeNode();
+			if(this.name.equals( typeNameParent )){
+				CodeNode cnTyps = tc.createCodeNode(this);
 				children.add( cnTyps );
 			}
 
@@ -348,7 +342,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		}
 		*/
 
-		CodeNode cn = new CodeNode(this.getCommand(), new String[] {name}, children);
+		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {name}, children);
 		
 		return cn;
 	}

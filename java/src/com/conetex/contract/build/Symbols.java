@@ -1,7 +1,42 @@
 package com.conetex.contract.build;
 
+import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+
 public class Symbols{
 
+	public static String[] splitRight(String aName) {
+		String[] re = new String[2];
+		if(aName == null){
+			return re;
+		}
+		int i = aName.lastIndexOf(Symbols.litTypeSeperator());
+		if(i > -1 && i < aName.length()){
+			re[0] = aName.substring(0, i);
+			if(i + Symbols.litTypeSeperator().length() < aName.length()){
+				re[1] = aName.substring(i + Symbols.litTypeSeperator().length());
+			}
+		}
+		return re;
+	}
+	
+	public static String getParentNameNoNull(String aName) throws AbstractInterpreterException {
+		String re = getParentName(aName);
+		if(re == null){
+			throw new AbstractInterpreterException("can not extract parent name from " + aName);						
+		}
+		return re;
+	}
+	
+	public static String getParentName(String aName) {
+		String[] re = splitRight(aName);
+		return re[0];
+	}
+
+	public static String getSimpleName(String aName) {
+		String[] re = splitRight(aName);
+		return re[0];
+	}
+	
 	public static final String NAME_SEPERATOR = ".";
 	
 	

@@ -5,12 +5,27 @@ import java.util.List;
 
 import com.conetex.contract.build.CodeModel.EggAbstr;
 import com.conetex.contract.build.CodeModel.EggAbstrImp;
+import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.TypeComplex;
 
 public class CodeNode{
 
+	
+	private static CodeNode root;
+
+	public static void init(CodeNode code) throws AbstractInterpreterException {
+		if(code == null){
+			throw new AbstractInterpreterException("no root of syntax tree");
+		}
+		CodeNode.root = code;
+	}
+	
+	public static CodeNode getTreeRoot() {
+		return CodeNode.root;
+	}
+	
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		return thisObj.parameters[ getParameterIdx(c, p, thisObj) ];
 	}
@@ -64,7 +79,7 @@ public class CodeNode{
 			return null;
 		}
 		if(parent != null){
-			String[] typeNames = TypeComplex.splitRight(typeName);
+			String[] typeNames = Symbols.splitRight(typeName);
 			if(typeNames[1] != null && typeNames[0] != null){
 				if(typeNames[0].equals(parent.getName())){
 					typeName = typeNames[1];
@@ -186,12 +201,24 @@ public class CodeNode{
 
 	private final List<CodeNode> children;
 
-	public CodeNode(String theCommand, String[] theParams, List<CodeNode> theChildren) {
+	public CodeNode(TypeComplex parent, String theCommand, String[] theParams, List<CodeNode> theChildren) {
+		this.command = theCommand;
+		this.parameters = theParams;
+		this.children = theChildren;
+	}
+	
+	public CodeNode(String parent, String theCommand, String[] theParams, List<CodeNode> theChildren) {
 		this.command = theCommand;
 		this.parameters = theParams;
 		this.children = theChildren;
 	}
 
+	private CodeNode(String theCommand, String[] theParams, List<CodeNode> theChildren) {
+		this.command = theCommand;
+		this.parameters = theParams;
+		this.children = theChildren;
+	}
+	
 	public String getCommand() {
 		return this.command;
 	}
@@ -233,5 +260,7 @@ public class CodeNode{
 			this.parameters[ getParameterIdx(this.command, p, this) ] = x.toString();			
 		}
 	}
+
+
 
 }

@@ -103,7 +103,7 @@ class ReadXML {
 				short typOfNode = children.item(i).getNodeType();
 				if (typOfNode == Node.ELEMENT_NODE) {
 					if (main == null) {
-						CodeNode r2 = createSyntaxNode(r);
+						CodeNode r2 = createSyntaxNode("", r);
 						main = Build.create(r2);
 					}
 					else {
@@ -144,90 +144,108 @@ class ReadXML {
 		}
 	}
 
-	private static CodeNode createSyntaxNode(Node n) {
+	private static CodeNode createSyntaxNode(String parentName, Node n) {
 
 		short typOfNode = n.getNodeType();
 		if (typOfNode != Node.ELEMENT_NODE) {
 			return null;
 		}
-
-		List<CodeNode> children = new LinkedList<>();
-		NodeList xmlChildren = n.getChildNodes();
-		for (int i = 0; i < xmlChildren.getLength(); i++) {
-			Node c = xmlChildren.item(i);
-			CodeNode child = createSyntaxNode(c);
-			if (child != null) {
-				children.add(child);
-			}
-		}
-
+		
 		String commandStr = n.getNodeName();
 		StringBuilder errors = new StringBuilder(commandStr + " missing params: ");
-		NamedNodeMap attributes = n.getAttributes();
 		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(commandStr);
-		if (commands == null) {
+		
+		String thisName = "";
+		
+		if(commands == null){
 			String theValue = ReadXMLtools.getNodeValue(n);
 			if (theValue == null) {
-				return new CodeNode(Symbols.comVirtualCompValue(), new String[] { commandStr }, children);
+				return new CodeNode(parentName, Symbols.comVirtualCompValue(), new String[] { commandStr }, createChildren(thisName, n));
 			}
 			else {
-				return new CodeNode(Symbols.comvirtualPrimValue(), new String[] { commandStr, theValue }, children);
+				return new CodeNode(parentName, Symbols.comvirtualPrimValue(), new String[] { commandStr, theValue }, createChildren(thisName, n));
 			}
 		}
-
-		// TODO Sortierung ist nicht getestet...
-		commands.sort((o1, o2) -> {
-			if (o1.getParameterCount() < o2.getParameterCount()) {
-				return -1;
-			}
-			else {
-				if (o1.getParameterCount() == o2.getParameterCount()) {
-					return 0;
+		else {			
+			// TODO Sortierung ist nicht getestet...
+			commands.sort((o1, o2) -> {
+				if (o1.getParameterCount() < o2.getParameterCount()) {
+					return -1;
 				}
 				else {
-					return 1;
+					if (o1.getParameterCount() == o2.getParameterCount()) {
+						return 0;
+					}
+					else {
+						return 1;
+					}
 				}
-			}
-		});
-		List<String> attributeList = new LinkedList<>();
-		outerLoop: for (EggAbstr<?> command : commands) {
-			String[] paramNames = command.getParameterNames();
-			if (paramNames != null) {
-				for (String paramName : paramNames) {
-					Node a = attributes.getNamedItem(paramName);
-					if (a == null) {
-						if (paramName == Symbols.comValue()) {
-							String value = ReadXMLtools.getNodeContent(n);
-							if (value == null) {
+			});
+			NamedNodeMap attributes = n.getAttributes();
+			String[] theParams = null;
+			List<String> attributeList = new LinkedList<>();
+			outerLoop: for (EggAbstr<?> command : commands) {
+				String[] paramNames = command.getParameterNames();
+				if (paramNames != null) {
+					for (String paramName : paramNames) {
+						Node a = attributes.getNamedItem(paramName);
+						if (a == null) {
+							if (paramName == Symbols.comValue()) {
+								String value = ReadXMLtools.getNodeContent(n);
+								if (value == null) {
+									errors.append(paramName).append(", ");
+									attributeList.clear();
+									continue outerLoop;
+								}
+								else {
+									attributeList.add(value);
+								}
+							}
+							else {
 								errors.append(paramName).append(", ");
 								attributeList.clear();
 								continue outerLoop;
 							}
-							else {
-								attributeList.add(value);
-							}
 						}
 						else {
-							errors.append(paramName).append(", ");
-							attributeList.clear();
-							continue outerLoop;
+							if(paramName.equals(Symbols.paramName())){
+								if(parentName == null || parentName.equals("")){
+									thisName = a.getNodeValue();									
+								}
+								else{
+									thisName = parentName + Symbols.NAME_SEPERATOR + a.getNodeValue();									
+								}
+								attributeList.add(thisName);
+							}
+							else{
+								attributeList.add(a.getNodeValue());
+							}
 						}
 					}
-					else {
-						attributeList.add(a.getNodeValue());
-					}
+					theParams = new String[attributeList.size()];
+					attributeList.toArray(theParams);
+					return new CodeNode(parentName, commandStr, theParams, createChildren(thisName, n));
 				}
-				String[] theParams = new String[attributeList.size()];
-				attributeList.toArray(theParams);
-				return new CodeNode(commandStr, theParams, children);
-			}
-			else {
-				return new CodeNode(commandStr, new String[0], children);
-			}
+				else {
+					return new CodeNode(parentName, commandStr, new String[0], createChildren(thisName, n));
+				}
+			}	
 		}
 		System.err.println(errors);
 		return null;
-
+	}
+	
+	private static List<CodeNode> createChildren(String thisName, Node n){
+		List<CodeNode> children = new LinkedList<>();
+		NodeList xmlChildren = n.getChildNodes();
+		for (int i = 0; i < xmlChildren.getLength(); i++) {
+			Node c = xmlChildren.item(i);
+			CodeNode child = createSyntaxNode(thisName, c);
+			if (child != null) {
+				children.add(child);
+			}
+		}
+		return children;
 	}
 
 }

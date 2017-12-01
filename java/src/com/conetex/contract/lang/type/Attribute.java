@@ -24,11 +24,18 @@ public abstract class Attribute<T> {
 		TypeComplex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);
 		while(id == null){// suche nach oben ...
+			String parentTypName = Symbols.getParentName(typName);
+			if(parentTypName == null){
+				break;
+			}
+			typName = parentTypName;
+			/*
 			String[] names = TypeComplex.splitRight(typName);
 			if(names[0] == null){
 				break;
 			}
 			typName = names[0];
+			*/
 			pTyp = TypeComplex.getInstance(typName);
 			if(pTyp == null){
 				break;
@@ -47,11 +54,11 @@ public abstract class Attribute<T> {
 		return t.getRawTypeClass();
 	}
 
-	public CodeNode persist() {
+	public CodeNode persist(TypeComplex parent) {
 		String name = this.getLabel().get();
 		String type = this.getType().getName();
 		
-		CodeNode cn = new CodeNode(Symbols.comAttribute(), new String[] {name, type}, new LinkedList<>());
+		CodeNode cn = new CodeNode(parent, Symbols.comAttribute(), new String[] {name, type}, new LinkedList<>());
 		
 		return cn;
 	}

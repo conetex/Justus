@@ -21,6 +21,7 @@ public class Build{
 
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
 		TypePrimitive.init();
+		CodeNode.init(code);
 		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
 		CodeNode complexRoot = BuildTypes.getComplexRoot(code);
 		List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(complexRoot);
@@ -41,7 +42,7 @@ public class Build{
 						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException {
 							mainFunction.getFromRoot(rootStructure);
 							if(w != null){
-								CodeNode cnTyps = complexTypeRoot.createCodeNode();
+								CodeNode cnTyps = complexTypeRoot.createCodeNode(null);
 								w.write(cnTyps);
 								/*
 								for(TypeComplex tc : TypeComplex.getInstances()){
@@ -59,7 +60,7 @@ public class Build{
 								}
 								*/			
 								Attribute<?> r = complexTypeRoot.createComplexAttribute(complexTypeRoot.getName());
-								CodeNode cnVal = rootStructure.createCodeNode(r);
+								CodeNode cnVal = rootStructure.createCodeNode(null, r);
 								w.write(cnVal);								
 								/*
 								List<CodeNode> cnVals = rootStructure.createCodeNodes();

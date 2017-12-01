@@ -180,16 +180,16 @@ public class TypeComplexOfFunction extends TypeComplex{
 		return Symbols.comFunction();
 	}
 	
-	public CodeNode createCodeNode() {
+	public CodeNode createCodeNode(TypeComplex parent) {
 		String name = super.name;
 		
 		List<CodeNode> children = new LinkedList<>();
 		
 		for(Attribute<?> a : super.orderedAttributes){
-			children.add( a.persist() );
+			children.add( a.persist(this) );
 		}
 
-		CodeNode cn = new CodeNode(this.getCommand(), new String[] {name, name}, children);
+		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {name, name}, children);
 		
 		return cn;
 	}

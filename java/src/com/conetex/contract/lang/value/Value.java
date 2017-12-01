@@ -4,6 +4,7 @@ import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
+import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
@@ -24,6 +25,6 @@ public interface Value<T> {
 
 	Value<T> cloneValue() throws Invalid;
 
-	CodeNode createCodeNode(Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
+	CodeNode createCodeNode(TypeComplex parent, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
 	
 }

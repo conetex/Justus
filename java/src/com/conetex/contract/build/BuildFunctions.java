@@ -281,9 +281,12 @@ public class BuildFunctions{
 
 	static class Fun{
 
-		static final BoxFun<Object, Object> noReturn = new BoxFunImp<Object, Object>("voidFunction"){
+		static class NoReturn extends BoxFunImp<Object, Object>{
+			NoReturn(String theName) {
+				super(theName);
+			}
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if(returntype == Object.class){
@@ -299,11 +302,15 @@ public class BuildFunctions{
 																			// exception
 				return null;
 			}
-		};
+		}
+		static final NoReturn noReturn = new NoReturn("voidFunction");
 
-		static final BoxFun<Structure, Object> structure = new BoxFunImp<Structure, Object>("objFunction"){
+		static class StructureReturn extends BoxFunImp<Structure, Object>{
+			StructureReturn(String theName) {
+				super(theName);
+			}
 			@Override
-			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if(returntype == Structure.class){
@@ -311,21 +318,29 @@ public class BuildFunctions{
 				}
 				System.err.println("unknown return type " + returntype);
 				return null;
-			}
-		};
+			}			
+		}
+		static final StructureReturn structure = new StructureReturn("objFunction");
 
-		static final BoxFun<Number, Object> number = new BoxFunImp<Number, Object>("numberFunction"){
+		static class NumberReturn extends BoxFunImp<Number, Object>{
+			NumberReturn(String theName) {
+				super(theName);
+			}
 			@Override
-			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				return Function.createNum(theSteps, thisNode.getParameter(Symbols.paramName()), returntype);
-			}
-		};
+			}			
+		}
+		static final NumberReturn number = new NumberReturn("numberFunction");
 
-		static final BoxFun<Boolean, Object> bool = new BoxFunImp<Boolean, Object>("boolFunction"){
+		static class BoolReturn extends BoxFunImp<Boolean, Object>{
+			BoolReturn(String theName) {
+				super(theName);
+			}
 			@Override
-			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if(returntype == Boolean.class){
@@ -333,8 +348,9 @@ public class BuildFunctions{
 				}
 				System.err.println("unknown return type " + returntype);
 				return null;
-			}
-		};
+			}			
+		}
+		static final BoolReturn bool = new BoolReturn("boolFunction");
 
 		static class FunctionClass extends BoxValueTypeFunImp<Object, Object>{
 
@@ -349,7 +365,7 @@ public class BuildFunctions{
 			}
 
 			@Override
-			public Accessible<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
 
 				//return this.functionCreateImpl(thisNode, thisType);
@@ -374,7 +390,7 @@ public class BuildFunctions{
 					return Function.createVoid(theSteps, thisNode.getParameter(Symbols.paramName()));
 				}
 				System.err.println("unknown return type " + returntype);
-				return null;
+				throw new AbstractInterpreterException("unknown return type " + returntype);
 			}
 
 			@Override
@@ -404,6 +420,33 @@ public class BuildFunctions{
 	}
 
 	static class FunCall{
+
+		static CodeNode getFunctionNode(String functionName) throws FunctionNotFound, UnknownCommandParameter, UnknownCommand{
+			CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
+			if(fNode == null){
+				throw new FunctionNotFound(functionName);						
+			}
+			return fNode;
+		}
+	
+		static CodeNode getFunctionNode(CodeNode n, String functionName) throws UnknownCommandParameter, UnknownCommand{
+			if( n.getCommand() == Symbols.comFunction() ){
+				if( functionName.equals( n.getParameter(Symbols.paramName()) ) ){
+					System.out.println("Treffer ... " + n.getParameter(Symbols.paramName()));
+					return n;
+				}
+				else{
+					System.out.println("kein Treffer ... " + n.getParameter(Symbols.paramName()));
+				}
+			}			
+			for(CodeNode c : n.getChildNodes()){
+				CodeNode re = getFunctionNode(c, functionName);
+				if(re != null){
+					return re;
+				}
+			}
+			return null;
+		}		
 		
 		static final EggFun<Object> voidCall = new EggFunImp<Object>("voidCall"){
 			@Override
@@ -413,14 +456,17 @@ public class BuildFunctions{
 				if(re == null){
 					throw new NoAccessToValue(thisNode.getParameter(Symbols.paramType()));
 				}
+				String functionName = thisNode.getParameter(Symbols.paramName());
 				Function<?> e = Function.getInstanceVoid(thisNode.getParameter(Symbols.paramName()));
 				if(e == null){
-					throw new FunctionNotFound(thisNode.getParameter(Symbols.paramName()));
+					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					e = Fun.noReturn.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
 		};
-
+		
 		static final EggFun<Object> whatEverCall = new EggFunImp<Object>("whatEverCall"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
@@ -429,9 +475,12 @@ public class BuildFunctions{
 				if(re == null){
 					throw new NoAccessToValue(thisNode.getParameter(Symbols.paramType()));
 				}
-				Function<?> e = Function.getInstance(thisNode.getParameter(Symbols.paramName()));
+				String functionName = thisNode.getParameter(Symbols.paramName());
+				Function<?> e = Function.getInstance( functionName );
 				if(e == null){
-					throw new FunctionNotFound(thisNode.getParameter(Symbols.paramName()));
+					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					e = Fun.whatEver.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
@@ -445,9 +494,12 @@ public class BuildFunctions{
 				if(re == null){
 					throw new NoAccessToValue(thisNode.getParameter(Symbols.paramType()));
 				}
-				Function<? extends Structure> e = Function.getInstanceStructure(thisNode.getParameter(Symbols.paramName()));
+				String functionName = thisNode.getParameter(Symbols.paramName());
+				Function<? extends Structure> e = Function.getInstanceStructure(functionName);
 				if(e == null){
-					throw new FunctionNotFound(thisNode.getParameter(Symbols.paramName()));
+					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					e = Fun.structure.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
@@ -462,9 +514,12 @@ public class BuildFunctions{
 				if(re == null){
 					throw new NoAccessToValue(thisNode.getParameter(Symbols.paramType()));
 				}
-				Function<? extends Number> e = Function.getInstanceNum(thisNode.getParameter(Symbols.paramName()));
+				String functionName = thisNode.getParameter(Symbols.paramName());
+				Function<? extends Number> e = Function.getInstanceNum(functionName);
 				if(e == null){
-					throw new FunctionNotFound(thisNode.getParameter(Symbols.paramName()));
+					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					e = Fun.number.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
@@ -479,9 +534,12 @@ public class BuildFunctions{
 				if(re == null){
 					throw new NoAccessToValue(thisNode.getParameter(Symbols.paramType()));
 				}
-				Function<Boolean> e = Function.getInstanceBool(thisNode.getParameter(Symbols.paramName()));
+				String functionName = thisNode.getParameter(Symbols.paramName());
+				Function<Boolean> e = Function.getInstanceBool( functionName );
 				if(e == null){
-					throw new FunctionNotFound(thisNode.getParameter(Symbols.paramName()));
+					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					e = Fun.bool.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
@@ -596,6 +654,9 @@ public class BuildFunctions{
 
 		//return 
 		//Types.complex.functionCreateImpl(thisNode, thisType); 
+		Types.contract.functionCreateImpl(thisNode, thisType);
+		Function.outAllInstances();
+		
 		//return Fun.whatEver.functionCreateImpl(thisNode, thisType);
 		return Types.contract.functionCreateImpl(thisNode, thisType);
 		
@@ -764,6 +825,11 @@ public class BuildFunctions{
 			System.err.println("createFunctions: no parent for " + thisNode.getParameter(Symbols.paramName()));
 			return null;
 		}
+		if(thisNode == null){
+			// TODO throw
+			System.err.println("createFunctions: no node " );
+			return null;
+		}		
 		String typeName = CodeNode.getTypSubstr( thisNode.getParameter(Symbols.paramName()), parentTyp );
 		TypeComplex type = TypeComplex.getInstance(typeName);
 		if(type == null){

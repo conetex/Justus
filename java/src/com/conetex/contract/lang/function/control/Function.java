@@ -80,7 +80,26 @@ public class Function<V> extends Accessible<V>{
 		if(fvoid != null){
 			return fvoid;
 		}
+		
 		return null;
+	}
+	
+	public static void outAllInstances() {
+		for(String x : instancesNum.keySet()){
+			System.out.println("ich kenn num " + x);
+		}
+		for(String x : instancesBoolean.keySet()){
+			System.out.println("ich kenn bool " + x);
+		}
+		for(String x : instancesString.keySet()){
+			System.out.println("ich kenn str " + x);
+		}
+		for(String x : instancesStructure.keySet()){
+			System.out.println("ich kenn struct " + x);
+		}		
+		for(String x : instancesVoid.keySet()){
+			System.out.println("ich kenn void " + x);
+		}		
 	}
 
 	public static Function<? extends Number> createNum(Accessible<?>[] theSteps, String theName, Class<?> theRawTypeClass) throws CastException {

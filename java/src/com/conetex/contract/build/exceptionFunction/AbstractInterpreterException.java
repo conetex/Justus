@@ -11,7 +11,7 @@ public class AbstractInterpreterException extends Exception{
 		super(msg, cause);
 	}
 
-	protected AbstractInterpreterException(String msg) {
+	public AbstractInterpreterException(String msg) {
 		super(msg);
 	}
 
