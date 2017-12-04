@@ -85,7 +85,7 @@ class ReadXML {
 							// ist alles xml-driven...
 
 		String fileExtension = ".xml";
-		String inFile = "input02";
+		String inFile = "input02_out";
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile + fileExtension)) {
 
@@ -104,7 +104,11 @@ class ReadXML {
 				if (typOfNode == Node.ELEMENT_NODE) {
 					if (main == null) {
 						CodeNode r2 = createSyntaxNode("", r);
-						main = Build.create(r2);
+						
+						createChildren("", r);
+						
+						
+						//main = Build.create(r2);
 					}
 					else {
 						System.err.println("more than one root element! can not proceed!");
@@ -144,6 +148,16 @@ class ReadXML {
 		}
 	}
 
+	private static CodeNode createSyntaxNode(Node n) {
+		
+		NamedNodeMap attributes = n.getAttributes();
+		Node a = attributes.getNamedItem(Symbols.paramName());
+		String contractName = a.getNodeValue();	
+		hier weiter
+		return null;
+		
+	}
+	
 	private static CodeNode createSyntaxNode(String parentName, Node n) {
 
 		short typOfNode = n.getNodeType();
@@ -210,12 +224,24 @@ class ReadXML {
 						else {
 							if(paramName.equals(Symbols.paramName())){
 								if(parentName == null || parentName.equals("")){
-									thisName = a.getNodeValue();									
+									thisName = a.getNodeValue();	
+									attributeList.add(thisName);
 								}
 								else{
-									thisName = parentName + Symbols.NAME_SEPERATOR + a.getNodeValue();									
+									// nur bei complex / function
+									thisName = parentName + Symbols.NAME_SEPERATOR + Symbols.getSimpleName( a.getNodeValue() );
+									if(thisName.equals("contract4u.contract4u")){
+										System.err.println("upps");
+									}
+									
+									
+									if(commandStr == Symbols.comFunction()){
+										attributeList.add(thisName);
+									}
+									else{
+										attributeList.add(a.getNodeValue());
+									}
 								}
-								attributeList.add(thisName);
 							}
 							else{
 								attributeList.add(a.getNodeValue());

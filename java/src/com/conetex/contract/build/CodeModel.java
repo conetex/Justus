@@ -903,7 +903,6 @@ public class CodeModel{
 		// TODO das gilt doch auch für alle anderen Functions ...
 
 		
-		
 		Types.complex.contains(FunCall.whatEverCall);
 		Types.complex.contains(Assign.whatEverAssigment);
 		Types.complex.contains(Control.loop);

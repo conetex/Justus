@@ -34,7 +34,10 @@ public class Symbols{
 
 	public static String getSimpleName(String aName) {
 		String[] re = splitRight(aName);
-		return re[0];
+		if(re[1] == null){
+			return aName;
+		}
+		return re[1];
 	}
 	
 	public static final String NAME_SEPERATOR = ".";

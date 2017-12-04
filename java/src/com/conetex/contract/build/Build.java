@@ -18,17 +18,17 @@ import com.conetex.contract.runNew.Main;
 import com.conetex.contract.runNew.Writer;
 
 public class Build{
-
+	
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
 		TypePrimitive.init();
-		CodeNode.init(code);
+		CodeNode.init(code); hier weiter
 		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
-		CodeNode complexRoot = BuildTypes.getComplexRoot(code);
+		CodeNode complexRoot = BuildTypes.getComplexRoot(code); hier weiter
 		List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(complexRoot);
 		
 		System.out.println("Builder " + code.getCommand());
 		if(complexTyps != null){
-			CodeNode valueRoot = BuildTypes.getValueRoot(code);
+			CodeNode valueRoot = BuildTypes.getValueRoot(code); hier weiter
 			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
 			if(rootStructure != null){

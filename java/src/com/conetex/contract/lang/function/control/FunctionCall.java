@@ -64,7 +64,8 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		// TODO der cast ist scheisse
 		// ComplexFunction z =
 		// x.getComplexFunction(this.function.name);//(ComplexFunction)(y.getType());
-		TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(x.getName() + "." + this.function.getName());
+		//TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(x.getName() + "." + this.function.getName());
+		TypeComplexOfFunction z = TypeComplexOfFunction.getInstance(this.function.getName());
 		return getFromComplexFun(z, obj);
 
 		// return this.function.getFrom(thisObject);
@@ -72,6 +73,9 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 
 	private V getFromComplexFun(TypeComplexOfFunction z, Structure obj) throws AbstractRuntimeException {
 
+		if(z == null){
+			System.err.println("was geht denn jetze hier?");
+		}
 		Structure thisObject = z.utilizeStructure(obj); // .prototype;//thisObject.getStructure(this.name);
 
 		if(thisObject == null){

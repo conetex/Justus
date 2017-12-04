@@ -56,8 +56,8 @@
 
 
     
-	<call type="instance.schuldne" name="tuWas" />
-	<call type="instance.glaeubig" name="tuWas" />
+	<call type="instance.schuldne" name="contract4u.root.person.tuWas" />
+	<call type="instance.glaeubig" name="contract4u.root.person.tuWas" />
 	<!-- <call type="instance.glaeubig" name="tuWas" object="instance.glaeubig" function="tuWas" /> -->
 	
 <!-- FUNCTION OK -->	
@@ -95,9 +95,9 @@
 	   <ref>foo.param</ref>
 	   <ref>param</ref>
 	</copy>   
-    <call name="foo" type='contract4u' />
+    <call name="contract4u.foo" type='contract4u' />
 	
-	<call name="foo" type='contract4u'>
+	<call name="contract4u.foo" type='contract4u'>
     	<Integer name="param">13</Integer>
     </call>
 	
@@ -112,7 +112,7 @@
 	    </return>		             
     </function>
         
-    <call name="foo2" type='contract4u'>
+    <call name="contract4u.foo2" type='contract4u'>
     	<Integer name="param">6</Integer>
     	<Integer name="param2">5</Integer>  
     </call>

@@ -654,8 +654,8 @@ public class BuildFunctions{
 
 		//return 
 		//Types.complex.functionCreateImpl(thisNode, thisType); 
-		Types.contract.functionCreateImpl(thisNode, thisType);
-		Function.outAllInstances();
+		//Types.contract.functionCreateImpl(thisNode, thisType);
+		//Function.outAllInstances();
 		
 		//return Fun.whatEver.functionCreateImpl(thisNode, thisType);
 		return Types.contract.functionCreateImpl(thisNode, thisType);
@@ -757,7 +757,14 @@ public class BuildFunctions{
 	}
 
 	static List<AbstractAssigment<?>> createAssigs(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
-		String path2FunctionComplex = n.getParameter(Symbols.paramType()) + "." + n.getParameter(Symbols.paramName());
+		//String functionComplexName = n.getParameter(Symbols.paramName());
+		//functionComplexName = Symbols.getSimpleName(functionComplexName);
+		//String parentComplexPath = parentTyp.getName();
+		//String path2FunctionComplex = n.getParameter(Symbols.paramType()) + "." + n.getParameter(Symbols.paramName());
+		//String path2FunctionComplex = parentComplexPath + "." + functionComplexName;
+		
+		String path2FunctionComplex = n.getParameter(Symbols.paramName());
+				
 		TypeComplex functionComplex = TypeComplex.getInstance(path2FunctionComplex); // z ...
 
 		List<AbstractAssigment<?>> assig = new LinkedList<>();

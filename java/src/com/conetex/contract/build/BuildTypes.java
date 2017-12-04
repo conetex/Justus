@@ -164,11 +164,13 @@ public class BuildTypes{
 				else{
 					if(idTypeName.startsWith(Symbols.litSimpleTypeNS())){
 						// Simple
+						idName = Symbols.getSimpleName(idName);
 						id = TypePrimitive.createAttribute(idName, idTypeName.substring(Symbols.litSimpleTypeNS().length()));
 					}
 					else{
 						// Complex
 						// referringComplexTypeNames.add(idTypeName);
+						idName = Symbols.getSimpleName(idName);
 						id = TypeComplex.createAttribute(idName, idTypeName, unformedComplexTypes);
 					}
 				}
