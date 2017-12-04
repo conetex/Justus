@@ -16,17 +16,20 @@ public class Symbols{
 				re[1] = aName.substring(i + Symbols.litTypeSeperator().length());
 			}
 		}
-		return re;
-	}
-	
-	public static String getParentNameNoNull(String aName) throws AbstractInterpreterException {
-		String re = getParentName(aName);
-		if(re == null){
-			throw new AbstractInterpreterException("can not extract parent name from " + aName);						
+		else {
+			re[1] = aName;
 		}
 		return re;
 	}
-	
+
+	public static String getParentNameNoNull(String aName) throws AbstractInterpreterException {
+		String re = getParentName(aName);
+		if(re == null){
+			throw new AbstractInterpreterException("can not extract parent name from " + aName);
+		}
+		return re;
+	}
+
 	public static String getParentName(String aName) {
 		String[] re = splitRight(aName);
 		return re[0];
@@ -34,15 +37,15 @@ public class Symbols{
 
 	public static String getSimpleName(String aName) {
 		String[] re = splitRight(aName);
-		if(re[1] == null){
-			return aName;
-		}
+		//if(re[1] == null){
+			//return aName;
+		//}
 		return re[1];
 	}
-	
+
 	public static final String NAME_SEPERATOR = ".";
-	
-	
+
+
 	private static final String SIMPLE_TYPE_NS = "t:";
 	private static final String TYPE_SEPERATOR = ".";
 	public static final String[] PARAM_AFFIXES = new String[] { "(", ")", "_", "-" };
@@ -93,7 +96,7 @@ public class Symbols{
 
 	// boolean expression for checks commands
 	private static final String COM_ISNULL = "isNull";
-	
+
 	// math elementary arithmetic commands
 	private static final String COM_PLUS = "plus"; // Addition
 	private static final String COM_MINUS = "minus"; // Subtraction
@@ -113,11 +116,11 @@ public class Symbols{
 	private static final String PARAM_VALUE = "value";
 	private static final String PARAM_TYPE = "type";
 
-	
-	
-	
-	
-	
+
+
+
+
+
 	public static String litSimpleTypeNS() {
 		return SIMPLE_TYPE_NS;
 	}

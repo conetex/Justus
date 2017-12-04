@@ -104,11 +104,11 @@ class ReadXML {
 				if (typOfNode == Node.ELEMENT_NODE) {
 					if (main == null) {
 						CodeNode r2 = createSyntaxNode("", r);
-						
+
 						createChildren("", r);
-						
-						
-						//main = Build.create(r2);
+
+
+						main = Build.create(r2);
 					}
 					else {
 						System.err.println("more than one root element! can not proceed!");
@@ -127,7 +127,7 @@ class ReadXML {
 				Document odoc = odocumentBuilder.newDocument();
 				Element root = odoc.createElement(Symbols.comContract());
 				root.setAttribute(Symbols.paramName(), main.getRootTyp().getName());
-				
+
 				odoc.appendChild(root);
 
 				Writer w = new XmlWriter(odoc, root);
@@ -149,28 +149,28 @@ class ReadXML {
 	}
 
 	private static CodeNode createSyntaxNode(Node n) {
-		
+
 		NamedNodeMap attributes = n.getAttributes();
 		Node a = attributes.getNamedItem(Symbols.paramName());
-		String contractName = a.getNodeValue();	
+		String contractName = a.getNodeValue();
 		hier weiter
 		return null;
-		
+
 	}
-	
+
 	private static CodeNode createSyntaxNode(String parentName, Node n) {
 
 		short typOfNode = n.getNodeType();
 		if (typOfNode != Node.ELEMENT_NODE) {
 			return null;
 		}
-		
+
 		String commandStr = n.getNodeName();
 		StringBuilder errors = new StringBuilder(commandStr + " missing params: ");
 		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(commandStr);
-		
+
 		String thisName = "";
-		
+
 		if(commands == null){
 			String theValue = ReadXMLtools.getNodeValue(n);
 			if (theValue == null) {
@@ -180,7 +180,7 @@ class ReadXML {
 				return new CodeNode(parentName, Symbols.comvirtualPrimValue(), new String[] { commandStr, theValue }, createChildren(thisName, n));
 			}
 		}
-		else {			
+		else {
 			// TODO Sortierung ist nicht getestet...
 			commands.sort((o1, o2) -> {
 				if (o1.getParameterCount() < o2.getParameterCount()) {
@@ -224,7 +224,7 @@ class ReadXML {
 						else {
 							if(paramName.equals(Symbols.paramName())){
 								if(parentName == null || parentName.equals("")){
-									thisName = a.getNodeValue();	
+									thisName = a.getNodeValue();
 									attributeList.add(thisName);
 								}
 								else{
@@ -233,8 +233,8 @@ class ReadXML {
 									if(thisName.equals("contract4u.contract4u")){
 										System.err.println("upps");
 									}
-									
-									
+
+
 									if(commandStr == Symbols.comFunction()){
 										attributeList.add(thisName);
 									}
@@ -255,12 +255,12 @@ class ReadXML {
 				else {
 					return new CodeNode(parentName, commandStr, new String[0], createChildren(thisName, n));
 				}
-			}	
+			}
 		}
 		System.err.println(errors);
 		return null;
 	}
-	
+
 	private static List<CodeNode> createChildren(String thisName, Node n){
 		List<CodeNode> children = new LinkedList<>();
 		NodeList xmlChildren = n.getChildNodes();

@@ -102,7 +102,7 @@ public class BuildFunctions{
 	}
 
 	static class Reference{
-		
+
 		static final EggFun<Object> whatEverRef = new EggFunImp<Object>("whatEverRef"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
@@ -318,7 +318,7 @@ public class BuildFunctions{
 				}
 				System.err.println("unknown return type " + returntype);
 				return null;
-			}			
+			}
 		}
 		static final StructureReturn structure = new StructureReturn("objFunction");
 
@@ -331,7 +331,7 @@ public class BuildFunctions{
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				return Function.createNum(theSteps, thisNode.getParameter(Symbols.paramName()), returntype);
-			}			
+			}
 		}
 		static final NumberReturn number = new NumberReturn("numberFunction");
 
@@ -348,7 +348,7 @@ public class BuildFunctions{
 				}
 				System.err.println("unknown return type " + returntype);
 				return null;
-			}			
+			}
 		}
 		static final BoolReturn bool = new BoolReturn("boolFunction");
 
@@ -411,9 +411,9 @@ public class BuildFunctions{
 					throws AbstractInterpreterException {
 				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
-			
+
 		}
-		
+
 		static final FunctionClass whatEver = new FunctionClass("whatEverFunction");
 
 
@@ -424,12 +424,12 @@ public class BuildFunctions{
 		static CodeNode getFunctionNode(String functionName) throws FunctionNotFound, UnknownCommandParameter, UnknownCommand{
 			CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
 			if(fNode == null){
-				throw new FunctionNotFound(functionName);						
+				throw new FunctionNotFound(functionName);		// throw new UnknownCommand("function not defined " + functionName);
 			}
 			return fNode;
 		}
-	
-		static CodeNode getFunctionNode(CodeNode n, String functionName) throws UnknownCommandParameter, UnknownCommand{
+
+		private static CodeNode getFunctionNode(CodeNode n, String functionName) throws UnknownCommandParameter, UnknownCommand{
 			if( n.getCommand() == Symbols.comFunction() ){
 				if( functionName.equals( n.getParameter(Symbols.paramName()) ) ){
 					System.out.println("Treffer ... " + n.getParameter(Symbols.paramName()));
@@ -438,7 +438,7 @@ public class BuildFunctions{
 				else{
 					System.out.println("kein Treffer ... " + n.getParameter(Symbols.paramName()));
 				}
-			}			
+			}
 			for(CodeNode c : n.getChildNodes()){
 				CodeNode re = getFunctionNode(c, functionName);
 				if(re != null){
@@ -446,8 +446,8 @@ public class BuildFunctions{
 				}
 			}
 			return null;
-		}		
-		
+		}
+
 		static final EggFun<Object> voidCall = new EggFunImp<Object>("voidCall"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
@@ -459,14 +459,14 @@ public class BuildFunctions{
 				String functionName = thisNode.getParameter(Symbols.paramName());
 				Function<?> e = Function.getInstanceVoid(thisNode.getParameter(Symbols.paramName()));
 				if(e == null){
-					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
-					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					CodeNode fNode = getFunctionNode(functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.noReturn.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
 		};
-		
+
 		static final EggFun<Object> whatEverCall = new EggFunImp<Object>("whatEverCall"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
@@ -478,8 +478,8 @@ public class BuildFunctions{
 				String functionName = thisNode.getParameter(Symbols.paramName());
 				Function<?> e = Function.getInstance( functionName );
 				if(e == null){
-					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
-					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					CodeNode fNode = getFunctionNode(functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.whatEver.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
@@ -497,8 +497,8 @@ public class BuildFunctions{
 				String functionName = thisNode.getParameter(Symbols.paramName());
 				Function<? extends Structure> e = Function.getInstanceStructure(functionName);
 				if(e == null){
-					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
-					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					CodeNode fNode = getFunctionNode(functionName);
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.structure.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
@@ -518,7 +518,7 @@ public class BuildFunctions{
 				Function<? extends Number> e = Function.getInstanceNum(functionName);
 				if(e == null){
 					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
-					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.number.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
@@ -538,7 +538,7 @@ public class BuildFunctions{
 				Function<Boolean> e = Function.getInstanceBool( functionName );
 				if(e == null){
 					CodeNode fNode = getFunctionNode(CodeNode.getTreeRoot(), functionName);
-					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );				
+					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.bool.functionCreate(fNode, parentTypeOfFunction);
 				}
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
@@ -652,14 +652,14 @@ public class BuildFunctions{
 
 	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
 
-		//return 
-		//Types.complex.functionCreateImpl(thisNode, thisType); 
+		//return
+		//Types.complex.functionCreateImpl(thisNode, thisType);
 		//Types.contract.functionCreateImpl(thisNode, thisType);
 		//Function.outAllInstances();
-		
+
 		//return Fun.whatEver.functionCreateImpl(thisNode, thisType);
 		return Types.contract.functionCreateImpl(thisNode, thisType);
-		
+
 	}
 
 	static Accessible<?>[] getFunctionSteps(CodeNode n, TypeComplex type, BoxFun<?, ?> box) throws AbstractInterpreterException {
@@ -670,11 +670,11 @@ public class BuildFunctions{
 			return null;
 		}
 		List<Accessible<?>> steps = new LinkedList<>();
-		
+
 		List<CodeNode> children = n.getChildNodes();
 		for(CodeNode c : children){
 			//if (c.isBuildInFunction() && !c.getCommand().equals(Symbol.FUNCTION)) {
-			
+
 			Accessible<?> v = box.functionCreateChild(c, type);
 			if(v != null){
 				steps.add(v);
@@ -762,9 +762,9 @@ public class BuildFunctions{
 		//String parentComplexPath = parentTyp.getName();
 		//String path2FunctionComplex = n.getParameter(Symbols.paramType()) + "." + n.getParameter(Symbols.paramName());
 		//String path2FunctionComplex = parentComplexPath + "." + functionComplexName;
-		
+
 		String path2FunctionComplex = n.getParameter(Symbols.paramName());
-				
+
 		TypeComplex functionComplex = TypeComplex.getInstance(path2FunctionComplex); // z ...
 
 		List<AbstractAssigment<?>> assig = new LinkedList<>();
@@ -836,7 +836,7 @@ public class BuildFunctions{
 			// TODO throw
 			System.err.println("createFunctions: no node " );
 			return null;
-		}		
+		}
 		String typeName = CodeNode.getTypSubstr( thisNode.getParameter(Symbols.paramName()), parentTyp );
 		TypeComplex type = TypeComplex.getInstance(typeName);
 		if(type == null){

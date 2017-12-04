@@ -143,7 +143,7 @@ public class TypePrimitive<T> extends Type<T>{
 	private final Class<? extends Value<T>> valueImplementClass;
 
 	private final Class<T> rawTypeClass;
-	
+
 	private final String name;
 
 	// private final Class<Value.Interface<T>> clazz;
@@ -202,7 +202,7 @@ public class TypePrimitive<T> extends Type<T>{
 		// TODO new
 		Label str = new Label(null);
 		try{
-			str.set(attributeName);
+			str.set( Symbols.getSimpleName(attributeName) );// TODO MERGE // str.set(attributeName);
 		}
 		catch(Invalid e){
 			// TODO Auto-generated catch block

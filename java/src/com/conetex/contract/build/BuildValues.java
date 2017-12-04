@@ -21,9 +21,10 @@ import com.conetex.contract.lang.value.implementation.Structure;
 class BuildValues{
 
 	static class Values{
-		
+
 		static final BoxType<Object, Object> type_with_value = new BoxTypeImp<Object, Object>("value"){
 
+			// same as in Types.attribute
 			@Override
 			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 				String idTypeName = null;
@@ -53,7 +54,7 @@ class BuildValues{
 			}
 
 		};
-		
+
 		static final BoxValue<Object, Object> value = new BoxValueImp<Object, Object>("value"){
 
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
@@ -62,7 +63,7 @@ class BuildValues{
 			}
 
 		};
-		
+
 		static final BoxValue<Object, Object> valueVirtComp = new BoxValueImp<Object, Object>("VIRTUAL_COMP_VALUE"){
 			public Value<?> valueCreate(CodeNode thisNode, TypeComplex parentType, Structure parentData) throws AbstractInterpreterException {
 				System.out.println("createValues " + thisNode.getCommand());
@@ -76,13 +77,13 @@ class BuildValues{
 				return BuildValues.createValue(thisNode, parentType, parentData);
 			}
 		};
-		
+
 		static final BoxValue<Object, Object> contract = new BoxValueImp<Object, Object>("contract"){
 			// TODO implement
 		};
-		
+
 	}
-		
+
 	public static void createValues(CodeNode n, TypeComplex type, Structure data) throws AbstractInterpreterException {
 		String name = n.getCommand();
 		if(type == null){
@@ -104,7 +105,6 @@ class BuildValues{
 
 		if(id == null){
 			System.err.println("createValue: can not identify " + name);
-			//Here is the breakpoint ..
 			return null;
 		}
 
@@ -113,7 +113,7 @@ class BuildValues{
 			// TODO: ok wir sind uns sicher, dass id den typ Attribute<Structur> hat. Trotzdem, warum funktioniert der cast ohne warnung?
 			// Siehe auch den else-zweig...
 			Structure re = ((AttributeComplex) id).createValue(parentData, n);
-			
+
 			// new
 			createValues(n, (TypeComplex) type, re);
 			parentData.set(name, re);
@@ -143,7 +143,7 @@ class BuildValues{
 			createValues(n, type, re);
 			// TODO hier passier garnix weil parentData keinen platz fuer die funktion hat...
 			parentData.set(name, re);
-			
+
 			type.setPrototype(re);
 
 			return re;

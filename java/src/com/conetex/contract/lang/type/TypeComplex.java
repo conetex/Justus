@@ -29,11 +29,11 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	public static TypeComplex getInstanceNoNull(String typeName) throws UnknownComplexType {
 		TypeComplex parentTypeOfFunction = allInstances.get(typeName);
 		if(parentTypeOfFunction == null){
-			throw new UnknownComplexType(typeName);						
-		}	
+			throw new UnknownComplexType(typeName);
+		}
 		return parentTypeOfFunction;
 	}
-	
+
 	public static TypeComplex getInstance(String typeName) {
 		return allInstances.get(typeName);
 	}
@@ -170,8 +170,9 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		// und hier muss jetzt auch nach functionsstructuren gesucht werden
 		System.out.println("complexname: " + this.name);
 
+aName = Symbols.getSimpleName(aName);// TODO MERGE
 		Attribute<?> aFun = TypeComplexOfFunction.getAttribute(this.name + "." + aName);
-		
+
 		if(aFun != null){
 			return aFun;
 		}
@@ -195,7 +196,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 				if(names[1] != null){
 
 					aFun = TypeComplexOfFunction.getAttribute(this.name + "." + names[0]);
-					
+
 					if(aFun != null){
 						Type<?> dt = aFun.getType();
 						if(dt != null){
@@ -235,7 +236,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		//		// TODO new
 		Label str = new Label(null);
 		try{
-			str.set(aName);
+			str.set( Symbols.getSimpleName(aName) );// TODO MERGE //str.set(aName);
 		}
 		catch(Invalid e){
 			// TODO Auto-generated catch block
@@ -298,23 +299,23 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	public String getCommand() {
 		return TypeComplex.staticGetCommand();
 	}
-	
+
 	public static String staticGetCommand() {
 		return Symbols.comComplex();
 	}
-	
+
 	public CodeNode createCodeNode(TypeComplex parent) {
 		String name = this.name;
-		
+
 		List<CodeNode> children = new LinkedList<>();
-		
+
 		for(Attribute<?> a : this.orderedAttributes){
 			children.add( a.persist(this) );
 		}
-		
+
 		for(TypeComplex tc : TypeComplex.getInstances()){
 			String typeName = tc.getName();
-			
+
 			String typeNameParent = Symbols.getParentName(typeName);
 			if(typeNameParent == null){
 				continue;
@@ -325,11 +326,11 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 			}
 
 		}
-		
+
 		/*
 		for(TypeComplexOfFunction tc : TypeComplexOfFunction.getInstances()){
 			String functionName = tc.getName();
-			
+
 			String[] functionNameTokens = TypeComplex.splitRight(functionName);
 			if(functionNameTokens[0] == null){
 				continue;
@@ -343,7 +344,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		*/
 
 		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {name}, children);
-		
+
 		return cn;
 	}
 
