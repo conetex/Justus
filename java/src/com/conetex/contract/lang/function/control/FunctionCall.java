@@ -43,7 +43,7 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 	}
 
 	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<?>> assig) {
-		super(Symbols.comCall(), new String[]{theExpression.getName(), theReference.getPath()}, new Accessible<?>[]{});
+		super(Symbols.comCall(), new String[]{theExpression.getName(), theReference.getPath()}, assig.toArray(new Accessible<?>[assig.size()]));
 		this.function = theExpression;
 		this.reference = theReference;
 		this.paramAssigments = assig;

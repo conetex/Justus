@@ -6,6 +6,10 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public abstract class ReturnAbstract<T> extends Accessible<T>{
 
+	protected ReturnAbstract(String theCommand, String[] theParameter, Accessible<?>[] theChildren) {
+		super(theCommand, theParameter, theChildren);
+	}
+
 	public static class Result{
 		public boolean toReturn = false;
 	}
