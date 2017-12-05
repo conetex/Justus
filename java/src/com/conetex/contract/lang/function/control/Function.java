@@ -293,6 +293,10 @@ public class Function<V> extends Accessible<V>{
 		this.rawTypeClass = theRawTypeClass;
 	}
 
+	public Accessible<?>[] getSteps(){
+		return this.steps;
+	}
+	
 	public void getFromRoot(Structure thisObject) throws AbstractRuntimeException {
 		System.out.println("Function getFrom " + this.name);
 

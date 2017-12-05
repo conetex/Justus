@@ -12,18 +12,47 @@ import com.conetex.contract.lang.type.TypeComplex;
 
 public class CodeNode{
 
+	private static CodeNode rootComplex;
 	
-	private static CodeNode root;
+	private static CodeNode rootValue;
 
 	public static void init(CodeNode code) throws AbstractInterpreterException {
 		if(code == null){
 			throw new AbstractInterpreterException("no root of syntax tree");
 		}
-		CodeNode.root = code;
+		if(code.getCommand() == Symbols.comContract()){
+			if(code.hasParameter(Symbols.paramName())){
+				CodeNode.rootComplex = code;
+				CodeNode.rootValue = code;
+			}
+			else{
+				for(CodeNode n : code.children){
+					if(n.getCommand() == Symbols.comComplex()){
+						CodeNode.rootComplex = n;
+					}
+					if(n.getCommand() == Symbols.comVirtualCompValue()){
+						CodeNode.rootValue = n;
+					}					
+				}
+				if(CodeNode.rootComplex == null){
+					throw new AbstractInterpreterException("no rootComplex");
+				}
+				if(CodeNode.rootValue == null){
+					throw new AbstractInterpreterException("no rootValue");
+				}				
+			}
+		}
+		else{
+			throw new AbstractInterpreterException("no contract");
+		}		
 	}
 	
-	public static CodeNode getTreeRoot() {
-		return CodeNode.root;
+	public static CodeNode getComplexRoot() {
+		return CodeNode.rootComplex;
+	}
+	
+	public static CodeNode getValueRoot() {
+		return CodeNode.rootValue;
 	}
 	
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
@@ -62,6 +91,19 @@ public class CodeNode{
 			}
 		}
 		throw new UnknownCommandParameter(c + "." + error);
+	}
+	
+	public boolean hasParameter(String p) throws UnknownCommandParameter, UnknownCommand {
+		if(p == null){
+			throw new UnknownCommandParameter("null");
+		}
+		String[] names = this.getParameterNames();
+		for(String n : names){
+			if(n.equals(p)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String[] getParameterNames() throws UnknownCommandParameter, UnknownCommand {

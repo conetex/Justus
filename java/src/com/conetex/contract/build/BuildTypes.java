@@ -198,7 +198,7 @@ public class BuildTypes{
 		void run(CodeNode node, TypeComplex parent) throws AbstractInterpreterException;
 	}
 
-	public static CodeNode getComplexRoot(CodeNode n) throws AbstractInterpreterException {
+	public static CodeNode _getComplexRoot(CodeNode n) throws AbstractInterpreterException {
 		String contractName = n.getParameter(Symbols.paramName());
 		for(CodeNode c : n.getChildNodes()){
 			if( c.getCommand() == Symbols.comComplex() && contractName.equals(c.getParameter(Symbols.paramName())) ){
@@ -207,7 +207,7 @@ public class BuildTypes{
 		}
 		return n;
 	}
-	public static CodeNode getValueRoot(CodeNode n) throws AbstractInterpreterException {
+	public static CodeNode _getValueRoot(CodeNode n) throws AbstractInterpreterException {
 		String contractName = n.getParameter(Symbols.paramName());
 		for(CodeNode c : n.getChildNodes()){
 			if( c.getCommand() == Symbols.comVirtualCompValue() && contractName.equals(c.getParameter(Symbols.paramName())) ){

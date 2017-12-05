@@ -85,7 +85,7 @@ class ReadXML {
 							// ist alles xml-driven...
 
 		String fileExtension = ".xml";
-		String inFile = "input02_out";
+		String inFile = "input02";
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile + fileExtension)) {
 
@@ -105,8 +105,7 @@ class ReadXML {
 					if (main == null) {
 						CodeNode r2 = createSyntaxNode("", r);
 
-						createChildren("", r);
-
+						//createChildren("", r);
 
 						main = Build.create(r2);
 					}
@@ -126,7 +125,7 @@ class ReadXML {
 				DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
 				Document odoc = odocumentBuilder.newDocument();
 				Element root = odoc.createElement(Symbols.comContract());
-				root.setAttribute(Symbols.paramName(), main.getRootTyp().getName());
+				//root.setAttribute(Symbols.paramName(), main.getRootTyp().getName());
 
 				odoc.appendChild(root);
 
@@ -146,16 +145,6 @@ class ReadXML {
 				}
 			}
 		}
-	}
-
-	private static CodeNode createSyntaxNode(Node n) {
-
-		NamedNodeMap attributes = n.getAttributes();
-		Node a = attributes.getNamedItem(Symbols.paramName());
-		String contractName = a.getNodeValue();
-		hier weiter
-		return null;
-
 	}
 
 	private static CodeNode createSyntaxNode(String parentName, Node n) {
@@ -184,14 +173,14 @@ class ReadXML {
 			// TODO Sortierung ist nicht getestet...
 			commands.sort((o1, o2) -> {
 				if (o1.getParameterCount() < o2.getParameterCount()) {
-					return -1;
+					return 1;
 				}
 				else {
 					if (o1.getParameterCount() == o2.getParameterCount()) {
 						return 0;
 					}
 					else {
-						return 1;
+						return -1;
 					}
 				}
 			});
@@ -230,7 +219,7 @@ class ReadXML {
 								else{
 									// nur bei complex / function
 									thisName = parentName + Symbols.NAME_SEPERATOR + Symbols.getSimpleName( a.getNodeValue() );
-									if(thisName.equals("contract4u.contract4u")){
+									if(thisName.equals("root.person.tuWas")){
 										System.err.println("upps");
 									}
 

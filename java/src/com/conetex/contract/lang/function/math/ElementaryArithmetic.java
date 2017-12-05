@@ -17,30 +17,30 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 	private static final int	REMAINS		= 4;	// Remainder
 
 	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB,
-			String operation) {
+			String operation, String theCommand) {
 		if(theA == null || theB == null){
 			return null;
 		}
 		if(operation.equals(Symbols.comPlus())){
-			return createNew(theA, theB, ElementaryArithmetic.PLUS);
+			return createNew(theA, theB, ElementaryArithmetic.PLUS, theCommand);
 		}
 		if(operation.equals(Symbols.comMinus())){
-			return createNew(theA, theB, ElementaryArithmetic.MINUS);
+			return createNew(theA, theB, ElementaryArithmetic.MINUS, theCommand);
 		}
 		if(operation.equals(Symbols.comTimes())){
-			return createNew(theA, theB, ElementaryArithmetic.TIMES);
+			return createNew(theA, theB, ElementaryArithmetic.TIMES, theCommand);
 		}
 		if(operation.equals(Symbols.comDividedBy())){
-			return createNew(theA, theB, ElementaryArithmetic.DIVIDED_BY);
+			return createNew(theA, theB, ElementaryArithmetic.DIVIDED_BY, theCommand);
 		}
 		if(operation.equals(Symbols.comRemains())){
-			return createNew(theA, theB, ElementaryArithmetic.REMAINS);
+			return createNew(theA, theB, ElementaryArithmetic.REMAINS, theCommand);
 		}
 		return null;
 	}
 
 	private static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB,
-			int operation) {
+			int operation, String theCommand) {
 		if(operation < ElementaryArithmetic.PLUS || operation > ElementaryArithmetic.REMAINS){
 			return null;
 		}
@@ -57,7 +57,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		}
 
 		if(inputTyp == BigInteger.class){
-			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation){
+			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation, theCommand){
 				@Override
 				public BigInteger getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -71,7 +71,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 			};
 		}
 		else if(inputTyp == Long.class){
-			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation){
+			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation, theCommand){
 				@Override
 				public Long getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -85,7 +85,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 			};
 		}
 		else if(inputTyp == Integer.class){
-			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation){
+			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation, theCommand){
 				@Override
 				public Integer getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -99,7 +99,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 			};
 		}
 		else if(inputTyp == Byte.class){
-			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation){
+			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation, theCommand){
 				@Override
 				public Byte getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -148,7 +148,8 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 
 	final Accessible<Ib> b;
 
-	ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
+	ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation, String theCommand) {
+		super(theCommand, new String[]{}, new Accessible<?>[]{theA, theB});
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;

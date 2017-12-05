@@ -21,14 +21,14 @@ public class Build{
 	
 	public static Main create(CodeNode code) throws AbstractInterpreterException {
 		TypePrimitive.init();
-		CodeNode.init(code); hier weiter
+		CodeNode.init(code);
 		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
-		CodeNode complexRoot = BuildTypes.getComplexRoot(code); hier weiter
+		CodeNode complexRoot = CodeNode.getComplexRoot();
 		List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(complexRoot);
 		
 		System.out.println("Builder " + code.getCommand());
 		if(complexTyps != null){
-			CodeNode valueRoot = BuildTypes.getValueRoot(code); hier weiter
+			CodeNode valueRoot = CodeNode.getValueRoot();
 			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
 			if(rootStructure != null){
@@ -44,6 +44,9 @@ public class Build{
 							if(w != null){
 								CodeNode cnTyps = complexTypeRoot.createCodeNode(null);
 								w.write(cnTyps);
+								
+								//CodeNode cnFuns = complexTypeRoot.createCodeNode(null);
+								//w.write(cnTyps);
 								/*
 								for(TypeComplex tc : TypeComplex.getInstances()){
 									if( tc.getCommand().equals( TypeComplex.staticGetCommand() ) ){

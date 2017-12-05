@@ -874,6 +874,9 @@ public class CodeModel{
 		Values.contract.means(Symbols.comContract()); // isAttributeInitialized //Symbol.VALUE 
 		Values.contract.registerParameters(new String[] { Symbols.paramName() });
 
+		Types.contract.means(Symbols.comContract()); // isAttributeInitialized //Symbol.VALUE 
+		Types.contract.registerParameters(new String[] { });
+		
 		// TODO this box-object is only a dummy ...
 		Control.then.means(Symbols.comThen());
 		// TODO this box-object is only a dummy ...

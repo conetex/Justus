@@ -2,10 +2,10 @@ package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleValue;
 import com.conetex.contract.lang.function.assign.AbstractAssigment;
-import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -43,6 +43,7 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 	}
 
 	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<?>> assig) {
+		super(Symbols.comCall(), new String[]{theExpression.getName(), theReference.getPath()}, new Accessible<?>[]{});
 		this.function = theExpression;
 		this.reference = theReference;
 		this.paramAssigments = assig;
@@ -59,7 +60,7 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		}
 
 		System.out.println("Function getFrom " + this.function.getName() + " - " + this.reference.getPath());
-		TypeComplex x = obj.getComplex();// .getInstance(this.name);
+		//TypeComplex x = obj.getComplex();// .getInstance(this.name);
 		// Attribute<?> y = x.getFunctionAttribute(this.function.name);
 		// TODO der cast ist scheisse
 		// ComplexFunction z =

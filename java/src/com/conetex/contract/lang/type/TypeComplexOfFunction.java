@@ -14,6 +14,8 @@ import com.conetex.contract.build.exceptionFunction.DublicateComplexException;
 import com.conetex.contract.build.exceptionFunction.DuplicateIdentifierNameExeption;
 import com.conetex.contract.build.exceptionFunction.NullIdentifierException;
 import com.conetex.contract.build.exceptionFunction.PrototypeWasInitialized;
+import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
@@ -189,6 +191,11 @@ public class TypeComplexOfFunction extends TypeComplex{
 			children.add( a.persist(this) );
 		}
 
+		Function<?> f = Function.getInstance(name);
+		for(Accessible<?> a : f.getSteps()){
+			children.add( a.createCodeNode() );
+		}
+		
 		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {name, name}, children);
 		
 		return cn;
