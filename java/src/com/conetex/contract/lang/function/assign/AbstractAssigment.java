@@ -1,8 +1,7 @@
 package com.conetex.contract.lang.function.assign;
 
-import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.access.Setable;
+import com.conetex.contract.lang.function.access.AccessibleValue;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
@@ -11,11 +10,11 @@ public abstract class AbstractAssigment<T> extends Accessible<T>{// Computable{/
 																	// extends
 																	// ComputablePair<T>{
 
-	private final Setable<T> target;
+	private final AccessibleValue<T> target;
 
 	private final Accessible<T> source;
 
-	AbstractAssigment(String command, Setable<T> trg, Accessible<T> src) {
+	AbstractAssigment(String command, AccessibleValue<T> trg, Accessible<T> src) {
 		super(command, new String[]{}, new Accessible<?>[] {trg, src});
 		this.target = trg;
 		this.source = src;

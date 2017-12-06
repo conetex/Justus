@@ -183,7 +183,6 @@ public class TypeComplexOfFunction extends TypeComplex{
 	}
 	
 	public CodeNode createCodeNode(TypeComplex parent) {
-		String name = super.name;
 		
 		List<CodeNode> children = new LinkedList<>();
 		
@@ -191,12 +190,16 @@ public class TypeComplexOfFunction extends TypeComplex{
 			children.add( a.persist(this) );
 		}
 
-		Function<?> f = Function.getInstance(name);
+		Function<?> f = Function.getInstance(super.name);
 		for(Accessible<?> a : f.getSteps()){
-			children.add( a.createCodeNode() );
+			CodeNode x = a.createCodeNode();
+			if(x == null) {
+				System.out.println(SHIT);
+			}
+			children.add( x );
 		}
 		
-		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {name, name}, children);
+		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {super.name, super.name}, children);
 		
 		return cn;
 	}

@@ -74,9 +74,6 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 
 	private V getFromComplexFun(TypeComplexOfFunction z, Structure obj) throws AbstractRuntimeException {
 
-		if(z == null){
-			System.err.println("was geht denn jetze hier?");
-		}
 		Structure thisObject = z.utilizeStructure(obj); // .prototype;//thisObject.getStructure(this.name);
 
 		if(thisObject == null){

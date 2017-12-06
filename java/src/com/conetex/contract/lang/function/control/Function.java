@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.conetex.contract.build.Cast;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
@@ -287,6 +288,7 @@ public class Function<V> extends Accessible<V>{
 	private final Accessible<?>[] steps;
 
 	private Function(Accessible<?>[] theSteps, List<ReturnAbstract<V>> theReturns, String theName, Class<V> theRawTypeClass) {
+		super(Symbols.comFunction(), new String[]{theName}, theSteps);
 		this.steps = theSteps;
 		this.returns = theReturns;
 		this.name = theName;

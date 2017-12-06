@@ -24,7 +24,6 @@ import com.conetex.contract.build.exceptionFunction.UnknownType;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleConstant;
 import com.conetex.contract.lang.function.access.AccessibleValue;
-import com.conetex.contract.lang.function.access.SetableValue;
 import com.conetex.contract.lang.function.assign.AbstractAssigment;
 import com.conetex.contract.lang.function.assign.Creator;
 import com.conetex.contract.lang.function.bool.expression.Comparsion;
@@ -185,7 +184,7 @@ public class BuildFunctions{
 			@Override
 			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
-				SetableValue<Structure> trg = SetableValue.createFunctionSetable(trgNode.getParameter(Symbols.paramValue()), parentType, Structure.class);
+				AccessibleValue<Structure> trg = AccessibleValue.createFunctionSetable(trgNode.getParameter(Symbols.paramValue()), parentType, Structure.class);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
 				Accessible<?> src = this.functionCreateChild(srcNode, parentType);
 				check2PartOperations(thisNode, trg, src);
@@ -200,7 +199,7 @@ public class BuildFunctions{
 			@Override
 			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
-				SetableValue<? extends Number> trg = SetableValue.createFunctionSetableNumber(trgNode.getParameter(Symbols.paramValue()), parentType);
+				AccessibleValue<? extends Number> trg = AccessibleValue.createFunctionSetableNumber(trgNode.getParameter(Symbols.paramValue()), parentType);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
 				Accessible<?> src = this.functionCreateChild(srcNode, parentType);
 				check2PartOperations(thisNode, trg, src);
@@ -215,7 +214,7 @@ public class BuildFunctions{
 			@Override
 			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
-				SetableValue<Boolean> trg = SetableValue.createFunctionSetable(trgNode.getParameter(Symbols.paramValue()), parentType, Boolean.class);
+				AccessibleValue<Boolean> trg = AccessibleValue.createFunctionSetable(trgNode.getParameter(Symbols.paramValue()), parentType, Boolean.class);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
 				Accessible<?> src = this.functionCreateChild(srcNode, parentType);
 				check2PartOperations(thisNode, trg, src);
@@ -228,7 +227,7 @@ public class BuildFunctions{
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
-				SetableValue<?> trg = SetableValue.createFunctionSetableWhatEver(trgNode.getParameter(Symbols.paramValue()), parentType);
+				AccessibleValue<?> trg = AccessibleValue.createFunctionSetableWhatEver(trgNode.getParameter(Symbols.paramValue()), parentType);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
 				Accessible<?> src = this.functionCreateChild(srcNode, parentType);
 				check2PartOperations(thisNode, trg, src);
@@ -429,7 +428,7 @@ public class BuildFunctions{
 			return fNode;
 		}
 
-		private static CodeNode getFunctionNode(CodeNode n, String functionName) throws UnknownCommandParameter, UnknownCommand{
+		static CodeNode getFunctionNode(CodeNode n, String functionName) throws UnknownCommandParameter, UnknownCommand{
 			if( n.getCommand() == Symbols.comFunction() ){
 				if( functionName.equals( n.getParameter(Symbols.paramName()) ) ){
 					System.out.println("Treffer ... " + n.getParameter(Symbols.paramName()));
@@ -772,7 +771,7 @@ public class BuildFunctions{
 		for(CodeNode srcNode : n.getChildNodes()){
 			String path2TrgParam = // n.getName() + "." +
 					srcNode.getParameter(Symbols.paramName());
-			SetableValue<?> trg = SetableValue.createFunctionSetableWhatEver(path2TrgParam, functionComplex);
+			AccessibleValue<?> trg = AccessibleValue.createFunctionSetableWhatEver(path2TrgParam, functionComplex);
 
 			Accessible<?> src = Assign.whatEverAssigment.functionCreateChild(srcNode, parentTyp);
 
@@ -791,7 +790,7 @@ public class BuildFunctions{
 	}
 
 	static AbstractAssigment<Structure> createAssigComp(String command, CodeNode srcNode, Accessible<?> src, String ComplexTrgNodeTyp,
-																SetableValue<?> trg) throws AbstractInterpreterException {
+			AccessibleValue<?> trg) throws AbstractInterpreterException {
 
 		Class<?> trgRawType = trg.getRawTypeClass();
 		Class<?> srcRawType = src.getRawTypeClass();
@@ -805,7 +804,7 @@ public class BuildFunctions{
 	}
 
 	static AbstractAssigment<?> createAssig(String command, CodeNode srcNode, Accessible<?> src,
-													SetableValue<?> trg) throws AbstractInterpreterException {
+			AccessibleValue<?> trg) throws AbstractInterpreterException {
 
 		Class<?> trgRawType = trg.getRawTypeClass();
 		Class<?> srcRawType = src.getRawTypeClass();

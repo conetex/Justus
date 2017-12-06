@@ -17,24 +17,24 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 	private static final int	REMAINS		= 4;	// Remainder
 
 	public static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB,
-			String operation, String theCommand) {
+			String operation) {
 		if(theA == null || theB == null){
 			return null;
 		}
 		if(operation.equals(Symbols.comPlus())){
-			return createNew(theA, theB, ElementaryArithmetic.PLUS, theCommand);
+			return createNew(theA, theB, ElementaryArithmetic.PLUS, operation);
 		}
 		if(operation.equals(Symbols.comMinus())){
-			return createNew(theA, theB, ElementaryArithmetic.MINUS, theCommand);
+			return createNew(theA, theB, ElementaryArithmetic.MINUS, operation);
 		}
 		if(operation.equals(Symbols.comTimes())){
-			return createNew(theA, theB, ElementaryArithmetic.TIMES, theCommand);
+			return createNew(theA, theB, ElementaryArithmetic.TIMES, operation);
 		}
 		if(operation.equals(Symbols.comDividedBy())){
-			return createNew(theA, theB, ElementaryArithmetic.DIVIDED_BY, theCommand);
+			return createNew(theA, theB, ElementaryArithmetic.DIVIDED_BY, operation);
 		}
 		if(operation.equals(Symbols.comRemains())){
-			return createNew(theA, theB, ElementaryArithmetic.REMAINS, theCommand);
+			return createNew(theA, theB, ElementaryArithmetic.REMAINS, operation);
 		}
 		return null;
 	}

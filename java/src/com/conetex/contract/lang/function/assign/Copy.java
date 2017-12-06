@@ -2,11 +2,11 @@ package com.conetex.contract.lang.function.assign;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.access.Setable;
+import com.conetex.contract.lang.function.access.AccessibleValue;
 
 public class Copy<T> extends AbstractAssigment<T>{
 
-	Copy(Setable<T> trg, Accessible<T> src) {
+	Copy(AccessibleValue<T> trg, Accessible<T> src) {
 		super(Symbols.comCopy(), trg, src);
 	}
 

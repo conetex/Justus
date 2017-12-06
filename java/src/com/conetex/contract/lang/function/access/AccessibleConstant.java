@@ -117,6 +117,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	private final Value<T> value;
 
 	private AccessibleConstant(Value<T> theValue) {
+		super("", new String[] {}, new Accessible<?>[]{});// TODO no command!!! das ist ein design-problem
 		this.value = theValue;
 	}
 

@@ -120,11 +120,12 @@ public class CodeNode{
 			System.err.println("no typeName for complex");
 			return null;
 		}
+		String re = typeName;
 		if(parent != null){
 			String[] typeNames = Symbols.splitRight(typeName);
 			if(typeNames[1] != null && typeNames[0] != null){
 				if(typeNames[0].equals(parent.getName())){
-					typeName = typeNames[1];
+					re = typeNames[1];
 				}
 				else{
 					// TODO Error
@@ -132,9 +133,9 @@ public class CodeNode{
 					return null;
 				}
 			}
-			return parent.getName() + "." + typeName;
+			return parent.getName() + "." + re;
 		}
-		return typeName;
+		return re;
 	}
 	
 	public static CodeNode __create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {

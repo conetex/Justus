@@ -261,14 +261,14 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 	}
 
 	@Override
-	public CodeNode createCodeNode(TypeComplex parent, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
+	public CodeNode createCodeNode(TypeComplex theParent, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand {
 		String name = a == null ? "n.a." : a.getLabel().get();
 		//Type<?> t = a == null ? null : a.getType();
 		//String ttype = t == null ? "n.a." : t.getName();
 		
 		List<CodeNode> children = createCodeNodes();
 		
-		CodeNode cn = new CodeNode(parent, Symbols.comVirtualCompValue(), new String[] {name}, children);
+		CodeNode cn = new CodeNode(theParent, Symbols.comVirtualCompValue(), new String[] {name}, children);
 		
 		return cn;
 	}

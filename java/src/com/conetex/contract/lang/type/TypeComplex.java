@@ -52,7 +52,9 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 	private final Map<String, Integer> index;
 
-	Attribute<?>[] orderedAttributes; // TODO kann das
+	Attribute<?>[] orderedAttributes; 
+	
+	// TODO kann das
 												// nicht doch final
 												// werden?
 
@@ -166,11 +168,12 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	}
 
 	@Override
-	public Attribute<?> getSubAttribute(String aName) {
+	public Attribute<?> getSubAttribute(String theName) {
 		// und hier muss jetzt auch nach functionsstructuren gesucht werden
 		System.out.println("complexname: " + this.name);
 
-aName = Symbols.getSimpleName(aName);// TODO MERGE
+String aName = Symbols.getSimpleName(theName);
+// TODO MERGE
 		Attribute<?> aFun = TypeComplexOfFunction.getAttribute(this.name + "." + aName);
 
 		if(aFun != null){
@@ -305,8 +308,6 @@ aName = Symbols.getSimpleName(aName);// TODO MERGE
 	}
 
 	public CodeNode createCodeNode(TypeComplex parent) {
-		String name = this.name;
-
 		List<CodeNode> children = new LinkedList<>();
 
 		for(Attribute<?> a : this.orderedAttributes){
@@ -343,7 +344,7 @@ aName = Symbols.getSimpleName(aName);// TODO MERGE
 		}
 		*/
 
-		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {name}, children);
+		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {this.name}, children);
 
 		return cn;
 	}

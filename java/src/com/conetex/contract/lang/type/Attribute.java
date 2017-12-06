@@ -20,9 +20,6 @@ public abstract class Attribute<T> {
 	public abstract Type<T> getType();
 
 	private static Attribute<?> getAttribute(String idName, TypeComplex parentTyp) throws UnknownAttribute {
-		if(parentTyp == null){
-			System.err.println("was geht denn hier?");
-		}
 		String typName = parentTyp.getName();
 		TypeComplex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);

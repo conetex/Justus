@@ -51,6 +51,9 @@ class ReadXML {
 		public Element writeNode(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
 			// TODO Auto-generated method stub
 			// TODO Auto-generated method stub
+			if(n == null) {
+				System.out.println("was geht");
+			}
 			Element e = odoc.createElement(n.getCommand());
 
 			String[] parameters = n.getParameters();

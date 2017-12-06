@@ -1,7 +1,5 @@
 package com.conetex.contract.lang.function.control;
 
-import java.util.List;
-
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;

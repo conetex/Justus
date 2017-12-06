@@ -20,6 +20,29 @@ public class AccessibleValue<T> extends Accessible<T>{
 		return new AccessibleValue<>(thePath, theClass);
 	}
 
+	public static <R> AccessibleValue<R> createFunctionSetable(String path, TypeComplex parentTyp, Class<R> expected) throws AbstractInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		BuildFunctions.checkType(Attribute.getRawTypeClass(path, parentTyp), expected);
+		// String path = n.getValue();
+        return AccessibleValue.create(path, expected);
+	}
+
+	public static AccessibleValue<?> createFunctionSetableWhatEver(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Class<?> rawType = Attribute.getRawTypeClass(path, parentTyp);
+		// String path = n.getValue();
+        return AccessibleValue.create(path, rawType);
+	}
+
+	public static AccessibleValue<? extends Number> createFunctionSetableNumber(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
+		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
+		// + ")");
+		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Attribute.getRawTypeClass(path, parentTyp));
+        return AccessibleValue.create(path, rawType);
+	}
+	
 	final String path;
 
 	public String getPath() {
@@ -29,6 +52,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 	final Class<T> clazz;
 
 	AccessibleValue(String thePath, Class<T> theClass) {
+		super("", new String[] {thePath}, new Accessible<?>[]{});// TODO no command!!! das ist ein design-problem
 		this.path = thePath;
 		this.clazz = theClass;
 	}
