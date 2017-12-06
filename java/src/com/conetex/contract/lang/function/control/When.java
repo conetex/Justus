@@ -2,6 +2,7 @@ package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -12,9 +13,11 @@ public class When<V> extends ReturnAbstract<V>{
 
 	final Accessible<Boolean> condition;
 
-	final Accessible<?>[] stepsIf;
+	final Steps<V> steps;
+	
+//	final Accessible<?>[] stepsIf;
 
-	final List<ReturnAbstract<V>> returnsIf;
+//	final List<ReturnAbstract<V>> returnsIf;
 
 	private final Class<V> rawTypeClass;
 
@@ -27,13 +30,23 @@ public class When<V> extends ReturnAbstract<V>{
 			System.err.println("theName is null");
 			return null;
 		}
-		List<ReturnAbstract<SV>> returns = Function.getReturns(theStepsIf, theRawTypeClass);
-        return new When<>(theStepsIf, returns, theCondition, theRawTypeClass);
+		Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+        return new When<>(theCondition, theSteps, theRawTypeClass);
 	}
 
-	When(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
+	/*
+	When(Accessible<?>[] allChildren, Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
+		super(Symbols.comWhen(), new String[]{}, allChildren);
 		this.stepsIf = theStepsIf;
 		this.returnsIf = returns;
+		this.condition = theCondition;
+		this.rawTypeClass = theRawTypeClass;
+	}
+	*/
+	
+	When(Accessible<Boolean> theCondition, Steps<V> theSteps, Class<V> theRawTypeClass) {
+		super(Symbols.comWhen(), new String[]{}, new Accessible<?>[] {theCondition, theSteps});
+		this.steps = theSteps;
 		this.condition = theCondition;
 		this.rawTypeClass = theRawTypeClass;
 	}
@@ -54,9 +67,11 @@ public class When<V> extends ReturnAbstract<V>{
 		return this.rawTypeClass;
 	}
 
+	/*
 	public boolean returns() {
         return this.returnsIf.size() > 0;
     }
+	*/
 
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
@@ -66,7 +81,7 @@ public class When<V> extends ReturnAbstract<V>{
 			return null;
 		}
 		if(res.booleanValue()){
-			return Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);
+			return this.steps.getFrom(thisObject, r);
 		}
 		return null;
 	}

@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.function.bool.operator;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -17,6 +18,7 @@ public class Not extends Accessible<Boolean>{
 	private final Accessible<? extends Boolean> sub;
 
 	private Not(Accessible<? extends Boolean> theSub) {
+		super(Symbols.comNot(), new String[]{}, new Accessible<?>[] {theSub});
 		this.sub = theSub;
 	}
 

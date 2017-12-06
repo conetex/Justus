@@ -13,7 +13,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			return null;
 		}
 		if(operation.equals(Symbols.comAnd())){
-			return new Binary(theA, theB){
+			return new Binary(operation, theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
 					if(aA.booleanValue() && aB.booleanValue()){
@@ -24,7 +24,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			};
 		}
 		else if(operation.equals(Symbols.comOr())){
-			return new Binary(theA, theB){
+			return new Binary(operation, theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
 					if(aA.booleanValue() || aB.booleanValue()){
@@ -35,7 +35,7 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 			};
 		}
 		else if(operation.equals(Symbols.comXOr())){
-			return new Binary(theA, theB){
+			return new Binary(operation, theA, theB){
 				@Override
 				protected Boolean calc(Boolean aA, Boolean aB) {
 					if(aA.booleanValue() ^ aB.booleanValue()){
@@ -52,7 +52,8 @@ public abstract class Binary extends Accessible<Boolean>{// implements
 
 	private final Accessible<? extends Boolean> b;
 
-	Binary(Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
+	Binary(String command, Accessible<? extends Boolean> theA, Accessible<? extends Boolean> theB) {
+		super(command, new String[]{}, new Accessible<?>[] {theA, theB});
 		this.a = theA;
 		this.b = theB;
 	}

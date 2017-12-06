@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.function.bool.expression;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -16,6 +17,7 @@ public class IsNull extends Accessible<Boolean>{
 	private final Accessible<?> sub;
 
 	private IsNull(Accessible<?> theSub) {
+		super(Symbols.comIsNull(), new String[]{}, new Accessible<?>[] {theSub});
 		this.sub = theSub;
 	}
 

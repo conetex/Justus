@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.function.control;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -43,6 +44,7 @@ public class Return<V> extends ReturnAbstract<V>{
 	private final Accessible<V> expression;
 
 	private Return(Accessible<V> theExpression) {
+		super(Symbols.comReturn(), new String[]{}, new Accessible<?>[]{theExpression});
 		this.expression = theExpression;
 	}
 

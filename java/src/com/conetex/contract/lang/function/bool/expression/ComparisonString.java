@@ -16,25 +16,25 @@ public class ComparisonString extends Accessible<Boolean>{
 			return null;
 		}
 		if(operation.equals(Symbols.comSmaller())){
-			return create(theA, theB, ComparisonString.SMALLER);
+			return create(theA, theB, operation, ComparisonString.SMALLER);
 		}
 		if(operation.equals(Symbols.comEqual())){
-			return create(theA, theB, ComparisonString.EQUAL);
+			return create(theA, theB, operation, ComparisonString.EQUAL);
 		}
 		if(operation.equals(Symbols.comGreater())){
-			return create(theA, theB, ComparisonString.GREATER);
+			return create(theA, theB, operation, ComparisonString.GREATER);
 		}
 		return null;
 	}
 
-	private static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation) {
+	private static ComparisonString create(Accessible<String> theA, Accessible<String> theB, String command, int operation) {
 		if(theA == null || theB == null){
 			return null;
 		}
 		if(operation < ComparisonString.SMALLER || operation > ComparisonString.GREATER){
 			return null;
 		}
-		return new ComparisonString(theA, theB, operation);
+		return new ComparisonString(command, theA, theB, operation);
 	}
 
 	private final int operator;
@@ -45,7 +45,8 @@ public class ComparisonString extends Accessible<Boolean>{
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
-	private ComparisonString(Accessible<String> theA, Accessible<String> theB, int theOperation) {
+	private ComparisonString(String command, Accessible<String> theA, Accessible<String> theB, int theOperation) {
+		super(command, new String[]{}, new Accessible<?>[] {theA, theB});
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;

@@ -1,5 +1,6 @@
 package com.conetex.contract.lang.function.assign;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.Setable;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -14,7 +15,8 @@ public abstract class AbstractAssigment<T> extends Accessible<T>{// Computable{/
 
 	private final Accessible<T> source;
 
-	AbstractAssigment(Setable<T> trg, Accessible<T> src) {
+	AbstractAssigment(String command, Setable<T> trg, Accessible<T> src) {
+		super(command, new String[]{}, new Accessible<?>[] {trg, src});
 		this.target = trg;
 		this.source = src;
 	}

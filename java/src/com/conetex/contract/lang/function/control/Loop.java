@@ -2,8 +2,10 @@ package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
@@ -18,28 +20,28 @@ public class Loop<V> extends When<V>{
 			System.err.println("theName is null");
 			return null;
 		}
-		List<ReturnAbstract<SV>> returns = Function.getReturns(theStepsIf, theRawTypeClass);
-		return new Loop<>(theStepsIf, returns, theCondition, theRawTypeClass);
+		Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+        return new Loop<>(theCondition, theSteps, theRawTypeClass);
 	}
 
-	private Loop(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
-		super(theStepsIf, returns, theCondition, theRawTypeClass);
+	Loop(Accessible<Boolean> theCondition, Steps<V> theSteps, Class<V> theRawTypeClass) {
+		super(theCondition, theSteps, theRawTypeClass);
 	}
-
+	
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = this.condition.getFrom(thisObject);
-		while(res != null && res.booleanValue()){
-			V re = Function.doSteps(this.stepsIf, this.returnsIf, r, thisObject);
+		if(res != null && res.booleanValue()){
+			V re = this.steps.getFrom(thisObject, r);
 			if(r.toReturn){
 				return re;
 			}
-			res = this.condition.getFrom(thisObject);
+			res = this.condition.getFrom(thisObject);			
 		}
 		if(res == null){
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
-		}
+		}		
 		return null;
 	}
 

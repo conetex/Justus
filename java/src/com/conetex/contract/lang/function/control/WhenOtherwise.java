@@ -2,65 +2,95 @@ package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class WhenOtherwise<V> extends When<V>{
+public class WhenOtherwise<V> extends ReturnAbstract<V>{
 
-	private final Accessible<?>[] stepsElse;
+	final Accessible<Boolean> condition;
 
-	private final List<ReturnAbstract<V>> returnsElse;
+	final Steps<V> steps;
+	
+	final Steps<V> stepsOtherwise;
+	
+//	final Accessible<?>[] stepsIf;
 
-	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition,
-			Class<SV> theRawTypeClass)
-			throws CastException {
+//	final List<ReturnAbstract<V>> returnsIf;
+
+	private final Class<V> rawTypeClass;
+
+	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass) throws CastException {
 		if(theStepsIf == null){
 			System.err.println("theStepsIf is null");
-			return null;
-		}
-		if(theStepsElse == null){
-			System.err.println("theStepsElse is null");
 			return null;
 		}
 		if(theCondition == null){
 			System.err.println("theName is null");
 			return null;
 		}
-		List<ReturnAbstract<SV>> returnsIf = Function.getReturns(theStepsIf, theRawTypeClass);
-		List<ReturnAbstract<SV>> returnsElse = Function.getReturns(theStepsElse, theRawTypeClass);
-        return new WhenOtherwise<>(theStepsIf, returnsIf, theStepsElse, returnsElse, theCondition, theRawTypeClass);
+		Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+		Steps<SV> stepsOtherwise = Steps.create(Symbols.comOtherwise(), theStepsElse, theRawTypeClass);
+        return new WhenOtherwise<>(theCondition, theSteps, stepsOtherwise, theRawTypeClass);
 	}
 
-	private WhenOtherwise(Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> theReturnsIf, Accessible<?>[] theStepsElse,
-			List<ReturnAbstract<V>> theReturnsElse,
-			Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
-		super(theStepsIf, theReturnsIf, theCondition, theRawTypeClass);
-		this.stepsElse = theStepsElse;
-		this.returnsElse = theReturnsElse;
+	/*
+	When(Accessible<?>[] allChildren, Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
+		super(Symbols.comWhen(), new String[]{}, allChildren);
+		this.stepsIf = theStepsIf;
+		this.returnsIf = returns;
+		this.condition = theCondition;
+		this.rawTypeClass = theRawTypeClass;
+	}
+	*/
+	
+	WhenOtherwise(Accessible<Boolean> theCondition, Steps<V> theSteps, Steps<V> theStepsOtherwise, Class<V> theRawTypeClass) {
+		super(Symbols.comWhen(), new String[]{}, new Accessible<?>[] {theCondition, theSteps, theStepsOtherwise});
+		this.steps = theSteps;
+		this.stepsOtherwise = theStepsOtherwise;
+		this.condition = theCondition;
+		this.rawTypeClass = theRawTypeClass;
 	}
 
 	@Override
-	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
-		Boolean res = super.condition.getFrom(thisObject);
-		if(res == null){
-			System.err.println("Function Structure getFrom: no access to data for if ... ");
-			return null;
-		}
-		if(res.booleanValue()){
-			return Function.doSteps(super.stepsIf, super.returnsIf, r, thisObject);
-		}
-		else{
-			return Function.doSteps(this.stepsElse, this.returnsElse, r, thisObject);
-		}
+	public final V getFrom(Structure thisObject) throws AbstractRuntimeException {
+		return this.getFrom(thisObject, new Result());
 	}
 
 	@Override
 	public V copyFrom(Structure thisObject) throws Invalid {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Class<V> getRawTypeClass() {
+		return this.rawTypeClass;
+	}
+
+	/*
+	public boolean returns() {
+        return this.returnsIf.size() > 0;
+    }
+	*/
+
+	@Override
+	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
+		Boolean res = this.condition.getFrom(thisObject);
+		if(res == null){
+			System.err.println("Function Structure getFrom: no access to data for if ... ");
+			return null;
+		}
+		if(res.booleanValue()){
+			return this.steps.getFrom(thisObject, r);
+		}
+		else{
+			return this.stepsOtherwise.getFrom(thisObject, r);
+		}
 	}
 
 }
