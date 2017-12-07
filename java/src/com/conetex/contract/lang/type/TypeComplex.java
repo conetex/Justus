@@ -17,6 +17,8 @@ import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
 import com.conetex.contract.build.exceptionFunction.NullIdentifierException;
 import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionFunction.UnknownComplexType;
+import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Label;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -327,7 +329,19 @@ String aName = Symbols.getSimpleName(theName);
 			}
 
 		}
-
+		
+		Function<?> f = Function.getInstance(this.name);
+		if(f != null){
+			for(Accessible<?> a : f.getSteps()){
+				if(a.getCommand() != Symbols.comFunction()){// TODO darauf sollte man verzichten! Auch Function.createCodeNode sollte was vernuenftiges bringen...
+					CodeNode x = a.createCodeNode(this);
+					if(x == null) {
+						System.out.println("SHIT");
+					}
+					children.add( x );
+				}
+			}
+		}
 		/*
 		for(TypeComplexOfFunction tc : TypeComplexOfFunction.getInstances()){
 			String functionName = tc.getName();

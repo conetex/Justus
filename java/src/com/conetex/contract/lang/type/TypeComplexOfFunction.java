@@ -191,10 +191,11 @@ public class TypeComplexOfFunction extends TypeComplex{
 		}
 
 		Function<?> f = Function.getInstance(super.name);
+		
 		for(Accessible<?> a : f.getSteps()){
-			CodeNode x = a.createCodeNode();
+			CodeNode x = a.createCodeNode(this);
 			if(x == null) {
-				System.out.println(SHIT);
+				System.out.println("SHIT");
 			}
 			children.add( x );
 		}

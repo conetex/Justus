@@ -107,6 +107,7 @@ public class Symbols{
 	// assignment of data commands
 	private static final String COM_COPY = "copy";
 	private static final String COM_REFER = "refer";
+	private static final String COM_PARAM = "param";
 
 	// addressing of data commands
 	private static final String COM_REFERENCE = "ref";
@@ -272,6 +273,11 @@ public class Symbols{
 		return COM_REFER;
 	}
 
+	public static String comParam() {
+		return COM_PARAM;
+	}
+	
+	
 	// addressing of data commands
 	public static String comReference() {
 		return COM_REFERENCE;

@@ -543,6 +543,11 @@ public class BuildFunctions{
 				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
 			}
 		};
+		
+		static final BoxFun<Object, Object> whatEverParam = new BoxFunImp<Object, Object>("whatEverParam"){
+			// TODO implement ....
+		};
+
 
 	}
 
@@ -769,11 +774,10 @@ public class BuildFunctions{
 		List<AbstractAssigment<?>> assig = new LinkedList<>();
 
 		for(CodeNode srcNode : n.getChildNodes()){
-			String path2TrgParam = // n.getName() + "." +
-					srcNode.getParameter(Symbols.paramName());
+			String path2TrgParam = srcNode.getParameter(Symbols.paramName()); // n.getName() + "." +
 			AccessibleValue<?> trg = AccessibleValue.createFunctionSetableWhatEver(path2TrgParam, functionComplex);
 
-			Accessible<?> src = Assign.whatEverAssigment.functionCreateChild(srcNode, parentTyp);
+			Accessible<?> src = Assign.whatEverAssigment.functionCreateChild(srcNode.getChildElementByIndex(0), parentTyp);
 
 			if(trg.getRawTypeClass() == Structure.class){
 				Attribute<?> trgAttr = functionComplex.getSubAttribute(srcNode.getParameter(Symbols.paramName()));

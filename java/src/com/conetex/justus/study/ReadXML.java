@@ -17,6 +17,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -54,14 +55,24 @@ class ReadXML {
 			if(n == null) {
 				System.out.println("was geht");
 			}
-			Element e = odoc.createElement(n.getCommand());
+			Element e = null;
+			try{
+				e = odoc.createElement(n.getCommand());
+			}
+			catch(DOMException de){
+				System.out.println(de);
+				return null;
+			}
 
 			String[] parameters = n.getParameters();
-			int i = 0;
-			for (String p : n.getParameterNames()) {
-				e.setAttribute(p, parameters[i++]);
-				// Attr a = odoc.createAttribute(p);
-				// e.appendChild(a);
+			String[] names = n.getParameterNames();
+			if(names != null){
+				int i = 0;
+				for (String p : names) {
+					e.setAttribute(p, parameters[i++]);
+					// Attr a = odoc.createAttribute(p);
+					// e.appendChild(a);
+				}				
 			}
 
 			for (CodeNode c : n.getChildNodes()) {
@@ -88,7 +99,7 @@ class ReadXML {
 							// ist alles xml-driven...
 
 		String fileExtension = ".xml";
-		String inFile = "input02";
+		String inFile = "input02_out";
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile + fileExtension)) {
 

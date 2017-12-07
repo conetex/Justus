@@ -52,7 +52,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 	final Class<T> clazz;
 
 	AccessibleValue(String thePath, Class<T> theClass) {
-		super("", new String[] {thePath}, new Accessible<?>[]{});// TODO no command!!! das ist ein design-problem
+		super("ref", new String[] {thePath}, new Accessible<?>[]{});// TODO no command!!! das ist ein design-problem
 		this.path = thePath;
 		this.clazz = theClass;
 	}

@@ -79,7 +79,12 @@ public class CodeNode{
 				continue;
 			}
 			if(command.getParameterNames() == null){
-				error.append(", 0 != ").append(thisObj.parameters.length);
+				if(thisObj.parameters.length == 0){
+					return command;
+				}
+				else{
+					error.append(", 0 != ").append(thisObj.parameters.length);
+				}
 			}
 			else{
 				if(command.getParameterNames().length == thisObj.parameters.length){
