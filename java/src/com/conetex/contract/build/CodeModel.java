@@ -24,7 +24,6 @@ import com.conetex.contract.build.exceptionFunction.UnexpectedSubOperation;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.assign.AbstractAssigment;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.Value;
@@ -745,12 +744,13 @@ public class CodeModel{
 		FunReturn.whatEverReturn.contains(FunCall.whatEverCall);
 
 		/* TODO das muss so registriert werden und dann muss aber auch Assign.whatEverParam implementiert werden statt BuildFunctions.createAssigs(CodeNode n, TypeComplex parentTyp)
-		FunCall.structureCall.contains(Assign.whatEverParam);
-		FunCall.numberCall.contains(Assign.whatEverParam);
-		FunCall.boolCall.contains(Assign.whatEverParam);
-		FunCall.voidCall.contains(Assign.whatEverParam);
-		FunCall.whatEverCall.contains(Assign.whatEverParam);
 		*/
+		FunCall.structureCall.contains(Assign.whatEverAssigment);
+		FunCall.numberCall.contains(Assign.whatEverAssigment);
+		FunCall.boolCall.contains(Assign.whatEverAssigment);
+		FunCall.voidCall.contains(Assign.whatEverAssigment);
+		FunCall.whatEverCall.contains(Assign.whatEverAssigment);
+		
 		
 		Fun.bool.contains(Assign.whatEverAssigment);
 		Fun.bool.contains(FunCall.whatEverCall);
@@ -814,7 +814,7 @@ public class CodeModel{
 		Constant.whatEverConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng(), Symbols.comBool(), Symbols.comStructure() });
 		Constant.whatEverConst.registerParameters(params4Const);
 
-		Assign.whatEverAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
+		Assign.whatEverAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer(), Symbols.comParam() });
 		Assign.structureAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
 		Assign.numberAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
 		Assign.boolAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer() });
@@ -839,8 +839,6 @@ public class CodeModel{
 		Fun.whatEver.means(Symbols.comFunction());
 		Fun.whatEver.registerParameters(params4Function);
 
-		FunCall.whatEverParam.means(new String[] { Symbols.comParam() });
-		FunCall.whatEverParam.registerParameters(new String[] { Symbols.paramName() });
 		
 		String[] params4Call = { Symbols.paramName(), Symbols.paramType() };
 		FunCall.structureCall.means(Symbols.comCall());

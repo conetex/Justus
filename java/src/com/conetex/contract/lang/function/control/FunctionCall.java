@@ -5,7 +5,6 @@ import java.util.List;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleValue;
-import com.conetex.contract.lang.function.assign.AbstractAssigment;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -14,7 +13,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 
 	public static <SV> FunctionCall<SV> create(Function<SV> theFunction, AccessibleValue<Structure> theReference,
-			List<AbstractAssigment<?>> assig) {
+			List<Accessible<?>> assig) {
 		// TODO drop this
 		if(theFunction == null){
 			System.err.println("theFunction is null");
@@ -35,14 +34,15 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 
 	private final AccessibleValue<Structure> reference;
 
-	private final List<AbstractAssigment<?>> paramAssigments;
+	private final List<Accessible<?>> paramAssigments;
+//	private final List<AbstractAssigment<?>> paramAssigments;
 
 	@Override
 	public String toString() {
 		return "call function " + this.function;
 	}
 
-	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<AbstractAssigment<?>> assig) {
+	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<Accessible<?>> assig) {
 		super(Symbols.comCall(), new String[]{theExpression.getName(), theReference.getPath()}, assig.toArray(new Accessible<?>[assig.size()]));
 		this.function = theExpression;
 		this.reference = theReference;
@@ -82,8 +82,10 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 		}
 		// thisObjectB = thisObjectB.copy();
 
-		for(AbstractAssigment<?> a : this.paramAssigments){
-			a.getFrom(thisObject);
+		if(this.paramAssigments != null) {
+			for(Accessible<?> a : this.paramAssigments){
+				a.getFrom(thisObject);
+			}
 		}
 
 		V re = this.function.getFrom(thisObject);

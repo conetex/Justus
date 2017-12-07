@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<contract>
+  <complexType name="contract4u">
+    <attribute name="instance" type="contract4u.root.credit"/>
+    <attribute name="counter" type="t:Int"/>
+    <attribute name="param" type="t:Int"/>
+    <attribute name="aAddress" type="t:MailAddress64"/>
+    <attribute name="a2Addres" type="t:MailAddress64"/>
+    <attribute name="ai" type="t:Int"/>
+    <attribute name="bi" type="t:Int"/>
+    <attribute name="bTrue" type="t:Bool"/>
+    <attribute name="bFalse" type="t:Bool"/>
+    <function name="contract4u.foo2" type="contract4u.foo2">
+      <attribute name="param" type="t:Int"/>
+      <attribute name="param2" type="t:Int"/>
+      <return>
+        <times>
+          <ref value="param"/>
+          <ref value="param2"/>
+        </times>
+      </return>
+    </function>
+    <function name="contract4u.foo" type="contract4u.foo">
+      <attribute name="param" type="t:Int"/>
+      <times>
+        <Integer value="2"/>
+        <Integer value="9"/>
+      </times>
+      <return>
+        <times>
+          <ref value="param"/>
+          <Integer value="8"/>
+        </times>
+      </return>
+    </function>
+    <complexType name="contract4u.root">
+      <attribute name="dummy" type="t:ASCII8"/>
+      <complexType name="contract4u.root.person">
+        <attribute name="name" type="t:ASCII8"/>
+        <attribute name="mail" type="t:MailAddress64"/>
+        <attribute name="nr" type="t:Int"/>
+        <complexType name="contract4u.root.person.person">
+          <attribute name="name" type="t:ASCII8"/>
+          <attribute name="mail" type="t:MailAddress64"/>
+        </complexType>
+        <function name="contract4u.root.person.tuWas" type="contract4u.root.person.tuWas">
+          <attribute name="action" type="t:ASCII8"/>
+          <if>
+            <equal>
+              <Integer value="13"/>
+              <Integer value="13"/>
+            </equal>
+            <then>
+              <return>
+                <ref value="nr"/>
+              </return>
+            </then>
+            <else>
+              <return>
+                <Integer value="8"/>
+              </return>
+            </else>
+          </if>
+          <return>
+            <ref value="nr"/>
+          </return>
+        </function>
+      </complexType>
+      <complexType name="contract4u.root.credit">
+        <attribute name="glaeubig" type="contract4u.root.person"/>
+        <attribute name="schuldne" type="contract4u.root.person"/>
+        <attribute name="betrag" type="t:Int"/>
+        <attribute name="aktiv" type="t:Bool"/>
+      </complexType>
+    </complexType>
+    <call name="contract4u.root.person.tuWas" type="instance.schuldne"/>
+    <call name="contract4u.root.person.tuWas" type="instance.glaeubig"/>
+    <if>
+      <smaller>
+        <ref value="counter"/>
+        <Integer value="4"/>
+      </smaller>
+      <then>
+        <copy>
+          <ref value="counter"/>
+          <plus>
+            <ref value="counter"/>
+            <Integer value="1"/>
+          </plus>
+        </copy>
+        <times>
+          <Integer value="3"/>
+          <Integer value="6"/>
+        </times>
+      </then>
+    </if>
+    <copy>
+      <ref value="foo.param"/>
+      <ref value="param"/>
+    </copy>
+    <call name="contract4u.foo" type="contract4u"/>
+    <call name="contract4u.foo" type="contract4u">
+      <param>
+        <ref value="param"/>
+        <Integer value="13"/>
+      </param>
+    </call>
+    <call name="contract4u.foo2" type="contract4u">
+      <param>
+        <ref value="param"/>
+        <Integer value="6"/>
+      </param>
+      <param>
+        <ref value="param2"/>
+        <Integer value="5"/>
+      </param>
+    </call>
+    <copy>
+      <ref value="a2Addres"/>
+      <ref value="aAddress"/>
+    </copy>
+    <plus>
+      <ref value="ai"/>
+      <ref value="bi"/>
+    </plus>
+    <minus>
+      <ref value="ai"/>
+      <plus>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </plus>
+    </minus>
+    <remains>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+      <Integer value="8"/>
+    </remains>
+    <greater>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+      <Integer value="9"/>
+    </greater>
+    <smaller>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+      <Integer value="9"/>
+    </smaller>
+    <smaller>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+      <Integer value="13"/>
+    </smaller>
+    <greater>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+      <Integer value="13"/>
+    </greater>
+    <greater>
+      <Integer value="13"/>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+    </greater>
+    <greater>
+      <Integer value="11"/>
+      <times>
+        <ref value="ai"/>
+        <ref value="bi"/>
+      </times>
+    </greater>
+    <and>
+      <ref value="bTrue"/>
+      <ref value="bTrue"/>
+    </and>
+    <and>
+      <ref value="bTrue"/>
+      <ref value="bFalse"/>
+    </and>
+    <or>
+      <ref value="bTrue"/>
+      <ref value="bFalse"/>
+    </or>
+    <and>
+      <ref value="bFalse"/>
+      <ref value="bFalse"/>
+    </and>
+    <not>
+      <and>
+        <ref value="bFalse"/>
+        <or>
+          <ref value="bTrue"/>
+          <ref value="bFalse"/>
+        </or>
+      </and>
+    </not>
+  </complexType>
+  <VIRTUAL_COMP_VALUE name="contract4u">
+    <VIRTUAL_COMP_VALUE name="instance">
+      <VIRTUAL_COMP_VALUE name="glaeubig">
+        <VIRTUAL_PRIM_VALUE name="name" value="hobo"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value="hobo@dida.de"/>
+        <VIRTUAL_PRIM_VALUE name="nr" value="111"/>
+      </VIRTUAL_COMP_VALUE>
+      <VIRTUAL_COMP_VALUE name="schuldne">
+        <VIRTUAL_PRIM_VALUE name="name" value="biba"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value="biba@dida.de"/>
+        <VIRTUAL_PRIM_VALUE name="nr" value="222"/>
+      </VIRTUAL_COMP_VALUE>
+      <VIRTUAL_PRIM_VALUE name="betrag" value="1024"/>
+      <VIRTUAL_PRIM_VALUE name="aktiv" value="true"/>
+    </VIRTUAL_COMP_VALUE>
+    <VIRTUAL_PRIM_VALUE name="counter" value="2"/>
+    <VIRTUAL_PRIM_VALUE name="param" value="12"/>
+    <VIRTUAL_PRIM_VALUE name="aAddress" value="12@32543.com"/>
+    <VIRTUAL_PRIM_VALUE name="a2Addres" value="12@32543.com"/>
+    <VIRTUAL_PRIM_VALUE name="ai" value="3"/>
+    <VIRTUAL_PRIM_VALUE name="bi" value="4"/>
+    <VIRTUAL_PRIM_VALUE name="bTrue" value="true"/>
+    <VIRTUAL_PRIM_VALUE name="bFalse" value="false"/>
+  </VIRTUAL_COMP_VALUE>
+</contract>

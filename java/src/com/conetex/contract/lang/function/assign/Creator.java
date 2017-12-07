@@ -21,6 +21,13 @@ public abstract class Creator{
 			return new Reference<>(trg, src);
 		}
 	};
+	
+	private static final Creator param = new Creator(){
+		@Override
+		public <T> AbstractAssigment<T> create(AccessibleValue<T> trg, Accessible<T> src) {
+			return new Param<>(trg, src);
+		}
+	};
 
 	protected abstract <T> AbstractAssigment<T> create(AccessibleValue<T> trg, Accessible<T> src);
 
@@ -95,6 +102,9 @@ public abstract class Creator{
 		}
 		if(name.equals(Symbols.comRefer())){
 			return Creator.refer;
+		}
+		if(name.equals(Symbols.comParam())){
+			return Creator.param;
 		}
 		return null;
 	}

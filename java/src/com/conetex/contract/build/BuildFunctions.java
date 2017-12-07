@@ -447,7 +447,7 @@ public class BuildFunctions{
 			return null;
 		}
 
-		static final EggFun<Object> voidCall = new EggFunImp<Object>("voidCall"){
+		static final BoxFunImp<Object, Object> voidCall = new BoxFunImp<Object, Object>("voidCall"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
@@ -462,11 +462,17 @@ public class BuildFunctions{
 					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.noReturn.functionCreate(fNode, parentTypeOfFunction);
 				}
-				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
+				TypeComplex functionComplex = TypeComplex.getInstance(functionName);				
+				List<Accessible<?>> assig = new LinkedList<>();
+				for(CodeNode srcNode : thisNode.getChildNodes()){
+					Accessible<?> src = this.functionCreateChild(srcNode, functionComplex);
+					assig.add(src);
+				}
+				return FunctionCall.create(e, re, assig);
 			}
 		};
 
-		static final EggFun<Object> whatEverCall = new EggFunImp<Object>("whatEverCall"){
+		static final BoxFunImp<Object, Object> whatEverCall = new BoxFunImp<Object, Object>("whatEverCall"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
@@ -481,11 +487,17 @@ public class BuildFunctions{
 					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.whatEver.functionCreate(fNode, parentTypeOfFunction);
 				}
-				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
+				TypeComplex functionComplex = TypeComplex.getInstance(functionName);				
+				List<Accessible<?>> assig = new LinkedList<>();
+				for(CodeNode srcNode : thisNode.getChildNodes()){
+					Accessible<?> src = this.functionCreateChild(srcNode, functionComplex);
+					assig.add(src);
+				}
+				return FunctionCall.create(e, re, assig);
 			}
 		};
 
-		static final EggFun<Structure> structureCall = new EggFunImp<Structure>("objCall"){
+		static final BoxFunImp<Structure, Object> structureCall = new BoxFunImp<Structure, Object>("objCall"){
 			@Override
 			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
@@ -500,11 +512,17 @@ public class BuildFunctions{
 					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.structure.functionCreate(fNode, parentTypeOfFunction);
 				}
-				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
+				TypeComplex functionComplex = TypeComplex.getInstance(functionName);				
+				List<Accessible<?>> assig = new LinkedList<>();
+				for(CodeNode srcNode : thisNode.getChildNodes()){
+					Accessible<?> src = this.functionCreateChild(srcNode, functionComplex);
+					assig.add(src);
+				}
+				return FunctionCall.create(e, re, assig);
 			}
 		};
 
-		static final EggFun<Number> numberCall = new EggFunImp<Number>("numberCall"){
+		static final BoxFunImp<Number, Object> numberCall = new BoxFunImp<Number, Object>("numberCall"){
 			@Override
 			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				// CONTROL FUNCTION
@@ -520,11 +538,17 @@ public class BuildFunctions{
 					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.number.functionCreate(fNode, parentTypeOfFunction);
 				}
-				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
+				TypeComplex functionComplex = TypeComplex.getInstance(functionName);				
+				List<Accessible<?>> assig = new LinkedList<>();
+				for(CodeNode srcNode : thisNode.getChildNodes()){
+					Accessible<?> src = this.functionCreateChild(srcNode, functionComplex);
+					assig.add(src);
+				}
+				return FunctionCall.create(e, re, assig);
 			}
 		};
 
-		static final EggFun<Boolean> boolCall = new EggFunImp<Boolean>("boolCall"){
+		static final BoxFunImp<Boolean, Object> boolCall = new BoxFunImp<Boolean, Object>("boolCall"){
 			@Override
 			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
 				// CONTROL FUNCTION
@@ -540,11 +564,17 @@ public class BuildFunctions{
 					TypeComplex parentTypeOfFunction = TypeComplex.getInstanceNoNull( Symbols.getParentNameNoNull(functionName) );
 					e = Fun.bool.functionCreate(fNode, parentTypeOfFunction);
 				}
-				return FunctionCall.create(e, re, createAssigs(thisNode, parentType));
+				TypeComplex functionComplex = TypeComplex.getInstance(functionName);				
+				List<Accessible<?>> assig = new LinkedList<>();
+				for(CodeNode srcNode : thisNode.getChildNodes()){
+					Accessible<?> src = this.functionCreateChild(srcNode, functionComplex);
+					assig.add(src);
+				}
+				return FunctionCall.create(e, re, assig);
 			}
 		};
 		
-		static final BoxFun<Object, Object> whatEverParam = new BoxFunImp<Object, Object>("whatEverParam"){
+		static final BoxFun<Object, Object> _whatEverParam = new BoxFunImp<Object, Object>("whatEverParam"){
 			// TODO implement ....
 		};
 
@@ -759,8 +789,8 @@ public class BuildFunctions{
 			throw new TypesDoNotMatch(type.getName() + " is not " + expected.getName());
 		}
 	}
-
-	static List<AbstractAssigment<?>> createAssigs(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
+	
+	static List<AbstractAssigment<?>> __createAssigs(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
 		//String functionComplexName = n.getParameter(Symbols.paramName());
 		//functionComplexName = Symbols.getSimpleName(functionComplexName);
 		//String parentComplexPath = parentTyp.getName();
@@ -768,24 +798,23 @@ public class BuildFunctions{
 		//String path2FunctionComplex = parentComplexPath + "." + functionComplexName;
 
 		String path2FunctionComplex = n.getParameter(Symbols.paramName());
-
-		TypeComplex functionComplex = TypeComplex.getInstance(path2FunctionComplex); // z ...
+		TypeComplex functionComplex = TypeComplex.getInstance(path2FunctionComplex);
 
 		List<AbstractAssigment<?>> assig = new LinkedList<>();
 
 		for(CodeNode srcNode : n.getChildNodes()){
 			String path2TrgParam = srcNode.getParameter(Symbols.paramName()); // n.getName() + "." +
 			AccessibleValue<?> trg = AccessibleValue.createFunctionSetableWhatEver(path2TrgParam, functionComplex);
-
-			Accessible<?> src = Assign.whatEverAssigment.functionCreateChild(srcNode.getChildElementByIndex(0), parentTyp);
+			
+			Accessible<?> src = Assign.whatEverAssigment.functionCreateChild(srcNode.getChildElementByIndex(1), parentTyp);
 
 			if(trg.getRawTypeClass() == Structure.class){
 				Attribute<?> trgAttr = functionComplex.getSubAttribute(srcNode.getParameter(Symbols.paramName()));
 				String trgTypeName = trgAttr.getType().getName();
-				assig.add(createAssigComp(Symbols.comCopy(), srcNode, src, trgTypeName, trg));
+				assig.add(createAssigComp(Symbols.comParam(), srcNode, src, trgTypeName, trg));
 			}
 			else{
-				assig.add(createAssig(Symbols.comCopy(), srcNode, src, trg));
+				assig.add(createAssig(Symbols.comParam(), srcNode, src, trg));
 			}
 
 		}

@@ -98,7 +98,7 @@
     <call name="contract4u.foo" type='contract4u' />
 	
 	<call name="contract4u.foo" type='contract4u'>
-    	<param name="param"><Integer>13</Integer></param>
+    	<param><ref>param</ref><Integer>13</Integer></param>
     </call>
 	
  	<function name='foo2' type="contract4u.foo2"> 
@@ -113,8 +113,8 @@
     </function>
         
     <call name="contract4u.foo2" type='contract4u'>
-    	<param name="param"><Integer>6</Integer></param>
-    	<param name="param2"><Integer>5</Integer></param>  
+    	<param><ref>param</ref><Integer>6</Integer></param>
+    	<param><ref>param2</ref><Integer>5</Integer></param>  
     </call>
 		
 <!-- ASSIGNMENT OK -->

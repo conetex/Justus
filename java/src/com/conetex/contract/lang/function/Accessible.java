@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.conetex.contract.build.CodeNode;
-import com.conetex.contract.lang.function.control.Function;
-import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
