@@ -5,10 +5,11 @@ import java.math.BigInteger;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.TypesDoNotMatch;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends Accessible<R>{
+public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number, R extends Number> extends AccessibleWithChildren<R>{
 
 	private static final int	PLUS		= 0;	// Addition
 	private static final int	MINUS		= 1;	// Subtraction
@@ -38,6 +39,26 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		}
 		return null;
 	}
+	
+	@Override
+	public String getCommand() {
+		if(this.operator == ElementaryArithmetic.PLUS){
+			return Symbols.comPlus();
+		}
+		if(this.operator == ElementaryArithmetic.MINUS){
+			return Symbols.comMinus();
+		}
+		if(this.operator == ElementaryArithmetic.TIMES){
+			return Symbols.comTimes();
+		}
+		if(this.operator == ElementaryArithmetic.DIVIDED_BY){
+			return Symbols.comDividedBy();
+		}
+		if(this.operator == ElementaryArithmetic.REMAINS){
+			return Symbols.comRemains();
+		}
+		return null;
+	}
 
 	private static <IA extends Number, IB extends Number> ElementaryArithmetic<IA, IB, ? extends Number> createNew(Accessible<IA> theA, Accessible<IB> theB,
 			int operation, String theCommand) {
@@ -57,7 +78,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 		}
 
 		if(inputTyp == BigInteger.class){
-			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation, theCommand){
+			return new ElementaryArithmetic<IA, IB, BigInteger>(theA, theB, BigInteger.class, operation){
 				@Override
 				public BigInteger getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -71,7 +92,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 			};
 		}
 		else if(inputTyp == Long.class){
-			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation, theCommand){
+			return new ElementaryArithmetic<IA, IB, Long>(theA, theB, Long.class, operation){
 				@Override
 				public Long getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -85,7 +106,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 			};
 		}
 		else if(inputTyp == Integer.class){
-			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation, theCommand){
+			return new ElementaryArithmetic<IA, IB, Integer>(theA, theB, Integer.class, operation){
 				@Override
 				public Integer getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -99,7 +120,7 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 			};
 		}
 		else if(inputTyp == Byte.class){
-			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation, theCommand){
+			return new ElementaryArithmetic<IA, IB, Byte>(theA, theB, Byte.class, operation){
 				@Override
 				public Byte getFrom(Structure thisObject) throws AbstractRuntimeException {
 					IA aA = super.a.getFrom(thisObject);
@@ -148,14 +169,17 @@ public abstract class ElementaryArithmetic<Ia extends Number, Ib extends Number,
 
 	final Accessible<Ib> b;
 
-	ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation, String theCommand) {
-		super(theCommand, new String[]{}, new Accessible<?>[]{theA, theB});
+	ElementaryArithmetic(Accessible<Ia> theA, Accessible<Ib> theB, Class<R> theResultTyp, int theOperation) {
+		super(new Accessible<?>[]{theA, theB});
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
 		this.resultTyp = theResultTyp;
 	}
 
+
+
+	
 	Byte calcByte(Number aA, Number aB) throws ArithmeticException {
 		int re = 0;
 		if(this.operator == ElementaryArithmetic.PLUS){

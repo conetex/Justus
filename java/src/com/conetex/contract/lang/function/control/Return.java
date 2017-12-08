@@ -44,7 +44,7 @@ public class Return<V> extends ReturnAbstract<V>{
 	private final Accessible<V> expression;
 
 	private Return(Accessible<V> theExpression) {
-		super(Symbols.comReturn(), new String[]{}, new Accessible<?>[]{theExpression});
+		super(new Accessible<?>[]{theExpression});
 		this.expression = theExpression;
 	}
 
@@ -68,6 +68,11 @@ public class Return<V> extends ReturnAbstract<V>{
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		r.toReturn = true;
 		return this.getFrom(thisObject);
+	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comReturn();
 	}
 
 }

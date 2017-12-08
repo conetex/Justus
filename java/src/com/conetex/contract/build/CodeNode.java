@@ -10,7 +10,7 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.TypeComplex;
 
-public class CodeNode{
+public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat (   class CodeNode{   )
 
 	private static CodeNode rootComplex;
 	

@@ -30,11 +30,24 @@ public class WhenOtherwise<V> extends ReturnAbstract<V>{
 			System.err.println("theName is null");
 			return null;
 		}
-		Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
-		Steps<SV> stepsOtherwise = Steps.create(Symbols.comOtherwise(), theStepsElse, theRawTypeClass);
+		Steps<SV> theSteps = new Steps<SV>(theStepsIf, Function.getReturns(theStepsIf, theRawTypeClass)){
+			@Override
+			public String getCommand() {
+				return Symbols.comThen();
+			}};
+		Steps<SV> stepsOtherwise = new Steps<SV>(theStepsElse, Function.getReturns(theStepsElse, theRawTypeClass)){
+			@Override
+			public String getCommand() {
+				return Symbols.comOtherwise();
+			}};
         return new WhenOtherwise<>(theCondition, theSteps, stepsOtherwise, theRawTypeClass);
 	}
 
+	@Override
+	public String getCommand() {
+		return Symbols.comWhen();
+	}
+	
 	/*
 	When(Accessible<?>[] allChildren, Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
 		super(Symbols.comWhen(), new String[]{}, allChildren);
@@ -46,7 +59,7 @@ public class WhenOtherwise<V> extends ReturnAbstract<V>{
 	*/
 	
 	WhenOtherwise(Accessible<Boolean> theCondition, Steps<V> theSteps, Steps<V> theStepsOtherwise, Class<V> theRawTypeClass) {
-		super(Symbols.comWhen(), new String[]{}, new Accessible<?>[] {theCondition, theSteps, theStepsOtherwise});
+		super(new Accessible<?>[] {theCondition, theSteps, theStepsOtherwise});
 		this.steps = theSteps;
 		this.stepsOtherwise = theStepsOtherwise;
 		this.condition = theCondition;
@@ -89,5 +102,7 @@ public class WhenOtherwise<V> extends ReturnAbstract<V>{
 			return this.stepsOtherwise.getFrom(thisObject, r);
 		}
 	}
+
+
 
 }

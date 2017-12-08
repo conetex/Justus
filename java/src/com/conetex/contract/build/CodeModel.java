@@ -23,11 +23,14 @@ import com.conetex.contract.build.exceptionFunction.OperationMeansNotCalled;
 import com.conetex.contract.build.exceptionFunction.UnexpectedSubOperation;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class CodeModel{
 
@@ -239,9 +242,9 @@ public class CodeModel{
 
 	public static interface EggFun<T> extends EggAbstr<T> {
 
-		public Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException;
+		public Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException;
 
-		public Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException;
+		public Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException;
 
 	}
 	
@@ -251,12 +254,13 @@ public class CodeModel{
 			super(theName);
 		}
 
-		public final Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
+		public final Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 			this.checkMeaning(n);
-			return this.functionCreate(n, parentTyp);
+			Accessible<? extends T> re = this.functionCreate(n, parentTyp);
+			return re;
 		}
 
-		public Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
+		public Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException  {
 			return null;
 		}
 
@@ -270,7 +274,7 @@ public class CodeModel{
 
 		EggFun<? extends S> getChildBuilderFun(CodeNode n) throws AbstractInterpreterException;
 
-		public Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException;
+		public Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException;
 
 	}
 	
@@ -309,7 +313,7 @@ public class CodeModel{
 			return s;
 		}
 
-		public final Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException {
+		public final Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 			EggFun<? extends S> cb = this.getChildBuilderFun(child);
 			return cb.functionCreateThis(child, parentTyp);
 		}
@@ -458,13 +462,13 @@ public class CodeModel{
 		private final Map<String, EggFun<? extends S>> childBuilderFun = new HashMap<>();
 		
 		@Override
-		public final Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
+		public final Accessible<? extends T> functionCreateThis(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 			this.checkMeaning(n);
 			return this.functionCreate(n, parentTyp);
 		}		
 
 		@Override
-		public abstract Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException;
+		public abstract Accessible<? extends T> functionCreate(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException;
 
 		
 		@Override
@@ -503,7 +507,7 @@ public class CodeModel{
 		}
 
 		@Override
-		public final Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException {
+		public final Accessible<? extends S> functionCreateChild(CodeNode child, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 			EggFun<? extends S> cb = this.getChildBuilderFun(child);
 			if(cb == null){
 				return null;

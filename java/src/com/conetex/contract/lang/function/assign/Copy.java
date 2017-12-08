@@ -7,12 +7,17 @@ import com.conetex.contract.lang.function.access.AccessibleValue;
 public class Copy<T> extends AbstractAssigment<T>{
 
 	Copy(AccessibleValue<T> trg, Accessible<T> src) {
-		super(Symbols.comCopy(), trg, src);
+		super(trg, src);
 	}
 
 	@Override
 	public boolean doCopy() {
 		return true;
+	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comCopy();
 	}
 
 }

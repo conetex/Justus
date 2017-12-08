@@ -8,26 +8,15 @@ import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public abstract class Accessible<T> {// implements Accessible<T> {
+public abstract class Accessible<T> {
 
-	String command;
+	private static Accessible<?>[] noChildren = new AccessibleImp<?>[]{};
 	
-	String[] parameter;
+	private static String[] noParams = new String[]{};
+
+	private static List<CodeNode> noChildNodes = new LinkedList<>();
 	
-	Accessible<?>[] children;
-	
-	protected Accessible(String theCommand, String[] theParameter, Accessible<?>[] theChildren){
-		this.command = theCommand;
-		this.parameter = theParameter;
-		this.children = theChildren;
-		if(theCommand.equals("")){
-			System.out.println("SHIT");
-		}
-	}
-	
-	public String getCommand(){
-		return this.command;
-	}
+	protected Accessible(){}
 	
 	public abstract T getFrom(Structure thisObject) throws AbstractRuntimeException;
 
@@ -35,23 +24,34 @@ public abstract class Accessible<T> {// implements Accessible<T> {
 
 	public abstract Class<T> getRawTypeClass();
 
-	//public CodeNode createCodeNode(TypeComplexOfFunction parent) {
-	public CodeNode createCodeNode(TypeComplex parent){
-		
-		List<CodeNode> NodeChildren = new LinkedList<>();
-		for(Accessible<?> a : this.children){
-			CodeNode x = a.createCodeNode(parent);
-			if(x == null) {
-				System.out.println("SHIT");
-			}
-			NodeChildren.add( x );
-		}		
-		
-		return new CodeNode(parent, this.command, this.parameter, NodeChildren);
-	}
+	public abstract String getCommand();
 
-
+	public abstract Accessible<?>[] getChildren();
 	
-	//public abstract CodeNode persist();
+	public Accessible<?>[] getChildrenDft(){
+		return Accessible.noChildren;
+	}
+	
+	public String[] getParameterDft() {
+		return Accessible.noParams;
+	}
+	
+	public abstract String[] getParameter();
+
+	public CodeNode createCodeNode(TypeComplex parent){
+		Accessible<?>[] cs = this.getChildren();
+		if(cs != null){
+			List<CodeNode> NodeChildren = new LinkedList<>();
+			for(Accessible<?> a : cs){
+				CodeNode x = a.createCodeNode(parent);
+				if(x == null) {
+					System.out.println("SHIT");
+				}
+				NodeChildren.add( x );
+			}		
+			return new CodeNode(parent, this.getCommand(), this.getParameter(), NodeChildren);
+		}
+		return new CodeNode(parent, this.getCommand(), this.getParameter(), Accessible.noChildNodes);
+	}
 
 }

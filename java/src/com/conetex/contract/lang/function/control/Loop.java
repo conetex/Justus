@@ -17,7 +17,12 @@ public class Loop<V> extends When<V>{
 			System.err.println("theName is null");
 			return null;
 		}
-		Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+		//Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+		Steps<SV> theSteps = new Steps<SV>(theStepsIf, Function.getReturns(theStepsIf, theRawTypeClass)){
+			@Override
+			public String getCommand() {
+				return Symbols.comThen();
+			}};
         return new Loop<>(theCondition, theSteps, theRawTypeClass);
 	}
 

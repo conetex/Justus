@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
+import com.conetex.contract.lang.function.AccessibleWithChildrenAndParams;
 import com.conetex.contract.lang.function.access.AccessibleValue;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -43,12 +45,22 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 	}
 
 	private FunctionCall(Function<V> theExpression, AccessibleValue<Structure> theReference, List<Accessible<?>> assig) {
-		super(Symbols.comCall(), new String[]{theExpression.getName(), theReference.getPath()}, assig.toArray(new Accessible<?>[assig.size()]));
+		super();
 		this.function = theExpression;
 		this.reference = theReference;
 		this.paramAssigments = assig;
 	}
 
+	@Override
+	public Accessible<?>[] getChildren() {
+		return this.paramAssigments.toArray(new Accessible<?>[this.paramAssigments.size()]);
+	}
+
+	@Override
+	public String[] getParameter() {
+		return new String[]{this.function.getName(), this.reference.getPath()};
+	}
+	
 	@Override
 	public V getFrom(Structure thisObject) throws AbstractRuntimeException {
 		// block hier ...
@@ -104,5 +116,12 @@ public class FunctionCall<V> extends Accessible<V>{ // V extends Value<?>
 	public Class<V> getRawTypeClass() {
 		return this.function.getRawTypeClass();
 	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comCall();
+	}
+
+
 
 }

@@ -2,10 +2,11 @@ package com.conetex.contract.lang.function.bool.expression;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class ComparisonString extends Accessible<Boolean>{
+public class ComparisonString extends AccessibleWithChildren<Boolean>{
 
 	private static final int	SMALLER	= -1;
 	private static final int	EQUAL	= 0;
@@ -16,25 +17,25 @@ public class ComparisonString extends Accessible<Boolean>{
 			return null;
 		}
 		if(operation.equals(Symbols.comSmaller())){
-			return create(theA, theB, operation, ComparisonString.SMALLER);
+			return create(theA, theB, ComparisonString.SMALLER);
 		}
 		if(operation.equals(Symbols.comEqual())){
-			return create(theA, theB, operation, ComparisonString.EQUAL);
+			return create(theA, theB, ComparisonString.EQUAL);
 		}
 		if(operation.equals(Symbols.comGreater())){
-			return create(theA, theB, operation, ComparisonString.GREATER);
+			return create(theA, theB, ComparisonString.GREATER);
 		}
 		return null;
 	}
 
-	private static ComparisonString create(Accessible<String> theA, Accessible<String> theB, String command, int operation) {
+	private static ComparisonString create(Accessible<String> theA, Accessible<String> theB, int operation) {
 		if(theA == null || theB == null){
 			return null;
 		}
 		if(operation < ComparisonString.SMALLER || operation > ComparisonString.GREATER){
 			return null;
 		}
-		return new ComparisonString(command, theA, theB, operation);
+		return new ComparisonString(theA, theB, operation);
 	}
 
 	private final int operator;
@@ -45,8 +46,8 @@ public class ComparisonString extends Accessible<Boolean>{
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
-	private ComparisonString(String command, Accessible<String> theA, Accessible<String> theB, int theOperation) {
-		super(command, new String[]{}, new Accessible<?>[] {theA, theB});
+	private ComparisonString(Accessible<String> theA, Accessible<String> theB, int theOperation) {
+		super(new Accessible<?>[] {theA, theB});
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
@@ -107,6 +108,20 @@ public class ComparisonString extends Accessible<Boolean>{
 	@Override
 	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
+	}
+
+	@Override
+	public String getCommand() {
+		if(this.operator == ComparisonString.SMALLER){
+			return Symbols.comSmaller();
+		}
+		if(this.operator == ComparisonString.EQUAL){
+			return Symbols.comEqual();
+		}
+		if(this.operator == ComparisonString.GREATER){
+			return Symbols.comGreater();
+		}
+		return null;
 	}
 
 }

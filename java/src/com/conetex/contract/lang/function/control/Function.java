@@ -10,6 +10,8 @@ import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
+import com.conetex.contract.lang.function.AccessibleWithChildrenAndParams;
 import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
 import com.conetex.contract.lang.function.math.ElementaryArithmetic;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -270,10 +272,10 @@ public class Function<V> extends Accessible<V>{
 		return returns;
 	}
 
-	private final String name;
+	private final String[] nameParam;
 
 	public String getName() {
-		return this.name;
+		return this.nameParam[0];
 	}
 
 	private final Class<V> rawTypeClass;
@@ -282,33 +284,43 @@ public class Function<V> extends Accessible<V>{
 
 	@Override
 	public String toString() {
-		return "function " + this.name;
+		return "function " + this.nameParam[0];
 	}
 
 	private final Accessible<?>[] steps;
 
 	private Function(Accessible<?>[] theSteps, List<ReturnAbstract<V>> theReturns, String theName, Class<V> theRawTypeClass) {
-		super(Symbols.comFunction(), new String[]{theName}, theSteps);
+		super();
 		this.steps = theSteps;
 		this.returns = theReturns;
-		this.name = theName;
+		this.nameParam = new String[]{theName};
 		this.rawTypeClass = theRawTypeClass;
 	}
 
+	@Override
+	public Accessible<?>[] getChildren() {
+		return this.steps;
+	}
+
+	@Override
+	public String[] getParameter() {
+		return this.nameParam;
+	}
+	
 	public Accessible<?>[] getSteps(){
 		return this.steps;
 	}
 	
 	public void getFromRoot(Structure thisObject) throws AbstractRuntimeException {
-		System.out.println("Function getFrom " + this.name);
+		System.out.println("Function getFrom " + this.nameParam[0]);
 
-		Structure thisObjectB = thisObject.getStructure(this.name);
+		Structure thisObjectB = thisObject.getStructure(this.nameParam[0]);
 		if(thisObject.getParent() == null){
 			thisObjectB = thisObject;
 		}
 
 		if(thisObjectB == null){
-			System.err.println("Function Structure getFrom: no access to data for function " + this.name);
+			System.err.println("Function Structure getFrom: no access to data for function " + this.nameParam[0]);
 			return;
 		}
 		Function.doSteps(this.steps, this.returns, new Result(), thisObjectB);
@@ -329,5 +341,12 @@ public class Function<V> extends Accessible<V>{
 	public Class<V> getRawTypeClass() {
 		return this.rawTypeClass;
 	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comFunction();
+	}
+
+
 
 }

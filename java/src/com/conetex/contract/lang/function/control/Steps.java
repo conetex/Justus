@@ -2,33 +2,23 @@ package com.conetex.contract.lang.function.control;
 
 import java.util.List;
 
-import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class Steps<T> extends Accessible<T>{
+public abstract class Steps<T> extends AccessibleWithChildren<T>{
 
 	private final Accessible<?>[] steps;
 	
 	private final List<ReturnAbstract<T>> returns;
 	
-	Steps(String theCommand, Accessible<?>[] theSteps, List<ReturnAbstract<T>> theReturns){
-		super(theCommand, new String[]{}, theSteps);
+	Steps(Accessible<?>[] theSteps, List<ReturnAbstract<T>> theReturns){
+		super(theSteps);
 		this.steps = theSteps;
 		this.returns = theReturns;
 	}
-
-	public static <SV> Steps<SV> create(String theCommand, Accessible<?>[] theSteps, Class<SV> theRawTypeClass) throws CastException {
-		if(theSteps == null){
-			System.err.println("theSteps is null");
-			return null;
-		}
-		List<ReturnAbstract<SV>> returns = Function.getReturns(theSteps, theRawTypeClass);
-        return new Steps<>(theCommand, theSteps, returns);
-	}	
-	
 	
 	@Override
 	public T getFrom(Structure thisObject) throws AbstractRuntimeException {

@@ -7,12 +7,17 @@ import com.conetex.contract.lang.function.access.AccessibleValue;
 public class Reference<T> extends AbstractAssigment<T>{
 
 	Reference(AccessibleValue<T> trg, Accessible<T> src) {
-		super(Symbols.comRefer(), trg, src);
+		super(trg, src);
 	}
 
 	@Override
 	public boolean doCopy() {
 		return false;
+	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comRefer();
 	}
 
 }

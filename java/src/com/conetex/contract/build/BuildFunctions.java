@@ -21,6 +21,7 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionFunction.UnknownComplexType;
 import com.conetex.contract.build.exceptionFunction.UnknownType;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleConstant;
 import com.conetex.contract.lang.function.access.AccessibleValue;
@@ -42,6 +43,8 @@ import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class BuildFunctions{
 
@@ -49,7 +52,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Number, Number> numberExpession = new BoxFunImp<Number, Number>("numberExpession"){
 			@Override
-			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				// MATH
 				String name = thisNode.getCommand();
 				Accessible<? extends Number> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
@@ -61,7 +64,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Boolean, Boolean> boolExpression = new BoxFunImp<Boolean, Boolean>("boolExpression"){
 			@Override
-			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				// BOOL
 				String name = thisNode.getCommand();
 				if(name.equals(Symbols.comNot())){
@@ -80,7 +83,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Boolean, Object> boolComparsion = new BoxFunImp<Boolean, Object>("boolComparsion"){
 			@Override
-			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				// COMPARISON
 				Accessible<?> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
 				Accessible<?> b = this.functionCreateChild(thisNode.getChildElementByIndex(1), parentType);
@@ -91,7 +94,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Boolean, ?> boolNullCheck = new BoxFunImp<Boolean, Object>("boolNullCheck"){
 			@Override
-			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
 				check1PartOperations(thisNode, a);
 				return IsNull.create(a);
@@ -136,7 +139,7 @@ public class BuildFunctions{
 
 		static final EggFun<Structure> objConst = new EggFunImp<Structure>("objConst"){
 			@Override
-			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 				return AccessibleConstant.create2(Structure.class, thisNode);
 			}
 		};
@@ -144,7 +147,7 @@ public class BuildFunctions{
 		static final EggFun<Object> whatEverConst = new EggFunImp<Object>("whatEverConst"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType)
-					throws TypeNotDeterminated, UnknownType, UnknownCommandParameter, UnknownCommand {
+					throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 				Accessible<? extends Number> reNu = AccessibleConstant.try2CreateNumConst(thisNode, parentType);
 				if(reNu != null){
 					return reNu;
@@ -164,14 +167,14 @@ public class BuildFunctions{
 		static final EggFun<Number> numberConst = new EggFunImp<Number>("numberConst"){
 			@Override
 			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType)
-					throws UnknownType, TypeNotDeterminated, UnknownCommandParameter, UnknownCommand {
+					throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 				return AccessibleConstant.createNumConst(thisNode, parentType);
 			}
 		};
 
 		static final EggFun<Boolean> boolConst = new EggFunImp<Boolean>("boolConst"){
 			@Override
-			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+			public Accessible<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 				return AccessibleConstant.create2(Boolean.class, thisNode);
 			}
 		};
@@ -182,7 +185,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Structure, Structure> structureAssigment = new BoxFunImp<Structure, Structure>("objAssigment"){
 			@Override
-			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
 				AccessibleValue<Structure> trg = AccessibleValue.createFunctionSetable(trgNode.getParameter(Symbols.paramValue()), parentType, Structure.class);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
@@ -197,7 +200,7 @@ public class BuildFunctions{
 		static final BoxFun<Number, Number> numberAssigment = new BoxFunImp<Number, Number>("numberAssigment"){
 
 			@Override
-			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
 				AccessibleValue<? extends Number> trg = AccessibleValue.createFunctionSetableNumber(trgNode.getParameter(Symbols.paramValue()), parentType);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
@@ -212,7 +215,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Boolean, Boolean> boolAssigment = new BoxFunImp<Boolean, Boolean>("boolAssigment"){
 			@Override
-			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
 				AccessibleValue<Boolean> trg = AccessibleValue.createFunctionSetable(trgNode.getParameter(Symbols.paramValue()), parentType, Boolean.class);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
@@ -225,7 +228,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Object, Object> whatEverAssigment = new BoxFunImp<Object, Object>("whatEverAssigment"){
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				CodeNode trgNode = thisNode.getChildElementByIndex(0);
 				AccessibleValue<?> trg = AccessibleValue.createFunctionSetableWhatEver(trgNode.getParameter(Symbols.paramValue()), parentType);
 				CodeNode srcNode = thisNode.getChildElementByIndex(1);
@@ -246,7 +249,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Object, Object> whatEverReturn = new BoxFunImp<Object, Object>("whatEverReturn"){
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
 				return Return.create(a);
 			}
@@ -254,7 +257,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Structure, Structure> structureReturn = new BoxFunImp<Structure, Structure>("objReturn"){
 			@Override
-			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<? extends Structure> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
 				return Return.create(a);
 			}
@@ -262,7 +265,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Number, Number> numberReturn = new BoxFunImp<Number, Number>("numberReturn"){
 			@Override
-			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<? extends Number> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
 				return Return.create(a);
 			}
@@ -270,7 +273,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Boolean, Boolean> boolReturn = new BoxFunImp<Boolean, Boolean>("boolReturn"){
 			@Override
-			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<? extends Boolean> a = this.functionCreateChild(thisNode.getChildElementByIndex(0), parentType);
 				return Return.create(a);
 			}
@@ -285,7 +288,7 @@ public class BuildFunctions{
 				super(theName);
 			}
 			@Override
-			public Function<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if(returntype == Object.class){
@@ -309,7 +312,7 @@ public class BuildFunctions{
 				super(theName);
 			}
 			@Override
-			public Function<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if(returntype == Structure.class){
@@ -326,7 +329,7 @@ public class BuildFunctions{
 				super(theName);
 			}
 			@Override
-			public Function<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				return Function.createNum(theSteps, thisNode.getParameter(Symbols.paramName()), returntype);
@@ -339,7 +342,7 @@ public class BuildFunctions{
 				super(theName);
 			}
 			@Override
-			public Function<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, parentType, this);
 				Class<?> returntype = Function.getReturnTyp(theSteps);
 				if(returntype == Boolean.class){
@@ -364,7 +367,7 @@ public class BuildFunctions{
 			}
 
 			@Override
-			public Function<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Function<? extends Object> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
 
 				//return this.functionCreateImpl(thisNode, thisType);
@@ -449,7 +452,7 @@ public class BuildFunctions{
 
 		static final BoxFunImp<Object, Object> voidCall = new BoxFunImp<Object, Object>("voidCall"){
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
 				AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
 				if(re == null){
@@ -474,7 +477,7 @@ public class BuildFunctions{
 
 		static final BoxFunImp<Object, Object> whatEverCall = new BoxFunImp<Object, Object>("whatEverCall"){
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
 				AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
 				if(re == null){
@@ -499,7 +502,7 @@ public class BuildFunctions{
 
 		static final BoxFunImp<Structure, Object> structureCall = new BoxFunImp<Structure, Object>("objCall"){
 			@Override
-			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
 				AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
 				if(re == null){
@@ -524,7 +527,7 @@ public class BuildFunctions{
 
 		static final BoxFunImp<Number, Object> numberCall = new BoxFunImp<Number, Object>("numberCall"){
 			@Override
-			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Number> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				// CONTROL FUNCTION
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
 				AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
@@ -550,7 +553,7 @@ public class BuildFunctions{
 
 		static final BoxFunImp<Boolean, Object> boolCall = new BoxFunImp<Boolean, Object>("boolCall"){
 			@Override
-			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<? extends Boolean> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				// CONTROL FUNCTION
 				String functionObj = thisNode.getParameter(Symbols.paramType()); //
 				AccessibleValue<Structure> re = AccessibleValue.create(functionObj, Structure.class);
@@ -585,7 +588,7 @@ public class BuildFunctions{
 
 		static final BoxFun<Object, Object> loop = new BoxFunImp<Object, Object>("unknownLoop"){
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				// TODO dies ist ne kopie von unknownIf
 				int countOfChilds = thisNode.getChildNodesSize();
 				if(countOfChilds == 2){
@@ -608,11 +611,11 @@ public class BuildFunctions{
 
 		static final BoxFun<Object, Object> when = new BoxFunImp<Object, Object>("unknownIf"){
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				return createIntern(thisNode, parentType);
 			}
 
-			private Accessible<?> createIntern(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			private Accessible<?> createIntern(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 
 				int countOfChilds = thisNode.getChildNodesSize();
 				if(countOfChilds == 2){
@@ -684,7 +687,7 @@ public class BuildFunctions{
 
 
 
-	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
+	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 
 		//return
 		//Types.complex.functionCreateImpl(thisNode, thisType);
@@ -696,7 +699,7 @@ public class BuildFunctions{
 
 	}
 
-	static Accessible<?>[] getFunctionSteps(CodeNode n, TypeComplex type, BoxFun<?, ?> box) throws AbstractInterpreterException {
+	static Accessible<?>[] getFunctionSteps(CodeNode n, TypeComplex type, BoxFun<?, ?> box) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 
 		String name = n.getCommand();
 		if(type == null){
@@ -790,7 +793,7 @@ public class BuildFunctions{
 		}
 	}
 	
-	static List<AbstractAssigment<?>> __createAssigs(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException {
+	static List<AbstractAssigment<?>> __createAssigs(CodeNode n, TypeComplex parentTyp) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 		//String functionComplexName = n.getParameter(Symbols.paramName());
 		//functionComplexName = Symbols.getSimpleName(functionComplexName);
 		//String parentComplexPath = parentTyp.getName();

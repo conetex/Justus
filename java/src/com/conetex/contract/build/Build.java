@@ -7,6 +7,7 @@ import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
 import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
@@ -14,12 +15,14 @@ import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.runNew.Main;
 import com.conetex.contract.runNew.Writer;
 
 public class Build{
 	
-	public static Main create(CodeNode code) throws AbstractInterpreterException {
+	public static Main create(CodeNode code) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 		TypePrimitive.init();
 		CodeNode.init(code);
 		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);

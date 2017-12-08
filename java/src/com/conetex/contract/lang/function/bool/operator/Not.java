@@ -2,11 +2,12 @@ package com.conetex.contract.lang.function.bool.operator;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 //Unary operation
-public class Not extends Accessible<Boolean>{
+public class Not extends AccessibleWithChildren<Boolean>{
 
 	public static Not create(Accessible<? extends Boolean> theSub) {
 		if(theSub == null){
@@ -18,7 +19,7 @@ public class Not extends Accessible<Boolean>{
 	private final Accessible<? extends Boolean> sub;
 
 	private Not(Accessible<? extends Boolean> theSub) {
-		super(Symbols.comNot(), new String[]{}, new Accessible<?>[] {theSub});
+		super(new Accessible<?>[] {theSub});
 		this.sub = theSub;
 	}
 
@@ -42,6 +43,11 @@ public class Not extends Accessible<Boolean>{
 	@Override
 	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
+	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comNot();
 	}
 
 }

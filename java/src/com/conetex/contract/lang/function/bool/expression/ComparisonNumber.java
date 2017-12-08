@@ -4,10 +4,11 @@ import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class ComparisonNumber extends Accessible<Boolean>{
+public class ComparisonNumber extends AccessibleWithChildren<Boolean>{
 	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit ueber den
 	// tats�chlichen typ entschieden wird.
 
@@ -38,9 +39,23 @@ public class ComparisonNumber extends Accessible<Boolean>{
 		if(operation < ComparisonNumber.SMALLER || operation > ComparisonNumber.GREATER){
 			return null;
 		}
-		return new ComparisonNumber(command, theA, theB, operation);
+		return new ComparisonNumber(theA, theB, operation);
 	}
 
+	@Override
+	public String getCommand() {
+		if(this.operator == ComparisonNumber.SMALLER){
+			return Symbols.comSmaller();
+		}
+		if(this.operator == ComparisonNumber.EQUAL){
+			return Symbols.comEqual();
+		}
+		if(this.operator == ComparisonNumber.GREATER){
+			return Symbols.comGreater();
+		}
+		return null;
+	}
+	
 	private final int operator;
 
 	private final Accessible<? extends Number> a;
@@ -49,8 +64,8 @@ public class ComparisonNumber extends Accessible<Boolean>{
 
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
-	private ComparisonNumber(String command, Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation) {
-		super(command, new String[]{}, new Accessible<?>[] {theA, theB});
+	private ComparisonNumber(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation) {
+		super(new Accessible<?>[] {theA, theB});
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
@@ -157,5 +172,7 @@ public class ComparisonNumber extends Accessible<Boolean>{
 	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
+
+
 
 }

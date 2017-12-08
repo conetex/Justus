@@ -33,6 +33,7 @@ import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.runNew.Main;
 import com.conetex.contract.runNew.Writer;
@@ -93,13 +94,13 @@ class ReadXML {
 	}
 
 	public static void main(String[] args)
-			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException {
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
 
 		CodeModel.build();// TODO das sollte woanders gemacht werden, denn hier
 							// ist alles xml-driven...
 
 		String fileExtension = ".xml";
-		String inFile = "input02_out_out";
+		String inFile = "input02";
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile + fileExtension)) {
 

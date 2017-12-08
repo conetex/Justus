@@ -1,8 +1,10 @@
 package com.conetex.contract.lang.function.access;
 
 import com.conetex.contract.build.BuildFunctions;
+import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithParams;
 import com.conetex.contract.lang.function.math.ElementaryArithmetic;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
@@ -43,23 +45,29 @@ public class AccessibleValue<T> extends Accessible<T>{
         return AccessibleValue.create(path, rawType);
 	}
 	
-	final String path;
+	final String[] path;
 
 	public String getPath() {
-		return this.path;
+		return this.path[0];
 	}
 
 	final Class<T> clazz;
 
 	AccessibleValue(String thePath, Class<T> theClass) {
-		super("ref", new String[] {thePath}, new Accessible<?>[]{});// TODO no command!!! das ist ein design-problem
-		this.path = thePath;
+		super();
+		// TODO no command!!! das ist ein design-problem
+		this.path = new String[] {thePath};
 		this.clazz = theClass;
 	}
 
 	@Override
+	public String getCommand() {
+		return Symbols.comReference();
+	}
+	
+	@Override
 	public T getFrom(Structure thisObject) throws ValueCastException {
-		Value<T> value = thisObject.getValue(this.path, this.clazz);
+		Value<T> value = thisObject.getValue(this.getPath(), this.clazz);
 		if(value == null){
 			return null;
 		}
@@ -67,7 +75,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 	}
 
 	public T setTo(Structure thisObject, T newValue) throws Invalid, ValueCastException {
-		Value<T> value = thisObject.getValue(this.path, this.clazz);
+		Value<T> value = thisObject.getValue(this.getPath(), this.clazz);
 		if(value == null){
 			return null;
 		}
@@ -76,7 +84,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 
 	@Override
 	public T copyFrom(Structure thisObject) throws Invalid, ValueCastException {
-		Value<T> value = thisObject.getValue(this.path, this.clazz);
+		Value<T> value = thisObject.getValue(this.getPath(), this.clazz);
 		if(value == null){
 			return null;
 		}
@@ -102,5 +110,17 @@ public class AccessibleValue<T> extends Accessible<T>{
 		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Attribute.getRawTypeClass(path, parentTyp));
 		return AccessibleValue.create(path, rawType);
 	}
+
+	@Override
+	public Accessible<?>[] getChildren() {
+		return super.getChildrenDft();
+	}
+
+	@Override
+	public String[] getParameter() {
+		return this.path;
+	}
+
+
 
 }

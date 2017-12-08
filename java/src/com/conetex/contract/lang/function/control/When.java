@@ -28,7 +28,12 @@ public class When<V> extends ReturnAbstract<V>{
 			System.err.println("theName is null");
 			return null;
 		}
-		Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+		//Steps<SV> theSteps = Steps.create(Symbols.comThen(), theStepsIf, theRawTypeClass);
+		Steps<SV> theSteps = new Steps<SV>(theStepsIf, Function.getReturns(theStepsIf, theRawTypeClass)){
+			@Override
+			public String getCommand() {
+				return Symbols.comThen();
+			}};
         return new When<>(theCondition, theSteps, theRawTypeClass);
 	}
 
@@ -43,7 +48,7 @@ public class When<V> extends ReturnAbstract<V>{
 	*/
 	
 	When(Accessible<Boolean> theCondition, Steps<V> theSteps, Class<V> theRawTypeClass) {
-		super(Symbols.comWhen(), new String[]{}, new Accessible<?>[] {theCondition, theSteps});
+		super(new Accessible<?>[] {theCondition, theSteps});
 		this.steps = theSteps;
 		this.condition = theCondition;
 		this.rawTypeClass = theRawTypeClass;
@@ -82,5 +87,10 @@ public class When<V> extends ReturnAbstract<V>{
 			return this.steps.getFrom(thisObject, r);
 		}
 		return null;
+	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comWhen();
 	}
 }

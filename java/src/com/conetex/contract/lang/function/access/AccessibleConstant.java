@@ -4,12 +4,14 @@ import java.math.BigInteger;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
+import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.TypeNotDeterminated;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionFunction.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.AccessibleWithParams;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
@@ -17,10 +19,10 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class AccessibleConstant<T> extends Accessible<T>{
-
+public abstract class AccessibleConstant<T> extends Accessible<T>{
+	
 	public static Accessible<? extends Number> createNumConst(CodeNode n, TypeComplex parentTyp)
-			throws UnknownType, TypeNotDeterminated, UnknownCommandParameter, UnknownCommand {
+			throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 		Accessible<? extends Number> re = try2CreateNumConst(n, parentTyp);
 		if(re == null){
 			throw new TypeNotDeterminated("number const-Type: " + n.getParameter(Symbols.paramName()));
@@ -28,7 +30,10 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return re;
 	}
 
-	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+	@Override
+	public abstract String getCommand();
+	
+	public static Accessible<? extends Number> try2CreateNumConst(CodeNode n, TypeComplex parentTyp) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBigInt())){
 			return AccessibleConstant.create2(BigInteger.class, n);
@@ -42,7 +47,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return null;
 	}
 
-	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+	public static Accessible<Boolean> try2CreateBoolConst(CodeNode n, TypeComplex parentTyp) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comBool())){
 			return AccessibleConstant.create2(Boolean.class, n);
@@ -50,7 +55,7 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return null;
 	}
 
-	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, TypeComplex parentTyp) throws UnknownType, UnknownCommandParameter, UnknownCommand {
+	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, TypeComplex parentTyp) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 		String name = n.getCommand();
 		if(name.equals(Symbols.comStructure())){
 			return AccessibleConstant.create2(Structure.class, n);
@@ -58,69 +63,87 @@ public class AccessibleConstant<T> extends Accessible<T>{
 		return null;
 	}
 
-	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, CodeNode thisNode) throws UnknownType, UnknownCommandParameter, UnknownCommand {
-		TypePrimitive<RE> theClass = null;
-		try{
+	//public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, CodeNode thisNode)
+	
+	private static <RE> Value<RE> getValue(TypePrimitive<RE> theClass, CodeNode thisNode) throws AbstractInterpreterException, Inconvertible, Invalid {
+		Value<RE> constVal = theClass.createValue(thisNode);
+		if(constVal == null){
+			throw new AbstractInterpreterException("can not create value");
+		}
+		constVal.setConverted( thisNode.getParameter(Symbols.paramValue()) );
+		return constVal;
+	}
 
-			if(expectedBaseTyp == BigInteger.class){
-				theClass = TypePrimitive.getInstance(Symbols.CLASS_BINT, expectedBaseTyp);
-			}
-			else if(expectedBaseTyp == Long.class){
-				theClass = TypePrimitive.getInstance(Symbols.CLASS_LNG, expectedBaseTyp);
-			}
-			else if(expectedBaseTyp == Integer.class){
-				theClass = TypePrimitive.getInstance(Symbols.CLASS_INT, expectedBaseTyp);
-			}
-			else if(expectedBaseTyp == Byte.class){
-				// TODO Typen klaeren ...
-				return null;
-			}
-			else if(expectedBaseTyp == String.class){
-				theClass = TypePrimitive.getInstance(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
-			}
-			else if(expectedBaseTyp == Boolean.class){
-				theClass = TypePrimitive.getInstance(Symbols.CLASS_BOOL, expectedBaseTyp);
-			}
-
+	
+	public static <RE> AccessibleConstant<RE> create2(Class<RE> expectedBaseTyp, CodeNode thisNode) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
+		if(expectedBaseTyp == BigInteger.class){
+			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_BINT, expectedBaseTyp);
+			return new AccessibleConstant<RE>( getValue(theClass, thisNode) ){
+				@Override
+				public String getCommand() {
+					return Symbols.comBigInt();
+				}};
 		}
-		catch(AbstractTypException e){
-			// convert TypeCastException InterpreterException
-			throw new UnknownType(expectedBaseTyp.getName());
+		else if(expectedBaseTyp == Long.class){
+			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_LNG, expectedBaseTyp);
+			return new AccessibleConstant<RE>( getValue(theClass, thisNode) ){
+				@Override
+				public String getCommand() {
+					return Symbols.comLng();
+				}};
 		}
-
-		if(theClass != null){
-			Value<RE> constVal = theClass.createValue(thisNode);
-			
-			try{
-				constVal.setConverted( thisNode.getParameter(Symbols.paramValue()) );
-			}
-			catch(Inconvertible | Invalid e){
-				// TODO convert runtime exceptions to build Lang Exception
-				e.printStackTrace();
-				return null;
-			}
-			return AccessibleConstant.<RE>create(constVal);
+		else if(expectedBaseTyp == Integer.class){
+			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_INT, expectedBaseTyp);
+			return new AccessibleConstant<RE>( getValue(theClass, thisNode) ){
+				@Override
+				public String getCommand() {
+					return Symbols.comInt();
+				}};
 		}
-		else{
-			// TODO error ... Primitive.<RE>getInstance can return null ...
+		else if(expectedBaseTyp == Byte.class){
+			// TODO Typen klaeren ...
+			return null;
 		}
+		else if(expectedBaseTyp == String.class){// TODO ascii klaeren...
+			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
+			return new AccessibleConstant<RE>( getValue(theClass, thisNode) ){
+				@Override
+				public String getCommand() {
+					return Symbols.comStr();
+				}};
+		}
+		else if(expectedBaseTyp == Boolean.class){
+			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_BOOL, expectedBaseTyp);
+			return new AccessibleConstant<RE>( getValue(theClass, thisNode) ){
+				@Override
+				public String getCommand() {
+					return Symbols.comBool();
+				}};
+		}
+		// TODO error ... Primitive.<RE>getInstance can return null ...
 		return null;
 	}
 
-	private static <T> AccessibleConstant<T> create(Value<T> theValue) {
-		if(theValue == null){
-			return null;
-		}
-		return new AccessibleConstant<>(theValue);
-	}
+
 
 	private final Value<T> value;
 
-	private AccessibleConstant(Value<T> theValue) {
-		super("Integer", new String[] {theValue.get().toString()}, new Accessible<?>[]{});// TODO no command!!! das ist ein design-problem
+	AccessibleConstant(Value<T> theValue) {
+		super();// TODO no command!!! das ist ein design-problem
 		this.value = theValue;
 	}
 
+	@Override
+	public Accessible<?>[] getChildren() {
+		return super.getChildrenDft();
+	}
+
+	@Override
+	public String[] getParameter() {
+		return new String[] {this.value.get().toString()};
+	}
+	
+	
 	@Override
 	public T getFrom(Structure thisObject) {
 		return this.value.get();
@@ -143,5 +166,6 @@ public class AccessibleConstant<T> extends Accessible<T>{
 	public Class<T> getRawTypeClass() {
 		return this.value.getRawTypeClass();
 	}
+
 
 }

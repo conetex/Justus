@@ -10,6 +10,7 @@ import com.conetex.contract.build.CodeModel.BoxType;
 import com.conetex.contract.build.CodeModel.BoxTypeImp;
 import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.Attribute;
@@ -18,6 +19,8 @@ import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
+import com.conetex.contract.run.exceptionValue.Inconvertible;
+import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class BuildTypes{
 
@@ -30,9 +33,9 @@ public class BuildTypes{
 			}
 
 			@Override
-			public abstract Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException;
+			public abstract Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException;
 
-			public abstract Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException;
+			public abstract Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException;
 
 		}
 		
@@ -58,7 +61,7 @@ public class BuildTypes{
 			}
 
 			@Override
-			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 
 				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
 
@@ -67,7 +70,7 @@ public class BuildTypes{
 
 			// this is just to create functions of complex
 			@Override
-			public Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
+			public Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				List<CodeNode> children = thisNode.getChildNodes();
 				for(CodeNode c : children){
 					this.functionCreateChild(c, thisType);
@@ -103,14 +106,14 @@ public class BuildTypes{
 			}
 
 			@Override
-			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException {
+			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 
 				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
 
 				return this.functionCreateImpl(thisNode, thisType);
 			}
 			
-			public Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException {
+			public Function<?> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				Accessible<?>[] theSteps = BuildFunctions.getFunctionSteps(thisNode, thisType, this);
 				if(theSteps == null){
 					System.err.println("no steps ");

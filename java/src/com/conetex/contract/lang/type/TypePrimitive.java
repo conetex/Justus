@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
+import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
 import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
@@ -161,6 +162,14 @@ public class TypePrimitive<T> extends Type<T>{
 		}
 	}
 
+	public static <W> TypePrimitive<W> getInstanceNotNull(String valueImplementClassStr, Class<W> rawType) throws AbstractTypException, AbstractInterpreterException {
+		TypePrimitive<?> re = TypePrimitive.getInstanceWild(valueImplementClassStr);
+		if(re != null){
+			return Cast.toTypedPrimitive(re, rawType);
+		}
+		throw new AbstractInterpreterException("can not find " + valueImplementClassStr);
+	}
+	
 	public static <W> TypePrimitive<W> getInstance(String valueImplementClassStr, Class<W> rawType) throws AbstractTypException {
 		TypePrimitive<?> re = TypePrimitive.getInstanceWild(valueImplementClassStr);
 		if(re != null){

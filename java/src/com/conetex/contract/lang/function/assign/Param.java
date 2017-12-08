@@ -7,12 +7,17 @@ import com.conetex.contract.lang.function.access.AccessibleValue;
 public class Param<T> extends AbstractAssigment<T>{
 
 	Param(AccessibleValue<T> trg, Accessible<T> src) {
-		super(Symbols.comParam(), trg, src);
+		super(trg, src);
 	}
 
 	@Override
 	public boolean doCopy() {
 		return false;
+	}
+
+	@Override
+	public String getCommand() {
+		return Symbols.comParam();
 	}
 
 }
