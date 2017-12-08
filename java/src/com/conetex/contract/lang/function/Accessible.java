@@ -40,7 +40,7 @@ public abstract class Accessible<T> {
 
 	public CodeNode createCodeNode(TypeComplex parent){
 		Accessible<?>[] cs = this.getChildren();
-		if(cs != null){
+		if(cs != null && cs.length > 0){
 			List<CodeNode> NodeChildren = new LinkedList<>();
 			for(Accessible<?> a : cs){
 				CodeNode x = a.createCodeNode(parent);

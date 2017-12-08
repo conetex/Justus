@@ -6,7 +6,7 @@ import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class ComparisonString extends AccessibleWithChildren<Boolean>{
+public class ComparisonString extends Accessible<Boolean>{
 
 	private static final int	SMALLER	= -1;
 	private static final int	EQUAL	= 0;
@@ -47,12 +47,22 @@ public class ComparisonString extends AccessibleWithChildren<Boolean>{
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
 	private ComparisonString(Accessible<String> theA, Accessible<String> theB, int theOperation) {
-		super(new Accessible<?>[] {theA, theB});
+		super();
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
 	}
 
+	@Override
+	public Accessible<?>[] getChildren() {
+		return new Accessible<?>[] {this.a, this.b};
+	}
+
+	@Override
+	public String[] getParameter() {
+		return super.getParameterDft();
+	}
+	
 	// public Comparison(Accessible<Comparable<?>> theA,
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {

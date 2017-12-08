@@ -8,7 +8,7 @@ import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-public class ComparisonNumber extends AccessibleWithChildren<Boolean>{
+public class ComparisonNumber extends Accessible<Boolean>{
 	// TODO: eigentlich doof, dass hier doch erst zur Laufzeit ueber den
 	// tats�chlichen typ entschieden wird.
 
@@ -65,12 +65,22 @@ public class ComparisonNumber extends AccessibleWithChildren<Boolean>{
 	// private Comparison(Accessible<T> theA, Accessible<T> theB, int
 	// theOperation){
 	private ComparisonNumber(Accessible<? extends Number> theA, Accessible<? extends Number> theB, int theOperation) {
-		super(new Accessible<?>[] {theA, theB});
+		super();
 		this.a = theA;
 		this.b = theB;
 		this.operator = theOperation;
 	}
 
+	@Override
+	public Accessible<?>[] getChildren() {
+		return new Accessible<?>[] {this.a, this.b};
+	}
+
+	@Override
+	public String[] getParameter() {
+		return super.getParameterDft();
+	}
+	
 	// public Comparison(Accessible<Comparable<?>> theA,
 	// Accessible<Comparable<?>>
 	// theB, int theOperation) {
@@ -172,6 +182,8 @@ public class ComparisonNumber extends AccessibleWithChildren<Boolean>{
 	public Class<Boolean> getRawTypeClass() {
 		return Boolean.class;
 	}
+
+
 
 
 
