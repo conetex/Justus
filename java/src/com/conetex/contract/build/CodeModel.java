@@ -859,6 +859,9 @@ public class CodeModel{
 		Types.complex.means(Symbols.comComplex());
 		Types.complex.registerParameters(new String[] { Symbols.paramName() });
 
+		Types.complexTyped.means(Symbols.comComplex());
+		Types.complexTyped.registerParameters(new String[] { Symbols.paramName(), Symbols.paramType() });
+		
 		/*
 		Types.functions_in_complex.means(Symbols.comComplex());
 		Types.functions_in_complex.registerParameters(new String[] { Symbols.paramName() });

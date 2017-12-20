@@ -2,16 +2,58 @@
 
 <contract name="contract4u" t="http://conetex.org/justus/baseTyps">
 
+	<complexType name="duty">  
+		<!-- <attribute name="participant" type="contract4u.participant"/> -->
+		<attribute name="participant" type="t:ASCII8" />
+	</complexType>
+	
+	<complexType name="dutyOfAgent" type="contract4u.duty">  
+		<!-- <attribute name="participant" type="contract4u.participant"/> -->
+		<attribute name="participant2" type="t:ASCII8" />
+		<function name="foo" type="contract4u.dutyOfAgent.foo">
+		</function>  
+	</complexType>	
+
+	<function name="contract4u.foo" type="contract4u.foo">
+    </function>
+	
+	<attribute name="state" type="t:ASCII8"/>
+	
+	<!--
 	<complexType name="participant">  
 		<attribute name="nick_name" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>        
 		<attribute name="mail_address" type="t:MailAddress64" minOccurs="1" maxOccurs="1" nillable="false"/>
-		<attribute name="public_key" type="t:ASCII8" minOccurs="1" maxOccurs="1" nillable="false"/>
+		<attribute name="public_key" type="t:ASCII256" minOccurs="1" maxOccurs="1" nillable="false"/>
 	</complexType>	
 
-	<attribute name="agent" type="contract4u.participant"/>  
-	<attribute name="client" type="contract4u.participant"/>  
+	<attribute name="dutyOfAgent" type="contract4u.duty"/>  
+	<call type="dutyOfAgent" name="contract4u.duty.todo" />
 
-	<attribute name="state" type="t:ASCII8"/>
+	<attribute name="dutyOfClient" type="contract4u.duty"/>  
+	<call type="dutyOfClient" name="contract4u.duty.todo" />
+
+	<function name="contract4u.foo" type="contract4u.foo">
+    </function>
 	
+	<attribute name="state" type="t:ASCII8"/>
+
+	<VIRTUAL_COMP_VALUE name="dutyOfAgent">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick_name" value="hobo"/>
+        <VIRTUAL_PRIM_VALUE name="mail_address" value="hobo@dida.de"/>
+        <VIRTUAL_PRIM_VALUE name="public_key" value="qpweoiuztrpoqawsifupaosifdapsoidufpaosiufapsoiduf"/>
+      </VIRTUAL_COMP_VALUE>	
+	  <VIRTUAL_PRIM_VALUE name="todo" value="contract4u.foo"/>	  
+    </VIRTUAL_COMP_VALUE>
+
+	<VIRTUAL_COMP_VALUE name="dutyOfClient">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick_name" value="client"/>
+        <VIRTUAL_PRIM_VALUE name="mail_address" value="client@dida.de"/>
+        <VIRTUAL_PRIM_VALUE name="public_key" value="ASDFGAGASDFASDFASDTWRTUFGKHFHJRUZWRSTZGAXSFG"/>
+      </VIRTUAL_COMP_VALUE>	
+	  <VIRTUAL_PRIM_VALUE name="todo" value="contract4u.foo"/>	  
+    </VIRTUAL_COMP_VALUE>
+	-->
 	
 </contract>

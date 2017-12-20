@@ -16,6 +16,7 @@ import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.type.TypeComplexTyped;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -52,23 +53,18 @@ public class BuildTypes{
 
 		}
 		
-		static final ComplexImp complex = new ComplexImp("complex"){
+		public static class ComplexType extends ComplexImp{
 
-			@Override
-			public Value<?> valueCreate(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
-				// TODO Auto-generated method stub
-				return null;
+			ComplexType(String name) {
+				super(name);
 			}
 
 			@Override
 			public Accessible<Structure> functionCreate(CodeNode thisNode, TypeComplex parentType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
-
 				TypeComplex thisType = BuildFunctions.getThisNodeType(thisNode, parentType);
-
 				return this.functionCreateImpl(thisNode, thisType);
-			}
+			}			
 
-			// this is just to create functions of complex
 			@Override
 			public Function<Structure> functionCreateImpl(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				List<CodeNode> children = thisNode.getChildNodes();
@@ -77,6 +73,13 @@ public class BuildTypes{
 				}
 				return null;
 			}
+
+			@Override
+			public Value<?> valueCreate(CodeNode n, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+				// TODO Auto-generated method stub
+				return null;
+			}
+						
 
 			@Override
 			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
@@ -88,10 +91,12 @@ public class BuildTypes{
 			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
 				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
-
-	
-
-		};
+			
+		}
+		
+		static final ComplexImp complex = new ComplexType("complex");
+		
+		static final ComplexImp complexTyped = new ComplexType("complexTyped");
 
 		static class ContractClass extends BoxValueTypeFunImp<Object, Object>{
 			
@@ -294,7 +299,20 @@ public class BuildTypes{
 			}
 			*/
 			else if(n.getCommand() == TypeComplex.staticGetCommand()){  
-				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+				if(n.getParameters().length > 1){
+					String superTypeName = n.getParameter(Symbols.paramType());
+					TypeComplex superType = TypeComplex.getInstance(superTypeName);
+					if(superType == null){
+						System.err.println("superType " + superTypeName + " not found!");
+					}
+					else{
+						complexType = TypeComplexTyped.createInit(typeName, superType, theOrderedIdentifiers);
+					}
+				}
+				else{
+					complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);	
+				}
+				
 			}			
 			/*
 			else if(n.getCommand() == Symbols.comVirtualCompValue()){  

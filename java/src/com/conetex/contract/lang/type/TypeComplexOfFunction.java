@@ -94,6 +94,7 @@ public class TypeComplexOfFunction extends TypeComplex{
 		super(theName, theIndex, theOrderedIdentifiers);
 	}
 
+	@Override
 	public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers)
 			throws DuplicateIdentifierNameExeption, NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
 		super.initImp(typeName, theOrderedIdentifiers);
@@ -182,6 +183,7 @@ public class TypeComplexOfFunction extends TypeComplex{
 		return Symbols.comFunction();
 	}
 	
+	@Override
 	public CodeNode createCodeNode(TypeComplex parent) {
 		
 		List<CodeNode> children = new LinkedList<>();
@@ -192,13 +194,18 @@ public class TypeComplexOfFunction extends TypeComplex{
 
 		Function<?> f = Function.getInstance(super.name);
 		
-		for(Accessible<?> a : f.getSteps()){
-			CodeNode x = a.createCodeNode(this);
-			if(x == null) {
-				System.out.println("SHIT");
+		if(f != null){
+			for(Accessible<?> a : f.getSteps()){
+				CodeNode x = a.createCodeNode(this);
+				if(x == null) {
+					System.err.println("SHIT");
+				}
+				children.add( x );
 			}
-			children.add( x );
 		}
+		//else{
+		//	System.err.println("SHIT");
+		//}
 		
 		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {super.name, super.name}, children);
 		

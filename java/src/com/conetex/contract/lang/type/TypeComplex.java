@@ -52,7 +52,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return TypeComplex.allInstances.values();
 	}
 
-	private final Map<String, Integer> index;
+	final Map<String, Integer> index;
 
 	Attribute<?>[] orderedAttributes; 
 	
@@ -309,6 +309,10 @@ String aName = Symbols.getSimpleName(theName);
 		return Symbols.comComplex();
 	}
 
+	String[] createCodeNodeGetParams() {
+		return new String[] {this.name};
+	}
+	
 	public CodeNode createCodeNode(TypeComplex parent) {
 		List<CodeNode> children = new LinkedList<>();
 
@@ -358,7 +362,7 @@ String aName = Symbols.getSimpleName(theName);
 		}
 		*/
 
-		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {this.name}, children);
+		CodeNode cn = new CodeNode(parent, this.getCommand(), this.createCodeNodeGetParams(), children);
 
 		return cn;
 	}

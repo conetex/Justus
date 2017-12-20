@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<contract>
+  <complexType name="contract4u">
+    <attribute name="state" type="t:ASCII8"/>
+    <complexType name="contract4u.duty">
+      <attribute name="participant" type="t:ASCII8"/>
+    </complexType>
+    <complexType name="contract4u.dutyOfAgent" type="contract4u.duty">
+      <attribute name="participant" type="t:ASCII8"/>
+      <attribute name="participant2" type="t:ASCII8"/>
+      <function name="contract4u.dutyOfAgent.foo" type="contract4u.dutyOfAgent.foo"/>
+    </complexType>
+    <function name="contract4u.foo" type="contract4u.foo"/>
+  </complexType>
+  <VIRTUAL_COMP_VALUE name="contract4u">
+    <VIRTUAL_PRIM_VALUE name="state" value=""/>
+  </VIRTUAL_COMP_VALUE>
+</contract>
