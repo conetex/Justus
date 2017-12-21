@@ -8,6 +8,7 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.value.implementation.Structure;
 
 public abstract class PrimitiveValue<T> implements Value<T>{
 	
@@ -40,6 +41,9 @@ public abstract class PrimitiveValue<T> implements Value<T>{
 		}
 	}
 	
-	
+	@Override
+	public Structure asStructure() {
+		return null;
+	}
 
 }

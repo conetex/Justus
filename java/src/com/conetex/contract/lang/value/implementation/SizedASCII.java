@@ -5,9 +5,9 @@ import java.util.regex.Pattern;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.lang.value.PrimitiveValue;
-import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.runOld.RtCast;
 
 public class SizedASCII extends PrimitiveValue<String>{
 

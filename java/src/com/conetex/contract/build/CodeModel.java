@@ -353,7 +353,7 @@ public class CodeModel{
 
 		EggValue<? extends S> getChildBuilderValue(CodeNode n) throws AbstractInterpreterException;
 
-		public void valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException;
+		public Value<?> valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException;
 
 	}
 	
@@ -391,9 +391,9 @@ public class CodeModel{
 			return s;
 		}
 
-		public final void valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+		public final Value<?> valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			EggValue<? extends S> cb = this.getChildBuilderValue(child);
-			cb.valueCreateThis(child, parentTyp, parentData);
+			return cb.valueCreateThis(child, parentTyp, parentData);
 		}
 
 	}
@@ -451,11 +451,12 @@ public class CodeModel{
 		}
 
 		@Override
-		public final void valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
+		public final Value<?> valueCreateChild(CodeNode child, TypeComplex parentTyp, Structure parentData) throws AbstractInterpreterException {
 			EggValue<? extends S> cb = this.getChildBuilderValue(child);
 			if(cb != null){
-				cb.valueCreateThis(child, parentTyp, parentData);
+				return cb.valueCreateThis(child, parentTyp, parentData);
 			}
+			return null;
 		}
 
 		

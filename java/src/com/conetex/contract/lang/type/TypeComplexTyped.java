@@ -25,6 +25,11 @@ public class TypeComplexTyped extends TypeComplex {
 	}
 
 	@Override
+	public TypeComplex getSuperType() {
+		return this.parent;
+	}
+	
+	@Override
 	String[] createCodeNodeGetParams() {
 		return new String[] {this.name, this.parent.name};
 	}

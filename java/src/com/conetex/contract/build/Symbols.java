@@ -50,6 +50,9 @@ public class Symbols{
 	private static final String TYPE_SEPERATOR = ".";
 	public static final String[] PARAM_AFFIXES = new String[] { "(", ")", "_", "-" };
 
+	// types
+	public static final String TYPE_DUTY = "duty";
+	
 	// data command
 	private static final String COM_CONTRACT = "contract";
 	private static final String COM_COMPLEX = "complexType";

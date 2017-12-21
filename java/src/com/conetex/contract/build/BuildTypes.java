@@ -22,6 +22,7 @@ import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.util.Pair;
 
 public class BuildTypes{
 
@@ -225,25 +226,25 @@ public class BuildTypes{
 		return n;
 	}
 	
-	public static List<TypeComplex> createComplexTypes(CodeNode n) throws AbstractInterpreterException {
+	public static List< Pair<CodeNode,TypeComplex> > createComplexTypes(CodeNode n) throws AbstractInterpreterException {
 		TypeComplex.clearInstances();
 		Map<String, TypeComplex> unformedComplexTypes = new HashMap<>();
 		//Set<String> referringComplexTypeNames = new TreeSet<>();
-		List<TypeComplex> re = new LinkedList<>();
+		List<Pair<CodeNode,TypeComplex>> re = new LinkedList<>();
 
 		Recursive<Run> recursive = new Recursive<>();
 		recursive.function = (CodeNode node, TypeComplex parent) -> {
 			for(CodeNode c : node.getChildNodes()){
 				TypeComplex complexType = Types.complex.complexCreateChild(c, parent, unformedComplexTypes);
 				if(complexType != null){
-					re.add(complexType);
+					re.add(new Pair<CodeNode, TypeComplex>(c, complexType));
 					recursive.function.run(c, complexType);
 				}
 			}
 		};
 		TypeComplex complexTypeRoot = createComplexType(n, null, unformedComplexTypes);
 		if(complexTypeRoot != null){
-			re.add(complexTypeRoot);
+			re.add(new Pair<CodeNode, TypeComplex>(n, complexTypeRoot));
 			recursive.function.run(n, complexTypeRoot);
 		}
 

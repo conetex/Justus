@@ -66,6 +66,10 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return this.name;
 	}
 
+	public TypeComplex getSuperType() {
+		return null;
+	}
+	
 	private static TypeComplex createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
 		if(theIndex != null && theOrderedIdentifiers != null){
 			return new TypeComplex(theName, theIndex, theOrderedIdentifiers);

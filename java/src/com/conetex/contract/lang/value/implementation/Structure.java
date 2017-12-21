@@ -11,10 +11,10 @@ import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.Value;
-import com.conetex.contract.run.RtCast;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
+import com.conetex.contract.runOld.RtCast;
 
 public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 
@@ -191,6 +191,10 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		return null;
 	}
 
+	public Value<?>[] getValues() {
+		return this.values;
+	}
+	
 	public void set(String id, Value<?> value) {
 		int i = this.type.getSubAttributeIndex(id);
 		if(i > -1 && i < this.values.length){
@@ -292,6 +296,11 @@ public class Structure implements Value<Structure>{// { Value<Value<?>[]>
 		}
 		
 		return children;
+	}
+
+	@Override
+	public Structure asStructure() {
+		return this;
 	}
 
 }

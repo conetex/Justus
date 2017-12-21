@@ -1,6 +1,8 @@
 package com.conetex.contract.build;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
@@ -13,27 +15,57 @@ import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
+import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
+import com.conetex.contract.run.Main;
+import com.conetex.contract.run.Writer;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
-import com.conetex.contract.runNew.Main;
-import com.conetex.contract.runNew.Writer;
+import com.conetex.contract.util.Pair;
 
 public class Build{
+	
+	public static Map<TypeComplex, Function<?>> getMainFunctions(List< Pair<CodeNode,TypeComplex> > complexTypes) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException{
+		Map<TypeComplex, Function<?>> mainFunctions = new TreeMap<TypeComplex, Function<?>>();
+		for(Pair<CodeNode,TypeComplex> t : complexTypes){
+			TypeComplex superType = t.b.getSuperType();
+			if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName()) ){
+				Function<?> f = BuildFunctions.build(t.a, t.b);
+				mainFunctions.put(t.b, f);
+				//f.getFrom(rootStructure);
+			}
+		}
+		return mainFunctions;
+	}
 	
 	public static Main create(CodeNode code) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 		TypePrimitive.init();
 		CodeNode.init(code);
 		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
 		CodeNode complexRoot = CodeNode.getComplexRoot();
-		List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(complexRoot);
+		List< Pair<CodeNode,TypeComplex> > complexTypes = BuildTypes.createComplexTypes(complexRoot);
 		
 		System.out.println("Builder " + code.getCommand());
-		if(complexTyps != null){
+		if(complexTypes != null){
+			
+			Map<TypeComplex, Function<?>> mainFunctions = getMainFunctions(complexTypes);
+			
 			CodeNode valueRoot = CodeNode.getValueRoot();
 			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
+			
+			for(Value<?> va : rootStructure.getValues()){
+				Structure s = va.asStructure();
+				if(s != null){
+					TypeComplex superType = s.getComplex().getSuperType();
+					if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName())){
+						
+					}
+				}
+			}
+			
+			
 			if(rootStructure != null){
 				BuildValues.createValues(valueRoot, complexTypeRoot, rootStructure);
 				rootStructure.fillMissingValues();

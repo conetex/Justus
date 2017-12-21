@@ -34,9 +34,9 @@ import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
+import com.conetex.contract.run.Main;
+import com.conetex.contract.run.Writer;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
-import com.conetex.contract.runNew.Main;
-import com.conetex.contract.runNew.Writer;
 
 class ReadXML {
 
