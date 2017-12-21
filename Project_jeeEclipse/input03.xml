@@ -12,6 +12,7 @@
 		<attribute name="participant2" type="t:ASCII8" />
 		<function name="foo" type="contract4u.dutyOfAgent.foo">
 		</function>  
+		<call type="dutyOfAgent" name="contract4u.dutyOfAgent.foo" />
 	</complexType>	
 
 	<function name="contract4u.foo" type="contract4u.foo">
