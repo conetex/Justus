@@ -4,7 +4,6 @@ import com.conetex.contract.build.BuildFunctions;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.AccessibleWithParams;
 import com.conetex.contract.lang.function.math.ElementaryArithmetic;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;

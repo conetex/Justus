@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.AccessibleWithChildren;
-import com.conetex.contract.lang.function.AccessibleWithChildrenAndParams;
 import com.conetex.contract.lang.function.access.AccessibleValue;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.value.implementation.Structure;

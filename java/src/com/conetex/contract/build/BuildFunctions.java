@@ -20,7 +20,6 @@ import com.conetex.contract.build.exceptionFunction.UnexpectedSubOperation;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionFunction.UnknownComplexType;
-import com.conetex.contract.build.exceptionFunction.UnknownType;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.access.AccessibleConstant;

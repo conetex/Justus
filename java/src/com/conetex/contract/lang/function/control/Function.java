@@ -10,8 +10,6 @@ import com.conetex.contract.build.Cast;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.CastException;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.AccessibleWithChildren;
-import com.conetex.contract.lang.function.AccessibleWithChildrenAndParams;
 import com.conetex.contract.lang.function.control.ReturnAbstract.Result;
 import com.conetex.contract.lang.function.math.ElementaryArithmetic;
 import com.conetex.contract.lang.value.implementation.Structure;

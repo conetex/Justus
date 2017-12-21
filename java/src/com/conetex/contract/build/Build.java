@@ -27,7 +27,7 @@ import com.conetex.contract.util.Pair;
 public class Build{
 	
 	public static Map<TypeComplex, Function<?>> getMainFunctions(List< Pair<CodeNode,TypeComplex> > complexTypes) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException{
-		Map<TypeComplex, Function<?>> mainFunctions = new TreeMap<TypeComplex, Function<?>>();
+		Map<TypeComplex, Function<?>> mainFunctions = new TreeMap<>();
 		for(Pair<CodeNode,TypeComplex> t : complexTypes){
 			TypeComplex superType = t.b.getSuperType();
 			if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName()) ){

@@ -237,14 +237,14 @@ public class BuildTypes{
 			for(CodeNode c : node.getChildNodes()){
 				TypeComplex complexType = Types.complex.complexCreateChild(c, parent, unformedComplexTypes);
 				if(complexType != null){
-					re.add(new Pair<CodeNode, TypeComplex>(c, complexType));
+					re.add(new Pair<>(c, complexType));
 					recursive.function.run(c, complexType);
 				}
 			}
 		};
 		TypeComplex complexTypeRoot = createComplexType(n, null, unformedComplexTypes);
 		if(complexTypeRoot != null){
-			re.add(new Pair<CodeNode, TypeComplex>(n, complexTypeRoot));
+			re.add(new Pair<>(n, complexTypeRoot));
 			recursive.function.run(n, complexTypeRoot);
 		}
 

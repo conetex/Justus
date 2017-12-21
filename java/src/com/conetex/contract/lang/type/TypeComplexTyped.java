@@ -18,6 +18,7 @@ public class TypeComplexTyped extends TypeComplex {
 	public static TypeComplexTyped createInit(String typeName, TypeComplex parent) throws DublicateComplexException{
 		if(parent == null){
 			System.err.println("parent is null");//TODO Exception
+			return null;
 		}
 		TypeComplexTyped re = new TypeComplexTyped(typeName, parent, parent.index, parent.orderedAttributes);
 		TypeComplex.put(re);
@@ -42,6 +43,7 @@ public class TypeComplexTyped extends TypeComplex {
 		}
 		if(parent == null){
 			System.err.println("parent is null");//TODO Exception
+			return null;
 		}
 
 		Attribute<?>[] allAttributes = new Attribute<?>[parent.orderedAttributes.length + theOrderedIdentifiers.length];

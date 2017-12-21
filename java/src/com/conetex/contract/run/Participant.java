@@ -12,11 +12,11 @@ public class Participant {
 	}
 
 	public String getNick() {
-		return nick;
+		return this.nick;
 	}
 
 	public String getPublicKey() {
-		return publicKey;
+		return this.publicKey;
 	}
 	
 }

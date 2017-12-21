@@ -4,7 +4,6 @@ import java.math.BigInteger;
 
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.lang.function.Accessible;
-import com.conetex.contract.lang.function.AccessibleWithChildren;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 

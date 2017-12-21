@@ -1,7 +1,6 @@
 package com.conetex.contract.lang.function;
 
 import com.conetex.contract.lang.value.implementation.Structure;
-import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
