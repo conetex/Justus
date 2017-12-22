@@ -10,6 +10,8 @@ import com.conetex.contract.build.CodeModel.BoxType;
 import com.conetex.contract.build.CodeModel.BoxTypeImp;
 import com.conetex.contract.build.CodeModel.BoxValueTypeFunImp;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.control.Function;
@@ -264,6 +266,19 @@ public class BuildTypes{
 		return re;
 	}
 
+	private static TypeComplex getSuperType(CodeNode n) throws UnknownCommandParameter, UnknownCommand{
+		if(n.hasParameter(Symbols.PARAM_SUPERTYPE)){
+			String superTypeName = n.getParameter(Symbols.PARAM_SUPERTYPE);
+			TypeComplex superType = TypeComplex.getInstance(superTypeName);
+			if(superType == null){
+				System.err.println("superType " + superTypeName + " not found!");
+			}
+			return superType;
+		}
+		return null;	
+	}
+	
+	
 	public static TypeComplex createComplexType(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		if(n == null){
@@ -274,6 +289,9 @@ public class BuildTypes{
 		String typeName = CodeNode.getTypSubstr( n.getParameter(Symbols.paramName()), parent );
 
 		System.out.println("createComplexType " + typeName);
+		if(typeName.equals("contract4u.DutyOfAgent")){
+			System.out.println("debug");
+		}
 
 		List<Attribute<?>> identifiers = new LinkedList<>();
 		// Map<String, Attribute<?>> functions = new HashMap<>();
@@ -300,20 +318,7 @@ public class BuildTypes{
 			}
 			*/
 			else if(n.getCommand() == TypeComplex.staticGetCommand()){  
-				if(n.getParameters().length > 1){
-					String superTypeName = n.getParameter(Symbols.paramType());
-					TypeComplex superType = TypeComplex.getInstance(superTypeName);
-					if(superType == null){
-						System.err.println("superType " + superTypeName + " not found!");
-					}
-					else{
-						complexType = TypeComplexTyped.createInit(typeName, superType, theOrderedIdentifiers);
-					}
-				}
-				else{
-					complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);	
-				}
-				
+				complexType = TypeComplex.createInit(typeName, getSuperType(n), theOrderedIdentifiers);	
 			}			
 			/*
 			else if(n.getCommand() == Symbols.comVirtualCompValue()){  
@@ -321,14 +326,14 @@ public class BuildTypes{
 			}
 			*/
 			else if(n.getCommand() == Symbols.comContract()){
-				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+				complexType = TypeComplex.createInit(typeName,  getSuperType(n), theOrderedIdentifiers);
 				//complexType = Types.contract.complexCreate(n, null, unformedComplexTypes);
 			}	
 			
 			else{
 				// TODO error...
 				System.err.println("mist unbekannter tag!");
-				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+				complexType = TypeComplex.createInit(typeName, getSuperType(n), theOrderedIdentifiers);
 			}
 
 			// TODO
@@ -344,7 +349,7 @@ public class BuildTypes{
 			return complexType;
 		}
 		else{
-			complexType.init(typeName, theOrderedIdentifiers);
+			complexType = complexType.init(typeName,  getSuperType(n), theOrderedIdentifiers);
 
 			unformedComplexTypes.remove(typeName);
 			return complexType;

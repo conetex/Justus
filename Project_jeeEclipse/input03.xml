@@ -2,23 +2,37 @@
 
 <contract name="contract4u" t="http://conetex.org/justus/baseTyps">
 
-	<complexType name="duty">  
-		<!-- <attribute name="participant" type="contract4u.participant"/> -->
-		<attribute name="participant" type="t:ASCII8" />
+	<complexType name="Participant">  
+		<attribute name="nick" type="t:ASCII32" />
+		<attribute name="mail" type="t:ASCII32" />
+		<attribute name="publicKey" type="t:ASCII256" />
 	</complexType>
 	
-	<complexType name="dutyOfAgent" type="contract4u.duty">  
-		<!-- <attribute name="participant" type="contract4u.participant"/> -->
-		<attribute name="participant2" type="t:ASCII8" />
-		<function name="foo" type="contract4u.dutyOfAgent.foo">
-		</function>  
-		<call type="dutyOfAgent" name="contract4u.dutyOfAgent.foo" />
-	</complexType>	
+	<complexType name="Duty">  
+		<attribute name="participant" type="contract4u.Participant" />
+	</complexType>
 
-	<function name="contract4u.foo" type="contract4u.foo">
-    </function>
+	<complexType name="DutyOfAgent" supertype="contract4u.Duty">  
+		<function name="foo" type="contract4u.DutyOfAgent.foo">
+		</function>  
+		<call type="dutyOfAgent" name="contract4u.dutyOfAgent.foo" />	
+	</complexType>	
 	
-	<attribute name="state" type="t:ASCII8"/>
+	<!-- <attribute name="state" type="t:ASCII8"/> -->
+	
+	<attribute name="dutyOfAgent" type="contract4u.DutyOfAgent"/>
+	<dutyOfAgent>
+		<participant>
+			<nick>hobo</nick> 		
+			<publicKey>asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic</publicKey> 		
+		</participant>        
+    </dutyOfAgent>
+	
+      <!--<VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="hobo"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value="hobo@dida.de"/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic"/>
+      </VIRTUAL_COMP_VALUE>	  -->
 	
 	<!--
 	<complexType name="participant">  
@@ -40,9 +54,9 @@
 
 	<VIRTUAL_COMP_VALUE name="dutyOfAgent">
       <VIRTUAL_COMP_VALUE name="participant">
-        <VIRTUAL_PRIM_VALUE name="nick_name" value="hobo"/>
-        <VIRTUAL_PRIM_VALUE name="mail_address" value="hobo@dida.de"/>
-        <VIRTUAL_PRIM_VALUE name="public_key" value="qpweoiuztrpoqawsifupaosifdapsoidufpaosiufapsoiduf"/>
+        <VIRTUAL_PRIM_VALUE name="nick" value="hobo"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value="hobo@dida.de"/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic"/>
       </VIRTUAL_COMP_VALUE>	
 	  <VIRTUAL_PRIM_VALUE name="todo" value="contract4u.foo"/>	  
     </VIRTUAL_COMP_VALUE>

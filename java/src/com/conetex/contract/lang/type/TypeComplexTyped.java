@@ -35,27 +35,6 @@ public class TypeComplexTyped extends TypeComplex {
 		return new String[] {this.name, this.parent.name};
 	}
 	
-	public static TypeComplex createInit(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
-			throws AbstractInterpreterException {
-		
-		if(theOrderedIdentifiers.length == 0){
-			return createInit(typeName, parent);
-		}
-		if(parent == null){
-			System.err.println("parent is null");//TODO Exception
-			return null;
-		}
 
-		Attribute<?>[] allAttributes = new Attribute<?>[parent.orderedAttributes.length + theOrderedIdentifiers.length];
-		System.arraycopy(parent.orderedAttributes, 0, allAttributes, 0, parent.orderedAttributes.length);
-		System.arraycopy(theOrderedIdentifiers, 0, allAttributes, parent.orderedAttributes.length, theOrderedIdentifiers.length);
-	
-		Map<String, Integer> theIndex = new HashMap<>();
-		buildIndex(theIndex, allAttributes);
-
-		TypeComplex re = new TypeComplexTyped(typeName, parent, theIndex, allAttributes);
-		TypeComplex.put(re);
-		return re;
-	}
 
 }

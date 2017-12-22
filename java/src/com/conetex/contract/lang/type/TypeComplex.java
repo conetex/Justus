@@ -83,7 +83,7 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return TypeComplex.createImpl(theName, index, idents);
 	}
 
-	public static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
+	private static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
 			throws AbstractInterpreterException {
 		if(theOrderedIdentifiers.length == 0){
 			//TODO Error
@@ -100,6 +100,28 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return re;
 	}
 
+	public static TypeComplex createInit(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
+			throws AbstractInterpreterException {
+		
+		if(theOrderedIdentifiers.length == 0){
+			return TypeComplexTyped.createInit(typeName, parent);
+		}
+		if(parent == null){
+			return TypeComplex.createInit(typeName, theOrderedIdentifiers);
+		}
+
+		Attribute<?>[] allAttributes = new Attribute<?>[parent.orderedAttributes.length + theOrderedIdentifiers.length];
+		System.arraycopy(parent.orderedAttributes, 0, allAttributes, 0, parent.orderedAttributes.length);
+		System.arraycopy(theOrderedIdentifiers, 0, allAttributes, parent.orderedAttributes.length, theOrderedIdentifiers.length);
+	
+		Map<String, Integer> theIndex = new HashMap<>();
+		buildIndex(theIndex, allAttributes);
+
+		TypeComplex re = new TypeComplexTyped(typeName, parent, theIndex, allAttributes);
+		TypeComplex.put(re);
+		return re;
+	}
+	
 	static void put(TypeComplex re) throws DublicateComplexException {
 		String typeName = re.name;
 		if(TypeComplex.allInstances.containsKey(typeName)){
@@ -141,10 +163,16 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 	}
 
-	public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers)
-			throws DuplicateIdentifierNameExeption, NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
-		this.initImp(typeName, theOrderedIdentifiers);
-		TypeComplex.allInstances.put(typeName, this);
+	public TypeComplex init(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
+			throws AbstractInterpreterException {
+		if(parent == null){
+			this.initImp(typeName, theOrderedIdentifiers);
+			TypeComplex.allInstances.put(typeName, this);
+			return this;
+		}
+		else{
+			return TypeComplex.createInit(typeName, parent, theOrderedIdentifiers);
+		}
 	}
 
 	public int getAttributesSize() {

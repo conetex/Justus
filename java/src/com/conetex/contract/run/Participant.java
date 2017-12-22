@@ -1,5 +1,8 @@
 package com.conetex.contract.run;
 
+import com.conetex.contract.build.Symbols;
+import com.conetex.contract.lang.value.implementation.Structure;
+
 public class Participant {
 
 	private final String nick;
@@ -17,6 +20,17 @@ public class Participant {
 
 	public String getPublicKey() {
 		return this.publicKey;
+	}
+	
+	public boolean isEqual(Structure s){
+		String aNick = s.getValue(Symbols.TYPE_PARTICIPANT_ATT_NICK).get().toString();
+		if(this.nick.equals(aNick)){
+			String aPubKey = s.getValue(Symbols.TYPE_PARTICIPANT_ATT_PUBKEY).get().toString();
+			if(this.publicKey.equals(aPubKey)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

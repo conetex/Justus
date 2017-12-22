@@ -95,11 +95,13 @@ public class TypeComplexOfFunction extends TypeComplex{
 	}
 
 	@Override
-	public void init(String typeName, final Attribute<?>[] theOrderedIdentifiers)
+	public TypeComplex init(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
 			throws DuplicateIdentifierNameExeption, NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
+		//System.err.println("this method should not be called");
 		super.initImp(typeName, theOrderedIdentifiers);
 		TypeComplex.put(this);
 		TypeComplexOfFunction.instances.put(typeName, this);
+		return this;
 	}
 
 	public static Attribute<?> getAttribute(String name) {

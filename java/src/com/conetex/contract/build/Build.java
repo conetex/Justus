@@ -1,5 +1,6 @@
 package com.conetex.contract.build;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,16 +18,19 @@ import com.conetex.contract.lang.type.TypeComplexOfFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
+import com.conetex.contract.run.ContractRuntime;
 import com.conetex.contract.run.Main;
+import com.conetex.contract.run.Participant;
 import com.conetex.contract.run.Writer;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
 import com.conetex.contract.run.exceptionValue.Invalid;
+import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.util.Pair;
 
 public class Build{
 	
-	public static Map<TypeComplex, Function<?>> getMainFunctions(List< Pair<CodeNode,TypeComplex> > complexTypes) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException{
+	private static Map<TypeComplex, Function<?>> getMainFunctions(List< Pair<CodeNode,TypeComplex> > complexTypes) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException{
 		Map<TypeComplex, Function<?>> mainFunctions = new TreeMap<>();
 		for(Pair<CodeNode,TypeComplex> t : complexTypes){
 			TypeComplex superType = t.b.getSuperType();
@@ -39,7 +43,36 @@ public class Build{
 		return mainFunctions;
 	}
 	
-	public static Main create(CodeNode code) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
+	private static List<Structure> getAllDuties(Structure rootStructure){
+		List<Structure> duties = new LinkedList<>();
+		for(Value<?> va : rootStructure.getValues()){
+			if(va == null){
+				System.err.println("warum ist das value null ?");
+				continue;
+			}
+			Structure s = va.asStructure();
+			if(s != null){
+				TypeComplex superType = s.getComplex().getSuperType();
+				if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName())){
+					duties.add(s);
+				}
+			}
+		}
+		return duties;
+	}
+	
+	private static List<Structure> getMyDuties( List<Structure> allDuties ) throws ValueCastException{
+		Participant me = ContractRuntime.whoAmI();
+		List<Structure> myDuties = new LinkedList<>();
+		for(Structure s : allDuties){
+			if( me.isEqual(s.getStructure(Symbols.TYPE_DUTY_ATT_PARTICIPANT)) ){
+				myDuties.add(s);
+			}
+		}
+		return myDuties;
+	}
+	
+	public static Main create(CodeNode code) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException, ValueCastException {
 		TypePrimitive.init();
 		CodeNode.init(code);
 		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
@@ -55,27 +88,29 @@ public class Build{
 			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
 			
-			for(Value<?> va : rootStructure.getValues()){
-				Structure s = va.asStructure();
-				if(s != null){
-					TypeComplex superType = s.getComplex().getSuperType();
-					if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName())){
-						
-					}
-				}
-			}
-			
-			
 			if(rootStructure != null){
 				BuildValues.createValues(valueRoot, complexTypeRoot, rootStructure);
 				rootStructure.fillMissingValues();
 				TypeComplexOfFunction.fillMissingPrototypeValues();
 				Function<?> mainFunction = BuildFunctions.build(complexRoot, complexTypeRoot);
+				
+				List<Structure> allDuties = getAllDuties(rootStructure);
+				List<Structure> myDuties = getMyDuties( allDuties );
+				
 				if(mainFunction != null){
 					return new Main(){
 						@Override
 						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException {
-							mainFunction.getFromRoot(rootStructure);
+							//mainFunction.getFromRoot(rootStructure);
+							for(Structure d : myDuties){
+								Function<?> f = mainFunctions.get( d.getComplex() );
+								if(f == null){
+									System.err.println("can not find my main function");
+									return;
+								}
+								f.getFrom(d);
+							}
+							
 							if(w != null){
 								CodeNode cnTyps = complexTypeRoot.createCodeNode(null);
 								w.write(cnTyps);

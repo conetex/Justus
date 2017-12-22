@@ -104,7 +104,7 @@ class BuildValues{
 		Attribute<?> id = parentTyp.getSubAttribute(name); //
 
 		if(id == null){
-			System.err.println("createValue: can not identify " + name);
+			System.err.println("createValue: can not identify " + name); warum landen wir hier? attribute liefert nicht den ueberschriebenen typ zurueck! das geht so nich...
 			return null;
 		}
 

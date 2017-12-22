@@ -51,7 +51,11 @@ public class Symbols{
 	public static final String[] PARAM_AFFIXES = new String[] { "(", ")", "_", "-" };
 
 	// types
-	public static final String TYPE_DUTY = "duty";
+	public static final String TYPE_DUTY = "Duty";
+	public static final String TYPE_DUTY_ATT_PARTICIPANT = "participant";
+	public static final String TYPE_PARTICIPANT = "Participant";
+	public static final String TYPE_PARTICIPANT_ATT_NICK = "nick";
+	public static final String TYPE_PARTICIPANT_ATT_PUBKEY = "publicKey";
 	
 	// data command
 	private static final String COM_CONTRACT = "contract";
@@ -119,7 +123,7 @@ public class Symbols{
 	private static final String PARAM_NAME = "name";
 	private static final String PARAM_VALUE = "value";
 	private static final String PARAM_TYPE = "type";
-
+	public static final String PARAM_SUPERTYPE = "supertype";
 
 
 
