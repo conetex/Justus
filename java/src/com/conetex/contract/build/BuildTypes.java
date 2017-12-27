@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import com.conetex.contract.build.CodeModel.BoxFunImp;
 import com.conetex.contract.build.CodeModel.BoxType;
@@ -16,8 +18,10 @@ import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.Attribute;
+import com.conetex.contract.lang.type.AttributeComplex;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.type.TypeComplexTemp;
 import com.conetex.contract.lang.type.TypeComplexTyped;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
@@ -85,13 +89,13 @@ public class BuildTypes{
 						
 
 			@Override
-			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
 			
@@ -147,13 +151,13 @@ public class BuildTypes{
 			}
 			
 			@Override
-			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}
 		}
@@ -163,7 +167,7 @@ public class BuildTypes{
 		static final BoxType<Object, Object> attribute = new BoxTypeImp<Object, Object>("attribute"){
 
 			@Override
-			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				String idTypeName = null;
 				String idName = null;
 				Attribute<?> id = null;
@@ -230,7 +234,7 @@ public class BuildTypes{
 	
 	public static List< Pair<CodeNode,TypeComplex> > createComplexTypes(CodeNode n) throws AbstractInterpreterException {
 		TypeComplex.clearInstances();
-		Map<String, TypeComplex> unformedComplexTypes = new HashMap<>();
+		Map<String, TypeComplexTemp> unformedComplexTypes = new HashMap<>();
 		//Set<String> referringComplexTypeNames = new TreeSet<>();
 		List<Pair<CodeNode,TypeComplex>> re = new LinkedList<>();
 
@@ -278,8 +282,176 @@ public class BuildTypes{
 		return null;	
 	}
 	
+	private static class TypeHierarchy{
+		CodeNode node;
+		Map<String, TypeHierarchy> namedChildren = new TreeMap<>();
+	}
 	
-	public static TypeComplex createComplexType(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes)
+	private static class TypeHierarchyResult{
+		Map< String, TypeHierarchy > namedTypes = new TreeMap<>();
+		List< Pair<String, TypeHierarchy> > rootTypes = new LinkedList<>();
+	}
+	
+	public static TypeComplex createComplexTypeNew(CodeNode root) throws AbstractInterpreterException{
+		TypeHierarchyResult r = new TypeHierarchyResult();
+		createTypeHierarchy(root, null, r);
+		
+		TypeComplex re = null;
+		
+		Map<String, TypeComplexTemp> unformedComplexTypes = new TreeMap<>();
+		for(Pair<String, TypeHierarchy> p : r.rootTypes){
+			re = createComplexTypeNew(root, p.a, p.b, null, unformedComplexTypes);
+		}
+		
+		for(Entry<String, TypeComplexTemp> e : unformedComplexTypes.entrySet()){
+			TypeComplex c = TypeComplex.getInstance( e.getKey() );
+			if(c == null){
+				System.err.println("Typ " + e.getKey() + " wurde nicht erzeugt...");
+				// TODO throw Error...
+				continue;
+			}
+			for(AttributeComplex a : e.getValue().listOfUnformedAttributes){
+				a.type = c;
+			}
+		}
+		
+		return re;
+	}
+	
+	public static void createTypeHierarchy(CodeNode n, String parentName, TypeHierarchyResult r) throws UnknownCommandParameter, UnknownCommand{
+		
+		if(n == null){
+			// TODO Exception
+			System.err.println("no node");
+			return;
+		}		
+		
+		String typeName = CodeNode.getTypSubstring( n.getParameter(Symbols.paramName()), parentName );	
+		
+		TypeHierarchy todo = null;
+		if(r.namedTypes.containsKey( typeName )){
+			todo = r.namedTypes.get( typeName );
+		}
+		else{
+			todo = new TypeHierarchy();
+		}
+		todo.node = n;
+		
+		if(n.hasParameter(Symbols.PARAM_SUPERTYPE)){
+			String superTypeName = n.getParameter(Symbols.PARAM_SUPERTYPE);
+			if(r.namedTypes.containsKey( superTypeName )){
+				TypeHierarchy superType = r.namedTypes.get( superTypeName );
+				superType.namedChildren.put(typeName, todo);
+			}
+			else{
+				TypeHierarchy superType = new TypeHierarchy();
+				r.namedTypes.put(superTypeName, superType);
+				superType.namedChildren.put(typeName, todo);
+			}			
+		}
+		else{
+			r.rootTypes.add( new Pair<>(typeName, todo) );
+		}
+		
+		for(CodeNode c : n.getChildNodes()){
+			if(Symbols.comComplex().equals( n.getCommand() )){
+				createTypeHierarchy(c, typeName, r);
+			}
+		}		
+		
+	}
+	
+	public static TypeComplex createComplexTypeNew(CodeNode root, String typeName, TypeHierarchy r, TypeComplex grandParent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException{
+		TypeComplex ret = null;
+		TypeComplex parent = createComplexTypeNew(typeName, r.node, grandParent, unformedComplexTypes);
+		for(Entry<String, TypeHierarchy> e : r.namedChildren.entrySet()){
+			String name = e.getKey();
+			TypeHierarchy th = e.getValue();			
+			ret = createComplexTypeNew(root, name, th, parent, unformedComplexTypes);
+		}
+		if(r.node == root){
+			ret = parent;
+		}
+		return ret;
+	}
+
+	public static TypeComplex createComplexTypeNew(String typeName, CodeNode n, TypeComplex superType, Map<String, TypeComplexTemp> unformedComplexTypes)
+			throws AbstractInterpreterException {
+		if(n == null){
+			// TODO Exception
+			System.err.println("no node");
+			return null;
+		}		
+		 
+		System.out.println("createComplexType " + typeName);
+		if(typeName.equals("contract4u.DutyOfAgent")){
+			System.out.println("debug");
+		}
+
+		List<Attribute<?>> identifiers = new LinkedList<>();
+		// Map<String, Attribute<?>> functions = new HashMap<>();
+
+		for(CodeNode c : n.getChildNodes()){
+			Attribute<?> id = Types.complex.attributeCreateChild(c, unformedComplexTypes);
+			if(id != null){
+				identifiers.add(id);
+			}
+		}
+		Attribute<?>[] theOrderedIdentifiers = new Attribute<?>[identifiers.size()];
+		identifiers.toArray(theOrderedIdentifiers);
+
+		// TODO doppelte definitionen abfangen ...
+		TypeComplex complexType = null;//unformedComplexTypes.get(typeName);
+		//if(complexType == null){
+
+			if(n.getCommand() == TypeComplexOfFunction.staticGetCommand()){
+				complexType = TypeComplexOfFunction.createInit(typeName, theOrderedIdentifiers);
+			}
+			/*
+			else if(n.getCommand() == Symbols.comvirtualPrimValue()){  
+				complexType = TypeComplexOfFunction.createInit(typeName, theOrderedIdentifiers);
+			}
+			*/
+			else if(n.getCommand() == TypeComplex.staticGetCommand()){  
+				complexType = TypeComplex.createInit(typeName, superType, theOrderedIdentifiers);	
+			}			
+			/*
+			else if(n.getCommand() == Symbols.comVirtualCompValue()){  
+				complexType = TypeComplex.createInit(typeName, theOrderedIdentifiers);
+			}
+			*/
+			else if(n.getCommand() == Symbols.comContract()){
+				complexType = TypeComplex.createInit(typeName,  superType, theOrderedIdentifiers);
+				//complexType = Types.contract.complexCreate(n, null, unformedComplexTypes);
+			}	
+			
+			else{
+				// TODO error...
+				System.err.println("mist unbekannter tag!");
+				complexType = TypeComplex.createInit(typeName, superType, theOrderedIdentifiers);
+			}
+
+			// TODO
+			// theOrderedIdentifiers
+			// m�ssen
+			// elemente
+			// enthalten,
+			// sonst
+			// gibts
+			// keinen
+			// typ
+
+			return complexType;
+		//}
+			//else{
+			//complexType = complexType.init(typeName,  superType, theOrderedIdentifiers);
+
+			//unformedComplexTypes.remove(typeName);
+			//return complexType;
+		//}
+	}
+	
+	public static TypeComplex createComplexType(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		if(n == null){
 			// TODO Exception

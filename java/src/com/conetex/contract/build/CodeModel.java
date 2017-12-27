@@ -27,6 +27,7 @@ import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.type.TypeComplexTemp;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
@@ -144,13 +145,13 @@ public class CodeModel{
 	
 	public static interface EggType<T> extends EggAbstr<T>{
 		
-		Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 
-		public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 
-		TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 
-		public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 		
 	}
 	
@@ -160,21 +161,21 @@ public class CodeModel{
 			super(theName);
 		}
 
-		public final Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			super.checkMeaning(c);
 			return this.attributeCreate(c, unformedComplexTypes);
 		}
 
-		public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			return null;
 		}
 
-		public final TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			super.checkMeaning(n);
 			return this.complexCreate(n, parent, unformedComplexTypes);
 		}
 
-		public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			return null;
 		}
 
@@ -188,9 +189,9 @@ public class CodeModel{
 
 		EggType<? extends S> getChildBuilderType(CodeNode n) throws AbstractInterpreterException;
 
-		public Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		public Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 
-		public TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		public TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 
 	}
 	
@@ -228,12 +229,12 @@ public class CodeModel{
 			return s;
 		}
 
-		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			EggType<? extends S> cb = this.getChildBuilderType(child);
 			return cb.attributeCreateThis(child, unformedComplexTypes);
 		}
 
-		public final TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			EggType<? extends S> cb = this.getChildBuilderType(child);
 			return cb.complexCreateThis(child, parent, unformedComplexTypes);
 		}
@@ -556,7 +557,7 @@ public class CodeModel{
 		}
 
 		@Override
-		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final Attribute<?> attributeCreateChild(CodeNode child, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			EggType<? extends S> cb = this.getChildBuilderType(child);
 			if(cb == null){
 				return null;
@@ -565,7 +566,7 @@ public class CodeModel{
 		}
 
 		@Override
-		public final TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final TypeComplex complexCreateChild(CodeNode child, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			EggType<? extends S> cb = this.getChildBuilderType(child);
 			if(cb == null){
 				return null;
@@ -574,22 +575,22 @@ public class CodeModel{
 		}
 
 		@Override
-		public final Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final Attribute<?> attributeCreateThis(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			super.checkMeaning(c);
 			return this.attributeCreate(c, unformedComplexTypes);
 		}
 
 		@Override
-		public abstract Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		public abstract Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 
 		@Override
-		public final TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+		public final TypeComplex complexCreateThis(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 			super.checkMeaning(n);
 			return this.complexCreate(n, parent, unformedComplexTypes);
 		}
 
 		@Override
-		public abstract TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException;
+		public abstract TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException;
 		
 	}
 	

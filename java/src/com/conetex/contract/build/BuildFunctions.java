@@ -40,6 +40,7 @@ import com.conetex.contract.lang.function.math.ElementaryArithmetic;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.type.TypeComplexTemp;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Inconvertible;
@@ -395,7 +396,7 @@ public class BuildFunctions{
 			}
 
 			@Override
-			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				String idTypeName = null;
 				String idName = null;
 				idTypeName = c.getParameter(Symbols.paramType());
@@ -408,7 +409,7 @@ public class BuildFunctions{
 			}
 
 			@Override
-			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplex> unformedComplexTypes)
+			public TypeComplex complexCreate(CodeNode n, TypeComplex parent, Map<String, TypeComplexTemp> unformedComplexTypes)
 					throws AbstractInterpreterException {
 				return BuildTypes.createComplexType(n, parent, unformedComplexTypes);
 			}

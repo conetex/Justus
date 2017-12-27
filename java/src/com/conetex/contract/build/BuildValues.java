@@ -14,6 +14,7 @@ import com.conetex.contract.lang.type.AttributePrimitive;
 import com.conetex.contract.lang.type.Type;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.type.TypeComplexTemp;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -26,7 +27,7 @@ class BuildValues{
 
 			// same as in Types.attribute
 			@Override
-			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplex> unformedComplexTypes) throws AbstractInterpreterException {
+			public Attribute<?> attributeCreate(CodeNode c, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException {
 				String idTypeName = null;
 				String idName = null;
 				Attribute<?> id = null;
@@ -104,7 +105,7 @@ class BuildValues{
 		Attribute<?> id = parentTyp.getSubAttribute(name); //
 
 		if(id == null){
-			System.err.println("createValue: can not identify " + name); warum landen wir hier? attribute liefert nicht den ueberschriebenen typ zurueck! das geht so nich...
+			System.err.println("createValue: can not identify " + name);// warum landen wir hier? attribute liefert nicht den ueberschriebenen typ zurueck! das geht so nich...
 			return null;
 		}
 

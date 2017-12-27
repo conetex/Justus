@@ -119,17 +119,17 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 		return CodeNode.getParameter(this.getCommand(), p, this);
 	}
 
-	public static String getTypSubstr(String typeName, TypeComplex parent){
+	public static String getTypSubstring(String typeName, String parentName){
 		if(typeName == null){
 			// TODO Exception
 			System.err.println("no typeName for complex");
 			return null;
 		}
 		String re = typeName;
-		if(parent != null){
+		if(parentName != null){
 			String[] typeNames = Symbols.splitRight(typeName);
 			if(typeNames[1] != null && typeNames[0] != null){
-				if(typeNames[0].equals(parent.getName())){
+				if(typeNames[0].equals(parentName)){
 					re = typeNames[1];
 				}
 				else{
@@ -138,9 +138,16 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 					return null;
 				}
 			}
-			return parent.getName() + "." + re;
+			return parentName + "." + re;
 		}
 		return re;
+	}
+	
+	public static String getTypSubstr(String typeName, TypeComplex parent){
+		if(parent != null){
+			return getTypSubstring(typeName, parent.getName());
+		}
+		return getTypSubstring(typeName, null);
 	}
 	
 	public static CodeNode __create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {

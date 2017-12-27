@@ -138,26 +138,10 @@ public class TypeComplexOfFunction extends TypeComplex{
 		return re;
 	}
 
-	public static void createAttributeFun(String attributeName, String typeName, Map<String, TypeComplex> unformedComplexTypes)
+
+	public static void createAttributeFun(String attributeName, String typeName, Map<String, TypeComplexTemp> unformedComplexTypes)
 			throws AbstractInterpreterException {
-		// ComplexType
-		if(typeName == null || typeName.length() == 0){
-			// TODO exception
-			return;
-		}
-		if(attributeName == null || attributeName.length() == 0){
-			// TODO exception
-			return;
-		}
-		TypeComplex c = TypeComplex.getInstance(typeName);
-		if(c == null){
-			c = unformedComplexTypes.get(typeName);
-			if(c == null){
-				c = TypeComplexOfFunction.create(typeName);
-				unformedComplexTypes.put(typeName, c);
-			}
-		}
-		Attribute<Structure> re = c.createComplexAttribute(attributeName);
+		Attribute<Structure> re = TypeComplex.createAttribute(attributeName, typeName, unformedComplexTypes);
 		TypeComplexOfFunction.functions.put(typeName, re);
 		System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
     }

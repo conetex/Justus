@@ -17,7 +17,7 @@ public class AttributeComplex extends Attribute<Structure>{// Attribute<Value<?>
 
 	// private final ValueFactory<T> factory;
 
-	private final TypeComplex type;
+	public TypeComplex type;
 
 	/*
 	 * private Attribute(ASCII8 theLabel, ValueFactory<T> theFactory){ this.label =

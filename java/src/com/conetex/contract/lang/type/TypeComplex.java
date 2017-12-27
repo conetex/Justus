@@ -265,7 +265,7 @@ String aName = Symbols.getSimpleName(theName);
 		return null;
 	}
 
-	public Attribute<Structure> createComplexAttribute(String aName) throws NullLabelException, EmptyLabelException {
+	public AttributeComplex createComplexAttribute(String aName) throws NullLabelException, EmptyLabelException {
 		// PrimitiveDataType<Structure> simpleType =
 		// PrimitiveDataType.getInstance(
 		// Value.Implementation.Struct.class.getSimpleName() );
@@ -280,14 +280,14 @@ String aName = Symbols.getSimpleName(theName);
 			e.printStackTrace();
 			return null;
 		}
-		Attribute<Structure> attribute = null;
+		AttributeComplex attribute = null;
 		attribute = this.createAttribute(str);
 
 		return attribute;
 
 	}
 
-	public static Attribute<?> createAttribute(String attributeName, String typeName, Map<String, TypeComplex> unformedComplexTypes)
+	public static Attribute<Structure> createAttribute(String attributeName, String typeName, Map<String, TypeComplexTemp> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		// ComplexType
 		if(typeName == null || typeName.length() == 0){
@@ -298,21 +298,28 @@ String aName = Symbols.getSimpleName(theName);
 			// TODO exception
 			return null;
 		}
+		
 		TypeComplex c = TypeComplex.getInstance(typeName);
 		if(c == null){
-			c = unformedComplexTypes.get(typeName);
-			if(c == null){
-				c = TypeComplex.create(typeName);
-				unformedComplexTypes.put(typeName, c);
+			TypeComplexTemp cTemp = unformedComplexTypes.get(typeName);
+			if(cTemp == null){
+				cTemp = TypeComplexTemp.create(typeName);
+				unformedComplexTypes.put(typeName, cTemp);
 			}
+			AttributeComplex re = cTemp.createComplexAttribute(attributeName);
+			cTemp.listOfUnformedAttributes.add(re);
+			System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
+			return re;
 		}
-		Attribute<Structure> re = c.createComplexAttribute(attributeName);
-		System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
-		return re;
+		else{
+			//System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
+			return c.createComplexAttribute(attributeName);
+		}
+
 	}
 
 	@Override
-	public Attribute<Structure> createAttribute(Label theName) throws NullLabelException, EmptyLabelException {
+	public AttributeComplex createAttribute(Label theName) throws NullLabelException, EmptyLabelException {
 		return Type.createAttribute(theName, this);
 	}
 

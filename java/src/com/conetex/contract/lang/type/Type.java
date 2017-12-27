@@ -29,7 +29,7 @@ public abstract class Type<T> {
 		return AttributePrimitive.create(theName, thisObj);
 	}
 
-	static Attribute<Structure> createAttribute(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
+	static AttributeComplex createAttribute(Label theName, TypeComplex thisObj) throws NullLabelException, EmptyLabelException {
 		if(theName == null || theName.get() == null){
 			throw new NullLabelException(Type.class.getName() + ".createAttribute()");
 		}
