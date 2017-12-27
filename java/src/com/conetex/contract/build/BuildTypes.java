@@ -232,7 +232,7 @@ public class BuildTypes{
 		return n;
 	}
 	
-	public static List< Pair<CodeNode,TypeComplex> > createComplexTypes(CodeNode n) throws AbstractInterpreterException {
+	public static List< Pair<CodeNode,TypeComplex> > createComplexTypesOld(CodeNode n) throws AbstractInterpreterException {
 		TypeComplex.clearInstances();
 		Map<String, TypeComplexTemp> unformedComplexTypes = new HashMap<>();
 		//Set<String> referringComplexTypeNames = new TreeSet<>();
@@ -292,17 +292,16 @@ public class BuildTypes{
 		List< Pair<String, TypeHierarchy> > rootTypes = new LinkedList<>();
 	}
 	
-	public static TypeComplex createComplexTypeNew(CodeNode root) throws AbstractInterpreterException{
+	public static List< Pair<CodeNode,TypeComplex> > createComplexTypes(CodeNode root) throws AbstractInterpreterException{
 		TypeHierarchyResult r = new TypeHierarchyResult();
 		createTypeHierarchy(root, null, r);
 		
-		TypeComplex re = null;
-		
 		Map<String, TypeComplexTemp> unformedComplexTypes = new TreeMap<>();
+		List< Pair<CodeNode,TypeComplex> > re = new LinkedList<>();
 		for(Pair<String, TypeHierarchy> p : r.rootTypes){
-			re = createComplexTypeNew(root, p.a, p.b, null, unformedComplexTypes);
+			createComplexTypeNew(root, p.a, p.b, null, re, unformedComplexTypes);
 		}
-		
+
 		for(Entry<String, TypeComplexTemp> e : unformedComplexTypes.entrySet()){
 			TypeComplex c = TypeComplex.getInstance( e.getKey() );
 			if(c == null){
@@ -334,6 +333,7 @@ public class BuildTypes{
 		}
 		else{
 			todo = new TypeHierarchy();
+			r.namedTypes.put( typeName, todo );
 		}
 		todo.node = n;
 		
@@ -354,25 +354,26 @@ public class BuildTypes{
 		}
 		
 		for(CodeNode c : n.getChildNodes()){
-			if(Symbols.comComplex().equals( n.getCommand() )){
+			if(    c.getCommand() == TypeComplexOfFunction.staticGetCommand()
+				|| c.getCommand() == TypeComplex.staticGetCommand()
+			    || c.getCommand() == Symbols.comContract()
+			  ){
+//			if(Symbols.comComplex().equals( c.getCommand() )){
 				createTypeHierarchy(c, typeName, r);
 			}
 		}		
 		
 	}
 	
-	public static TypeComplex createComplexTypeNew(CodeNode root, String typeName, TypeHierarchy r, TypeComplex grandParent, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException{
-		TypeComplex ret = null;
+	public static void createComplexTypeNew(CodeNode root, String typeName, TypeHierarchy r, TypeComplex grandParent, List< Pair<CodeNode,TypeComplex> > re, Map<String, TypeComplexTemp> unformedComplexTypes) throws AbstractInterpreterException{
 		TypeComplex parent = createComplexTypeNew(typeName, r.node, grandParent, unformedComplexTypes);
+		re.add(new Pair(r.node, parent));
 		for(Entry<String, TypeHierarchy> e : r.namedChildren.entrySet()){
+			System.out.println("create complex child " + e.getKey());
 			String name = e.getKey();
 			TypeHierarchy th = e.getValue();			
-			ret = createComplexTypeNew(root, name, th, parent, unformedComplexTypes);
+			createComplexTypeNew(root, name, th, parent, re, unformedComplexTypes);
 		}
-		if(r.node == root){
-			ret = parent;
-		}
-		return ret;
 	}
 
 	public static TypeComplex createComplexTypeNew(String typeName, CodeNode n, TypeComplex superType, Map<String, TypeComplexTemp> unformedComplexTypes)
