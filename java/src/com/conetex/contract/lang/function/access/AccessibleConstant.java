@@ -53,6 +53,15 @@ public abstract class AccessibleConstant<T> extends Accessible<T> {
 		return null;
 	}
 
+	public static Accessible<String> try2CreateStrConst(CodeNode n, TypeComplex parentTyp)
+			throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
+		String name = n.getCommand();
+		if (name.equals(Symbols.comStr())) {
+			return AccessibleConstant.create2(String.class, n);
+		}
+		return null;
+	}
+	
 	public static Accessible<Structure> try2CreateStructureConst(CodeNode n, TypeComplex parentTyp)
 			throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 		String name = n.getCommand();
@@ -107,8 +116,8 @@ public abstract class AccessibleConstant<T> extends Accessible<T> {
 			// TODO Typen klaeren ...
 			return null;
 		}
-		else if (expectedBaseTyp == String.class) {// TODO ascii klaeren...
-			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_SIZED_ASCII, expectedBaseTyp);
+		else if (expectedBaseTyp == String.class) {// TODO ascii klaeren... so mit 256 geht das jedenfalls nich...
+			TypePrimitive<RE> theClass = TypePrimitive.getInstanceNotNull(Symbols.CLASS_SIZED_ASCII + "256", expectedBaseTyp);
 			return new AccessibleConstant<RE>(getValue(theClass, thisNode)) {
 				@Override
 				public String getCommand() {

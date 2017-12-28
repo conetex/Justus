@@ -50,7 +50,7 @@ public class Symbols {
 	public static final String[]	PARAM_AFFIXES				= new String[] { "(", ")", "_", "-" };
 
 	// types
-	public static final String		TYPE_DUTY					= "Duty";
+	public static final String		TYPE_DUTY					= "simpleContractExample.Duty";
 	public static final String		TYPE_DUTY_ATT_PARTICIPANT	= "participant";
 	public static final String		TYPE_PARTICIPANT			= "Participant";
 	public static final String		TYPE_PARTICIPANT_ATT_NICK	= "nick";

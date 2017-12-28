@@ -2,25 +2,31 @@
 
 <contract name="simpleContractExample" t="http://conetex.org/justus/baseTyps">
 
-	<complexType name="Participant">  
+	<complexType name="Participant">
 		<attribute name="nick" type="t:ASCII(32)" />
 		<attribute name="mail" type="t:ASCII(32)" />
 		<attribute name="publicKey" type="t:ASCII(256)" />
 	</complexType>
-	
-	<complexType name="Duty">  
+
+	<complexType name="Duty">
 		<attribute name="participant" type="simpleContractExample.Participant" />
 	</complexType>
 
-	<complexType name="DutyOfRequester" supertype="simpleContractExample.Duty">  
-		<value name="param" type='t:Int' value="11" /> 
+	<complexType name="simpleContractExample.DutyOfRequester" supertype="simpleContractExample.Duty">
+		<!--
+		<value name="param" type='t:Int' value="11" />
+		-->
+		<copy>
+		  <ref value="amountOfFavour"/>
+		  <Integer value="13"/>
+		</copy>
 		<copy>
 		  <ref value="status"/>
-		  <String name="msg">Hallo Bjoern! I want you to do something.</String>
-		</copy>			
-	</complexType>	
+		  <String value="Hallo Bjoern! I want you to do something."/>
+		</copy>
+	</complexType>
 
-	<complexType name="DutyOfClerk" supertype="simpleContractExample.Duty">  
+	<complexType name="simpleContractExample.DutyOfClerk" supertype="simpleContractExample.Duty">
 		<function name="todo" type="simpleContractExample.DutyOfClerk.todo">
 			<value name="param" type='t:Int' value="11" /> <!--TODO bei einer leeren function wird kein complex erzeugt! bloed!!! -->
 			<copy>
@@ -30,27 +36,31 @@
 				<Integer value="1"/>
 			  </plus>
 			</copy>
-		</function>  
-		<call type="DutyOfClerk" name="simpleContractExample.DutyOfClerk.todo" />	
-	</complexType>	
-	
-	<attribute name="status" type="t:ASCII(256)"/>
-	<value name="amountOfFavour" type='t:Int'>0</value>
-	
+			<copy>
+			  <ref value="status"/>
+			  <String value="Hi Matthias! I have done something."/>
+			</copy>
+		</function>
+		<call type="DutyOfClerk" name="simpleContractExample.DutyOfClerk.todo" />
+	</complexType>
+
+	<attribute name="status" type="t:ASCII256"/>
+	<value name="amountOfFavour" type='t:Int'>31</value>
+
 	<attribute name="dutyOfClerk" type="simpleContractExample.DutyOfClerk"/>
 	<dutyOfClerk>
 		<participant>
-			<nick>Bjoern</nick> 		
-			<publicKey>soidnaaoiyxcvkjlksajdfoaisjoyixcvjoyixcjvoasjfoaskdfkz</publicKey> 		
-		</participant> 
+			<nick>Bjoern</nick>
+			<publicKey>soidnaaoiyxcvkjlksajdfoaisjoyixcvjoyixcjvoasjfoaskdfkz</publicKey>
+		</participant>
 	</dutyOfClerk>
-	
+
 	<attribute name="dutyOfRequester" type="simpleContractExample.DutyOfRequester"/>
 	<dutyOfRequester>
 		<participant>
-			<nick>Matthias</nick> 		
-			<publicKey>asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic</publicKey> 		
-		</participant> 
+			<nick>Matthias</nick>
+			<publicKey>asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic</publicKey>
+		</participant>
 	</dutyOfRequester>
 	<!-- -->
 </contract>

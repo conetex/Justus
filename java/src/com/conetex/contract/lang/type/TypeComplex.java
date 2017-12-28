@@ -375,6 +375,8 @@ public class TypeComplex extends Type<Structure> { // AbstractType<Value<?>[]>
 		}
 
 		Function<?> f = Function.getInstance(this.name);
+		//Function<?> f = Function.getInstance( Symbols.getSimpleName(this.name) );
+		
 		if (f != null) {
 			for (Accessible<?> a : f.getSteps()) {
 				if (a.getCommand() != Symbols.comFunction()) {// TODO darauf

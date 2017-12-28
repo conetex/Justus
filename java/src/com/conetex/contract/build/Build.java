@@ -30,18 +30,18 @@ import com.conetex.contract.util.Pair;
 
 public class Build {
 
-	private static Map<TypeComplex, Function<?>> getMainFunctions(List<Pair<CodeNode, TypeComplex>> complexTypes)
+	private static Map<String, Function<?>> createMainFunctions(List<Pair<CodeNode, TypeComplex>> complexTypes)
 			throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
-		Map<TypeComplex, Function<?>> mainFunctions = new TreeMap<>();
+		Map<String, Function<?>> mainFunctions = new TreeMap<>();
 		for (Pair<CodeNode, TypeComplex> t : complexTypes) {
 			if (t == null || t.b == null) {
 				System.err.println("was geht denn hier?");
 			}
 
 			TypeComplex superType = t.b.getSuperType();
-			if (superType != null && Symbols.TYPE_DUTY.equals(superType.getName())) {
+			if (superType != null && Symbols.TYPE_DUTY.equals(superType.getName())) {//Todo besser sowas wie is subtypeOf machen...
 				Function<?> f = BuildFunctions.build(t.a, t.b);
-				mainFunctions.put(t.b, f);
+				mainFunctions.put(t.b.getName(), f);
 				// f.getFrom(rootStructure);
 			}
 		}
@@ -58,7 +58,7 @@ public class Build {
 			Structure s = va.asStructure();
 			if (s != null) {
 				TypeComplex superType = s.getComplex().getSuperType();
-				if (superType != null && Symbols.TYPE_DUTY.equals(superType.getName())) {
+				if (superType != null && Symbols.TYPE_DUTY.equals(superType.getName())) {//Todo besser sowas wie is subtypeOf machen...
 					duties.add(s);
 				}
 			}
@@ -87,7 +87,7 @@ public class Build {
 		System.out.println("Builder " + code.getCommand());
 		if (complexTypes != null) {
 
-			Map<TypeComplex, Function<?>> mainFunctions = getMainFunctions(complexTypes);
+			Map<String, Function<?>> mainFunctions = createMainFunctions(complexTypes);
 
 			CodeNode valueRoot = CodeNode.getValueRoot();
 			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
@@ -109,7 +109,7 @@ public class Build {
 								throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException {
 							// mainFunction.getFromRoot(rootStructure);
 							for (Structure d : myDuties) {
-								Function<?> f = mainFunctions.get(d.getComplex());
+								Function<?> f = mainFunctions.get(d.getComplex().getName());
 								if (f == null) {
 									System.err.println("can not find my main function");
 									return;

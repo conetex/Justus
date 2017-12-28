@@ -945,11 +945,13 @@ public class CodeModel {
 		String[] params4Const = new String[] { Symbols.paramValue() };// Symbols.paramName(),
 		Constant.numberConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng() });
 		Constant.numberConst.registerParameters(params4Const);
+		Constant.stringConst.means(Symbols.comStr());
+		Constant.stringConst.registerParameters(params4Const);
 		Constant.boolConst.means(Symbols.comBool());
 		Constant.boolConst.registerParameters(params4Const);
 		Constant.objConst.means(Symbols.comStructure());
 		Constant.objConst.registerParameters(params4Const);
-		Constant.whatEverConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng(), Symbols.comBool(), Symbols.comStructure() });
+		Constant.whatEverConst.means(new String[] { Symbols.comBigInt(), Symbols.comInt(), Symbols.comLng(), Symbols.comStr(), Symbols.comBool(), Symbols.comStructure() });
 		Constant.whatEverConst.registerParameters(params4Const);
 
 		Assign.whatEverAssigment.means(new String[] { Symbols.comCopy(), Symbols.comRefer(), Symbols.comParam() });
