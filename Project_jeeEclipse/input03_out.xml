@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <contract>
-  <complexType name="contract4u">
-    <attribute name="dutyOfAgent" type="contract4u.DutyOfAgent"/>
-    <complexType name="contract4u.DutyOfAgent" supertype="contract4u.Duty">
-      <attribute name="participant" type="contract4u.Participant"/>
-      <function name="contract4u.DutyOfAgent.foo" type="contract4u.DutyOfAgent.foo"/>
+  <complexType name="simpleContractExample">
+    <attribute name="status" type="t:ASCII(256)"/>
+    <attribute name="amountOfFavour" type="t:Int"/>
+    <attribute name="dutyOfClerk" type="simpleContractExample.DutyOfClerk"/>
+    <attribute name="dutyOfRequester" type="simpleContractExample.DutyOfRequester"/>
+    <complexType name="simpleContractExample.DutyOfClerk" supertype="simpleContractExample.Duty">
+      <function name="simpleContractExample.DutyOfClerk.todo" type="simpleContractExample.DutyOfClerk.todo">
+        <attribute name="param" type="t:Int"/>
+      </function>
     </complexType>
-    <complexType name="contract4u.Participant">
-      <attribute name="nick" type="t:ASCII32"/>
-      <attribute name="mail" type="t:ASCII32"/>
-      <attribute name="publicKey" type="t:ASCII256"/>
+    <complexType name="simpleContractExample.Participant">
+      <attribute name="nick" type="t:ASCII(32)"/>
+      <attribute name="mail" type="t:ASCII(32)"/>
+      <attribute name="publicKey" type="t:ASCII(256)"/>
     </complexType>
-    <complexType name="contract4u.Duty">
-      <attribute name="participant" type="contract4u.Participant"/>
+    <complexType name="simpleContractExample.DutyOfRequester" supertype="simpleContractExample.Duty">
+      <attribute name="param" type="t:Int"/>
+    </complexType>
+    <complexType name="simpleContractExample.Duty">
+      <attribute name="participant" type="simpleContractExample.Participant"/>
     </complexType>
   </complexType>
-  <VIRTUAL_COMP_VALUE name="contract4u">
-    <VIRTUAL_COMP_VALUE name="dutyOfAgent"/>
+  <VIRTUAL_COMP_VALUE name="simpleContractExample">
+    <VIRTUAL_PRIM_VALUE name="status" value=""/>
+    <VIRTUAL_PRIM_VALUE name="amountOfFavour" value="0"/>
+    <VIRTUAL_COMP_VALUE name="dutyOfClerk">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="Bjoern"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="soidnaaoiyxcvkjlksajdfoaisjoyixcvjoyixcjvoasjfoaskdfkz"/>
+      </VIRTUAL_COMP_VALUE>
+    </VIRTUAL_COMP_VALUE>
+    <VIRTUAL_COMP_VALUE name="dutyOfRequester">
+      <VIRTUAL_PRIM_VALUE name="param" value=""/>
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="Matthias"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic"/>
+      </VIRTUAL_COMP_VALUE>
+    </VIRTUAL_COMP_VALUE>
   </VIRTUAL_COMP_VALUE>
 </contract>

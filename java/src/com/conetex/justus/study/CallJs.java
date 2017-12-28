@@ -5,7 +5,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-class CallJs{
+class CallJs {
 
 	public static void main(String[] args) throws ScriptException, NoSuchMethodException {
 
@@ -15,8 +15,8 @@ class CallJs{
 				+ "};"
 
 				+ "var fun2 = function (object) {" + "var result = object.fun1('John Doe');" // does
-																																																																																		// not
-																																																																																		// work
+																								// not
+																								// work
 				+ "return result;"
 				// + "print(result);"
 				// +" print(\" JS Class Definition: \" +

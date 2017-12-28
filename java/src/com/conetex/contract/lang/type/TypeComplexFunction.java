@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.conetex.contract.build.BuildTypes.TypeComplexTemp;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
@@ -22,28 +23,28 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.PrototypeInInvalidState;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class TypeComplexOfFunction extends TypeComplex{
+public class TypeComplexFunction extends TypeComplex {
 
-	private Structure prototype;
+	private Structure										prototype;
 
-	private Structure runtimeCopyInUse;
+	private Structure										runtimeCopyInUse;
 
-	private Structure runtimeCopyNotInUse;
+	private Structure										runtimeCopyNotInUse;
 
-	private static final Map<String, Attribute<?>> functions = new HashMap<>();
+	private static final Map<String, Attribute<?>>			functions	= new HashMap<>();
 
-	private static final Map<String, TypeComplexOfFunction> instances = new HashMap<>();
+	private static final Map<String, TypeComplexFunction>	instances	= new HashMap<>();
 
-	public static Collection<TypeComplexOfFunction> getInstances() {
-		return TypeComplexOfFunction.instances.values();
+	public static Collection<TypeComplexFunction> getInstances() {
+		return TypeComplexFunction.instances.values();
 	}
-	
-	public static TypeComplexOfFunction getInstance(String typeName) {
+
+	public static TypeComplexFunction getInstance(String typeName) {
 		return instances.get(typeName);
 	}
 
 	public void setPrototype(Structure thePrototype) throws PrototypeWasInitialized {
-		if(this.prototype != null){
+		if (this.prototype != null) {
 			throw new PrototypeWasInitialized(this.getName());
 		}
 		this.prototype = thePrototype;
@@ -55,13 +56,13 @@ public class TypeComplexOfFunction extends TypeComplex{
 	}
 
 	public Structure utilizeStructure(Structure obj) throws Invalid, ValueCastException, PrototypeInInvalidState {
-		if(this.prototype == null){
+		if (this.prototype == null) {
 			throw new PrototypeInInvalidState("prototype is null");
 		}
-		if(this.runtimeCopyInUse != null){
+		if (this.runtimeCopyInUse != null) {
 			throw new PrototypeInInvalidState("runtimeCopyInUse is not null");
 		}
-		if(this.runtimeCopyNotInUse == null){
+		if (this.runtimeCopyNotInUse == null) {
 			throw new PrototypeInInvalidState("runtimeCopyNotInUse is null");
 		}
 
@@ -69,7 +70,7 @@ public class TypeComplexOfFunction extends TypeComplex{
 		this.runtimeCopyNotInUse = null;
 
 		TypeComplex complex = this.prototype.getComplex();
-		for(String key : complex.getSubAttributeNames()){
+		for (String key : complex.getSubAttributeNames()) {
 			Value<?> vOrg = this.prototype.getValue(key);
 			Value<?> vNew = this.runtimeCopyInUse.getValue(key);
 			vNew.setObject(vOrg.get());
@@ -80,75 +81,67 @@ public class TypeComplexOfFunction extends TypeComplex{
 	}
 
 	public void unutilizeStructure(Structure s) throws PrototypeInInvalidState {
-		if(this.runtimeCopyInUse == null){
+		if (this.runtimeCopyInUse == null) {
 			throw new PrototypeInInvalidState("runtimeCopyInUse is null");
 		}
-		if(this.runtimeCopyNotInUse != null){
+		if (this.runtimeCopyNotInUse != null) {
 			throw new PrototypeInInvalidState("runtimeCopyNotInUse is not null");
 		}
 		this.runtimeCopyNotInUse = this.runtimeCopyInUse;
 		this.runtimeCopyInUse = null;
 	}
 
-	private TypeComplexOfFunction(String theName, Map<String, Integer> theIndex, Attribute<?>[] theOrderedIdentifiers) {
+	private TypeComplexFunction(String theName, Map<String, Integer> theIndex, Attribute<?>[] theOrderedIdentifiers) {
 		super(theName, theIndex, theOrderedIdentifiers);
 	}
 
 	@Override
 	public TypeComplex init(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
 			throws DuplicateIdentifierNameExeption, NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
-		//System.err.println("this method should not be called");
+		// System.err.println("this method should not be called");
 		super.initImp(typeName, theOrderedIdentifiers);
 		TypeComplex.put(this);
-		TypeComplexOfFunction.instances.put(typeName, this);
+		TypeComplexFunction.instances.put(typeName, this);
 		return this;
 	}
 
 	public static Attribute<?> getAttribute(String name) {
-		return TypeComplexOfFunction.functions.get(name);
+		return TypeComplexFunction.functions.get(name);
 	}
 
-	private static TypeComplexOfFunction createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
-		if(theIndex != null && theOrderedIdentifiers != null){
-			return new TypeComplexOfFunction(theName, theIndex, theOrderedIdentifiers);
+	private static TypeComplexFunction createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
+		if (theIndex != null && theOrderedIdentifiers != null) {
+			return new TypeComplexFunction(theName, theIndex, theOrderedIdentifiers);
 		}
 		return null;
 	}
 
-	private static TypeComplex create(final String theName) {
-		Map<String, Integer> index = new HashMap<>();
-		Attribute<?>[] idents = new Attribute<?>[0];
-		return TypeComplexOfFunction.createImpl(theName, index, idents);
-	}
-
-	public static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
-			throws AbstractInterpreterException {
-		if(theOrderedIdentifiers.length == 0){
+	public static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers) throws AbstractInterpreterException {
+		if (theOrderedIdentifiers.length == 0) {
 			return null;
 		}
 		Map<String, Integer> theIndex = new HashMap<>();
 		TypeComplex.buildIndex(theIndex, theOrderedIdentifiers);
 		// return new ComplexDataType(theIndex, theOrderedAttributeTypes);
-		if(TypeComplexOfFunction.instances.containsKey(typeName)){
+		if (TypeComplexFunction.instances.containsKey(typeName)) {
 			throw new DublicateComplexException(typeName);
 		}
-		TypeComplexOfFunction re = TypeComplexOfFunction.createImpl(typeName, theIndex, theOrderedIdentifiers);
+		TypeComplexFunction re = TypeComplexFunction.createImpl(typeName, theIndex, theOrderedIdentifiers);
 		TypeComplex.put(re);
-		TypeComplexOfFunction.instances.put(typeName, re);
+		TypeComplexFunction.instances.put(typeName, re);
 		return re;
 	}
-
 
 	public static void createAttributeFun(String attributeName, String typeName, Map<String, TypeComplexTemp> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		Attribute<Structure> re = TypeComplex.createAttribute(attributeName, typeName, unformedComplexTypes);
-		TypeComplexOfFunction.functions.put(typeName, re);
+		TypeComplexFunction.functions.put(typeName, re);
 		System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
-    }
+	}
 
 	public static void fillMissingPrototypeValues() throws PrototypeWasInitialized {
-		for(TypeComplexOfFunction cf : TypeComplexOfFunction.instances.values()){
-			if(cf.prototype == null){
+		for (TypeComplexFunction cf : TypeComplexFunction.instances.values()) {
+			if (cf.prototype == null) {
 				Structure s = cf.createValue(null);
 				s.fillMissingValues();
 				cf.setPrototype(s);
@@ -162,40 +155,40 @@ public class TypeComplexOfFunction extends TypeComplex{
 
 	@Override
 	public String getCommand() {
-		return TypeComplexOfFunction.staticGetCommand();
+		return TypeComplexFunction.staticGetCommand();
 	}
-	
+
 	public static String staticGetCommand() {
 		return Symbols.comFunction();
 	}
-	
+
 	@Override
 	public CodeNode createCodeNode(TypeComplex parent) {
-		
+
 		List<CodeNode> children = new LinkedList<>();
-		
-		for(Attribute<?> a : super.orderedAttributes){
-			children.add( a.persist(this) );
+
+		for (Attribute<?> a : super.orderedAttributes) {
+			children.add(a.persist(this));
 		}
 
 		Function<?> f = Function.getInstance(super.name);
-		
-		if(f != null){
-			for(Accessible<?> a : f.getSteps()){
+
+		if (f != null) {
+			for (Accessible<?> a : f.getSteps()) {
 				CodeNode x = a.createCodeNode(this);
-				if(x == null) {
+				if (x == null) {
 					System.err.println("SHIT");
 				}
-				children.add( x );
+				children.add(x);
 			}
 		}
-		//else{
-		//	System.err.println("SHIT");
-		//}
-		
-		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] {super.name, super.name}, children);
-		
+		// else{
+		// System.err.println("SHIT");
+		// }
+
+		CodeNode cn = new CodeNode(parent, this.getCommand(), new String[] { super.name, super.name }, children);
+
 		return cn;
 	}
-	
+
 }

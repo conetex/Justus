@@ -9,11 +9,11 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.runOld.RtCast;
 
-public class SizedASCII extends PrimitiveValue<String>{
+public class SizedASCII extends PrimitiveValue<String> {
 
-	final int maxSize;
+	final int	maxSize;
 
-	String actual;
+	String		actual;
 
 	public SizedASCII(CodeNode theNode, int theMaxSize) {
 		super(theNode);
@@ -26,11 +26,11 @@ public class SizedASCII extends PrimitiveValue<String>{
 	}
 
 	boolean check(String aValue, String allowedChars) throws Invalid {
-		if(aValue == null){
+		if (aValue == null) {
 			return true;
 		}
 
-		if(aValue.length() > this.getMaxSize()){
+		if (aValue.length() > this.getMaxSize()) {
 			throw new Invalid("Input is longer than " + this.getMaxSize() + ": '" + aValue + "'");
 		}
 
@@ -57,7 +57,7 @@ public class SizedASCII extends PrimitiveValue<String>{
 		// !\"#\\$%&'\\(\\)\\*\\+,\\-\\./0-9:;<=>\\?@A-Z\\[\\\\\\]\\^_`a-z\\{\\|\\}~";
 		// // "\t !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~"
 
-		if(aValue.matches("[" + allowedChars + "]{1,}")){ // "[\\p{ASCII}]{0,}"
+		if (aValue.matches("[" + allowedChars + "]{1,}")) { // "[\\p{ASCII}]{0,}"
 															// "\\A\\p{ASCII}*\\z"
 															// "^[\\p{ASCII}]*$"
 			return true;
@@ -66,7 +66,7 @@ public class SizedASCII extends PrimitiveValue<String>{
 		Pattern noASCIIpattern = Pattern.compile("[^" + allowedChars + "]{1}");
 		Matcher m = noASCIIpattern.matcher(aValue);
 		String noASCII = "";
-		if(m.find()){
+		if (m.find()) {
 			noASCII = m.group(0);
 
 			Pattern ctrlCharPattern = Pattern.compile("[\\s]{1}"); // check for
@@ -74,7 +74,7 @@ public class SizedASCII extends PrimitiveValue<String>{
 																	// chars
 																	// (\s)
 			Matcher ctrlCharMatcher = ctrlCharPattern.matcher(noASCII);
-			if(ctrlCharMatcher.find()){
+			if (ctrlCharMatcher.find()) {
 				// noASCII is a control char
 				ctrlCharPattern = Pattern.compile("([[^\\s][ ]]{0,})[\\s]{1}"); // search
 																				// for
@@ -85,12 +85,12 @@ public class SizedASCII extends PrimitiveValue<String>{
 																				// space
 																				// (blank)
 				ctrlCharMatcher = ctrlCharPattern.matcher(aValue);
-				if(ctrlCharMatcher.find()){
+				if (ctrlCharMatcher.find()) {
 					// Locate the control char
 					int groupCount = ctrlCharMatcher.groupCount();
-					if(groupCount > 0){
+					if (groupCount > 0) {
 						String strBevorCtrlChar = ctrlCharMatcher.group(1);
-						if(strBevorCtrlChar == null || strBevorCtrlChar.length() == 0){
+						if (strBevorCtrlChar == null || strBevorCtrlChar.length() == 0) {
 							throw new Invalid("found control char at begin of Input! Don't use control chars!");
 						}
 						throw new Invalid("Please do not use control chars! found control char after '" + strBevorCtrlChar + "'");
@@ -103,6 +103,8 @@ public class SizedASCII extends PrimitiveValue<String>{
 		}
 
 		// when code above is correct we should never go here ...
+		// TODO unterschiedliches verhalten bei Debug 1: je nach input-File
+		// kommt was verschiedenes raus...
 		throw new Invalid("regex '[" + allowedChars + "]{1,}' is not matched by '" + aValue + "'! Please report! This Issue should be debugged!");
 
 	}
@@ -112,7 +114,7 @@ public class SizedASCII extends PrimitiveValue<String>{
 		// ascii without control characters:
 		String allowedChars = " !\"#\\$%&'\\(\\)\\*\\+,\\-\\./0-9:;<=>\\?@A-Z\\[\\\\\\]\\^_`a-z\\{\\|\\}~"; // "\t
 																											// !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~"
-		if(this.check(aValue, allowedChars)){
+		if (this.check(aValue, allowedChars)) {
 			this.actual = aValue;
 		}
 		return this.actual;

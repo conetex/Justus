@@ -10,11 +10,11 @@ import javax.mail.Store;
 /**
  * Created by Matthias on 17.02.2017.
  */
-class ReadMail{
+class ReadMail {
 
 	public static void main(String[] args) {
 		// Properties props = new Properties();
-		try{
+		try {
 			// props.load(new FileInputStream(new File("C:\\smtp.properties")));
 
 			Properties props = System.getProperties();
@@ -32,14 +32,14 @@ class ReadMail{
 
 			Message[] messages = inbox.getMessages();
 			System.out.println("------------------------------");
-			for(int i = 0; i < 10; i++){
+			for (int i = 0; i < 10; i++) {
 				System.out.println("Mail Subject:- " + messages[i].getSubject());
 			}
 			inbox.close(true);
 			store.close();
 
 		}
-		catch(Exception e){
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

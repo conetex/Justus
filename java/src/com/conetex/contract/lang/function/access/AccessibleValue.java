@@ -12,10 +12,10 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 
-public class AccessibleValue<T> extends Accessible<T>{
+public class AccessibleValue<T> extends Accessible<T> {
 
 	public static <T> AccessibleValue<T> create(String thePath, Class<T> theClass) {
-		if(thePath == null){
+		if (thePath == null) {
 			return null;
 		}
 		return new AccessibleValue<>(thePath, theClass);
@@ -26,7 +26,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 		// + ")");
 		BuildFunctions.checkType(Attribute.getRawTypeClass(path, parentTyp), expected);
 		// String path = n.getValue();
-        return AccessibleValue.create(path, expected);
+		return AccessibleValue.create(path, expected);
 	}
 
 	public static AccessibleValue<?> createFunctionSetableWhatEver(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
@@ -34,16 +34,16 @@ public class AccessibleValue<T> extends Accessible<T>{
 		// + ")");
 		Class<?> rawType = Attribute.getRawTypeClass(path, parentTyp);
 		// String path = n.getValue();
-        return AccessibleValue.create(path, rawType);
+		return AccessibleValue.create(path, rawType);
 	}
 
 	public static AccessibleValue<? extends Number> createFunctionSetableNumber(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
 		// System.out.println("get_id from " + n.getTag() + " (" + n.getValue()
 		// + ")");
 		Class<? extends Number> rawType = ElementaryArithmetic.getConcretNumRawType(Attribute.getRawTypeClass(path, parentTyp));
-        return AccessibleValue.create(path, rawType);
+		return AccessibleValue.create(path, rawType);
 	}
-	
+
 	final String[] path;
 
 	public String getPath() {
@@ -55,7 +55,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 	AccessibleValue(String thePath, Class<T> theClass) {
 		super();
 		// TODO no command!!! das ist ein design-problem
-		this.path = new String[] {thePath};
+		this.path = new String[] { thePath };
 		this.clazz = theClass;
 	}
 
@@ -63,11 +63,11 @@ public class AccessibleValue<T> extends Accessible<T>{
 	public String getCommand() {
 		return Symbols.comReference();
 	}
-	
+
 	@Override
 	public T getFrom(Structure thisObject) throws ValueCastException {
 		Value<T> value = thisObject.getValue(this.getPath(), this.clazz);
-		if(value == null){
+		if (value == null) {
 			return null;
 		}
 		return value.get();
@@ -75,7 +75,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 
 	public T setTo(Structure thisObject, T newValue) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.getPath(), this.clazz);
-		if(value == null){
+		if (value == null) {
 			return null;
 		}
 		return value.set(newValue);
@@ -84,7 +84,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 	@Override
 	public T copyFrom(Structure thisObject) throws Invalid, ValueCastException {
 		Value<T> value = thisObject.getValue(this.getPath(), this.clazz);
-		if(value == null){
+		if (value == null) {
 			return null;
 		}
 		return value.getCopy();
@@ -97,7 +97,7 @@ public class AccessibleValue<T> extends Accessible<T>{
 
 	public static <R> Accessible<R> createFunctionRef(String path, TypeComplex parentTyp, Class<R> expected) throws AbstractInterpreterException {
 		BuildFunctions.checkType(Attribute.getRawTypeClass(path, parentTyp), expected);
-        return AccessibleValue.create(path, expected);
+		return AccessibleValue.create(path, expected);
 	}
 
 	public static Accessible<?> createFunctionRefWhatEver(String path, TypeComplex parentTyp) throws AbstractInterpreterException {
@@ -119,7 +119,5 @@ public class AccessibleValue<T> extends Accessible<T>{
 	public String[] getParameter() {
 		return this.path;
 	}
-
-
 
 }

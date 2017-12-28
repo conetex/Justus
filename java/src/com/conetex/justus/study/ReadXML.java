@@ -53,27 +53,27 @@ class ReadXML {
 		public Element writeNode(CodeNode n) throws UnknownCommandParameter, UnknownCommand {
 			// TODO Auto-generated method stub
 			// TODO Auto-generated method stub
-			if(n == null) {
+			if (n == null) {
 				System.out.println("was geht");
 			}
 			Element e = null;
-			try{
+			try {
 				e = odoc.createElement(n.getCommand());
 			}
-			catch(DOMException de){
+			catch (DOMException de) {
 				System.out.println(de);
 				return null;
 			}
 
 			String[] parameters = n.getParameters();
 			String[] names = n.getParameterNames();
-			if(names != null){
+			if (names != null) {
 				int i = 0;
 				for (String p : names) {
 					e.setAttribute(p, parameters[i++]);
 					// Attr a = odoc.createAttribute(p);
 					// e.appendChild(a);
-				}				
+				}
 			}
 
 			for (CodeNode c : n.getChildNodes()) {
@@ -120,7 +120,7 @@ class ReadXML {
 					if (main == null) {
 						CodeNode r2 = createSyntaxNode("", r);
 
-						//createChildren("", r);
+						// createChildren("", r);
 
 						main = Build.create(r2);
 					}
@@ -140,7 +140,8 @@ class ReadXML {
 				DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
 				Document odoc = odocumentBuilder.newDocument();
 				Element root = odoc.createElement(Symbols.comContract());
-				//root.setAttribute(Symbols.paramName(), main.getRootTyp().getName());
+				// root.setAttribute(Symbols.paramName(),
+				// main.getRootTyp().getName());
 
 				odoc.appendChild(root);
 
@@ -175,7 +176,7 @@ class ReadXML {
 
 		String thisName = "";
 
-		if(commands == null){
+		if (commands == null) {
 			String theValue = ReadXMLtools.getNodeValue(n);
 			if (theValue == null) {
 				return new CodeNode(parentName, Symbols.comVirtualCompValue(), new String[] { commandStr }, createChildren(thisName, n));
@@ -226,28 +227,27 @@ class ReadXML {
 							}
 						}
 						else {
-							if(paramName.equals(Symbols.paramName())){
-								if(parentName == null || parentName.equals("")){
+							if (paramName.equals(Symbols.paramName())) {
+								if (parentName == null || parentName.equals("")) {
 									thisName = a.getNodeValue();
 									attributeList.add(thisName);
 								}
-								else{
+								else {
 									// nur bei complex / function
-									thisName = parentName + Symbols.NAME_SEPERATOR + Symbols.getSimpleName( a.getNodeValue() );
-									if(thisName.equals("root.person.tuWas")){
+									thisName = parentName + Symbols.NAME_SEPERATOR + Symbols.getSimpleName(a.getNodeValue());
+									if (thisName.equals("root.person.tuWas")) {
 										System.err.println("upps");
 									}
 
-
-									if(commandStr == Symbols.comFunction()){
+									if (commandStr == Symbols.comFunction()) {
 										attributeList.add(thisName);
 									}
-									else{
+									else {
 										attributeList.add(a.getNodeValue());
 									}
 								}
 							}
-							else{
+							else {
 								attributeList.add(a.getNodeValue());
 							}
 						}
@@ -265,7 +265,7 @@ class ReadXML {
 		return null;
 	}
 
-	private static List<CodeNode> createChildren(String thisName, Node n){
+	private static List<CodeNode> createChildren(String thisName, Node n) {
 		List<CodeNode> children = new LinkedList<>();
 		NodeList xmlChildren = n.getChildNodes();
 		for (int i = 0; i < xmlChildren.getLength(); i++) {

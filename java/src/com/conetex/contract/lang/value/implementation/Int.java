@@ -7,7 +7,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.runOld.RtCast;
 
-public class Int extends PrimitiveValue<Integer>{
+public class Int extends PrimitiveValue<Integer> {
 
 	private Integer actual;
 
@@ -23,8 +23,8 @@ public class Int extends PrimitiveValue<Integer>{
 
 	@Override
 	public void setObject(Object value) throws Invalid, ValueCastException {
-        this.set(RtCast.cast(value, Integer.class));
-    }
+		this.set(RtCast.cast(value, Integer.class));
+	}
 
 	@Override
 	public final Integer get() {
@@ -33,11 +33,11 @@ public class Int extends PrimitiveValue<Integer>{
 
 	@Override
 	public void setConverted(String value) throws Inconvertible {
-		try{
+		try {
 			Integer v = Integer.valueOf(Integer.parseInt(value));
-            this.set(v);
-        }
-		catch(NumberFormatException e){
+			this.set(v);
+		}
+		catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}
@@ -58,5 +58,5 @@ public class Int extends PrimitiveValue<Integer>{
 		re.actual = this.actual;
 		return re;
 	}
-	
+
 }

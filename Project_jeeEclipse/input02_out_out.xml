@@ -220,10 +220,10 @@
       <VIRTUAL_PRIM_VALUE name="betrag" value="1024"/>
       <VIRTUAL_PRIM_VALUE name="aktiv" value="true"/>
     </VIRTUAL_COMP_VALUE>
-    <VIRTUAL_PRIM_VALUE name="counter" value="2"/>
+    <VIRTUAL_PRIM_VALUE name="counter" value="0"/>
     <VIRTUAL_PRIM_VALUE name="param" value="12"/>
     <VIRTUAL_PRIM_VALUE name="aAddress" value="12@32543.com"/>
-    <VIRTUAL_PRIM_VALUE name="a2Addres" value="12@32543.com"/>
+    <VIRTUAL_PRIM_VALUE name="a2Addres" value="ab@cdefg.com"/>
     <VIRTUAL_PRIM_VALUE name="ai" value="3"/>
     <VIRTUAL_PRIM_VALUE name="bi" value="4"/>
     <VIRTUAL_PRIM_VALUE name="bTrue" value="true"/>

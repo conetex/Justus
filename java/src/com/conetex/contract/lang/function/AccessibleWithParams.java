@@ -7,7 +7,7 @@ import com.conetex.contract.run.exceptionValue.ValueCastException;
 public abstract class AccessibleWithParams<T> extends AccessibleImp<T> {
 
 	private String[] parameter;
-	
+
 	protected AccessibleWithParams(String[] theParameter) {
 		super();
 		this.parameter = theParameter;
@@ -16,10 +16,10 @@ public abstract class AccessibleWithParams<T> extends AccessibleImp<T> {
 	public String[] getParameter() {
 		return this.parameter;
 	}
-	
+
 	@Override
 	public abstract String getCommand();
-	
+
 	@Override
 	public abstract T getFrom(Structure thisObject) throws ValueCastException;
 

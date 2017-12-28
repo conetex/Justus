@@ -14,7 +14,7 @@ import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.control.Function;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
-import com.conetex.contract.lang.type.TypeComplexOfFunction;
+import com.conetex.contract.lang.type.TypeComplexFunction;
 import com.conetex.contract.lang.type.TypePrimitive;
 import com.conetex.contract.lang.value.Value;
 import com.conetex.contract.lang.value.implementation.Structure;
@@ -28,121 +28,127 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.util.Pair;
 
-public class Build{
-	
-	private static Map<TypeComplex, Function<?>> getMainFunctions(List< Pair<CodeNode,TypeComplex> > complexTypes) throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException{
+public class Build {
+
+	private static Map<TypeComplex, Function<?>> getMainFunctions(List<Pair<CodeNode, TypeComplex>> complexTypes)
+			throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 		Map<TypeComplex, Function<?>> mainFunctions = new TreeMap<>();
-		for(Pair<CodeNode,TypeComplex> t : complexTypes){
+		for (Pair<CodeNode, TypeComplex> t : complexTypes) {
+			if (t == null || t.b == null) {
+				System.err.println("was geht denn hier?");
+			}
+
 			TypeComplex superType = t.b.getSuperType();
-			if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName()) ){
+			if (superType != null && Symbols.TYPE_DUTY.equals(superType.getName())) {
 				Function<?> f = BuildFunctions.build(t.a, t.b);
 				mainFunctions.put(t.b, f);
-				//f.getFrom(rootStructure);
+				// f.getFrom(rootStructure);
 			}
 		}
 		return mainFunctions;
 	}
-	
-	private static List<Structure> getAllDuties(Structure rootStructure){
+
+	private static List<Structure> getAllDuties(Structure rootStructure) {
 		List<Structure> duties = new LinkedList<>();
-		for(Value<?> va : rootStructure.getValues()){
-			if(va == null){
+		for (Value<?> va : rootStructure.getValues()) {
+			if (va == null) {
 				System.err.println("warum ist das value null ?");
 				continue;
 			}
 			Structure s = va.asStructure();
-			if(s != null){
+			if (s != null) {
 				TypeComplex superType = s.getComplex().getSuperType();
-				if(superType != null && Symbols.TYPE_DUTY.equals(superType.getName())){
+				if (superType != null && Symbols.TYPE_DUTY.equals(superType.getName())) {
 					duties.add(s);
 				}
 			}
 		}
 		return duties;
 	}
-	
-	private static List<Structure> getMyDuties( List<Structure> allDuties ) throws ValueCastException{
+
+	private static List<Structure> getMyDuties(List<Structure> allDuties) throws ValueCastException {
 		Participant me = ContractRuntime.whoAmI();
 		List<Structure> myDuties = new LinkedList<>();
-		for(Structure s : allDuties){
-			if( me.isEqual(s.getStructure(Symbols.TYPE_DUTY_ATT_PARTICIPANT)) ){
+		for (Structure s : allDuties) {
+			if (me.isEqual(s.getStructure(Symbols.TYPE_DUTY_ATT_PARTICIPANT))) {
 				myDuties.add(s);
 			}
 		}
 		return myDuties;
 	}
-	
+
 	public static Main create(CodeNode code) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException, ValueCastException {
 		TypePrimitive.init();
 		CodeNode.init(code);
-		//List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
+		// List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
 		CodeNode complexRoot = CodeNode.getComplexRoot();
-		List< Pair<CodeNode,TypeComplex> > complexTypes = BuildTypes.createComplexTypes(complexRoot);
-		
+		List<Pair<CodeNode, TypeComplex>> complexTypes = BuildTypes.createComplexTypes(complexRoot);
+
 		System.out.println("Builder " + code.getCommand());
-		if(complexTypes != null){
-			
+		if (complexTypes != null) {
+
 			Map<TypeComplex, Function<?>> mainFunctions = getMainFunctions(complexTypes);
-			
+
 			CodeNode valueRoot = CodeNode.getValueRoot();
 			TypeComplex complexTypeRoot = TypeComplex.getInstance(valueRoot.getParameter(Symbols.paramName()));
 			Structure rootStructure = complexTypeRoot.createValue(null);
-			
-			if(rootStructure != null){
+
+			if (rootStructure != null) {
 				BuildValues.createValues(valueRoot, complexTypeRoot, rootStructure);
 				rootStructure.fillMissingValues();
-				TypeComplexOfFunction.fillMissingPrototypeValues();
+				TypeComplexFunction.fillMissingPrototypeValues();
 				Function<?> mainFunction = BuildFunctions.build(complexRoot, complexTypeRoot);
-				
+
 				List<Structure> allDuties = getAllDuties(rootStructure);
-				List<Structure> myDuties = getMyDuties( allDuties );
-				
-				if(mainFunction != null){
-					return new Main(){
+				List<Structure> myDuties = getMyDuties(allDuties);
+
+				if (mainFunction != null) {
+					return new Main() {
 						@Override
-						public void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException {
-							//mainFunction.getFromRoot(rootStructure);
-							for(Structure d : myDuties){
-								Function<?> f = mainFunctions.get( d.getComplex() );
-								if(f == null){
+						public void run(Writer w)
+								throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException {
+							// mainFunction.getFromRoot(rootStructure);
+							for (Structure d : myDuties) {
+								Function<?> f = mainFunctions.get(d.getComplex());
+								if (f == null) {
 									System.err.println("can not find my main function");
 									return;
 								}
 								f.getFrom(d);
 							}
-							
-							if(w != null){
+
+							if (w != null) {
 								CodeNode cnTyps = complexTypeRoot.createCodeNode(null);
 								w.write(cnTyps);
-								
-								//CodeNode cnFuns = complexTypeRoot.createCodeNode(null);
-								//w.write(cnTyps);
+
+								// CodeNode cnFuns =
+								// complexTypeRoot.createCodeNode(null);
+								// w.write(cnTyps);
 								/*
-								for(TypeComplex tc : TypeComplex.getInstances()){
-									if( tc.getCommand().equals( TypeComplex.staticGetCommand() ) ){
-										CodeNode cnTyps = tc.createCodeNode();
-										w.write(cnTyps);
-									}
-									// else // functions are done by tc.createCodeNode() internal
-								}
-								*/
+								 * for(TypeComplex tc :
+								 * TypeComplex.getInstances()){ if(
+								 * tc.getCommand().equals(
+								 * TypeComplex.staticGetCommand() ) ){ CodeNode
+								 * cnTyps = tc.createCodeNode();
+								 * w.write(cnTyps); } // else // functions are
+								 * done by tc.createCodeNode() internal }
+								 */
 								/*
-								for(TypeComplexOfFunction tcf : TypeComplexOfFunction.getInstances()){
-									CodeNode cnTyps = tcf.persist();
-									w.write(cnTyps);
-								}
-								*/			
+								 * for(TypeComplexOfFunction tcf :
+								 * TypeComplexOfFunction.getInstances()){
+								 * CodeNode cnTyps = tcf.persist();
+								 * w.write(cnTyps); }
+								 */
 								Attribute<?> r = complexTypeRoot.createComplexAttribute(complexTypeRoot.getName());
 								CodeNode cnVal = rootStructure.createCodeNode(null, r);
-								w.write(cnVal);								
+								w.write(cnVal);
 								/*
-								List<CodeNode> cnVals = rootStructure.createCodeNodes();
-								for(CodeNode cnVal : cnVals){
-									w.write(cnVal);
-								}
-								*/
+								 * List<CodeNode> cnVals =
+								 * rootStructure.createCodeNodes(); for(CodeNode
+								 * cnVal : cnVals){ w.write(cnVal); }
+								 */
 							}
-							else{
+							else {
 								// TODO exception ...
 							}
 						}

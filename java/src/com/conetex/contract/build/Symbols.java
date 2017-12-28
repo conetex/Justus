@@ -2,17 +2,17 @@ package com.conetex.contract.build;
 
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 
-public class Symbols{
+public class Symbols {
 
 	public static String[] splitRight(String aName) {
 		String[] re = new String[2];
-		if(aName == null){
+		if (aName == null) {
 			return re;
 		}
 		int i = aName.lastIndexOf(Symbols.litTypeSeperator());
-		if(i > -1 && i < aName.length()){
+		if (i > -1 && i < aName.length()) {
 			re[0] = aName.substring(0, i);
-			if(i + Symbols.litTypeSeperator().length() < aName.length()){
+			if (i + Symbols.litTypeSeperator().length() < aName.length()) {
 				re[1] = aName.substring(i + Symbols.litTypeSeperator().length());
 			}
 		}
@@ -24,7 +24,7 @@ public class Symbols{
 
 	public static String getParentNameNoNull(String aName) throws AbstractInterpreterException {
 		String re = getParentName(aName);
-		if(re == null){
+		if (re == null) {
 			throw new AbstractInterpreterException("can not extract parent name from " + aName);
 		}
 		return re;
@@ -37,101 +37,97 @@ public class Symbols{
 
 	public static String getSimpleName(String aName) {
 		String[] re = splitRight(aName);
-		//if(re[1] == null){
-			//return aName;
-		//}
+		// if(re[1] == null){
+		// return aName;
+		// }
 		return re[1];
 	}
 
-	public static final String NAME_SEPERATOR = ".";
+	public static final String		NAME_SEPERATOR				= ".";
 
-
-	private static final String SIMPLE_TYPE_NS = "t:";
-	private static final String TYPE_SEPERATOR = ".";
-	public static final String[] PARAM_AFFIXES = new String[] { "(", ")", "_", "-" };
+	private static final String		SIMPLE_TYPE_NS				= "t:";
+	private static final String		TYPE_SEPERATOR				= ".";
+	public static final String[]	PARAM_AFFIXES				= new String[] { "(", ")", "_", "-" };
 
 	// types
-	public static final String TYPE_DUTY = "Duty";
-	public static final String TYPE_DUTY_ATT_PARTICIPANT = "participant";
-	public static final String TYPE_PARTICIPANT = "Participant";
-	public static final String TYPE_PARTICIPANT_ATT_NICK = "nick";
-	public static final String TYPE_PARTICIPANT_ATT_PUBKEY = "publicKey";
-	
+	public static final String		TYPE_DUTY					= "Duty";
+	public static final String		TYPE_DUTY_ATT_PARTICIPANT	= "participant";
+	public static final String		TYPE_PARTICIPANT			= "Participant";
+	public static final String		TYPE_PARTICIPANT_ATT_NICK	= "nick";
+	public static final String		TYPE_PARTICIPANT_ATT_PUBKEY	= "publicKey";
+
 	// data command
-	private static final String COM_CONTRACT = "contract";
-	private static final String COM_COMPLEX = "complexType";
-	private static final String COM_ATTRIBUTE = "attribute";
-	private static final String COM_VALUE = "value";
-	private static final String COM_VIRTUAL_COMP_VALUE = "VIRTUAL_COMP_VALUE";
-	private static final String COM_VIRTUAL_PRIM_VALUE = "VIRTUAL_PRIM_VALUE";
+	private static final String		COM_CONTRACT				= "contract";
+	private static final String		COM_COMPLEX					= "complexType";
+	private static final String		COM_ATTRIBUTE				= "attribute";
+	private static final String		COM_VALUE					= "value";
+	private static final String		COM_VIRTUAL_COMP_VALUE		= "VIRTUAL_COMP_VALUE";
+	private static final String		COM_VIRTUAL_PRIM_VALUE		= "VIRTUAL_PRIM_VALUE";
 
 	// def of data (const)
-	public static final String CLASS_BINT = "BigInt";
-	public static final String CLASS_LNG = "Lng";
-	public static final String CLASS_INT = "Int";
-	public static final String CLASS_BOOL = "Bool";
-	public static final String CLASS_SIZED_ASCII = "ASCII";
-	public static final String CLASS_MAIL_ADDRESS = "MailAddress";
-	public static final String CLASS_BASE64 = "Base64";
+	public static final String		CLASS_BINT					= "BigInt";
+	public static final String		CLASS_LNG					= "Lng";
+	public static final String		CLASS_INT					= "Int";
+	public static final String		CLASS_BOOL					= "Bool";
+	public static final String		CLASS_SIZED_ASCII			= "ASCII";
+	public static final String		CLASS_MAIL_ADDRESS			= "MailAddress";
+	public static final String		CLASS_BASE64				= "Base64";
 
-	private static final String COM_STRUCT = "struct";
-	private static final String COM_BOOL = "Boolean";
-	private static final String COM_BINT = "BigInteger";
-	private static final String COM_INT = "Integer";
-	private static final String COM_LNG = "Long";
-	private static final String COM_STR = "String";
+	private static final String		COM_STRUCT					= "struct";
+	private static final String		COM_BOOL					= "Boolean";
+	private static final String		COM_BINT					= "BigInteger";
+	private static final String		COM_INT						= "Integer";
+	private static final String		COM_LNG						= "Long";
+	private static final String		COM_STR						= "String";
 
 	// control commands
-	private static final String COM_WHEN = "if";
-	private static final String COM_THEN = "then";
-	private static final String COM_OTHERWISE = "else";
-	private static final String COM_LOOP = "loop";
-	private static final String COM_FUNCTION = "function";
-	private static final String COM_RETURN = "return";
-	private static final String COM_CALL = "call";
+	private static final String		COM_WHEN					= "if";
+	private static final String		COM_THEN					= "then";
+	private static final String		COM_OTHERWISE				= "else";
+	private static final String		COM_LOOP					= "loop";
+	private static final String		COM_FUNCTION				= "function";
+	private static final String		COM_RETURN					= "return";
+	private static final String		COM_CALL					= "call";
 
 	// boolean operator commands
-	private static final String COM_AND = "and";
-	private static final String COM_OR = "or";
-	private static final String COM_XOR = "xor";
-	private static final String COM_NOT = "not";
+	private static final String		COM_AND						= "and";
+	private static final String		COM_OR						= "or";
+	private static final String		COM_XOR						= "xor";
+	private static final String		COM_NOT						= "not";
 
 	// boolean expression for comparison commands
-	private static final String COM_SMALLER = "smaller";
-	private static final String COM_EQUAL = "equal";
-	private static final String COM_GREATER = "greater";
+	private static final String		COM_SMALLER					= "smaller";
+	private static final String		COM_EQUAL					= "equal";
+	private static final String		COM_GREATER					= "greater";
 
 	// boolean expression for checks commands
-	private static final String COM_ISNULL = "isNull";
+	private static final String		COM_ISNULL					= "isNull";
 
 	// math elementary arithmetic commands
-	private static final String COM_PLUS = "plus"; // Addition
-	private static final String COM_MINUS = "minus"; // Subtraction
-	private static final String COM_TIMES = "times"; // Multiplication
-	private static final String COM_DIVIDED_BY = "divided_by"; // Division
-	private static final String COM_REMAINS = "remains"; // Remainder
+	private static final String		COM_PLUS					= "plus";								// Addition
+	private static final String		COM_MINUS					= "minus";								// Subtraction
+	private static final String		COM_TIMES					= "times";								// Multiplication
+	private static final String		COM_DIVIDED_BY				= "divided_by";							// Division
+	private static final String		COM_REMAINS					= "remains";							// Remainder
 
 	// assignment of data commands
-	private static final String COM_COPY = "copy";
-	private static final String COM_REFER = "refer";
-	private static final String COM_PARAM = "param";
+	private static final String		COM_COPY					= "copy";
+	private static final String		COM_REFER					= "refer";
+	private static final String		COM_PARAM					= "param";
 
 	// addressing of data commands
-	private static final String COM_REFERENCE = "ref";
+	private static final String		COM_REFERENCE				= "ref";
 
 	// parameters
-	private static final String PARAM_NAME = "name";
-	private static final String PARAM_VALUE = "value";
-	private static final String PARAM_TYPE = "type";
-	public static final String PARAM_SUPERTYPE = "supertype";
-
-
-
-
+	private static final String		PARAM_NAME					= "name";
+	private static final String		PARAM_VALUE					= "value";
+	private static final String		PARAM_TYPE					= "type";
+	public static final String		PARAM_SUPERTYPE				= "supertype";
 
 	public static String litSimpleTypeNS() {
 		return SIMPLE_TYPE_NS;
 	}
+
 	public static String litTypeSeperator() {
 		return TYPE_SEPERATOR;
 	}
@@ -283,8 +279,7 @@ public class Symbols{
 	public static String comParam() {
 		return COM_PARAM;
 	}
-	
-	
+
 	// addressing of data commands
 	public static String comReference() {
 		return COM_REFERENCE;

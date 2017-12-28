@@ -9,7 +9,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.runOld.RtCast;
 
-public class BigInt extends PrimitiveValue<BigInteger>{
+public class BigInt extends PrimitiveValue<BigInteger> {
 
 	public BigInt(CodeNode theNode) {
 		super(theNode);
@@ -19,8 +19,8 @@ public class BigInt extends PrimitiveValue<BigInteger>{
 
 	@Override
 	public void setObject(Object value) throws Invalid, ValueCastException {
-        this.set(RtCast.cast(value, BigInteger.class));
-    }
+		this.set(RtCast.cast(value, BigInteger.class));
+	}
 
 	@Override
 	public BigInteger set(BigInteger aValue) {
@@ -35,11 +35,11 @@ public class BigInt extends PrimitiveValue<BigInteger>{
 
 	@Override
 	public void setConverted(String value) throws Inconvertible {
-		try{
+		try {
 			BigInteger v = new BigInteger(value);
-            this.set(v);
-        }
-		catch(NumberFormatException e){
+			this.set(v);
+		}
+		catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Integer", e);
 		}
 	}

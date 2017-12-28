@@ -10,129 +10,130 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.TypeComplex;
 
-public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat (   class CodeNode{   )
+public class CodeNode {// TODO ziel sollte sein dass die Klasse package-Scope
+						// hat ( class CodeNode{ )
 
-	private static CodeNode rootComplex;
-	
-	private static CodeNode rootValue;
+	private static CodeNode	rootComplex;
+
+	private static CodeNode	rootValue;
 
 	public static void init(CodeNode code) throws AbstractInterpreterException {
-		if(code == null){
+		if (code == null) {
 			throw new AbstractInterpreterException("no root of syntax tree");
 		}
-		if(code.getCommand() == Symbols.comContract()){
-			if(code.hasParameter(Symbols.paramName())){
+		if (code.getCommand() == Symbols.comContract()) {
+			if (code.hasParameter(Symbols.paramName())) {
 				CodeNode.rootComplex = code;
 				CodeNode.rootValue = code;
 			}
-			else{
-				for(CodeNode n : code.children){
-					if(n.getCommand() == Symbols.comComplex()){
+			else {
+				for (CodeNode n : code.children) {
+					if (n.getCommand() == Symbols.comComplex()) {
 						CodeNode.rootComplex = n;
 					}
-					if(n.getCommand() == Symbols.comVirtualCompValue()){
+					if (n.getCommand() == Symbols.comVirtualCompValue()) {
 						CodeNode.rootValue = n;
-					}					
+					}
 				}
-				if(CodeNode.rootComplex == null){
+				if (CodeNode.rootComplex == null) {
 					throw new AbstractInterpreterException("no rootComplex");
 				}
-				if(CodeNode.rootValue == null){
+				if (CodeNode.rootValue == null) {
 					throw new AbstractInterpreterException("no rootValue");
-				}				
+				}
 			}
 		}
-		else{
+		else {
 			throw new AbstractInterpreterException("no contract");
-		}		
+		}
 	}
-	
+
 	public static CodeNode getComplexRoot() {
 		return CodeNode.rootComplex;
 	}
-	
+
 	public static CodeNode getValueRoot() {
 		return CodeNode.rootValue;
 	}
-	
+
 	private static String getParameter(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
-		return thisObj.parameters[ getParameterIdx(c, p, thisObj) ];
+		return thisObj.parameters[getParameterIdx(c, p, thisObj)];
 	}
-	
+
 	private static int getParameterIdx(String c, String p, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		EggAbstr<?> command = getParameters(c, thisObj);
 		return command.getParameterIndex(p);
 	}
-	
+
 	private static EggAbstr<?> getParameters(String c, CodeNode thisObj) throws UnknownCommandParameter, UnknownCommand {
 		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(c);
-		if(commands == null){
+		if (commands == null) {
 			throw new UnknownCommand(c);
 		}
-		if(thisObj.parameters == null){
+		if (thisObj.parameters == null) {
 			throw new UnknownCommandParameter(c);
 		}
 		StringBuilder error = new StringBuilder();
-		for(EggAbstr<?> command : commands){
-			if(command == null){
+		for (EggAbstr<?> command : commands) {
+			if (command == null) {
 				error.append(", ").append(c);
 				continue;
 			}
-			if(command.getParameterNames() == null){
-				if(thisObj.parameters.length == 0){
+			if (command.getParameterNames() == null) {
+				if (thisObj.parameters.length == 0) {
 					return command;
 				}
-				else{
+				else {
 					error.append(", 0 != ").append(thisObj.parameters.length);
 				}
 			}
-			else{
-				if(command.getParameterNames().length == thisObj.parameters.length){
+			else {
+				if (command.getParameterNames().length == thisObj.parameters.length) {
 					return command;
 				}
-				else{
+				else {
 					error.append(", ").append(command.getParameterNames().length).append(" != ").append(thisObj.parameters.length);
 				}
 			}
 		}
 		throw new UnknownCommandParameter(c + "." + error);
 	}
-	
+
 	public boolean hasParameter(String p) throws UnknownCommandParameter, UnknownCommand {
-		if(p == null){
+		if (p == null) {
 			throw new UnknownCommandParameter("null");
 		}
 		String[] names = this.getParameterNames();
-		for(String n : names){
-			if(n.equals(p)){
+		for (String n : names) {
+			if (n.equals(p)) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	public String[] getParameterNames() throws UnknownCommandParameter, UnknownCommand {
 		return CodeNode.getParameters(this.getCommand(), this).getParameterNames();
 	}
-	
+
 	public String getParameter(String p) throws UnknownCommandParameter, UnknownCommand {
 		return CodeNode.getParameter(this.getCommand(), p, this);
 	}
 
-	public static String getTypSubstring(String typeName, String parentName){
-		if(typeName == null){
+	public static String getTypSubstring(String typeName, String parentName) {
+		if (typeName == null) {
 			// TODO Exception
 			System.err.println("no typeName for complex");
 			return null;
 		}
 		String re = typeName;
-		if(parentName != null){
+		if (parentName != null) {
 			String[] typeNames = Symbols.splitRight(typeName);
-			if(typeNames[1] != null && typeNames[0] != null){
-				if(typeNames[0].equals(parentName)){
+			if (typeNames[1] != null && typeNames[0] != null) {
+				if (typeNames[0].equals(parentName)) {
 					re = typeNames[1];
 				}
-				else{
+				else {
 					// TODO Error
 					System.err.println("typeName passt nicht zum parent");
 					return null;
@@ -142,14 +143,14 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 		}
 		return re;
 	}
-	
-	public static String getTypSubstr(String typeName, TypeComplex parent){
-		if(parent != null){
+
+	public static String getTypSubstr(String typeName, TypeComplex parent) {
+		if (parent != null) {
 			return getTypSubstring(typeName, parent.getName());
 		}
 		return getTypSubstring(typeName, null);
 	}
-	
+
 	public static CodeNode __create(String command, String theNameAttribute, String theValue, String theType) throws UnknownCommandParameter, UnknownCommand {
 		return __create(command, theNameAttribute, theValue, theType, new LinkedList<>());
 	}
@@ -160,77 +161,79 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 		String command = commandOrg;
 		String theNameAttribute = theNameAttributeOrg;
 
-		if(command == null || command.length() == 0){
+		if (command == null || command.length() == 0) {
 			return null;
 		}
 
 		List<EggAbstr<?>> x = EggAbstrImp.getInstance(commandOrg);
-		if(x == null){
-			//if (!(isType(theName) || isFunction(theName) || isAttribute(theName) || isAttributeInitialized(theName) || isBuildInFunction(theName))) {
-			if(theNameAttribute == null){
+		if (x == null) {
+			// if (!(isType(theName) || isFunction(theName) ||
+			// isAttribute(theName) || isAttributeInitialized(theName) ||
+			// isBuildInFunction(theName))) {
+			if (theNameAttribute == null) {
 				theNameAttribute = command;
-				if(theValue == null){
+				if (theValue == null) {
 					command = Symbols.comVirtualCompValue();
 				}
-				else{
+				else {
 					command = Symbols.comvirtualPrimValue();
 				}
 			}
 		}
 
-		if(theNameAttribute == null){
-			if(theValue == null){
-				if(theType == null){
+		if (theNameAttribute == null) {
+			if (theValue == null) {
+				if (theType == null) {
 					__checkParameter(command, null);
 					return new CodeNode(command, null, theChildren);
 				}
-				else{
+				else {
 					__checkParameter(command, new String[] { Symbols.paramType() });
 					return new CodeNode(command, new String[] { theType }, theChildren);
 				}
 			}
-			else if(theType == null){
+			else if (theType == null) {
 				__checkParameter(command, new String[] { Symbols.paramValue() });
 				return new CodeNode(command, new String[] { theValue }, theChildren);
 			}
-			else{
+			else {
 				__checkParameter(command, new String[] { Symbols.paramValue(), Symbols.paramType() });
 				return new CodeNode(command, new String[] { theValue, theType }, theChildren);
 			}
 		}
-		else if(theValue == null){
-			if(theType == null){
+		else if (theValue == null) {
+			if (theType == null) {
 				__checkParameter(command, new String[] { Symbols.paramName() });
 				return new CodeNode(command, new String[] { theNameAttribute }, theChildren);
 			}
-			else{
+			else {
 				__checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramType() });
 				return new CodeNode(command, new String[] { theNameAttribute, theType }, theChildren);
 			}
 		}
-		else if(theType == null){
+		else if (theType == null) {
 			__checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue() });
 			return new CodeNode(command, new String[] { theNameAttribute, theValue }, theChildren);
 		}
-		else{
+		else {
 			__checkParameter(command, new String[] { Symbols.paramName(), Symbols.paramValue(), Symbols.paramType() });
 			return new CodeNode(command, new String[] { theNameAttribute, theValue, theType }, theChildren);
 		}
-	}	
-	
+	}
+
 	private static void __checkParameter(String c, String[] p) throws UnknownCommandParameter, UnknownCommand {
 
 		List<EggAbstr<?>> commands = CodeModel.EggAbstrImp.getInstance(c);
-		if(commands == null){
+		if (commands == null) {
 			throw new UnknownCommand(c);
 		}
 		StringBuilder error = new StringBuilder();
-		outerLoop: for(EggAbstr<?> command : commands){
+		outerLoop: for (EggAbstr<?> command : commands) {
 			String[] paramNames = command.getParameterNames();
-			if(paramNames != null && !(p == null || p.length == 0)){
-				if(paramNames.length == p.length){
-					for(int j = 0; j < paramNames.length; j++){
-						if(paramNames[j] != p[j]){
+			if (paramNames != null && !(p == null || p.length == 0)) {
+				if (paramNames.length == p.length) {
+					for (int j = 0; j < paramNames.length; j++) {
+						if (paramNames[j] != p[j]) {
 							error.append(paramNames[j]).append(" != ").append(p[j]).append(", ");
 							continue outerLoop;
 						}
@@ -239,16 +242,16 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 				}
 				error.append(paramNames.length).append(" != ").append(p.length).append(", ");
 			}
-			else{
+			else {
 				return;
 			}
 		}
 		throw new UnknownCommandParameter(error.toString());
 	}
 
-	private final String command;
+	private final String	command;
 
-	private final String[] parameters;
+	private final String[]	parameters;
 
 	public String[] getParameters() {
 		return this.parameters;
@@ -261,7 +264,7 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 		this.parameters = theParams;
 		this.children = theChildren;
 	}
-	
+
 	public CodeNode(String parent, String theCommand, String[] theParams, List<CodeNode> theChildren) {
 		this.command = theCommand;
 		this.parameters = theParams;
@@ -273,16 +276,16 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 		this.parameters = theParams;
 		this.children = theChildren;
 	}
-	
+
 	public String getCommand() {
 		return this.command;
 	}
 
 	public CodeNode getChildElementByIndex(int index) {
-		if(this.children == null){
+		if (this.children == null) {
 			return null;
 		}
-		if(index >= 0 && index < this.children.size()){
+		if (index >= 0 && index < this.children.size()) {
 			return this.children.get(index);
 		}
 		return null;
@@ -293,29 +296,27 @@ public class CodeNode{// TODO ziel sollte sein dass die Klasse package-Scope hat
 	}
 
 	public int getChildNodesSize() {
-		if(this.children == null){
+		if (this.children == null) {
 			return 0;
 		}
 		return this.children.size();
 	}
-	
-	public CodeNode cloneNode(){
+
+	public CodeNode cloneNode() {
 		List<CodeNode> clonedChildren = new LinkedList<>();
-        for(CodeNode c : this.children){
-        	clonedChildren.add( c.cloneNode() );
+		for (CodeNode c : this.children) {
+			clonedChildren.add(c.cloneNode());
 		}
 		return new CodeNode(this.command, this.parameters, clonedChildren);
 	}
 
 	public void setParameter(String p, Object x) throws UnknownCommandParameter, UnknownCommand {
-		if(x == null){
-			this.parameters[ getParameterIdx(this.command, p, this) ] = null;
+		if (x == null) {
+			this.parameters[getParameterIdx(this.command, p, this)] = null;
 		}
-		else{
-			this.parameters[ getParameterIdx(this.command, p, this) ] = x.toString();			
+		else {
+			this.parameters[getParameterIdx(this.command, p, this)] = x.toString();
 		}
 	}
-
-
 
 }

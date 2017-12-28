@@ -7,10 +7,10 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.runOld.RtCast;
 
-public class Lng extends PrimitiveValue<Long>{
+public class Lng extends PrimitiveValue<Long> {
 
 	private Long actual;
-	
+
 	public Lng(CodeNode theNode) {
 		super(theNode);
 	}
@@ -23,8 +23,8 @@ public class Lng extends PrimitiveValue<Long>{
 
 	@Override
 	public void setObject(Object value) throws Invalid, ValueCastException {
-        this.set(RtCast.cast(value, Long.class));
-    }
+		this.set(RtCast.cast(value, Long.class));
+	}
 
 	@Override
 	public final Long get() {
@@ -33,11 +33,11 @@ public class Lng extends PrimitiveValue<Long>{
 
 	@Override
 	public void setConverted(String value) throws Inconvertible, NumberFormatException {
-		try{
+		try {
 			Long v = Long.valueOf(Long.parseLong(value));
-            this.set(v);
-        }
-		catch(NumberFormatException e){
+			this.set(v);
+		}
+		catch (NumberFormatException e) {
 			throw new Inconvertible("can not convert " + value + " to Long", e);
 		}
 	}

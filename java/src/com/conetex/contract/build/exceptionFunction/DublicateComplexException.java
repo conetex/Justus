@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionFunction;
 
-public class DublicateComplexException extends AbstractInterpreterException{
+public class DublicateComplexException extends AbstractInterpreterException {
 
 	private static final long serialVersionUID = 1L;
 

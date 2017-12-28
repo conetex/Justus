@@ -16,33 +16,30 @@ public abstract class Attribute<T> {
 	public abstract Value<T> createValue(Structure theParent, CodeNode theNode);
 
 	public abstract Value<T> createNewValue(Structure theParent);
-	
+
 	public abstract Type<T> getType();
 
 	private static Attribute<?> getAttribute(String idName, TypeComplex parentTyp) throws UnknownAttribute {
 		String typName = parentTyp.getName();
 		TypeComplex pTyp = parentTyp;
 		Attribute<?> id = pTyp.getSubAttribute(idName);
-		while(id == null){// suche nach oben ...
+		while (id == null) {// suche nach oben ...
 			String parentTypName = Symbols.getParentName(typName);
-			if(parentTypName == null){
+			if (parentTypName == null) {
 				break;
 			}
 			typName = parentTypName;
 			/*
-			String[] names = TypeComplex.splitRight(typName);
-			if(names[0] == null){
-				break;
-			}
-			typName = names[0];
-			*/
+			 * String[] names = TypeComplex.splitRight(typName); if(names[0] ==
+			 * null){ break; } typName = names[0];
+			 */
 			pTyp = TypeComplex.getInstance(typName);
-			if(pTyp == null){
+			if (pTyp == null) {
 				break;
 			}
 			id = pTyp.getSubAttribute(idName);
 		}
-		if(id == null){
+		if (id == null) {
 			throw new UnknownAttribute(idName + "@" + typName);
 		}
 		return id;
@@ -57,9 +54,9 @@ public abstract class Attribute<T> {
 	public CodeNode persist(TypeComplex parent) {
 		String name = this.getLabel().get();
 		String type = this.getType().getName();
-		
-		CodeNode cn = new CodeNode(parent, Symbols.comAttribute(), new String[] {name, type}, new LinkedList<>());
-		
+
+		CodeNode cn = new CodeNode(parent, Symbols.comAttribute(), new String[] { name, type }, new LinkedList<>());
+
 		return cn;
 	}
 

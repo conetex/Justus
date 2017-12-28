@@ -29,5 +29,5 @@ public interface Value<T> {
 	CodeNode createCodeNode(TypeComplex parent, Attribute<?> a) throws UnknownCommandParameter, UnknownCommand;
 
 	Structure asStructure();
-	
+
 }

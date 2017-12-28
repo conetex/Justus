@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionValue;
 
-abstract class AbstractValueBuildException extends Exception{
+abstract class AbstractValueBuildException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 

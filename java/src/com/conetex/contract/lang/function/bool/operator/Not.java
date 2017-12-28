@@ -7,10 +7,10 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 //Unary operation
-public class Not extends AccessibleWithChildren<Boolean>{
+public class Not extends AccessibleWithChildren<Boolean> {
 
 	public static Not create(Accessible<? extends Boolean> theSub) {
-		if(theSub == null){
+		if (theSub == null) {
 			return null;
 		}
 		return new Not(theSub);
@@ -19,17 +19,17 @@ public class Not extends AccessibleWithChildren<Boolean>{
 	private final Accessible<? extends Boolean> sub;
 
 	private Not(Accessible<? extends Boolean> theSub) {
-		super(new Accessible<?>[] {theSub});
+		super(new Accessible<?>[] { theSub });
 		this.sub = theSub;
 	}
 
 	@Override
 	public Boolean getFrom(Structure thisObject) throws AbstractRuntimeException {
 		Boolean b = this.sub.getFrom(thisObject);
-		if(b == null){
+		if (b == null) {
 			return null;
 		}
-		if(b.booleanValue()){
+		if (b.booleanValue()) {
 			return Boolean.FALSE;
 		}
 		return Boolean.TRUE;

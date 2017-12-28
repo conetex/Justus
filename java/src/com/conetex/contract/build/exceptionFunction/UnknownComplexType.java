@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionFunction;
 
-public class UnknownComplexType extends AbstractInterpreterException{
+public class UnknownComplexType extends AbstractInterpreterException {
 
 	private static final long serialVersionUID = 1L;
 

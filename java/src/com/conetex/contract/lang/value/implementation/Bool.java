@@ -7,7 +7,7 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 import com.conetex.contract.run.exceptionValue.ValueCastException;
 import com.conetex.contract.runOld.RtCast;
 
-public class Bool extends PrimitiveValue<Boolean>{
+public class Bool extends PrimitiveValue<Boolean> {
 
 	private Boolean actual;
 
@@ -23,8 +23,8 @@ public class Bool extends PrimitiveValue<Boolean>{
 
 	@Override
 	public void setObject(Object value) throws Invalid, ValueCastException {
-        this.set(RtCast.cast(value, Boolean.class));
-    }
+		this.set(RtCast.cast(value, Boolean.class));
+	}
 
 	@Override
 	public final Boolean get() {
@@ -33,19 +33,19 @@ public class Bool extends PrimitiveValue<Boolean>{
 
 	private static Boolean getTrans(String value) {
 		// TODO make "true"... a symbol...
-		if(value.equalsIgnoreCase("true")){
+		if (value.equalsIgnoreCase("true")) {
 			return Boolean.TRUE;
 		}
-		else if(value.equalsIgnoreCase("false")){
+		else if (value.equalsIgnoreCase("false")) {
 			return Boolean.FALSE;
 		}
-		else if(value.equals("1")){
+		else if (value.equals("1")) {
 			return Boolean.TRUE;
 		}
-		else if(value.equals("0")){
+		else if (value.equals("0")) {
 			return Boolean.FALSE;
 		}
-		else{
+		else {
 			return null;
 		}
 	}
@@ -53,11 +53,11 @@ public class Bool extends PrimitiveValue<Boolean>{
 	@Override
 	public void setConverted(String value) throws Inconvertible {
 		Boolean v = getTrans(value);
-		if(v == null){
+		if (v == null) {
 			throw new Inconvertible("can not convert '" + value + "' to Boolean!");
 		}
-        this.set(v);
-    }
+		this.set(v);
+	}
 
 	@Override
 	public Boolean getCopy() {
@@ -75,5 +75,5 @@ public class Bool extends PrimitiveValue<Boolean>{
 		re.actual = this.actual;
 		return re;
 	}
-	
+
 }

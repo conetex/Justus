@@ -7,22 +7,22 @@ import com.conetex.contract.run.exceptionValue.Invalid;
 public abstract class AccessibleWithChildren<T> extends AccessibleImp<T> {
 
 	private Accessible<?>[] children;
-	
+
 	protected AccessibleWithChildren(Accessible<?>[] theChildren) {
 		super();
-		if(theChildren.length == 0){
+		if (theChildren.length == 0) {
 			System.err.println("das darf nicht sein...");// TODO exception ...
 		}
 		this.children = theChildren;
 	}
-	
-	public Accessible<?>[] getChildren(){
+
+	public Accessible<?>[] getChildren() {
 		return this.children;
 	}
 
 	@Override
 	public abstract String getCommand();
-	
+
 	@Override
 	public abstract T getFrom(Structure thisObject) throws AbstractRuntimeException;
 

@@ -3,13 +3,11 @@ package com.conetex.contract.lang.value.implementation;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Constants;
 
-public class Label extends SizedASCII{
+public class Label extends SizedASCII {
 
-	public Label( CodeNode theNode ) {
+	public Label(CodeNode theNode) {
 		super(theNode, Constants.labelSize());
 	}
-
-	
 
 	@Override
 	public Label cloneValue() {
@@ -17,5 +15,5 @@ public class Label extends SizedASCII{
 		re.actual = this.actual;
 		return re;
 	}
-	
+
 }

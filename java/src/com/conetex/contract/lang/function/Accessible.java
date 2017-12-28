@@ -10,14 +10,15 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public abstract class Accessible<T> {
 
-	private static Accessible<?>[] noChildren = new AccessibleImp<?>[]{};
-	
-	private static String[] noParams = new String[]{};
+	private static Accessible<?>[]	noChildren		= new AccessibleImp<?>[] {};
 
-	private static List<CodeNode> noChildNodes = new LinkedList<>();
-	
-	protected Accessible(){}
-	
+	private static String[]			noParams		= new String[] {};
+
+	private static List<CodeNode>	noChildNodes	= new LinkedList<>();
+
+	protected Accessible() {
+	}
+
 	public abstract T getFrom(Structure thisObject) throws AbstractRuntimeException;
 
 	public abstract T copyFrom(Structure thisObject) throws AbstractRuntimeException;
@@ -27,28 +28,28 @@ public abstract class Accessible<T> {
 	public abstract String getCommand();
 
 	public abstract Accessible<?>[] getChildren();
-	
-	public Accessible<?>[] getChildrenDft(){
+
+	public Accessible<?>[] getChildrenDft() {
 		return Accessible.noChildren;
 	}
-	
+
 	public String[] getParameterDft() {
 		return Accessible.noParams;
 	}
-	
+
 	public abstract String[] getParameter();
 
-	public CodeNode createCodeNode(TypeComplex parent){
+	public CodeNode createCodeNode(TypeComplex parent) {
 		Accessible<?>[] cs = this.getChildren();
-		if(cs != null && cs.length > 0){
+		if (cs != null && cs.length > 0) {
 			List<CodeNode> NodeChildren = new LinkedList<>();
-			for(Accessible<?> a : cs){
+			for (Accessible<?> a : cs) {
 				CodeNode x = a.createCodeNode(parent);
-				if(x == null) {
+				if (x == null) {
 					System.out.println("SHIT");
 				}
-				NodeChildren.add( x );
-			}		
+				NodeChildren.add(x);
+			}
 			return new CodeNode(parent, this.getCommand(), this.getParameter(), NodeChildren);
 		}
 		return new CodeNode(parent, this.getCommand(), this.getParameter(), Accessible.noChildNodes);

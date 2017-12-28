@@ -220,13 +220,13 @@
       <VIRTUAL_PRIM_VALUE name="betrag" value="1024"/>
       <VIRTUAL_PRIM_VALUE name="aktiv" value="true"/>
     </VIRTUAL_COMP_VALUE>
-    <VIRTUAL_PRIM_VALUE name="counter" value="1"/>
-    <VIRTUAL_PRIM_VALUE name="param" value="12"/>
-    <VIRTUAL_PRIM_VALUE name="aAddress" value="12@32543.com"/>
-    <VIRTUAL_PRIM_VALUE name="a2Addres" value="12@32543.com"/>
-    <VIRTUAL_PRIM_VALUE name="ai" value="3"/>
-    <VIRTUAL_PRIM_VALUE name="bi" value="4"/>
-    <VIRTUAL_PRIM_VALUE name="bTrue" value="true"/>
-    <VIRTUAL_PRIM_VALUE name="bFalse" value="false"/>
+    <VIRTUAL_PRIM_VALUE name="counter" value=""/>
+    <VIRTUAL_PRIM_VALUE name="param" value=""/>
+    <VIRTUAL_PRIM_VALUE name="aAddress" value=""/>
+    <VIRTUAL_PRIM_VALUE name="a2Addres" value=""/>
+    <VIRTUAL_PRIM_VALUE name="ai" value=""/>
+    <VIRTUAL_PRIM_VALUE name="bi" value=""/>
+    <VIRTUAL_PRIM_VALUE name="bTrue" value=""/>
+    <VIRTUAL_PRIM_VALUE name="bFalse" value=""/>
   </VIRTUAL_COMP_VALUE>
 </contract>

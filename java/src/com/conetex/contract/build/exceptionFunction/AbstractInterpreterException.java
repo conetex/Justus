@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionFunction;
 
-public class AbstractInterpreterException extends Exception{
+public class AbstractInterpreterException extends Exception {
 
 	/**
 	 * 

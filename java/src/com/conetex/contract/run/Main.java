@@ -15,17 +15,17 @@ import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 public abstract class Main {
 
 	public abstract void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException;
-	
+
 	public abstract TypeComplex getRootTyp();
-	
+
 	public static List<CodeNode> getFunctionNodes(CodeNode n) throws AbstractInterpreterException {
 		List<CodeNode> re = new LinkedList<>();
 		List<CodeNode> children = n.getChildNodes();
-		for(CodeNode c : children){
+		for (CodeNode c : children) {
 			// TODO implement
 			c.getCommand();
 		}
 		return re;
 	}
-	
+
 }

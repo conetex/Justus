@@ -1,6 +1,6 @@
 package com.conetex.contract.build.exceptionFunction;
 
-public class UnknownCommand extends AbstractInterpreterException{
+public class UnknownCommand extends AbstractInterpreterException {
 
 	private static final long serialVersionUID = 1L;
 

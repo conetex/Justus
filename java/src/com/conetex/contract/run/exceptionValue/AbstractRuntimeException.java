@@ -1,6 +1,6 @@
 package com.conetex.contract.run.exceptionValue;
 
-public abstract class AbstractRuntimeException extends Exception{
+public abstract class AbstractRuntimeException extends Exception {
 	/**
 	 * 
 	 */

@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <contract>
   <complexType name="contract4u">
-    <attribute name="state" type="t:ASCII8"/>
     <attribute name="dutyOfAgent" type="contract4u.DutyOfAgent"/>
-    <complexType name="contract4u.DutyOfAgent">
-      <attribute name="participant2" type="contract4u.Participant"/>
-      <function name="contract4u.DutyOfAgent.foo" type="contract4u.DutyOfAgent.foo"/>
+    <complexType name="contract4u.DutyOfAgent" supertype="contract4u.Duty">
+      <function name="contract4u.DutyOfAgent.foo" type="contract4u.DutyOfAgent.foo">
+        <attribute name="param" type="t:Int"/>
+      </function>
     </complexType>
     <complexType name="contract4u.Participant">
       <attribute name="nick" type="t:ASCII32"/>
       <attribute name="mail" type="t:ASCII32"/>
       <attribute name="publicKey" type="t:ASCII256"/>
     </complexType>
-    <complexType name="contract4u.Duty3" type="contract4u.Duty2">
-      <attribute name="participant" type="t:ASCII32"/>
-    </complexType>
-    <complexType name="contract4u.Duty2">
-      <attribute name="participant" type="t:ASCII32"/>
-    </complexType>
     <complexType name="contract4u.Duty">
       <attribute name="participant" type="contract4u.Participant"/>
     </complexType>
   </complexType>
   <VIRTUAL_COMP_VALUE name="contract4u">
-    <VIRTUAL_PRIM_VALUE name="state" value=""/>
     <VIRTUAL_COMP_VALUE name="dutyOfAgent">
-      <VIRTUAL_COMP_VALUE name="participant2">
+      <VIRTUAL_COMP_VALUE name="participant">
         <VIRTUAL_PRIM_VALUE name="nick" value="hobo"/>
         <VIRTUAL_PRIM_VALUE name="mail" value=""/>
         <VIRTUAL_PRIM_VALUE name="publicKey" value="asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic"/>

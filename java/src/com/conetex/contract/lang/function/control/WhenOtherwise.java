@@ -7,59 +7,60 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class WhenOtherwise<V> extends ReturnAbstract<V>{
+public class WhenOtherwise<V> extends ReturnAbstract<V> {
 
-	final Accessible<Boolean> condition;
+	final Accessible<Boolean>	condition;
 
-	final Steps<V> steps;
-	
-	final Steps<V> stepsOtherwise;
-	
-//	final Accessible<?>[] stepsIf;
+	final Steps<V>				steps;
 
-//	final List<ReturnAbstract<V>> returnsIf;
+	final Steps<V>				stepsOtherwise;
 
-	private final Class<V> rawTypeClass;
+	// final Accessible<?>[] stepsIf;
 
-	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition, Class<SV> theRawTypeClass) throws CastException {
-		if(theStepsIf == null){
+	// final List<ReturnAbstract<V>> returnsIf;
+
+	private final Class<V>		rawTypeClass;
+
+	public static <SV> WhenOtherwise<SV> create(Accessible<?>[] theStepsIf, Accessible<?>[] theStepsElse, Accessible<Boolean> theCondition,
+			Class<SV> theRawTypeClass) throws CastException {
+		if (theStepsIf == null) {
 			System.err.println("theStepsIf is null");
 			return null;
 		}
-		if(theCondition == null){
+		if (theCondition == null) {
 			System.err.println("theName is null");
 			return null;
 		}
-		Steps<SV> theSteps = new Steps<SV>(theStepsIf, Function.getReturns(theStepsIf, theRawTypeClass)){
+		Steps<SV> theSteps = new Steps<SV>(theStepsIf, Function.getReturns(theStepsIf, theRawTypeClass)) {
 			@Override
 			public String getCommand() {
 				return Symbols.comThen();
-			}};
-		Steps<SV> stepsOtherwise = new Steps<SV>(theStepsElse, Function.getReturns(theStepsElse, theRawTypeClass)){
+			}
+		};
+		Steps<SV> stepsOtherwise = new Steps<SV>(theStepsElse, Function.getReturns(theStepsElse, theRawTypeClass)) {
 			@Override
 			public String getCommand() {
 				return Symbols.comOtherwise();
-			}};
-        return new WhenOtherwise<>(theCondition, theSteps, stepsOtherwise, theRawTypeClass);
+			}
+		};
+		return new WhenOtherwise<>(theCondition, theSteps, stepsOtherwise, theRawTypeClass);
 	}
 
 	@Override
 	public String getCommand() {
 		return Symbols.comWhen();
 	}
-	
+
 	/*
-	When(Accessible<?>[] allChildren, Accessible<?>[] theStepsIf, List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition, Class<V> theRawTypeClass) {
-		super(Symbols.comWhen(), new String[]{}, allChildren);
-		this.stepsIf = theStepsIf;
-		this.returnsIf = returns;
-		this.condition = theCondition;
-		this.rawTypeClass = theRawTypeClass;
-	}
-	*/
-	
+	 * When(Accessible<?>[] allChildren, Accessible<?>[] theStepsIf,
+	 * List<ReturnAbstract<V>> returns, Accessible<Boolean> theCondition,
+	 * Class<V> theRawTypeClass) { super(Symbols.comWhen(), new String[]{},
+	 * allChildren); this.stepsIf = theStepsIf; this.returnsIf = returns;
+	 * this.condition = theCondition; this.rawTypeClass = theRawTypeClass; }
+	 */
+
 	WhenOtherwise(Accessible<Boolean> theCondition, Steps<V> theSteps, Steps<V> theStepsOtherwise, Class<V> theRawTypeClass) {
-		super(new Accessible<?>[] {theCondition, theSteps, theStepsOtherwise});
+		super(new Accessible<?>[] { theCondition, theSteps, theStepsOtherwise });
 		this.steps = theSteps;
 		this.stepsOtherwise = theStepsOtherwise;
 		this.condition = theCondition;
@@ -83,26 +84,22 @@ public class WhenOtherwise<V> extends ReturnAbstract<V>{
 	}
 
 	/*
-	public boolean returns() {
-        return this.returnsIf.size() > 0;
-    }
-	*/
+	 * public boolean returns() { return this.returnsIf.size() > 0; }
+	 */
 
 	@Override
 	public V getFrom(Structure thisObject, Result r) throws AbstractRuntimeException {
 		Boolean res = this.condition.getFrom(thisObject);
-		if(res == null){
+		if (res == null) {
 			System.err.println("Function Structure getFrom: no access to data for if ... ");
 			return null;
 		}
-		if(res.booleanValue()){
+		if (res.booleanValue()) {
 			return this.steps.getFrom(thisObject, r);
 		}
-		else{
+		else {
 			return this.stepsOtherwise.getFrom(thisObject, r);
 		}
 	}
-
-
 
 }

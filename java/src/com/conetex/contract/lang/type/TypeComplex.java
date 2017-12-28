@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.conetex.contract.build.BuildTypes.TypeComplexTemp;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
@@ -24,13 +25,13 @@ import com.conetex.contract.lang.value.implementation.Label;
 import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
-public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
+public class TypeComplex extends Type<Structure> { // AbstractType<Value<?>[]>
 
 	private static final Map<String, TypeComplex> allInstances = new HashMap<>();
 
 	public static TypeComplex getInstanceNoNull(String typeName) throws UnknownComplexType {
 		TypeComplex parentTypeOfFunction = allInstances.get(typeName);
-		if(parentTypeOfFunction == null){
+		if (parentTypeOfFunction == null) {
 			throw new UnknownComplexType(typeName);
 		}
 		return parentTypeOfFunction;
@@ -52,15 +53,15 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return TypeComplex.allInstances.values();
 	}
 
-	final Map<String, Integer> index;
+	final Map<String, Integer>	index;
 
-	Attribute<?>[] orderedAttributes; 
-	
+	Attribute<?>[]				orderedAttributes;
+
 	// TODO kann das
-												// nicht doch final
-												// werden?
+	// nicht doch final
+	// werden?
 
-	final String name;
+	final String				name;
 
 	public String getName() {
 		return this.name;
@@ -69,30 +70,23 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 	public TypeComplex getSuperType() {
 		return null;
 	}
-	
+
 	private static TypeComplex createImpl(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
-		if(theIndex != null && theOrderedIdentifiers != null){
+		if (theIndex != null && theOrderedIdentifiers != null) {
 			return new TypeComplex(theName, theIndex, theOrderedIdentifiers);
 		}
 		return null;
 	}
 
-	private static TypeComplex create(final String theName) {
-		Map<String, Integer> index = new HashMap<>();
-		Attribute<?>[] idents = new Attribute<?>[0];
-		return TypeComplex.createImpl(theName, index, idents);
-	}
-
-	private static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers)
-			throws AbstractInterpreterException {
-		if(theOrderedIdentifiers.length == 0){
-			//TODO Error
+	private static TypeComplex createInit(String typeName, final Attribute<?>[] theOrderedIdentifiers) throws AbstractInterpreterException {
+		if (theOrderedIdentifiers.length == 0) {
+			// TODO Error
 			return null;
 		}
 		Map<String, Integer> theIndex = new HashMap<>();
 		buildIndex(theIndex, theOrderedIdentifiers);
 		// return new ComplexDataType(theIndex, theOrderedAttributeTypes);
-		if(TypeComplex.allInstances.containsKey(typeName)){
+		if (TypeComplex.allInstances.containsKey(typeName)) {
 			throw new DublicateComplexException(typeName);
 		}
 		TypeComplex re = TypeComplex.createImpl(typeName, theIndex, theOrderedIdentifiers);
@@ -100,62 +94,70 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return re;
 	}
 
-	public static TypeComplex createInit(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
-			throws AbstractInterpreterException {
-		
-		if(theOrderedIdentifiers.length == 0){
-			return TypeComplexTyped.createInit(typeName, parent);
+	public static TypeComplex createInit(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers) throws AbstractInterpreterException {
+
+		if (theOrderedIdentifiers.length == 0) {
+			return TypeComplexSub.createInit(typeName, parent);
 		}
-		if(parent == null){
+		if (parent == null) {
 			return TypeComplex.createInit(typeName, theOrderedIdentifiers);
 		}
 
-		Attribute<?>[] allAttributes = new Attribute<?>[parent.orderedAttributes.length + theOrderedIdentifiers.length];
-		System.arraycopy(parent.orderedAttributes, 0, allAttributes, 0, parent.orderedAttributes.length);
-		System.arraycopy(theOrderedIdentifiers, 0, allAttributes, parent.orderedAttributes.length, theOrderedIdentifiers.length);
-	
+		Attribute<?>[] parentsOrderedIdentifiers = parent.getSubAttributes();
+		Attribute<?>[] allAttributes = new Attribute<?>[parentsOrderedIdentifiers.length + theOrderedIdentifiers.length];
+		System.arraycopy(theOrderedIdentifiers, 0, allAttributes, 0, theOrderedIdentifiers.length);
+		System.arraycopy(parentsOrderedIdentifiers, 0, allAttributes, theOrderedIdentifiers.length, parentsOrderedIdentifiers.length);
+
 		Map<String, Integer> theIndex = new HashMap<>();
 		buildIndex(theIndex, allAttributes);
 
-		TypeComplex re = new TypeComplexTyped(typeName, parent, theIndex, allAttributes);
+		/*
+		 * TypeComplex re = new TypeComplexTyped(typeName, parent, theIndex,
+		 * allAttributes); TypeComplex.put(re); return re;
+		 */
+
+		TypeComplex re = new TypeComplexSub(typeName, parent, theIndex, theOrderedIdentifiers);
 		TypeComplex.put(re);
 		return re;
 	}
-	
+
 	static void put(TypeComplex re) throws DublicateComplexException {
 		String typeName = re.name;
-		if(TypeComplex.allInstances.containsKey(typeName)){
+		if (TypeComplex.allInstances.containsKey(typeName)) {
 			throw new DublicateComplexException(typeName);
 		}
 		TypeComplex.allInstances.put(typeName, re);
-    }
+	}
 
 	static void buildIndex(Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers)
 			throws DuplicateIdentifierNameExeption, NullIdentifierException {
-		for(int i = 0; i < theOrderedIdentifiers.length; i++){
-			if(theOrderedIdentifiers[i] == null){
+		for (int i = 0; i < theOrderedIdentifiers.length; i++) {
+			if (theOrderedIdentifiers[i] == null) {
 				throw new NullIdentifierException(TypeComplex.class.getName() + "buildIndex");
 			}
 			String label = theOrderedIdentifiers[i].getLabel().get();
-			if(theIndex.containsKey(label)){
+			if (theIndex.containsKey(label)) {
 				throw new DuplicateIdentifierNameExeption(label);
 			}
 			theIndex.put(label, Integer.valueOf(i));
 		}
 	}
 
-	TypeComplex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
+	protected TypeComplex(final String theName, final Map<String, Integer> theIndex, final Attribute<?>[] theOrderedIdentifiers) {
 		this.name = theName;
 		this.index = theIndex;
 		this.orderedAttributes = theOrderedIdentifiers;
+		if (this.name.endsWith("DutyOfAgent")) {
+			System.out.println("debug");
+		}
 	}
 
 	void initImp(String typeName, final Attribute<?>[] theOrderedIdentifiers)
 			throws DuplicateIdentifierNameExeption, NullIdentifierException, ComplexWasInitializedExeption, DublicateComplexException {
-		if(this.index.size() > 0 || this.orderedAttributes.length > 0){
+		if (this.index.size() > 0 || this.orderedAttributes.length > 0) {
 			throw new ComplexWasInitializedExeption(this.name);
 		}
-		if(TypeComplex.allInstances.containsKey(typeName)){
+		if (TypeComplex.allInstances.containsKey(typeName)) {
 			throw new DublicateComplexException(typeName);
 		}
 		this.orderedAttributes = theOrderedIdentifiers;
@@ -163,14 +165,13 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 
 	}
 
-	public TypeComplex init(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers)
-			throws AbstractInterpreterException {
-		if(parent == null){
+	public TypeComplex init(String typeName, TypeComplex parent, final Attribute<?>[] theOrderedIdentifiers) throws AbstractInterpreterException {
+		if (parent == null) {
 			this.initImp(typeName, theOrderedIdentifiers);
 			TypeComplex.allInstances.put(typeName, this);
 			return this;
 		}
-		else{
+		else {
 			return TypeComplex.createInit(typeName, parent, theOrderedIdentifiers);
 		}
 	}
@@ -183,16 +184,20 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		return this.index.keySet();
 	}
 
+	Attribute<?>[] getSubAttributes() {
+		return this.orderedAttributes;
+	}
+
 	public int getSubAttributeIndex(String aName) {
 		Integer i = this.index.get(aName);
-		if(i == null){
+		if (i == null) {
 			return -1;
 		}
 		return i.intValue();
 	}
 
 	public Attribute<?> getSubAttribute(int i) {
-		if(i < 0 || i >= this.orderedAttributes.length){
+		if (i < 0 || i >= this.orderedAttributes.length) {
 			// TODO i < this.orderedAttributes.length darf auf keinen fall
 			// vorkommen! hier
 			// bitte schwere Exception werfen!
@@ -206,53 +211,44 @@ public class TypeComplex extends Type<Structure>{ // AbstractType<Value<?>[]>
 		// und hier muss jetzt auch nach functionsstructuren gesucht werden
 		System.out.println("complexname: " + this.name);
 
-String aName = Symbols.getSimpleName(theName);
-// TODO MERGE
-		Attribute<?> aFun = TypeComplexOfFunction.getAttribute(this.name + "." + aName);
+		String aName = Symbols.getSimpleName(theName);
+		// TODO MERGE
+		Attribute<?> aFun = TypeComplexFunction.getAttribute(this.name + "." + aName);
 
-		if(aFun != null){
+		if (aFun != null) {
 			return aFun;
 		}
 
 		Integer i = this.index.get(aName);
-		if(i != null){
-			int iv = i.intValue();
-			if(iv < 0 || iv >= this.orderedAttributes.length){
-				// TODO i < this.orderedAttributes.length darf auf keinen fall
-				// vorkommen! hier
-				// bitte schwere Exception werfen!
-				return null;
-			}
-			return this.orderedAttributes[iv];// (Attribute<V>)
-												// this.orderedAttributes[i];
+		if (i != null) {
+			return this.getSubAttribute(i.intValue());
 		}
-		else{
+		else {
 			String[] names = Structure.split(aName);
 
-			if(names[0] != null){
-				if(names[1] != null){
+			if (names[0] != null) {
+				if (names[1] != null) {
 
-					aFun = TypeComplexOfFunction.getAttribute(this.name + "." + names[0]);
+					aFun = TypeComplexFunction.getAttribute(this.name + "." + names[0]);
 
-					if(aFun != null){
+					if (aFun != null) {
 						Type<?> dt = aFun.getType();
-						if(dt != null){
+						if (dt != null) {
 							return dt.getSubAttribute(names[1]);
 						}
 					}
 
 					i = this.index.get(names[0]);
-					if(i != null){
-						int iv = i.intValue();
-						if(iv < 0 || iv >= this.orderedAttributes.length){
-							// TODO i < this.orderedAttributes.length darf auf
-							// keinen fall vorkommen! hier
+					if (i != null) {
+						Attribute<?> a = this.getSubAttribute(i.intValue());
+						if (a == null) {
+							// TODO darf auf keinen fall vorkommen! hier
 							// bitte schwere Exception werfen!
 							return null;
 						}
 
-						Type<?> dt = this.orderedAttributes[iv].getType();
-						if(dt != null){
+						Type<?> dt = a.getType();
+						if (dt != null) {
 							return dt.getSubAttribute(names[1]);
 						}
 
@@ -270,12 +266,13 @@ String aName = Symbols.getSimpleName(theName);
 		// PrimitiveDataType.getInstance(
 		// Value.Implementation.Struct.class.getSimpleName() );
 
-		//		// TODO new
+		// // TODO new
 		Label str = new Label(null);
-		try{
-			str.set( Symbols.getSimpleName(aName) );// TODO MERGE //str.set(aName);
+		try {
+			str.set(Symbols.getSimpleName(aName));// TODO MERGE
+													// //str.set(aName);
 		}
-		catch(Invalid e){
+		catch (Invalid e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
@@ -290,19 +287,19 @@ String aName = Symbols.getSimpleName(theName);
 	public static Attribute<Structure> createAttribute(String attributeName, String typeName, Map<String, TypeComplexTemp> unformedComplexTypes)
 			throws AbstractInterpreterException {
 		// ComplexType
-		if(typeName == null || typeName.length() == 0){
+		if (typeName == null || typeName.length() == 0) {
 			// TODO exception
 			return null;
 		}
-		if(attributeName == null || attributeName.length() == 0){
+		if (attributeName == null || attributeName.length() == 0) {
 			// TODO exception
 			return null;
 		}
-		
+
 		TypeComplex c = TypeComplex.getInstance(typeName);
-		if(c == null){
+		if (c == null) {
 			TypeComplexTemp cTemp = unformedComplexTypes.get(typeName);
-			if(cTemp == null){
+			if (cTemp == null) {
 				cTemp = TypeComplexTemp.create(typeName);
 				unformedComplexTypes.put(typeName, cTemp);
 			}
@@ -311,8 +308,9 @@ String aName = Symbols.getSimpleName(theName);
 			System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
 			return re;
 		}
-		else{
-			//System.out.println("createAttributesValues " + attributeName + " " + typeName + " ==> " + re);
+		else {
+			// System.out.println("createAttributesValues " + attributeName + "
+			// " + typeName + " ==> " + re);
 			return c.createComplexAttribute(attributeName);
 		}
 
@@ -349,61 +347,72 @@ String aName = Symbols.getSimpleName(theName);
 	}
 
 	String[] createCodeNodeGetParams() {
-		return new String[] {this.name};
+		return new String[] { this.name };
 	}
-	
+
 	public CodeNode createCodeNode(TypeComplex parent) {
 		List<CodeNode> children = new LinkedList<>();
 
-		for(Attribute<?> a : this.orderedAttributes){
-			children.add( a.persist(this) );
+		if (this.name.endsWith("DutyOfAgent")) {
+			System.out.println("debug");
+		}
+		for (Attribute<?> a : this.orderedAttributes) {
+			children.add(a.persist(this));
 		}
 
-		for(TypeComplex tc : TypeComplex.getInstances()){
+		for (TypeComplex tc : TypeComplex.getInstances()) {
 			String typeName = tc.getName();
 
 			String typeNameParent = Symbols.getParentName(typeName);
-			if(typeNameParent == null){
+			if (typeNameParent == null) {
 				continue;
 			}
-			if(this.name.equals( typeNameParent )){
+			if (this.name.equals(typeNameParent)) {
 				CodeNode cnTyps = tc.createCodeNode(this);
-				children.add( cnTyps );
+				children.add(cnTyps);
 			}
 
 		}
-		
+
 		Function<?> f = Function.getInstance(this.name);
-		if(f != null){
-			for(Accessible<?> a : f.getSteps()){
-				if(a.getCommand() != Symbols.comFunction()){// TODO darauf sollte man verzichten! Auch Function.createCodeNode sollte was vernuenftiges bringen...
+		if (f != null) {
+			for (Accessible<?> a : f.getSteps()) {
+				if (a.getCommand() != Symbols.comFunction()) {// TODO darauf
+																// sollte man
+																// verzichten!
+																// Auch
+																// Function.createCodeNode
+																// sollte was
+																// vernuenftiges
+																// bringen...
 					CodeNode x = a.createCodeNode(this);
-					if(x == null) {
+					if (x == null) {
 						System.out.println("SHIT");
 					}
-					children.add( x );
+					children.add(x);
 				}
 			}
 		}
 		/*
-		for(TypeComplexOfFunction tc : TypeComplexOfFunction.getInstances()){
-			String functionName = tc.getName();
-
-			String[] functionNameTokens = TypeComplex.splitRight(functionName);
-			if(functionNameTokens[0] == null){
-				continue;
-			}
-			if(this.name.equals( functionNameTokens[0] )){
-				CodeNode cnTyps = tc.createCodeNode();
-				children.add( cnTyps );
-			}
-
-		}
-		*/
+		 * for(TypeComplexOfFunction tc : TypeComplexOfFunction.getInstances()){
+		 * String functionName = tc.getName();
+		 * 
+		 * String[] functionNameTokens = TypeComplex.splitRight(functionName);
+		 * if(functionNameTokens[0] == null){ continue; } if(this.name.equals(
+		 * functionNameTokens[0] )){ CodeNode cnTyps = tc.createCodeNode();
+		 * children.add( cnTyps ); }
+		 * 
+		 * }
+		 */
 
 		CodeNode cn = new CodeNode(parent, this.getCommand(), this.createCodeNodeGetParams(), children);
 
 		return cn;
+	}
+
+	@Override
+	public boolean isComplex() {
+		return true;
 	}
 
 }

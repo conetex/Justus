@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<contract>
+  <complexType name="contract4u">
+    <attribute name="dutyOfAgent" type="contract4u.DutyOfAgent"/>
+    <complexType name="contract4u.DutyOfAgent" supertype="contract4u.Duty">
+      <function name="contract4u.DutyOfAgent.foo" type="contract4u.DutyOfAgent.foo">
+        <attribute name="param" type="t:Int"/>
+      </function>
+    </complexType>
+    <complexType name="contract4u.Participant">
+      <attribute name="nick" type="t:ASCII32"/>
+      <attribute name="mail" type="t:ASCII32"/>
+      <attribute name="publicKey" type="t:ASCII256"/>
+    </complexType>
+    <complexType name="contract4u.Duty">
+      <attribute name="participant" type="contract4u.Participant"/>
+    </complexType>
+  </complexType>
+  <VIRTUAL_COMP_VALUE name="contract4u">
+    <VIRTUAL_COMP_VALUE name="dutyOfAgent">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="hobo"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic"/>
+      </VIRTUAL_COMP_VALUE>
+    </VIRTUAL_COMP_VALUE>
+  </VIRTUAL_COMP_VALUE>
+</contract>
