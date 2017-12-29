@@ -802,6 +802,10 @@ public class BuildFunctions{
 
 	}
 
+	static class Runtime{
+		
+	}
+	
 	public static Function<?> build(CodeNode thisNode, TypeComplex thisType) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 
 		// return

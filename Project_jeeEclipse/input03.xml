@@ -22,7 +22,8 @@
 		</copy>
 		<copy>
 		  <ref value="status"/>
-		  <String value="Hallo Bjoern! I want you to do something."/>
+		  <!-- <String value="Hallo Bjoern! I want you to do something."/> -->
+		  <query/>
 		</copy>
 	</complexType>
 
@@ -38,7 +39,7 @@
 			</copy>
 			<copy>
 			  <ref value="status"/>
-			  <String value="Hi Matthias! I have done something."/>
+			  <String value="Hi Matthias! I have done something."/> 
 			</copy>
 		</function>
 		<call type="DutyOfClerk" name="simpleContractExample.DutyOfClerk.todo" />

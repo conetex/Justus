@@ -89,6 +89,8 @@ public class Symbols {
 	private static final String		COM_RETURN					= "return";
 	private static final String		COM_CALL					= "call";
 
+	public static final String COM_REQUEST = "query";
+
 	// boolean operator commands
 	private static final String		COM_AND						= "and";
 	private static final String		COM_OR						= "or";
@@ -123,6 +125,7 @@ public class Symbols {
 	private static final String		PARAM_VALUE					= "value";
 	private static final String		PARAM_TYPE					= "type";
 	public static final String		PARAM_SUPERTYPE				= "supertype";
+
 
 	public static String litSimpleTypeNS() {
 		return SIMPLE_TYPE_NS;
