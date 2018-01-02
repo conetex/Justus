@@ -101,7 +101,7 @@ class ReadXML {
 							// ist alles xml-driven...
 
 		String fileExtension = ".xml";
-		String inFile = "input03_out";
+		String inFile = "input03";
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile + fileExtension)) {
 

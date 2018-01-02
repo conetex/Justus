@@ -217,7 +217,7 @@ public class BuildFunctions{
 
 	}
 
-	static class Assign{
+	public static class Assign{
 
 		static final BoxFun<Structure, Structure> structureAssigment = new BoxFunImp<Structure, Structure>("objAssigment"){
 			@Override
@@ -274,7 +274,7 @@ public class BuildFunctions{
 			}
 		};
 
-		static final BoxFun<Object, Object> whatEverAssigment = new BoxFunImp<Object, Object>("whatEverAssigment"){
+		public static final BoxFun<Object, Object> whatEverAssigment = new BoxFunImp<Object, Object>("whatEverAssigment"){
 			@Override
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType)
 					throws AbstractInterpreterException, Inconvertible, Invalid,

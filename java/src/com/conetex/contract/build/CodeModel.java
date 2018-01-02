@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import com.conetex.contract.build.BuildFunctions.Assign;
 import com.conetex.contract.build.BuildFunctions.Constant;
@@ -26,6 +27,7 @@ import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.lang.function.Accessible;
+import com.conetex.contract.lang.function.runtime.Request;
 import com.conetex.contract.lang.type.Attribute;
 import com.conetex.contract.lang.type.TypeComplex;
 import com.conetex.contract.lang.value.Value;
@@ -71,7 +73,7 @@ public class CodeModel {
 
 		private final Set<String>	meaning	= new HashSet<>();
 
-		EggAbstrImp(String theName) {
+		public EggAbstrImp(String theName) {
 			this.name = theName;
 		}
 
@@ -258,7 +260,7 @@ public class CodeModel {
 
 	public static abstract class EggFunImp<T> extends EggAbstrImp<T> implements EggFun<T> {
 
-		EggFunImp(String theName) {
+		public EggFunImp(String theName) {
 			super(theName);
 		}
 
@@ -923,8 +925,10 @@ public class CodeModel {
 		Fun.noReturn.functionContains(Control.when);
 
 	}
-
+	
 	public static void build() throws AbstractInterpreterException {
+		
+		Request.build();
 
 		Expression.numberExpession
 				.means(new String[] { Symbols.comPlus(), Symbols.comMinus(), Symbols.comTimes(), Symbols.comDividedBy(), Symbols.comRemains() });
