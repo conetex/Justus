@@ -40,17 +40,20 @@ public class Request extends Accessible<String> {
 	}
 	
 	public static void build() throws DublicateOperation, OperationMeansNotCalled{
+		String param = "question";
 		EggFun<String> request = new CodeModel.EggFunImp<String>("stringRequest"){
 			
 			@Override
 			public Accessible<String> functionCreate(CodeNode thisNode, TypeComplex parentType)
 					throws Inconvertible, Invalid, AbstractInterpreterException, AbstractTypException {
 				//return AccessibleConstant.create2(String.class, thisNode);
-				return new Request("eine Frage?");
+				String question = thisNode.getParameter(param);
+				return new Request(question);
 			}
 			
 		};
 		request.means(Request.getCommandStatic());
+		request.registerParameters(new String[] {param});
 		//Expression.numberExpession.functionContains(request);
 		BuildFunctions.Assign.whatEverAssigment.functionContains(request);
 		
@@ -58,7 +61,7 @@ public class Request extends Accessible<String> {
 		
 	private final String question;
 		
-	private Request(String theQuestion) {
+	Request(String theQuestion) {
 		super();
 		this.question = theQuestion;
 	}

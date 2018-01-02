@@ -23,7 +23,7 @@
 		<copy>
 		  <ref value="status"/>
 		  <!-- <String value="Hallo Bjoern! I want you to do something."/> -->
-		  <query question="darf ich eine Frage frage?" />
+		  <query question="darf ich eine Frage fragen?" />
 		</copy>
 	</complexType>
 

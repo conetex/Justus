@@ -8,7 +8,7 @@ public class ContractRuntime {
 	}
 	
 	public static String getStringAnswer(String question) {
-		return "Hallo Bjoern! I want you to do something. Regards Matthias";
+		return "Hallo Bjoern! I want you to do something cool. Kind regards Matthias";
 	}
 	
 }

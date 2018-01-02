@@ -22,7 +22,7 @@ public class Function<V> extends Accessible<V> {
 
 	private static final Map<String, Function<Boolean>>				instancesBoolean	= new HashMap<>();
 
-	private static final Map<String, Function<String>>				_instancesString		= new HashMap<>();
+	private static final Map<String, Function<String>>				instancesString		= new HashMap<>();
 
 	private static final Map<String, Function<? extends Structure>>	instancesStructure	= new HashMap<>();
 
@@ -183,6 +183,25 @@ public class Function<V> extends Accessible<V> {
 		Function.instancesStructure.put(theName, re);
 		return re;
 	}
+	
+	public static Function<String> createString(Accessible<?>[] theSteps, String theName) throws CastException {
+		if (theSteps == null) {
+			System.err.println("theSteps is null");
+			return null;
+		}
+		if (theName == null || theName.length() < 1) {
+			System.err.println("theName is null");
+			return null;
+		}
+		if (Function.instancesStructure.containsKey(theName)) {
+			System.err.println("duplicate function " + theName);
+			return null;
+		}
+		List<ReturnAbstract<String>> returns = getReturns(theSteps, String.class);
+		Function<String> re = new Function<>(theSteps, returns, theName, String.class);
+		Function.instancesString.put(theName, re);
+		return re;
+	}	
 
 	public static Function<Object> createVoid(Accessible<?>[] theSteps, String theName) throws CastException {
 		if (theSteps == null) {
