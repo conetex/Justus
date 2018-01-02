@@ -281,21 +281,18 @@ public class Structure implements Value<Structure> {// { Value<Value<?>[]>
 	public List<CodeNode> createCodeNodes() throws UnknownCommandParameter, UnknownCommand {
 
 		List<CodeNode> children = new LinkedList<>();
-
-		int i = 0;
-		for (Value<?> v : this.values) {
-			// if(v == null){
-			// System.err.println("v is null");
-			// }
-			if (this.type == null) {
-				System.err.println("this.type is null");
-			}
-			if (v != null) {
-				children.add(v.createCodeNode(this.type, this.type.getSubAttribute(i)));
-			}
-			i++;
+		if (this.type == null) {
+			System.err.println("this.type is null");
 		}
-
+		else {
+			int i = 0;
+			for (Value<?> v : this.values) {
+				if (v != null) {
+					children.add(v.createCodeNode(this.type, this.type.getSubAttribute(i)));
+				}
+				i++;
+			}
+		}
 		return children;
 	}
 

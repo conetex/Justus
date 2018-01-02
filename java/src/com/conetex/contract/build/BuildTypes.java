@@ -314,12 +314,12 @@ public class BuildTypes {
 		return null;
 	}
 
-	private static class TypeHierarchy {
+	static class TypeHierarchy {
 		CodeNode					node;
 		Map<String, TypeHierarchy>	namedChildren	= new TreeMap<>();
 	}
 
-	private static class TypeHierarchyResult {
+	static class TypeHierarchyResult {
 		Map<String, TypeHierarchy>			namedTypes	= new TreeMap<>();
 		List<Pair<String, TypeHierarchy>>	rootTypes	= new LinkedList<>();
 	}

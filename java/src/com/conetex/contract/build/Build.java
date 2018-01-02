@@ -36,6 +36,7 @@ public class Build {
 		for (Pair<CodeNode, TypeComplex> t : complexTypes) {
 			if (t == null || t.b == null) {
 				System.err.println("was geht denn hier?");
+				continue;
 			}
 
 			TypeComplex superType = t.b.getSuperType();

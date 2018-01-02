@@ -55,10 +55,11 @@ class ReadXML {
 			// TODO Auto-generated method stub
 			if (n == null) {
 				System.out.println("was geht");
+				return null;
 			}
 			Element e = null;
 			try {
-				e = odoc.createElement(n.getCommand());
+				e = this.odoc.createElement(n.getCommand());
 			}
 			catch (DOMException de) {
 				System.out.println(de);

@@ -411,8 +411,8 @@ public class CodeModel {
 	}
 
 	public abstract static class BoxValueTypImp<T, S> extends EggAbstrImp<T> implements BoxValue<T, S>, BoxType<T, S> {
-		BoxValueImp<T, S>	delegateValue	= new BoxValueImp<T, S>(null);
-		BoxTypeImp<T, S>	delegateType	= new BoxTypeImp<T, S>(null);
+		BoxValueImp<T, S>	delegateValue	= new BoxValueImp<>(null);
+		BoxTypeImp<T, S>	delegateType	= new BoxTypeImp<>(null);
 
 		BoxValueTypImp(String theName) {
 			super(theName);
@@ -461,7 +461,7 @@ public class CodeModel {
 
 		@Override
 		public EggType<? extends S> typeGetChildBuilder(CodeNode n) throws AbstractInterpreterException {
-			return typeGetChildBuilder(n);
+			return this.delegateType.typeGetChildBuilder(n);
 		}
 
 		@Override
@@ -1052,10 +1052,10 @@ public class CodeModel {
 		CodeModel.buildStruct();
 		CodeModel.buildUnknown();
 
-		Types.complex.typeContains((BoxType<Structure, Object>) Types.complex);
-		Types.complex.functionContains((BoxFun<Structure, Object>) Types.complex);
-		Types.complex.typeContains((BoxType<Object, Object>) Fun.whatEver);
-		Types.complex.functionContains((BoxFun<Object, Object>) Fun.whatEver);
+		Types.complex.typeContains(Types.complex);
+		Types.complex.functionContains(Types.complex);
+		Types.complex.typeContains(Fun.whatEver);
+		Types.complex.functionContains(Fun.whatEver);
 
 		Types.complex.typeContains(Types.attribute);
 		Types.complex.typeContains(Values.type_with_value);
@@ -1072,7 +1072,7 @@ public class CodeModel {
 		// Fun.whatEver.contains(Values.value);
 		Fun.whatEver.valueContains(Values.valueVirtComp);
 		Fun.whatEver.valueContains(Values.valueVirtPrim);
-		// TODO das gilt doch auch für alle anderen Functions ...
+		// TODO das gilt doch auch fï¿½r alle anderen Functions ...
 
 		Types.complex.functionContains(FunCall.whatEverCall);
 		Types.complex.functionContains(Assign.whatEverAssigment);
@@ -1120,9 +1120,9 @@ public class CodeModel {
 		// Types.contract.contains(Values.value);
 		Types.contract.typeContains(Values.type_with_value);
 		Types.contract.valueContains(Values.valueVirtComp);
-		Types.contract.typeContains((BoxType<Structure, Object>) Types.complex);
+		Types.contract.typeContains(Types.complex);
 		// Types.contract.contains((BoxFun<Structure, Object>) Types.complex);
-		Types.contract.functionContains((BoxFun<Object, Object>) Fun.whatEver);
+		Types.contract.functionContains(Fun.whatEver);
 
 	}
 

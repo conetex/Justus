@@ -18,7 +18,7 @@ public abstract class Main {
 
 	public abstract TypeComplex getRootTyp();
 
-	public static List<CodeNode> getFunctionNodes(CodeNode n) throws AbstractInterpreterException {
+	public static List<CodeNode> _getFunctionNodes(CodeNode n) throws AbstractInterpreterException {
 		List<CodeNode> re = new LinkedList<>();
 		List<CodeNode> children = n.getChildNodes();
 		for (CodeNode c : children) {

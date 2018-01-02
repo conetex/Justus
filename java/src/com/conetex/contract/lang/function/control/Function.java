@@ -22,7 +22,7 @@ public class Function<V> extends Accessible<V> {
 
 	private static final Map<String, Function<Boolean>>				instancesBoolean	= new HashMap<>();
 
-	private static final Map<String, Function<String>>				instancesString		= new HashMap<>();
+	private static final Map<String, Function<String>>				_instancesString		= new HashMap<>();
 
 	private static final Map<String, Function<? extends Structure>>	instancesStructure	= new HashMap<>();
 
