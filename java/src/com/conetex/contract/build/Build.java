@@ -158,6 +158,11 @@ public class Build {
 						public TypeComplex getRootTyp() {
 							return complexTypeRoot;
 						}
+
+						@Override
+						public CodeNode getRootCodeNode() {
+							return code;
+						}
 					};
 				}
 			}

@@ -17,6 +17,8 @@ public abstract class Main {
 	public abstract void run(Writer w) throws AbstractRuntimeException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException;
 
 	public abstract TypeComplex getRootTyp();
+	
+	public abstract CodeNode getRootCodeNode();
 
 	public static List<CodeNode> _getFunctionNodes(CodeNode n) throws AbstractInterpreterException {
 		List<CodeNode> re = new LinkedList<>();

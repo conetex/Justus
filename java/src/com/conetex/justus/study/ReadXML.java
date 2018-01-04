@@ -1,5 +1,6 @@
 package com.conetex.justus.study;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,7 +39,7 @@ import com.conetex.contract.run.Main;
 import com.conetex.contract.run.Writer;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
-class ReadXML {
+public class ReadXML {
 
 	public static class XmlWriter extends Writer {
 
@@ -96,14 +97,24 @@ class ReadXML {
 
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
+		String inFile = "input03";
+		String fileExtension = ".xml";
+		
+		Main main = in( new File(inFile + fileExtension) );
+		
+		out(main, new File(inFile + "_out" + fileExtension));
+	}
+	
+	public static Main in(File inFile)
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
 
 		CodeModel.build();// TODO das sollte woanders gemacht werden, denn hier
 							// ist alles xml-driven...
 
-		String fileExtension = ".xml";
-		String inFile = "input03";
+		
+		
 		Main main = null;
-		try (FileInputStream is = new FileInputStream(inFile + fileExtension)) {
+		try (FileInputStream is = new FileInputStream(inFile)) {
 
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -134,8 +145,16 @@ class ReadXML {
 			is.close();
 		}
 
+		return main;
+		
+
+	}
+
+	public static void out(Main main, File outFile)
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
+		
 		if (main != null) {
-			try (FileOutputStream os = new FileOutputStream(inFile + "_out" + fileExtension)) {
+			try (FileOutputStream os = new FileOutputStream(outFile)) {
 				StreamResult res = new StreamResult(os);
 				DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
 				DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
@@ -163,7 +182,7 @@ class ReadXML {
 			}
 		}
 	}
-
+	
 	private static CodeNode createSyntaxNode(String parentName, Node n) {
 
 		short typOfNode = n.getNodeType();

@@ -318,5 +318,9 @@ public class CodeNode {// TODO ziel sollte sein dass die Klasse package-Scope
 			this.parameters[getParameterIdx(this.command, p, this)] = x.toString();
 		}
 	}
+	
+	public String toString(){
+		return this.command;
+	}
 
 }
