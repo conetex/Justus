@@ -9,16 +9,22 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -40,6 +46,8 @@ import javafx.stage.Stage;
 
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.UnknownCommand;
+import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
 import com.conetex.contract.run.Main;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
@@ -47,8 +55,25 @@ import com.conetex.justus.study.ReadXML;
 
 public class UImain extends Application {
 	
-	//static ObservableList<TreeItem<CodeNode>> treeItems;
-	
+    public static class KeyValue {
+    	 
+        private final String key;
+        private final String value;
+ 
+        KeyValue(String k, String v) {
+            this.key = k;
+            this.value = v;
+        }
+ 
+        public String getValue() {
+            return this.value;
+        }
+ 
+        public String getKey() {
+            return this.key;
+        }
+
+    }
 	
 	public Control createFileDropTarget(ObservableList<TreeItem<CodeNode>> treeItems) {
 		Label target = new Label("Drag a file to me.");
@@ -146,6 +171,8 @@ public class UImain extends Application {
 		try {
 	        primaryStage.setTitle("Justus Contract View");
 	        
+	        ObservableList<KeyValue> data =
+				    FXCollections.observableArrayList();//new KeyValue("A", "B")
 	
 	        
 	        final Button btnAdd = new Button("add Button");
@@ -154,6 +181,8 @@ public class UImain extends Application {
 	            @Override
 	            public void handle(ActionEvent event) {
 	                System.out.println("add!");
+	                data.add( new KeyValue("k a","v a") );
+	                data.add( new KeyValue("k b","v b") );
 	                
                     //TreeItem<String> newEmployee = new TreeItem<String>("New Item");
                     //UImain.treeItems.add(newEmployee);	                
@@ -167,6 +196,7 @@ public class UImain extends Application {
 	            @Override
 	            public void handle(ActionEvent event) {
 	                System.out.println("del!");
+	                data.clear();
 	       //         if(! rootItem.getChildren().isEmpty()){
 	                	 //UImain.treeItems.remove(0);
 	       //         }
@@ -176,27 +206,83 @@ public class UImain extends Application {
 	        TreeItem<CodeNode> rootItem = new TreeItem<CodeNode> ();
 	        rootItem.setExpanded(true);
 	        TreeView<CodeNode> tree = new TreeView<CodeNode> (rootItem);
+	        tree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TreeItem<CodeNode>>() {
+	        	/*
+                public void changed(
+                        ObservableValue<? extends TreeItem<CodeNode>> observable,
+                        TreeItem<String> old_val, TreeItem<CodeNode> new_val) {
+                    TreeItem<CodeNode> selectedItem = new_val;
+                    System.out.println("Selected Text : " + selectedItem.getValue());
+                    // do what ever you want
+                }
+                */
+
+				@Override
+				public void changed(ObservableValue<? extends TreeItem<CodeNode>> observable, TreeItem<CodeNode> old_val, TreeItem<CodeNode> new_val) {
+					// TODO Auto-generated method stub
+					System.out.println("Selected Text : " + new_val.getValue());
+					if(old_val == null || new_val.getValue() != old_val.getValue()) {
+						data.clear();
+						CodeNode n = new_val.getValue();
+						if(n != null) {
+							try{
+								String[] paramNames = n.getParameterNames();
+								if(paramNames != null) {
+									for(String k : paramNames) {
+										data.add(new KeyValue(k, n.getParameter(k)));
+									}
+								}
+								else {
+									System.out.println("..." + new_val.getValue());
+								}
+							}
+							catch(UnknownCommandParameter | UnknownCommand e){
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+
+            });
 	        
 	        Control target = createFileDropTarget(rootItem.getChildren());
 
-	        TableView<CodeNode> table = new TableView<>();
+	        TableView<KeyValue> table = new TableView<>();
 	        TableColumn keyCol = new TableColumn("key");
-	        keyCol.setCellValueFactory(      new PropertyValueFactory<>("lastName")   ); hier gehts weiter 
+	        keyCol.setCellValueFactory(   new PropertyValueFactory<>("key")   
+	        		/*
+	        		new Callback<CellDataFeatures<CodeNode, String>, String>() {
+						@Override
+						public String call(CellDataFeatures<CodeNode, String> n) {
+							// TODO Auto-generated method stub
+							return null;
+						}
+					}
+					*/
+        		); //hier gehts weiter 
 	        TableColumn valCol = new TableColumn("value");
+	        valCol.setCellValueFactory(   new PropertyValueFactory<>("value") );
+	        table.setItems(data);
+	        table.getColumns().addAll(keyCol, valCol);
 	        
 	        HBox rightArea = new HBox();
 	        rightArea.getChildren().add(btnAdd);
 	        rightArea.getChildren().add(btnDel);
-	        
-	        SplitPane splitPane1 = new SplitPane();
-	        splitPane1.getItems().add(tree);
-	        splitPane1.getItems().add(rightArea);
+	        	        
+	        SplitPane splitPaneHorizontal = new SplitPane();
+	        splitPaneHorizontal.getItems().add(tree);
+	        splitPaneHorizontal.getItems().add(rightArea);
+	     
+	        SplitPane splitPaneVertical = new SplitPane();
+	        splitPaneVertical.setOrientation(Orientation.VERTICAL);
+	        splitPaneVertical.getItems().add(splitPaneHorizontal);
+	        splitPaneVertical.getItems().add(table);
 	        
 	        VBox mainArea = new VBox();
 	        mainArea.getChildren().add(target);
-	        mainArea.getChildren().add(splitPane1);
-	        mainArea.getChildren().add(table);
-			
+	        mainArea.getChildren().add(splitPaneVertical);
+	        			
 	        StackPane root = new StackPane();
 			//root.getChildren().add(btn);
 			root.getChildren().add(mainArea);
