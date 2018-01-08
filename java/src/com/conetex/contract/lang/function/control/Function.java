@@ -27,7 +27,15 @@ public class Function<V> extends Accessible<V> {
 	private static final Map<String, Function<? extends Structure>>	instancesStructure	= new HashMap<>();
 
 	private static final Map<String, Function<?>>					instancesVoid		= new HashMap<>();
-
+	
+	public static void clearInstances(){
+		Function.instancesNum.clear();
+		Function.instancesBoolean.clear();
+		Function.instancesString.clear();
+		Function.instancesStructure.clear();
+		Function.instancesVoid.clear();
+	}
+	
 	public static Function<Boolean> getInstanceBool(String name) {
 		Function<Boolean> f = instancesBoolean.get(name);
 		if (f == null) {
