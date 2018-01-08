@@ -83,11 +83,15 @@ public class Build {
 		CodeNode.init(code);
 		// List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
 		CodeNode complexRoot = CodeNode.getComplexRoot();
+		
+		TypeComplex.clearInstances();
+		TypeComplexFunction.clearInstances();
 		List<Pair<CodeNode, TypeComplex>> complexTypes = BuildTypes.createComplexTypes(complexRoot);
 
 		System.out.println("Builder " + code.getCommand());
 		if (complexTypes != null) {
 
+			Function.clearInstances();
 			Map<String, Function<?>> mainFunctions = createMainFunctions(complexTypes);
 
 			CodeNode valueRoot = CodeNode.getValueRoot();

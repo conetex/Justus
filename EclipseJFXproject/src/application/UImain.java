@@ -288,7 +288,7 @@ public class UImain extends Application {
 							@Override
 							public void run() {
 								try {
-									ReadXML.out(UImain.main, new File(inFile.getName().replace(".xml", "_out.xml")));
+									ReadXML.out(UImain.main, new File(inFile.getParent(), inFile.getName().replace(".xml", "_out.xml")));
 								}
 								catch (ParserConfigurationException e) {
 									// TODO Auto-generated catch block
@@ -413,17 +413,12 @@ public class UImain extends Application {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-			Runnable r = new Runnable(){
-					@Override
-					public void run() {
-						UImain.tasks.doTasks();
-					}
-				};
-			(new Thread(r)).start();
+
 
 
 			Semaphore s = new Semaphore();
 			StringResult res = new StringResult();
+			Label questionLabel = new Label("...");
 			TextField textField = new TextField();
 			Button okButton = new Button("ok");
 			okButton.setText("ok");
@@ -432,12 +427,21 @@ public class UImain extends Application {
 				public void handle(ActionEvent event) {
 					System.out.println("ok!");
 					res.res = textField.getText();
+					textField.setText("");
 					middleUpperRightArea.getChildren().clear();
 					s.weakup();
 				}
 			});			
 			
-			
+		
+			Runnable r = new Runnable(){
+				@Override
+				public void run() {
+					UImain.tasks.doTasks();
+				}
+			};
+			(new Thread(r)).start();
+		
 			ContractRuntime.stringAgency.subscribe(new Informant<String>() {
 
 				@Override
@@ -448,14 +452,15 @@ public class UImain extends Application {
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
+							textField.setText("");
+							questionLabel.setText(question);
+							middleUpperRightArea.getChildren().add(questionLabel);
 							middleUpperRightArea.getChildren().add(textField);
-							middleUpperRightArea.getChildren().add(okButton);
-							
+							middleUpperRightArea.getChildren().add(okButton);							
 						}
 						
 					});
 
-					
 					s.sleep();
 
 					//s.enter();

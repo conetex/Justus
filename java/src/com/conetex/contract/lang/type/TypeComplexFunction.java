@@ -35,6 +35,11 @@ public class TypeComplexFunction extends TypeComplex {
 
 	private static final Map<String, TypeComplexFunction>	instances	= new HashMap<>();
 
+	public static void clearInstances() {
+		TypeComplexFunction.functions.clear();
+		TypeComplexFunction.instances.clear();
+	}
+	
 	public static Collection<TypeComplexFunction> getInstances() {
 		return TypeComplexFunction.instances.values();
 	}

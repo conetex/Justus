@@ -26,7 +26,7 @@ import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.Invalid;
 
 public class TypeComplex extends Type<Structure> { // AbstractType<Value<?>[]>
-
+	
 	private static final Map<String, TypeComplex> allInstances = new HashMap<>();
 
 	public static TypeComplex getInstanceNoNull(String typeName) throws UnknownComplexType {

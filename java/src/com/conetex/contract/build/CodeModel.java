@@ -926,7 +926,15 @@ public class CodeModel {
 
 	}
 	
+	private static boolean isBuilded = false;
+	
 	public static void build() throws AbstractInterpreterException {
+		
+		if(isBuilded){
+			return;
+		}
+		
+		CodeModel.isBuilded = true;
 		
 		Request.build();
 
