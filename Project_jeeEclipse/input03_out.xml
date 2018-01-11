@@ -45,7 +45,7 @@
   </complexType>
   <VIRTUAL_COMP_VALUE name="simpleContractExample">
     <VIRTUAL_PRIM_VALUE name="amountOfFavour" value="0"/>
-    <VIRTUAL_PRIM_VALUE name="status" value="Standardantwort 0"/>
+    <VIRTUAL_PRIM_VALUE name="status" value="einmal durchgelaufen..."/>
     <VIRTUAL_COMP_VALUE name="signatureOfClerk">
       <VIRTUAL_COMP_VALUE name="participant">
         <VIRTUAL_PRIM_VALUE name="nick" value="Bjoern"/>
@@ -60,7 +60,7 @@
         <VIRTUAL_PRIM_VALUE name="mail" value=""/>
         <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB"/>
       </VIRTUAL_COMP_VALUE>
-      <VIRTUAL_PRIM_VALUE name="signing" value="dBdMlKtNmQ5/9I5uqY4wNFT3tBFR6B9BJ/M/3hjbeJqebrWjfp4vmcgyVXeSUdKxrYoBQVqDdDaZRGxuupQqsOrxmX2Tw3jwlFPZSG94k90fea45PvRjPH+gUIjrkB+LGtJicYtwczcQTPAYvIqianmVJ3mtyysQv1qnvXjbthU="/>
+      <VIRTUAL_PRIM_VALUE name="signing" value="IKswn2ti7nGB6cVhywJlnIxJ/U0AE+UzaKdxYKril8AEyBxNz//izFkX7A8nI7quqJat7oSnqag3EkeCyFDZWyeeeJyCoeuOrA5WG+TfA9+ZznLvDylOUIeXK0SE3EjR/uYH9sKE9mWsmBZa0Q7+Xu3XMwPz16SHb2xz+gdP/wk="/>
     </VIRTUAL_COMP_VALUE>
     <VIRTUAL_COMP_VALUE name="dutyOfClerk">
       <VIRTUAL_COMP_VALUE name="participant">

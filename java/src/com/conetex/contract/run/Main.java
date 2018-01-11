@@ -14,6 +14,7 @@ import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.lang.type.TypeComplex;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
 
 public abstract class Main {
@@ -24,6 +25,8 @@ public abstract class Main {
 	
 	public abstract CodeNode getRootCodeNode();
 
+	public abstract Structure getRootStructure();
+	
 	public static List<CodeNode> _getFunctionNodes(CodeNode n) throws AbstractInterpreterException {
 		List<CodeNode> re = new LinkedList<>();
 		List<CodeNode> children = n.getChildNodes();

@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.conetex.contract.util.Pair;
+
 import org.liquidplayer.webkit.javascriptcore.JSContext;
 import org.liquidplayer.webkit.javascriptcore.JSValue;
 
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Pair x = new Pair<>("c", "b");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

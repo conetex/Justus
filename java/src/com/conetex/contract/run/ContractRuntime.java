@@ -89,9 +89,14 @@ public class ContractRuntime {
 
 	}
 
-	public static void validateSignatures(Structure rootStructure) {
+	public static String validateSignatures(Structure rootStructure) {
+		if(rootStructure == null) {
+			return "nothing to check";
+		}
 		List<Structure> sigs = getAllSignatures(rootStructure);
 
+		boolean checked = false;
+		
 		for (Structure s : sigs) {
 
 			Value<?> ss = s.getValue(Symbols.TYPE_SIGNATURE_ATT_SIGNING);
@@ -128,7 +133,11 @@ public class ContractRuntime {
 				signature.initVerify(publicKey);
 				update(signature, rootStructure);
 				boolean result = signature.verify(sss);
+				checked = true;
 				System.err.println(" valid signature --> " + result);
+				if(! result) {
+					return "signing invalid (document was changed after last sign off)";
+				}
 			}
 			catch (SignatureException e) {
 				// TODO Auto-generated catch block
@@ -148,7 +157,12 @@ public class ContractRuntime {
 			}
 
 		}
-
+		if(checked) {
+			return "everything ok!";
+		}
+		else {
+			return "nothing signed";			
+		}
 	}
 
 	public static void update(Signature rsa, Structure s) throws SignatureException {

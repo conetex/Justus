@@ -108,9 +108,8 @@ public class Build {
 				rootStructure.fillMissingValues();
 				TypeComplexFunction.fillMissingPrototypeValues();
 				Function<?> mainFunction = BuildFunctions.build(complexRoot, complexTypeRoot);
-
 				
-				ContractRuntime.validateSignatures(rootStructure);
+				//ContractRuntime.validateSignatures(rootStructure);
 				
 				List<Structure> allDuties = getAllDuties(rootStructure);
 				List<Structure> myDuties = getMyDuties(allDuties);
@@ -175,6 +174,11 @@ public class Build {
 						@Override
 						public CodeNode getRootCodeNode() {
 							return code;
+						}
+
+						@Override
+						public Structure getRootStructure() {
+							return rootStructure;
 						}
 					};
 				}

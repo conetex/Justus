@@ -37,9 +37,12 @@ import com.conetex.contract.build.CodeModel.EggAbstr;
 import com.conetex.contract.build.CodeNode;
 import com.conetex.contract.build.Symbols;
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
+import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
+import com.conetex.contract.build.exceptionFunction.NullLabelException;
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
+import com.conetex.contract.lang.value.implementation.Structure;
 import com.conetex.contract.run.ContractRuntime;
 import com.conetex.contract.run.Main;
 import com.conetex.contract.run.Writer;
@@ -121,7 +124,8 @@ public class ReadXML {
 					}
 				}
 			);
-		out(main, new File(inFile + "_out" + fileExtension));
+		run(main);
+		out(new File(inFile + "_out" + fileExtension));
 	}
 	
 	public static Main in(File inFile)
@@ -166,35 +170,41 @@ public class ReadXML {
 
 	}
 
-	public static void out(Main main, File outFile)
-			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
-		
+	public static void run(Main main) throws ParserConfigurationException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException, AbstractRuntimeException {
 		if (main != null) {
-			try (FileOutputStream os = new FileOutputStream(outFile)) {
-				StreamResult res = new StreamResult(os);
-				DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
-				Document odoc = odocumentBuilder.newDocument();
-				Element root = odoc.createElement(Symbols.comContract());
-				// root.setAttribute(Symbols.paramName(),
-				// main.getRootTyp().getName());
-
-				odoc.appendChild(root);
-
-				Writer w = new XmlWriter(odoc, root);
-
-				main.run(w);
-				Transformer t;
-				try {
-					t = TransformerFactory.newInstance().newTransformer();
-					t.setOutputProperty(OutputKeys.INDENT, "yes");
-					t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-					t.transform(new DOMSource(odoc), res);
-				}
-				catch (TransformerFactoryConfigurationError | TransformerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
+			ReadXML.doc = odocumentBuilder.newDocument();
+			Element root = ReadXML.doc.createElement(Symbols.comContract());
+			// root.setAttribute(Symbols.paramName(),
+			// main.getRootTyp().getName());
+			ReadXML.doc.appendChild(root);
+			Writer w = new XmlWriter(ReadXML.doc, root);
+			main.run(w);
+		}
+	}
+	
+	public static Document doc = null;
+		
+	public static void out(File outFile)
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
+		if(ReadXML.doc == null) {
+			return;
+		}
+		Document odoc = ReadXML.doc;
+		ReadXML.doc = null;
+		try (FileOutputStream os = new FileOutputStream(outFile)) {
+			StreamResult res = new StreamResult(os);
+			Transformer t;
+			try {
+				t = TransformerFactory.newInstance().newTransformer();
+				t.setOutputProperty(OutputKeys.INDENT, "yes");
+				t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+				t.transform(new DOMSource(odoc), res);
+			}
+			catch (TransformerFactoryConfigurationError | TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

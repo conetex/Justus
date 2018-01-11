@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.Semaphore;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -147,8 +148,15 @@ public class UImain extends Application {
 
 	protected static File	inFile;
 	protected static Main	main;
+    static Semaphore semaphoreRunButWait4Answer = new Semaphore();
+	private static void exit() {
+		
+		UImain.tasks.run = false;
+		semaphoreRunButWait4Answer.weakup();
+		Platform.exit();
+	}
 
-	public Control createFileDropTarget(TreeView<CodeNode> tree) {
+	public Control createFileDropTarget(TreeView<CodeNode> tree, Label messageLabel) {
 		Label target = new Label("Drag a file to me.");
 		target.setOnDragOver(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
@@ -210,6 +218,7 @@ public class UImain extends Application {
 
 								// UImain.load(i.getChildren(), n);
 								success = true;
+								messageLabel.setText( "loaded " + f.getName() );
 							}
 							catch (ParserConfigurationException e) {
 								// TODO Auto-generated catch block
@@ -262,43 +271,42 @@ public class UImain extends Application {
 																				// KeyValue("A",
 																				// "B")
 
-			final Button _btnAdd = new Button("add Button");
-			_btnAdd.setText("add");
-			_btnAdd.setOnAction(new EventHandler<ActionEvent>() {
+			Label messageLabel = new Label("");
+			
+			final Button validButton = new Button("validate");
+			validButton.setText("validate");
+			validButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
-				public void handle(ActionEvent event) {
-					System.out.println("add!");
-					data.add(new KeyValue("k a", "v a"));
-					data.add(new KeyValue("k b", "v b"));
-
-					// TreeItem<String> newEmployee = new TreeItem<String>("New
-					// Item");
-					// UImain.treeItems.add(newEmployee);
-
+				public void handle(ActionEvent arg0) {
+					if(UImain.main != null) {
+						String msg = ContractRuntime.validateSignatures( UImain.main.getRootStructure() );
+						messageLabel.setText( msg );
+					}
 				}
 			});
-
+			
+			
 			final Button runButton = new Button("run");
 			runButton.setText("run");
 			runButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					if (UImain.inFile != null && UImain.main != null) {
+						messageLabel.setText( "running ..." );
 						Runnable r = new Runnable() {
 							@Override
 							public void run() {
 								try {
-									ReadXML.out(UImain.main, new File(inFile.getParent(), inFile.getName().replace(".xml", "_out.xml")));
+									ReadXML.run(UImain.main);
+									UImain.tasks.insertTask(new Runnable(){
+										@Override
+										public void run() {
+											messageLabel.setText("run finished!");							
+										}
+									});
+									//ReadXML.out(UImain.main, new File(inFile.getParent(), inFile.getName().replace(".xml", "_out.xml")));
 								}
 								catch (ParserConfigurationException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								catch (SAXException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								catch (IOException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
@@ -307,10 +315,6 @@ public class UImain extends Application {
 									e.printStackTrace();
 								}
 								catch (AbstractRuntimeException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								catch (AbstractTypException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
@@ -323,7 +327,42 @@ public class UImain extends Application {
 				}
 			});
 
-
+			final Button saveButton = new Button("sign, save");
+			saveButton.setText("sign, save");
+			saveButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent arg0) {
+					try{
+						String outFileName = inFile.getName().replace(".xml", "I.xml");
+						ReadXML.out(new File(inFile.getParent(), outFileName));
+						messageLabel.setText( "saved " + outFileName );
+					}
+					catch(ParserConfigurationException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch(SAXException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch(IOException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch(AbstractInterpreterException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch(AbstractRuntimeException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch(AbstractTypException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
 			
 			TreeItem<CodeNode> rootItem = new TreeItem<CodeNode>();
 			rootItem.setExpanded(true);
@@ -371,7 +410,7 @@ public class UImain extends Application {
 			});
 
 			// Control target = createFileDropTarget(rootItem.getChildren());
-			Control target = createFileDropTarget(tree);
+			Control target = createFileDropTarget(tree, messageLabel);
 
 			TableView<KeyValue> table = new TableView<>();
 			TableColumn keyCol = new TableColumn("key");
@@ -385,11 +424,14 @@ public class UImain extends Application {
 
 			HBox upperArea = new HBox();
 			upperArea.getChildren().add(target);
+			upperArea.getChildren().add(validButton);
 			upperArea.getChildren().add(runButton);
-
-			HBox middleUpperRightArea = new HBox();
+			upperArea.getChildren().add(saveButton);
+			
+			VBox middleUpperRightArea = new VBox();
 			// middleUpperRightArea.getChildren().add(btnAdd);
 			// rightArea.getChildren().add(btnDel);
+			middleUpperRightArea.getChildren().add(table);
 
 			SplitPane middleUpperArea = new SplitPane();
 			middleUpperArea.getItems().add(tree);
@@ -398,11 +440,13 @@ public class UImain extends Application {
 			SplitPane middleArea = new SplitPane();
 			middleArea.setOrientation(Orientation.VERTICAL);
 			middleArea.getItems().add(middleUpperArea);
-			middleArea.getItems().add(table);
+			//middleArea.getItems().add(table);
 
 			VBox mainArea = new VBox();
 			mainArea.getChildren().add(upperArea);
 			mainArea.getChildren().add(middleArea);
+			mainArea.getChildren().add(messageLabel);
+			
 
 			StackPane root = new StackPane();
 			// root.getChildren().add(btn);
@@ -412,11 +456,9 @@ public class UImain extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-
-
-
-
-			Semaphore s = new Semaphore();
+			
+			primaryStage.setOnCloseRequest( x -> exit() );
+			
 			StringResult res = new StringResult();
 			Label questionLabel = new Label("...");
 			TextField textField = new TextField();
@@ -429,7 +471,8 @@ public class UImain extends Application {
 					res.res = textField.getText();
 					textField.setText("");
 					middleUpperRightArea.getChildren().clear();
-					s.weakup();
+					middleUpperRightArea.getChildren().add(table);
+					semaphoreRunButWait4Answer.weakup();
 				}
 			});			
 			
@@ -452,6 +495,7 @@ public class UImain extends Application {
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
+							middleUpperRightArea.getChildren().clear();
 							textField.setText("");
 							questionLabel.setText(question);
 							middleUpperRightArea.getChildren().add(questionLabel);
@@ -461,7 +505,7 @@ public class UImain extends Application {
 						
 					});
 
-					s.sleep();
+					semaphoreRunButWait4Answer.sleep();
 
 					//s.enter();
 					return res.res;
@@ -479,6 +523,7 @@ public class UImain extends Application {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	public static void main(String[] args) {
