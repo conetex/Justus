@@ -55,6 +55,9 @@ public class Symbols {
 	public static final String		TYPE_PARTICIPANT			= "Participant";
 	public static final String		TYPE_PARTICIPANT_ATT_NICK	= "nick";
 	public static final String		TYPE_PARTICIPANT_ATT_PUBKEY	= "publicKey";
+	public static final String		TYPE_SIGNATURE				= "simpleContractExample.Signature";
+	public static final String		TYPE_SIGNATURE_ATT_PARTICIPANT	= "participant";
+	public static final String		TYPE_SIGNATURE_ATT_SIGNING	= "signing";
 
 	// data command
 	private static final String		COM_CONTRACT				= "contract";

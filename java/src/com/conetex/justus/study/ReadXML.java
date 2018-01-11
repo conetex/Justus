@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,9 +40,12 @@ import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException
 import com.conetex.contract.build.exceptionFunction.UnknownCommand;
 import com.conetex.contract.build.exceptionFunction.UnknownCommandParameter;
 import com.conetex.contract.build.exceptionType.AbstractTypException;
+import com.conetex.contract.run.ContractRuntime;
 import com.conetex.contract.run.Main;
 import com.conetex.contract.run.Writer;
+import com.conetex.contract.run.ContractRuntime.Informant;
 import com.conetex.contract.run.exceptionValue.AbstractRuntimeException;
+import com.conetex.contract.util.Pair;
 
 public class ReadXML {
 
@@ -96,22 +104,30 @@ public class ReadXML {
 	}
 
 	public static void main(String[] args)
-			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
-		String inFile = "input03";
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException, InvalidKeySpecException, NoSuchAlgorithmException {
+		String inFile = "input03_out";
 		String fileExtension = ".xml";
 		
 		Main main = in( new File(inFile + fileExtension) );
-		
+		ContractRuntime.stringAgency.subscribe(
+				new Informant<String>() {
+					@Override
+					public String getStringAnswer(String question) {
+						return "Standardantwort 1";
+					}
+					@Override
+					public String getStringAnswer(String question, Pair<String, String>[] allowedAnswers) {
+						return "Standardantwort 2";
+					}
+				}
+			);
 		out(main, new File(inFile + "_out" + fileExtension));
 	}
 	
 	public static Main in(File inFile)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
 
-		CodeModel.build();// TODO das sollte woanders gemacht werden, denn hier
-							// ist alles xml-driven...
-
-		
+		CodeModel.build(); // TODO das sollte woanders gemacht werden, denn hier ist alles xml-driven...
 		
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile)) {

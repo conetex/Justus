@@ -1,5 +1,10 @@
 package com.conetex.contract.build;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +109,9 @@ public class Build {
 				TypeComplexFunction.fillMissingPrototypeValues();
 				Function<?> mainFunction = BuildFunctions.build(complexRoot, complexTypeRoot);
 
+				
+				ContractRuntime.validateSignatures(rootStructure);
+				
 				List<Structure> allDuties = getAllDuties(rootStructure);
 				List<Structure> myDuties = getMyDuties(allDuties);
 
@@ -121,6 +129,7 @@ public class Build {
 								}
 								f.getFrom(d);
 							}
+							ContractRuntime.whoAmI().sign(rootStructure);
 
 							if (w != null) {
 								CodeNode cnTyps = complexTypeRoot.createCodeNode(null);

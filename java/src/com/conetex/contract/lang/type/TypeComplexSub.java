@@ -26,7 +26,8 @@ public class TypeComplexSub extends TypeComplex {
 		return re;
 	}
 
-	Set<String> getSubAttributeNames() {
+	@Override
+	public Set<String> getSubAttributeNames() {
 		Set<String> re = new TreeSet<>();
 		re.addAll(super.getSubAttributeNames());
 		re.addAll(this.parent.getSubAttributeNames());
@@ -35,7 +36,8 @@ public class TypeComplexSub extends TypeComplex {
 		return re;
 	}
 
-	Attribute<?>[] getSubAttributes() {
+	@Override
+	public Attribute<?>[] getSubAttributes() {
 		Attribute<?>[] theOrderedIdentifiers = super.getSubAttributes();
 		Attribute<?>[] parentsOrderedIdentifiers = this.parent.getSubAttributes();
 		Attribute<?>[] allAttributes = new Attribute<?>[parentsOrderedIdentifiers.length + theOrderedIdentifiers.length];
@@ -44,10 +46,12 @@ public class TypeComplexSub extends TypeComplex {
 		return allAttributes;
 	}
 
+	@Override
 	public int getAttributesSize() {
 		return this.orderedAttributes.length + this.parent.getAttributesSize();
 	}
 
+	@Override
 	public Attribute<?> getSubAttribute(int i) {
 		if (i < 0) {
 			// TODO darf auf keinen fall vorkommen

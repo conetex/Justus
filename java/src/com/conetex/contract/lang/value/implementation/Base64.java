@@ -18,9 +18,14 @@ public class Base64 extends SizedASCII {
 	public String set(String newValue) throws Invalid {
 		String allowedChars = "A-Za-z0-9+/=";
 		if (super.check(newValue, allowedChars)) {
-			if (!(newValue.matches("[A-Za-z0-9+/]{1,}[=]{0,}"))) { // "[\\p{ASCII}]{0,}"
+			//if (newValue.matches("^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$")) { 
+			if ( newValue.matches("[A-Za-z0-9+/]{1,}[=]{0,}") ) { // "[\\p{ASCII}]{0,}"
 																	// "\\A\\p{ASCII}*\\z"
 																	// "^[\\p{ASCII}]*$"
+				
+				// ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$
+				//   [^-A-Za-z0-9+/=]|=[^=]|={3,}$
+				
 				super.actual = newValue;
 			}
 			else {

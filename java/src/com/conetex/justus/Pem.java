@@ -18,8 +18,10 @@ public class Pem{
 		
 		File f = new File("KeyPair/publicKey");	
 		FileInputStream fis = new FileInputStream(f);
+		Long size = f.length();
 		
-		byte[] k = fis.readAllBytes();
+		byte[] k = new byte[size.intValue()];
+        fis.read(k);
 		fis.close();
 		
 		byte[] bytes = Base64.getDecoder().decode( k );

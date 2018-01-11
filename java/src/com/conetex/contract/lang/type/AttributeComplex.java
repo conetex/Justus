@@ -41,8 +41,8 @@ public class AttributeComplex extends Attribute<Structure> {// Attribute<Value<?
 
 	public Structure createNewValue(Structure parent) {
 		// TODO implement
-		return null;
-		// return this.type.createValue(parent);
+		//return null;
+		return this.type.createValue(parent);
 	}
 
 	@Override

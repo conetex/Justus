@@ -180,11 +180,11 @@ public class TypeComplex extends Type<Structure> { // AbstractType<Value<?>[]>
 		return this.orderedAttributes.length;
 	}
 
-	Set<String> getSubAttributeNames() {
+	public Set<String> getSubAttributeNames() {
 		return this.index.keySet();
 	}
 
-	Attribute<?>[] getSubAttributes() {
+	public Attribute<?>[] getSubAttributes() {
 		return this.orderedAttributes;
 	}
 

@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 public class GenerateKeys{
@@ -20,7 +21,8 @@ public class GenerateKeys{
 
 	public GenerateKeys(int keylength) throws NoSuchAlgorithmException, NoSuchProviderException {
 		this.keyGen = KeyPairGenerator.getInstance("RSA");
-		this.keyGen.initialize(keylength);
+		SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+		this.keyGen.initialize(keylength, random);
 	}
 
 	public void createKeys() {
@@ -54,10 +56,10 @@ public class GenerateKeys{
 			gk.createKeys();
 			
 			System.out.println( gk.getPublicKey().getFormat() );
-			
 			byte[] publicKeyBase = Base64.getEncoder().encode( gk.getPublicKey().getEncoded() );
 			gk.writeToFile("KeyPair/publicKey", publicKeyBase);
 			
+			System.out.println( gk.getPrivateKey().getFormat() );
 			byte[] privateKeyBase = Base64.getEncoder().encode( gk.getPrivateKey().getEncoded() );
 			gk.writeToFile("KeyPair/privateKey", privateKeyBase);
 			

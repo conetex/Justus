@@ -5,21 +5,28 @@
 	<complexType name="Participant">
 		<attribute name="nick" type="t:ASCII(32)" />
 		<attribute name="mail" type="t:ASCII(32)" />
-		<attribute name="publicKey" type="t:ASCII(256)" />
+		<attribute name="publicKey" type="t:Base64(256)" />
 	</complexType>
 
 	<complexType name="Duty">
 		<attribute name="participant" type="simpleContractExample.Participant" />
+	</complexType>
+	
+	<complexType name="Signature">
+		<attribute name="participant" type="simpleContractExample.Participant" />
+		<attribute name="signing" type="t:Base64(1024)" />
 	</complexType>
 
 	<complexType name="simpleContractExample.DutyOfRequester" supertype="simpleContractExample.Duty">
 		<!--
 		<value name="param" type='t:Int' value="11" />
 		-->
+		<!--
 		<copy>
 		  <ref value="amountOfFavour"/>
 		  <Integer value="13"/>
 		</copy>
+		-->
 		<copy>
 		  <ref value="status"/>
 		  <!-- <String value="Hallo Bjoern! I want you to do something."/> -->
@@ -45,14 +52,30 @@
 		<call type="DutyOfClerk" name="simpleContractExample.DutyOfClerk.todo" />
 	</complexType>
 
+	<value name="amountOfFavour" type='t:Int'>0</value>
 	<attribute name="status" type="t:ASCII256"/>
-	<value name="amountOfFavour" type='t:Int'>31</value>
-
+	
+	<attribute name="signatureOfClerk" type="simpleContractExample.Signature"/>
+	<signatureOfClerk>
+		<participant>
+			<nick>Bjoern</nick>
+			<publicKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB</publicKey>
+		</participant>
+	</signatureOfClerk>
+	
+	<attribute name="signatureOfRequester" type="simpleContractExample.Signature"/>
+	<signatureOfRequester>
+		<participant>
+			<nick>Matthias</nick>
+			<publicKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB</publicKey>
+		</participant>
+	</signatureOfRequester>
+	
 	<attribute name="dutyOfClerk" type="simpleContractExample.DutyOfClerk"/>
 	<dutyOfClerk>
 		<participant>
 			<nick>Bjoern</nick>
-			<publicKey>soidnaaoiyxcvkjlksajdfoaisjoyixcvjoyixcjvoasjfoaskdfkz</publicKey>
+			<publicKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB</publicKey>
 		</participant>
 	</dutyOfClerk>
 
@@ -60,7 +83,7 @@
 	<dutyOfRequester>
 		<participant>
 			<nick>Matthias</nick>
-			<publicKey>asdfopikepoavxoiowertxyfgdlnsaflgaqzwuesdmviignyhsmqic</publicKey>
+			<publicKey>MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB</publicKey>
 		</participant>
 	</dutyOfRequester>
 	<!-- -->
