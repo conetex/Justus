@@ -875,6 +875,7 @@ public class CodeModel {
 		Control.when.functionContains(Assign.whatEverAssigment);
 		Control.when.functionContains(FunCall.whatEverCall);
 		Control.when.functionContains(FunReturn.whatEverReturn);
+		Control.when.functionContains(Control.when);
 
 		// whatEverReturn.contains(whatEverCall);
 		FunReturn.whatEverReturn.functionContains(Reference.whatEverRef);

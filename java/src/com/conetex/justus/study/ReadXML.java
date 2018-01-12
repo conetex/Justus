@@ -108,7 +108,7 @@ public class ReadXML {
 
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException, InvalidKeySpecException, NoSuchAlgorithmException {
-		String inFile = "changeProcessV2_";
+		String inFile = "changeProcessV2__out_out_out";
 		String fileExtension = ".xml";
 		
 		Main main = in( new File(inFile + fileExtension) );
@@ -116,11 +116,11 @@ public class ReadXML {
 				new Informant<String>() {
 					@Override
 					public String getStringAnswer(String question) {
-						return "Standardantwort 1";
+						return "default answer A";
 					}
 					@Override
 					public String getStringAnswer(String question, Pair<String, String>[] allowedAnswers) {
-						return "Standardantwort 2";
+						return "default answer B";
 					}
 				}
 			);

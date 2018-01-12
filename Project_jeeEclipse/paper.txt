@@ -1,0 +1,33 @@
+
+Es gibt zwei Voraussetzung für eine Public-Key-Infrastruktur:
+1.
+Der private Schlüssel darf nur dem Teilnehmer bekannt sein, der den Schlüssel besitzt.
+Der private Schlüssel darf also nicht publiziert oder entwendet werden.
+2.
+In einem Netzwerk muss der öffentliche Schlüssel sicher der Identität eines Teilnehmers zugeordnet sein.
+Dies kann durch bekannte Handshake-Verfahren sichergestellt werden.
+
+Sind beide Voraussetzungen erfüllt, können Daten mit Hilfe des privaten Schlüssels signiert werden.
+Die Signatur kann mit Hilfe des öffentlichen Schlüssels validiert werden.
+Ausgetauschte Daten sind dadurch vor Manipulation geschützt.
+Außerdem lässt sich die Herkunft der ausgetauschten Daten eindeutig identifizieren.
+Auf diesem Verfahren beruht Code-Signing und die digitale Unterschrift auf Dokumenten.
+
+Im Folgenden wird eine Erweiterung des Verfahrens beschrieben.
+Die Erweiterung bezieht sich auf drei Aspekte:
+1. Signierung des Zustands von Anwendungen, die durch ein Netzwerk verteilter Teilnehmerknoten ausgeführt werden
+2. Signierung des Codes derartig verteilter Anwendungen
+3. Reproduktion des Anwendungszustands
+Das Verteilen der Kombination aus Code und Zustand auf einzelne Teilnehmer 
+kommt einem Kontrakt 
+Dadurch ist es Teilnehmerknoten möglich, Konsens bezüglich Code und Anwendungszustand zu festzustellen.
+Kann Dissens auch durch das Konsultieren von weiteren Knoten nicht ausgeräumt werden, brechen die Teilnehmerknoten die Verarbeitung ab.
+
+
+
+
+
+Dadurch, dass der Code zur Laufzeit kompiliert wird sind Änderung des Codes zur Laufzeit möglich.
+
+
+
