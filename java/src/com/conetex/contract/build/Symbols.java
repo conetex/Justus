@@ -50,12 +50,12 @@ public class Symbols {
 	public static final String[]	PARAM_AFFIXES				= new String[] { "(", ")", "_", "-" };
 
 	// types
-	public static final String		TYPE_DUTY					= "simpleContractExample.Duty";
+	public static final String		TYPE_DUTY					= "change.Duty"; // TODO so gehts nicht! wir muessen das von conetex erben...
 	public static final String		TYPE_DUTY_ATT_PARTICIPANT	= "participant";
 	public static final String		TYPE_PARTICIPANT			= "Participant";
 	public static final String		TYPE_PARTICIPANT_ATT_NICK	= "nick";
 	public static final String		TYPE_PARTICIPANT_ATT_PUBKEY	= "publicKey";
-	public static final String		TYPE_SIGNATURE				= "simpleContractExample.Signature";
+	public static final String		TYPE_SIGNATURE				= "change.Signature";//simpleContractExample TODO so gehts nicht! wir muessen das von conetex erben...
 	public static final String		TYPE_SIGNATURE_ATT_PARTICIPANT	= "participant";
 	public static final String		TYPE_SIGNATURE_ATT_SIGNING	= "signing";
 

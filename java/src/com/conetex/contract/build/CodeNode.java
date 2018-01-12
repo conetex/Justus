@@ -104,9 +104,11 @@ public class CodeNode {// TODO ziel sollte sein dass die Klasse package-Scope
 			throw new UnknownCommandParameter("null");
 		}
 		String[] names = this.getParameterNames();
-		for (String n : names) {
-			if (n.equals(p)) {
-				return true;
+		if(names != null){
+			for (String n : names) {
+				if (n.equals(p)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -320,6 +322,25 @@ public class CodeNode {// TODO ziel sollte sein dass die Klasse package-Scope
 	}
 	
 	public String toString(){
+		try {
+			if(this.command == Symbols.comvirtualPrimValue()){
+				return "value " + this.getParameter(Symbols.paramName());
+			}
+			if(this.command == Symbols.comVirtualCompValue()){
+				return "structure " + this.getParameter(Symbols.paramName());
+			}
+			if(this.hasParameter(Symbols.paramName())){
+				return this.command + " " + this.getParameter(Symbols.paramName());
+			}
+		}
+		catch (UnknownCommandParameter e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (UnknownCommand e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		return this.command;
 	}
 

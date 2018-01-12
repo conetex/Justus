@@ -9,6 +9,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import javafx.application.Application;
@@ -98,7 +99,7 @@ public class UImain extends Application {
 
 	}
 	
-	static TaskQueue tasks = new TaskQueue();
+	
 	
 	public static class StringResult {
 		String res;
@@ -146,6 +147,8 @@ public class UImain extends Application {
 
 	}
 
+	static TaskQueue tasks = new TaskQueue();
+	static Document doc = null;
 	protected static File	inFile;
 	protected static Main	main;
     static Semaphore semaphoreRunButWait4Answer = new Semaphore();
@@ -282,6 +285,9 @@ public class UImain extends Application {
 						String msg = ContractRuntime.validateSignatures( UImain.main.getRootStructure() );
 						messageLabel.setText( msg );
 					}
+					else{
+						messageLabel.setText( "no structure to validate" );
+					}
 				}
 			});
 			
@@ -297,7 +303,7 @@ public class UImain extends Application {
 							@Override
 							public void run() {
 								try {
-									ReadXML.run(UImain.main);
+									UImain.doc = ReadXML.run(UImain.main);
 									UImain.tasks.insertTask(new Runnable(){
 										@Override
 										public void run() {
@@ -333,8 +339,18 @@ public class UImain extends Application {
 				@Override
 				public void handle(ActionEvent arg0) {
 					try{
+						if(UImain.inFile == null){
+							messageLabel.setText( "no document opened ");
+							return;
+						}
+						if(UImain.doc == null){
+							messageLabel.setText( "no changes to save ");
+							return;
+						}
+						Document d = UImain.doc;
+						UImain.doc = null;
 						String outFileName = inFile.getName().replace(".xml", "I.xml");
-						ReadXML.out(new File(inFile.getParent(), outFileName));
+						ReadXML.out(d, new File(inFile.getParent(), outFileName));
 						messageLabel.setText( "saved " + outFileName );
 					}
 					catch(ParserConfigurationException e){
@@ -414,9 +430,8 @@ public class UImain extends Application {
 
 			TableView<KeyValue> table = new TableView<>();
 			TableColumn keyCol = new TableColumn("key");
-			keyCol.setCellValueFactory(new PropertyValueFactory<>("key")); // hier
-																			// gehts
-																			// weiter
+			keyCol.setCellValueFactory(new PropertyValueFactory<>("key")); 
+			
 			TableColumn valCol = new TableColumn("value");
 			valCol.setCellValueFactory(new PropertyValueFactory<>("value"));
 			table.setItems(data);

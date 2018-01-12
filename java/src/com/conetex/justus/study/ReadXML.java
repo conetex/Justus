@@ -108,7 +108,7 @@ public class ReadXML {
 
 	public static void main(String[] args)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException, InvalidKeySpecException, NoSuchAlgorithmException {
-		String inFile = "input03_out";
+		String inFile = "changeProcessV2_";
 		String fileExtension = ".xml";
 		
 		Main main = in( new File(inFile + fileExtension) );
@@ -124,8 +124,8 @@ public class ReadXML {
 					}
 				}
 			);
-		run(main);
-		out(new File(inFile + "_out" + fileExtension));
+		Document doc = run(main);
+		out(doc, new File(inFile + "_out" + fileExtension));
 	}
 	
 	public static Main in(File inFile)
@@ -170,29 +170,28 @@ public class ReadXML {
 
 	}
 
-	public static void run(Main main) throws ParserConfigurationException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException, AbstractRuntimeException {
+	public static Document run(Main main) throws ParserConfigurationException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException, AbstractRuntimeException {
 		if (main != null) {
 			DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
-			ReadXML.doc = odocumentBuilder.newDocument();
-			Element root = ReadXML.doc.createElement(Symbols.comContract());
+			Document doc = odocumentBuilder.newDocument();
+			Element root = doc.createElement(Symbols.comContract());
 			// root.setAttribute(Symbols.paramName(),
 			// main.getRootTyp().getName());
-			ReadXML.doc.appendChild(root);
-			Writer w = new XmlWriter(ReadXML.doc, root);
+			doc.appendChild(root);
+			Writer w = new XmlWriter(doc, root);
 			main.run(w);
+			return doc;
 		}
+		return null;
 	}
-	
-	public static Document doc = null;
 		
-	public static void out(File outFile)
+	public static void out(Document doc, File outFile)
 			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
-		if(ReadXML.doc == null) {
+		if(doc == null) {
 			return;
 		}
-		Document odoc = ReadXML.doc;
-		ReadXML.doc = null;
+		Document odoc = doc;
 		try (FileOutputStream os = new FileOutputStream(outFile)) {
 			StreamResult res = new StreamResult(os);
 			Transformer t;
