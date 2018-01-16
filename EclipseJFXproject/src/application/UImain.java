@@ -68,15 +68,15 @@ import com.conetex.justus.study.ReadXML;
 
 public class UImain extends Application {
 
-	
+
 	public static class TaskQueue{
 
 		Semaphore ui = new Semaphore();
-		
+
 		private Queue<Runnable> uiTodos = new LinkedList<>();
-		
+
 		boolean run = true;
-		
+
 		public void insertTask(Runnable r){
 			synchronized(this){
 				this.uiTodos.add(r);
@@ -89,7 +89,7 @@ public class UImain extends Application {
 			while(this.run){
 				synchronized(this){
 					r = this.uiTodos.poll();
-				}				
+				}
 				while(r != null){
 					Platform.runLater(r);
 					r = null;
@@ -102,13 +102,13 @@ public class UImain extends Application {
 		}
 
 	}
-	
-	
-	
+
+
+
 	public static class StringResult {
 		String res;
 	}
-	
+
 	public static class Semaphore {
 
 		public void sleep() {
@@ -157,10 +157,10 @@ public class UImain extends Application {
 	protected static Main	main;
     static Semaphore semaphoreRunButWait4Answer = new Semaphore();
 	private static void exit() {
-		
 		UImain.tasks.run = false;
 		semaphoreRunButWait4Answer.weakup();
 		Platform.exit();
+		System.exit(0);
 	}
 
 	public Control createFileDropTarget(TreeView<CodeNode> tree, Label messageLabel) {
@@ -278,15 +278,15 @@ public class UImain extends Application {
 						new FileOutputStream("err.log")
 					),
 					true
-				) 
+				)
 			);
 			System.setOut( 	new PrintStream(
 					new BufferedOutputStream(
 						new FileOutputStream("out.log")
 					),
 					true
-				) 
-			);			
+				)
+			);
 		}
 		catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -301,7 +301,7 @@ public class UImain extends Application {
 																				// "B")
 
 			Label messageLabel = new Label("");
-			
+
 			final Button validButton = new Button("validate");
 			validButton.setText("validate");
 			validButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -316,8 +316,8 @@ public class UImain extends Application {
 					}
 				}
 			});
-			
-			
+
+
 			final Button runButton = new Button("run");
 			runButton.setText("run");
 			runButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -333,7 +333,7 @@ public class UImain extends Application {
 									UImain.tasks.insertTask(new Runnable(){
 										@Override
 										public void run() {
-											messageLabel.setText("run finished!");							
+											messageLabel.setText("run finished!");
 										}
 									});
 									//ReadXML.out(UImain.main, new File(inFile.getParent(), inFile.getName().replace(".xml", "_out.xml")));
@@ -405,7 +405,7 @@ public class UImain extends Application {
 					}
 				}
 			});
-			
+
 			TreeItem<CodeNode> rootItem = new TreeItem<CodeNode>();
 			rootItem.setExpanded(true);
 			TreeView<CodeNode> tree = new TreeView<CodeNode>();
@@ -456,8 +456,8 @@ public class UImain extends Application {
 
 			TableView<KeyValue> table = new TableView<>();
 			TableColumn keyCol = new TableColumn("key");
-			keyCol.setCellValueFactory(new PropertyValueFactory<>("key")); 
-			
+			keyCol.setCellValueFactory(new PropertyValueFactory<>("key"));
+
 			TableColumn valCol = new TableColumn("value");
 			valCol.setCellValueFactory(new PropertyValueFactory<>("value"));
 			table.setItems(data);
@@ -468,7 +468,7 @@ public class UImain extends Application {
 			upperArea.getChildren().add(validButton);
 			upperArea.getChildren().add(runButton);
 			upperArea.getChildren().add(saveButton);
-			
+
 			VBox middleUpperRightArea = new VBox();
 			// middleUpperRightArea.getChildren().add(btnAdd);
 			// rightArea.getChildren().add(btnDel);
@@ -487,7 +487,7 @@ public class UImain extends Application {
 			mainArea.getChildren().add(upperArea);
 			mainArea.getChildren().add(middleArea);
 			mainArea.getChildren().add(messageLabel);
-			
+
 
 			StackPane root = new StackPane();
 			// root.getChildren().add(btn);
@@ -497,9 +497,9 @@ public class UImain extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			
+
 			primaryStage.setOnCloseRequest( x -> exit() );
-			
+
 			StringResult res = new StringResult();
 			Label questionLabel = new Label("...");
 			TextField textField = new TextField();
@@ -515,9 +515,9 @@ public class UImain extends Application {
 					middleUpperRightArea.getChildren().add(table);
 					semaphoreRunButWait4Answer.weakup();
 				}
-			});			
-			
-		
+			});
+
+
 			Runnable r = new Runnable(){
 				@Override
 				public void run() {
@@ -525,7 +525,7 @@ public class UImain extends Application {
 				}
 			};
 			(new Thread(r)).start();
-		
+
 			ContractRuntime.stringAgency.subscribe(new Informant<String>() {
 
 				@Override
@@ -541,9 +541,9 @@ public class UImain extends Application {
 							questionLabel.setText(question);
 							middleUpperRightArea.getChildren().add(questionLabel);
 							middleUpperRightArea.getChildren().add(textField);
-							middleUpperRightArea.getChildren().add(okButton);							
+							middleUpperRightArea.getChildren().add(okButton);
 						}
-						
+
 					});
 
 					semaphoreRunButWait4Answer.sleep();
@@ -564,7 +564,7 @@ public class UImain extends Application {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public static void main(String[] args) {
