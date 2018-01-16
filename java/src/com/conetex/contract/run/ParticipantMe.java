@@ -28,8 +28,8 @@ public class ParticipantMe extends Participant{
 	
 	private final PrivateKey privateKey;
 	
-	public ParticipantMe(String theNick, String thePublicKey, String thePrivateKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		super(theNick, thePublicKey);
+	public ParticipantMe(String theNick, String theMail, String thePublicKey, String thePrivateKey) throws InvalidKeySpecException, NoSuchAlgorithmException {
+		super(theNick, theMail, thePublicKey);
 		this.privateKeyBase64 = thePrivateKey;
 		byte[] bytes = Base64.getDecoder().decode( thePrivateKey.getBytes() );
 		//this.privateKey = KeyFactory.getInstance("RSA").generatePrivate(new X509EncodedKeySpec(bytes));

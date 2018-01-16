@@ -1,0 +1,331 @@
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragOver ok
+onDragDropped
+createComplexType change
+Primitive.createIdentifier amountOfFavour Int ==> com.conetex.contract.lang.type.AttributePrimitive@ef632
+Primitive.createIdentifier step Int ==> com.conetex.contract.lang.type.AttributePrimitive@8ec18a
+Primitive.createIdentifier integerAnswer Int ==> com.conetex.contract.lang.type.AttributePrimitive@d75e8d
+Primitive.createIdentifier status ASCII256 ==> com.conetex.contract.lang.type.AttributePrimitive@4212ef
+createAttributesValues signatureOfClerk change.Signature ==> com.conetex.contract.lang.type.AttributeComplex@17760b2
+createAttributesValues signatureOfRequester change.Signature ==> com.conetex.contract.lang.type.AttributeComplex@16ac659
+createAttributesValues dutyOfClerk change.DutyOfClerk ==> com.conetex.contract.lang.type.AttributeComplex@1697394
+createAttributesValues dutyOfRequester change.DutyOfRequester ==> com.conetex.contract.lang.type.AttributeComplex@138cac0
+createComplexType change.DutyOfClerk.todo
+Primitive.createIdentifier param Int ==> com.conetex.contract.lang.type.AttributePrimitive@13a4e65
+createComplexType change.Signature
+createAttributesValues participant change.Participant ==> com.conetex.contract.lang.type.AttributeComplex@3710d5
+Primitive.createIdentifier signing Base64(1024) ==> com.conetex.contract.lang.type.AttributePrimitive@1ef4f80
+createComplexType change.Participant
+Primitive.createIdentifier nick ASCII(32) ==> com.conetex.contract.lang.type.AttributePrimitive@3b3d19
+Primitive.createIdentifier mail ASCII(32) ==> com.conetex.contract.lang.type.AttributePrimitive@1de7a61
+Primitive.createIdentifier publicKey Base64(256) ==> com.conetex.contract.lang.type.AttributePrimitive@6dfb37
+createComplexType change.Duty
+create complex child change.DutyOfClerk
+createComplexType change.DutyOfClerk
+createAttributesValues change.DutyOfClerk.todo change.DutyOfClerk.todo ==> com.conetex.contract.lang.type.AttributeComplex@14b33f5
+create complex child change.DutyOfRequester
+createComplexType change.DutyOfRequester
+Builder contract
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfClerk.todo
+complexname: change.DutyOfClerk
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+createValues VIRTUAL_PRIM_VALUE
+complexname: change
+createValue amountOfFavour 0
+createValues VIRTUAL_PRIM_VALUE
+complexname: change
+createValue step 1
+createValues VIRTUAL_PRIM_VALUE
+complexname: change
+createValue status 
+createValues VIRTUAL_PRIM_VALUE
+complexname: change
+createValue integerAnswer 0
+createValues VIRTUAL_COMP_VALUE
+complexname: change
+createValues VIRTUAL_COMP_VALUE
+complexname: change.Signature
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue nick Bjoern
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue mail 
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Signature
+createValue signing 
+createValues VIRTUAL_COMP_VALUE
+complexname: change
+createValues VIRTUAL_COMP_VALUE
+complexname: change.Signature
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue nick Matthias
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue mail 
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Signature
+createValue signing bo/sg2EkKl5zge30x0WY7CdsVj1AJvU58C+8GaPnf5X9Z5aWtNKppyaZVGGCYbH6ABcnrbMH65IgeN20JNRveQJWQXbp3DlflzE5FTzInyIpDNSx+21qcFFiGeDoKHkvzIqiQVx8vvxNYB80WJoTZHbnUG0orNpkW5BynMvDf7Q=
+createValues VIRTUAL_COMP_VALUE
+complexname: change
+createValues VIRTUAL_COMP_VALUE
+complexname: change.DutyOfClerk
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue nick Bjoern
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue mail 
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB
+createValues VIRTUAL_COMP_VALUE
+complexname: change
+createValues VIRTUAL_COMP_VALUE
+complexname: change.DutyOfRequester
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue nick Matthias
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue mail 
+createValues VIRTUAL_PRIM_VALUE
+complexname: change.Participant
+createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB
+Selected Text : attribute amountOfFavour
+Selected Text : attribute step
+Selected Text : attribute integerAnswer
+Selected Text : attribute status
+Selected Text : attribute signatureOfClerk
+ok!
+MOCK stepResult: nixxxxx sag ich
+write attribute
+write attribute
+write attribute
+write attribute
+write attribute
+write attribute
+write attribute
+write attribute
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write then
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write ref
+write ref
+write Integer
+write plus
+write copy
+write then
+write Integer
+write ref
+write equal
+write ref
+write String
+write copy
+write ref
+write ref
+write Integer
+write plus
+write copy
+write then
+write ref
+write String
+write copy
+write else
+write if
+write else
+write if
+write else
+write if
+write complexType
+write attribute
+write attribute
+write complexType
+write attribute
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write ref
+write Integer
+write copy
+write then
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write Integer
+write ref
+write equal
+write ref
+write Integer
+write copy
+write then
+write ref
+write Integer
+write copy
+write ref
+write String
+write copy
+write else
+write if
+write then
+write ref
+write String
+write copy
+write else
+write if
+write else
+write if
+write function
+write call
+write complexType
+write attribute
+write complexType
+write attribute
+write attribute
+write attribute
+write complexType
+write complexType
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_PRIM_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_COMP_VALUE
+write VIRTUAL_COMP_VALUE
+Selected Text : attribute status
+Selected Text : attribute signatureOfClerk
+Selected Text : complexType change
+Selected Text : value amountOfFavour
+Selected Text : value step
+Selected Text : value status
+Selected Text : structure participant
+Selected Text : value nick
+Selected Text : value mail
+Selected Text : value publicKey
+Selected Text : structure participant
+Selected Text : structure signatureOfClerk
+Selected Text : structure participant
+Selected Text : value nick
+Selected Text : value mail
+Selected Text : value publicKey
+Selected Text : structure participant
+Selected Text : structure signatureOfRequester
+Selected Text : structure dutyOfClerk
+Selected Text : structure participant
+Selected Text : value nick
+Selected Text : value mail
+Selected Text : value publicKey
+Selected Text : structure participant
+Selected Text : structure dutyOfClerk

@@ -1,7 +1,11 @@
 package application;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -267,6 +271,28 @@ public class UImain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+
+		try {
+			System.setErr( 	new PrintStream(
+					new BufferedOutputStream(
+						new FileOutputStream("err.log")
+					),
+					true
+				) 
+			);
+			System.setOut( 	new PrintStream(
+					new BufferedOutputStream(
+						new FileOutputStream("out.log")
+					),
+					true
+				) 
+			);			
+		}
+		catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
 		try {
 			primaryStage.setTitle("Justus Contract View");
 

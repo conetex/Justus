@@ -15,13 +15,16 @@ import com.conetex.contract.lang.value.implementation.Structure;
 public class Participant {
 
 	final String	nick;
+	
+	final String	mail;
 
 	final String	publicKeyBase64;
 	
 	final PublicKey publicKey;
 
-	public Participant(String theNick, String thePublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	public Participant(String theNick, String theMail, String thePublicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		this.nick = theNick;
+		this.mail = theMail;
 		this.publicKeyBase64 = thePublicKey;
 		this.publicKey = getPublicKey(thePublicKey);
 	}

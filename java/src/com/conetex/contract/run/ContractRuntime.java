@@ -1,5 +1,9 @@
 package com.conetex.contract.run;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -10,6 +14,7 @@ import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 
 import com.conetex.contract.build.Constants;
@@ -67,31 +72,72 @@ public class ContractRuntime {
 
 	public static AgentHandler<String> stringAgency = new AgentHandler<>();
 
-	private static ParticipantMe me = null;
+	private static ParticipantMe me = initMe();
 	
-	public static void initMe(ParticipantMe theParticipantMe) throws AbstractRuntimeException {
+	private static ParticipantMe initMe() {
 		if(me == null){
-			me = theParticipantMe;
+				        
+	        InputStream input = null;
+			try {
+				input = new FileInputStream("runtime.properties");
+			}
+			catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				System.err.println("Error opening Properties - File...");
+				e1.printStackTrace();
+				return null;
+			}
+	        Properties properties = new Properties();
+			try {
+				properties.load(input);
+			}
+			catch (IOException e1) {
+				// TODO Auto-generated catch block
+				System.err.println("Error reading Properties...");
+				e1.printStackTrace();
+				return null;
+			}
+			String nick = properties.getProperty("myNick");
+			String mail = properties.getProperty("myMail");
+			String publicKey = properties.getProperty("myPublicKey");
+			String privateKey = properties.getProperty("myPrivateKey");
+			
+			try {
+				return new ParticipantMe(nick, mail, publicKey, privateKey);
+			}
+			catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+			
 		}
 		else{
+			/*
 			throw new AbstractRuntimeException("ParticipantMe was initialized bevor"){
 				private static final long serialVersionUID = 1L;
 			};
+			*/
+			return me;
 		}
 	}
 	
 	public static ParticipantMe whoAmI() {
+		return me;
+	}
+	
+	public static ParticipantMe _whoAmI() {
 
 		try {
 			/*		
-			return new ParticipantMe("Matthias",
+			return new ParticipantMe("Matthias", "egal@nocorp.com",
 					"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB",
 					"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAIbh8pG6PpJfqWBoq1D2lRX/bJXAUHiarSXsNp5mTOUX+0f32+8w4P1DRJVrQO4KVw1BLwNe0rLcxT7RrHhQbxiHxgvcL7O/sJveQZawQ/90NaRr7qYeGF/uh9nprUdl1S+PypbgfdIM/zdg/SPdCeOoID63h+OzypsO7fHivVmRAgMBAAECgYBDFyQmpDL3b6m6EJYWIXCqjnAeVJgyRQ2W7VWFmHDrCvCsLXcyFGf00X7Nq5mSTYZbS27tCD9ZRELAKl7VQXzgQpy6zEGZ5yOQ1ii97mY692hLC9HyrtQSDjbjeTPMs6sstqs4W1l4vlPdx0QhRuZ0nWanN4ib9B70YvcwxRgpeQJBAOuz5Y+vJOYD9z+nJBL6VsP4kxG3f/5zW7SktZyMcD8g/u52yT3HtEuNZiUMAQ8ZkO/Z7klPte3N8Ue2GjPETrMCQQCSf3Sml2jhxHRK+Db3yYfJQ8leYrL1Iw3aGgnVy85oJ1zUV7C/NE0ozd9IVcdidh1huNNHoUZhNP+VVnDZ1BirAkEAh8C7LQBhLiGGnCC2BEAvDPv0KLYZgAINBYQAHcQ9Of7VFZ9Q1MZar1EnTZsWWQ4OjjZkqdDBJdABcZ4OhVZBRQJAPDfOAGh+gUcasnJjTel2OmH11Slm/GLjX8KSRmKXPrLncpV1HrNmAB7X6EjyQ2Pf4fpyRqBhaLW7VWyJyNBpLwJBAL1wqLMRY8tLzAcgnPVTqX0nAwKNtjRIUgq9KijWfxCWtoCS1qKDEBYCSMAkf8Z8jqhlHFnhzmnGUJ4axtUX5fE=");
 */
 
-			return new ParticipantMe("Bjoern" ,
-			 "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB",
-			 "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJOP+kpYsVm+6CR/RNCmzrDGO7grugj+LBbkvHIF4ATvgmAjC+hwFwOdABZTOFJqS0Q7l9aAS0f3Cvca9syE06oNfdEBfa75v2fMv6W2oJEGiMmrLDBWPgeJKS723tJzoySKxR0TmNC9LOd6aXd3FQRdaMgRzBvb02kKlmlDU9rVAgMBAAECgYBRrbxpMrbYames7BV3OR3nk5Ky2uFa4PYepfX5V28szDZqaHvK6WCTy2+k6+OdGuEWn7XoMZN5/jC/ntlFU7Ck8/pNvGxJSFdSneLJsYUOcTvqd9pGpST6L/3vGpmn0x73yu+YwD9eelcn9TR49V9zo60KsxSbit7eHLQUPxLigQJBANgWZ2Jgh6h1e1kuk8V+QRvEOX6p/ict5AOUvDJ/Y6jN0RYQov8s5Vj1E9apze5AY5ryGpliEvF/B0vO7B4BNTkCQQCu0WWQ0PQ/pFhqRQ4SkJlvVpbArBjW0yvB7jhGW4Ur8j06G5/SXfvdVUCY5/Tj62adtLTAmSD/XudocUYUMc59AkAcLX+5wmCuRPOaw4odfMM8va/Jpp0vuro7BVAtPZNfVcdoGy9GGzKlEQBPQ8FIyjiy4dM6ISHbP/dRmWAM4ZdxAkB121fk3Op96XduFaYaIABBTpgNxzhrxCww70BjNpo+eW6LuUnzUkdV/X6yV1cDPZWN5uEhI1tarwnFoPBE9xslAkAHKxay7yNdsW/YMfMonT2SChpmqtEfGO84pG8sVOoQrD0z1HsQjEoMoEeOclIaVc3TaQb8JZvnJJHS70H6Ewc1");
+			return new ParticipantMe("Bjoern", "egal@nocorp.com",
+					 "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB",
+					 "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJOP+kpYsVm+6CR/RNCmzrDGO7grugj+LBbkvHIF4ATvgmAjC+hwFwOdABZTOFJqS0Q7l9aAS0f3Cvca9syE06oNfdEBfa75v2fMv6W2oJEGiMmrLDBWPgeJKS723tJzoySKxR0TmNC9LOd6aXd3FQRdaMgRzBvb02kKlmlDU9rVAgMBAAECgYBRrbxpMrbYames7BV3OR3nk5Ky2uFa4PYepfX5V28szDZqaHvK6WCTy2+k6+OdGuEWn7XoMZN5/jC/ntlFU7Ck8/pNvGxJSFdSneLJsYUOcTvqd9pGpST6L/3vGpmn0x73yu+YwD9eelcn9TR49V9zo60KsxSbit7eHLQUPxLigQJBANgWZ2Jgh6h1e1kuk8V+QRvEOX6p/ict5AOUvDJ/Y6jN0RYQov8s5Vj1E9apze5AY5ryGpliEvF/B0vO7B4BNTkCQQCu0WWQ0PQ/pFhqRQ4SkJlvVpbArBjW0yvB7jhGW4Ur8j06G5/SXfvdVUCY5/Tj62adtLTAmSD/XudocUYUMc59AkAcLX+5wmCuRPOaw4odfMM8va/Jpp0vuro7BVAtPZNfVcdoGy9GGzKlEQBPQ8FIyjiy4dM6ISHbP/dRmWAM4ZdxAkB121fk3Op96XduFaYaIABBTpgNxzhrxCww70BjNpo+eW6LuUnzUkdV/X6yV1cDPZWN5uEhI1tarwnFoPBE9xslAkAHKxay7yNdsW/YMfMonT2SChpmqtEfGO84pG8sVOoQrD0z1HsQjEoMoEeOclIaVc3TaQb8JZvnJJHS70H6Ewc1");
 
 		}
 		catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
