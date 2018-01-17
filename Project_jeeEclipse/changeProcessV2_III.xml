@@ -149,17 +149,17 @@
     </complexType>
   </complexType>
   <VIRTUAL_COMP_VALUE name="change">
-    <VIRTUAL_PRIM_VALUE name="amountOfFavour" value="0"/>
-    <VIRTUAL_PRIM_VALUE name="step" value="1"/>
+    <VIRTUAL_PRIM_VALUE name="amountOfFavour" value="2"/>
+    <VIRTUAL_PRIM_VALUE name="step" value="3"/>
     <VIRTUAL_PRIM_VALUE name="integerAnswer" value="0"/>
-    <VIRTUAL_PRIM_VALUE name="status" value="einen kern"/>
+    <VIRTUAL_PRIM_VALUE name="status" value="asdf"/>
     <VIRTUAL_COMP_VALUE name="signatureOfClerk">
       <VIRTUAL_COMP_VALUE name="participant">
         <VIRTUAL_PRIM_VALUE name="nick" value="Bjoern"/>
         <VIRTUAL_PRIM_VALUE name="mail" value=""/>
         <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB"/>
       </VIRTUAL_COMP_VALUE>
-      <VIRTUAL_PRIM_VALUE name="signing" value=""/>
+      <VIRTUAL_PRIM_VALUE name="signing" value="DOyLLUE05CaNcQJdjTy4DzyHy3TMWS5wZiii2OgjhgMu1PB3fKMCBpGpLQC1HeHd6q2eI2DyLTps6KgaxNbelISh9julIxCG9oy/nuEyH4vm96DH1kym4RvFT90HdWDuBwydJQO8RuuACJZS34gVR6uQIfGfqzY8VcYXufM9458="/>
     </VIRTUAL_COMP_VALUE>
     <VIRTUAL_COMP_VALUE name="signatureOfRequester">
       <VIRTUAL_COMP_VALUE name="participant">
@@ -167,7 +167,7 @@
         <VIRTUAL_PRIM_VALUE name="mail" value=""/>
         <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB"/>
       </VIRTUAL_COMP_VALUE>
-      <VIRTUAL_PRIM_VALUE name="signing" value="QKJQDgnzkMuzRso19o4oLq2og4fN7+7JqnWQQQly1y8EiJShTLomoeL07+UhjE8SHa4pyM/sc0U7fBZBmDqBL/nM3/iSccciLdF3IBkzEHJkH+5SF5SIHhnI3hf2UdctjVhTGAqH2Qz0fezza0Pvxqf8gMxRKrH8fc8+qQFNOG4="/>
+      <VIRTUAL_PRIM_VALUE name="signing" value="SA7s3T4OuT/+4xUGdxmjMEtM1VzLG9RrNXDStarhe9FO7qdyHngC8hw1er91lMMpNF6bmad8FhmpmKYXLRLDWQmnJ3P1loXBZrVpssJ+I5MzWU7/F2KNvTAnB6III0XY7wAzjhGtdjReauHdv+dl3XxZYK/98flTuorPMYB781o="/>
     </VIRTUAL_COMP_VALUE>
     <VIRTUAL_COMP_VALUE name="dutyOfClerk">
       <VIRTUAL_COMP_VALUE name="participant">

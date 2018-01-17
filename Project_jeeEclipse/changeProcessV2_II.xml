@@ -150,16 +150,16 @@
   </complexType>
   <VIRTUAL_COMP_VALUE name="change">
     <VIRTUAL_PRIM_VALUE name="amountOfFavour" value="0"/>
-    <VIRTUAL_PRIM_VALUE name="step" value="1"/>
+    <VIRTUAL_PRIM_VALUE name="step" value="3"/>
     <VIRTUAL_PRIM_VALUE name="integerAnswer" value="0"/>
-    <VIRTUAL_PRIM_VALUE name="status" value="einen kern"/>
+    <VIRTUAL_PRIM_VALUE name="status" value="21543"/>
     <VIRTUAL_COMP_VALUE name="signatureOfClerk">
       <VIRTUAL_COMP_VALUE name="participant">
         <VIRTUAL_PRIM_VALUE name="nick" value="Bjoern"/>
         <VIRTUAL_PRIM_VALUE name="mail" value=""/>
         <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB"/>
       </VIRTUAL_COMP_VALUE>
-      <VIRTUAL_PRIM_VALUE name="signing" value=""/>
+      <VIRTUAL_PRIM_VALUE name="signing" value="DOyLLUE05CaNcQJdjTy4DzyHy3TMWS5wZiii2OgjhgMu1PB3fKMCBpGpLQC1HeHd6q2eI2DyLTps6KgaxNbelISh9julIxCG9oy/nuEyH4vm96DH1kym4RvFT90HdWDuBwydJQO8RuuACJZS34gVR6uQIfGfqzY8VcYXufM9458="/>
     </VIRTUAL_COMP_VALUE>
     <VIRTUAL_COMP_VALUE name="signatureOfRequester">
       <VIRTUAL_COMP_VALUE name="participant">
