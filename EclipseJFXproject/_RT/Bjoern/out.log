@@ -31,55 +31,32 @@ onDragOver ok
 onDragOver ok
 onDragOver ok
 onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
-onDragOver ok
 onDragDropped
 createComplexType change
-Primitive.createIdentifier amountOfFavour Int ==> com.conetex.contract.lang.type.AttributePrimitive@15002ba
-Primitive.createIdentifier step Int ==> com.conetex.contract.lang.type.AttributePrimitive@1bfd158
-Primitive.createIdentifier integerAnswer Int ==> com.conetex.contract.lang.type.AttributePrimitive@115bc6d
-Primitive.createIdentifier status ASCII256 ==> com.conetex.contract.lang.type.AttributePrimitive@ef632
-createAttributesValues signatureOfClerk change.Signature ==> com.conetex.contract.lang.type.AttributeComplex@108c34c
-createAttributesValues signatureOfRequester change.Signature ==> com.conetex.contract.lang.type.AttributeComplex@680ff9
-createAttributesValues dutyOfClerk change.DutyOfClerk ==> com.conetex.contract.lang.type.AttributeComplex@4212ef
-createAttributesValues dutyOfRequester change.DutyOfRequester ==> com.conetex.contract.lang.type.AttributeComplex@ab1c5c
+Primitive.createIdentifier amountOfFavour Int ==> com.conetex.contract.lang.type.AttributePrimitive@4175b130
+Primitive.createIdentifier step Int ==> com.conetex.contract.lang.type.AttributePrimitive@4d42f6f8
+Primitive.createIdentifier integerAnswer Int ==> com.conetex.contract.lang.type.AttributePrimitive@13471dd9
+Primitive.createIdentifier status ASCII256 ==> com.conetex.contract.lang.type.AttributePrimitive@20521ba0
+createAttributesValues signatureOfClerk change.Signature ==> com.conetex.contract.lang.type.AttributeComplex@2f2a8d98
+createAttributesValues signatureOfRequester change.Signature ==> com.conetex.contract.lang.type.AttributeComplex@e955ac7
+createAttributesValues dutyOfClerk change.DutyOfClerk ==> com.conetex.contract.lang.type.AttributeComplex@5677fc31
+createAttributesValues dutyOfRequester change.DutyOfRequester ==> com.conetex.contract.lang.type.AttributeComplex@4281cdf6
 createComplexType change.Signature
-createAttributesValues participant change.Participant ==> com.conetex.contract.lang.type.AttributeComplex@150afe6
-Primitive.createIdentifier signing Base64(1024) ==> com.conetex.contract.lang.type.AttributePrimitive@13a4e65
+createAttributesValues participant change.Participant ==> com.conetex.contract.lang.type.AttributeComplex@38069410
+Primitive.createIdentifier signing Base64(1024) ==> com.conetex.contract.lang.type.AttributePrimitive@4cb26452
 createComplexType change.DutyOfClerk.todo
-Primitive.createIdentifier param Int ==> com.conetex.contract.lang.type.AttributePrimitive@3710d5
+Primitive.createIdentifier param Int ==> com.conetex.contract.lang.type.AttributePrimitive@3a286aae
 createComplexType change.Duty
-createAttributesValues participant change.Participant ==> com.conetex.contract.lang.type.AttributeComplex@c034d4
+createAttributesValues participant change.Participant ==> com.conetex.contract.lang.type.AttributeComplex@1520ddc7
 create complex child change.DutyOfClerk
 createComplexType change.DutyOfClerk
-createAttributesValues change.DutyOfClerk.todo change.DutyOfClerk.todo ==> com.conetex.contract.lang.type.AttributeComplex@15f92c6
+createAttributesValues change.DutyOfClerk.todo change.DutyOfClerk.todo ==> com.conetex.contract.lang.type.AttributeComplex@4a1da0f9
 create complex child change.DutyOfRequester
 createComplexType change.DutyOfRequester
 createComplexType change.Participant
-Primitive.createIdentifier nick ASCII(32) ==> com.conetex.contract.lang.type.AttributePrimitive@83a1ee
-Primitive.createIdentifier mail ASCII(32) ==> com.conetex.contract.lang.type.AttributePrimitive@98a613
-Primitive.createIdentifier publicKey Base64(256) ==> com.conetex.contract.lang.type.AttributePrimitive@1ef4f80
+Primitive.createIdentifier nick ASCII(32) ==> com.conetex.contract.lang.type.AttributePrimitive@6c56b802
+Primitive.createIdentifier mail ASCII(32) ==> com.conetex.contract.lang.type.AttributePrimitive@7f8b8eaa
+Primitive.createIdentifier publicKey Base64(256) ==> com.conetex.contract.lang.type.AttributePrimitive@5836e3ca
 Builder contract
 complexname: change.DutyOfClerk.todo
 complexname: change.DutyOfClerk
@@ -105,11 +82,13 @@ complexname: change
 complexname: change.DutyOfClerk.todo
 complexname: change.DutyOfClerk
 complexname: change
-complexname: change.DutyOfClerk.todo
-complexname: change.DutyOfClerk
+complexname: change.DutyOfRequester
 complexname: change
-complexname: change.DutyOfClerk.todo
-complexname: change.DutyOfClerk
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
+complexname: change
+complexname: change.DutyOfRequester
 complexname: change
 complexname: change.DutyOfRequester
 complexname: change
@@ -135,16 +114,16 @@ complexname: change.DutyOfRequester
 complexname: change
 createValues VIRTUAL_PRIM_VALUE
 complexname: change
-createValue amountOfFavour 0
+createValue amountOfFavour 2
 createValues VIRTUAL_PRIM_VALUE
 complexname: change
-createValue step 1
+createValue step 45
 createValues VIRTUAL_PRIM_VALUE
 complexname: change
 createValue integerAnswer 0
 createValues VIRTUAL_PRIM_VALUE
 complexname: change
-createValue status einen kern
+createValue status nagut
 createValues VIRTUAL_COMP_VALUE
 complexname: change
 createValues VIRTUAL_COMP_VALUE
@@ -160,7 +139,7 @@ complexname: change.Participant
 createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB
 createValues VIRTUAL_PRIM_VALUE
 complexname: change.Signature
-createValue signing 
+createValue signing YiuyQeTwRZpeR7sQ3hmdtPYPFchmES0yZ5KFXHm3pyfp6tu8nbtrtqNkTYf+WE8A06thiFrUum1CPPET2UrHKEZqcnM1LgcTffxOFMY6s/fmUM1q4897yeQ83z/+fDRSza2rha64fVyMAzfuu/jZIAXGBe3HbtyeKBkQEaNeJlI=
 createValues VIRTUAL_COMP_VALUE
 complexname: change
 createValues VIRTUAL_COMP_VALUE
@@ -176,7 +155,7 @@ complexname: change.Participant
 createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB
 createValues VIRTUAL_PRIM_VALUE
 complexname: change.Signature
-createValue signing QKJQDgnzkMuzRso19o4oLq2og4fN7+7JqnWQQQly1y8EiJShTLomoeL07+UhjE8SHa4pyM/sc0U7fBZBmDqBL/nM3/iSccciLdF3IBkzEHJkH+5SF5SIHhnI3hf2UdctjVhTGAqH2Qz0fezza0Pvxqf8gMxRKrH8fc8+qQFNOG4=
+createValue signing JkJhfbEzaKIgrNWWmvh5NrhYf4TJy97cR62C3a7AiSbVF7XJ/tPA3h1ae35M7LIVoDPV1XR+KPirL6vZ8oB5U7Ubutx4w1cxpD61NfRgSYk70dw1UoXiktrrPMESW/9Duanor3WzdW43QCAjo5u5WZcvGh4UQC1dqfZnK4GbC/M=
 createValues VIRTUAL_COMP_VALUE
 complexname: change
 createValues VIRTUAL_COMP_VALUE
@@ -203,10 +182,8 @@ createValue mail
 createValues VIRTUAL_PRIM_VALUE
 complexname: change.Participant
 createValue publicKey MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB
-Selected Text : value status
-ok!
-MOCK stepResult: 21543
-MOCK stepResult: 3
+MOCK stepResult: OK!
+MOCK stepResult: 5
 MOCK stepResult: null
 MOCK stepResult: null
 write attribute
@@ -222,6 +199,18 @@ write ref
 write equal
 write ref
 write query
+write copy
+write then
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write ref
+write ref
+write Integer
+write plus
 write copy
 write then
 write Integer
@@ -257,45 +246,38 @@ write else
 write if
 write else
 write if
-write complexType
-write attribute
-write attribute
-write complexType
-write attribute
-write Integer
-write ref
-write equal
-write ref
-write query
-write copy
-write ref
-write Integer
-write copy
-write then
-write Integer
-write ref
-write equal
-write ref
-write query
-write copy
-write Integer
-write ref
-write equal
-write ref
-write Integer
-write copy
-write then
-write ref
-write Integer
-write copy
-write ref
-write String
-write copy
 write else
 write if
+write complexType
+write attribute
+write attribute
+write complexType
+write attribute
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write ref
+write Integer
+write copy
+write then
+write Integer
+write ref
+write equal
+write ref
+write query
+write copy
+write ref
+write Integer
+write copy
 write then
 write ref
 write String
+write copy
+write ref
+write Integer
 write copy
 write else
 write if
@@ -338,4 +320,3 @@ write VIRTUAL_PRIM_VALUE
 write VIRTUAL_COMP_VALUE
 write VIRTUAL_COMP_VALUE
 write VIRTUAL_COMP_VALUE
-Selected Text : value amountOfFavour

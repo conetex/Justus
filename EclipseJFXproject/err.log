@@ -1,10 +1,16 @@
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
-regex '[A-Za-z0-9+/=]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+ valid signature --> true
+signatureOfClerk change.Signature
+signatureOfRequester change.Signature
+--> match signatureOfRequester change.Signature
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
- valid signature --> false
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+ valid signature --> true
 signatureOfClerk change.Signature
 signatureOfRequester change.Signature
 --> match signatureOfRequester change.Signature

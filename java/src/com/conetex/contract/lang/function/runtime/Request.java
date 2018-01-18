@@ -68,7 +68,7 @@ public class Request extends Accessible<String> {
 	
 	@Override
 	public String getFrom(Structure thisObject) throws AbstractRuntimeException {
-		return ContractRuntime.stringAgency.getStringAnswer(this.question);
+		return ContractRuntime.stringAgency.getStringAnswer(this.question, this.question);
 	}
 
 	@Override

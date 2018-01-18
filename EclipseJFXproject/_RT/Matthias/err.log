@@ -2,9 +2,9 @@ regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not m
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[A-Za-z0-9+/=]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[A-Za-z0-9+/=]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
- valid signature --> false
 signatureOfClerk change.Signature
 signatureOfRequester change.Signature
 --> match signatureOfRequester change.Signature
@@ -13,28 +13,14 @@ regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not m
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
  valid signature --> true
- valid signature --> false
-com.conetex.contract.run.exceptionValue.Invalid: regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
-	at com.conetex.contract.lang.value.implementation.SizedASCII.check(SizedASCII.java:108)
-	at com.conetex.contract.lang.value.implementation.SizedASCII.set(SizedASCII.java:117)
-	at com.conetex.contract.lang.value.implementation.SizedASCII.set(SizedASCII.java:1)
-	at com.conetex.contract.lang.function.access.AccessibleValue.setTo(AccessibleValue.java:81)
-	at com.conetex.contract.lang.function.assign.AbstractAssigment.getFrom(AbstractAssigment.java:47)
-	at com.conetex.contract.lang.function.control.Function.doSteps(Function.java:253)
-	at com.conetex.contract.lang.function.control.Steps.getFrom(Steps.java:29)
-	at com.conetex.contract.lang.function.control.WhenOtherwise.getFrom(WhenOtherwise.java:98)
-	at com.conetex.contract.lang.function.control.Function.doSteps(Function.java:239)
-	at com.conetex.contract.lang.function.control.Steps.getFrom(Steps.java:29)
-	at com.conetex.contract.lang.function.control.WhenOtherwise.getFrom(WhenOtherwise.java:101)
-	at com.conetex.contract.lang.function.control.Function.doSteps(Function.java:239)
-	at com.conetex.contract.lang.function.control.Function.getFrom(Function.java:357)
-	at com.conetex.contract.build.Build$1.run(Build.java:129)
-	at com.conetex.justus.study.ReadXML.run(ReadXML.java:183)
-	at application.UImain$4$1.run(UImain.java:332)
-	at java.lang.Thread.run(Unknown Source)
 signatureOfClerk change.Signature
 signatureOfRequester change.Signature
 --> match signatureOfRequester change.Signature
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+ valid signature --> true
 signatureOfClerk change.Signature
 signatureOfRequester change.Signature
 --> match signatureOfRequester change.Signature

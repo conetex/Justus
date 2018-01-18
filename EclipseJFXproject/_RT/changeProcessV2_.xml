@@ -25,21 +25,21 @@
 						  <String value="Hi Matthias! I have done something."/>
 						</copy>
 						-->
-		
+
 		<if>
 			<equal>
 				<Integer name="egal">1</Integer>
 				<ref value="step"/>
 			</equal>
-			<then>			
+			<then>
 				<copy>
 					<ref value="status"/>
 					<query question="2. what's the reference number of the change?"/>
-				</copy>					
+				</copy>
 				<copy>
 					<ref value="step"/>
 					<Integer name="egal">3</Integer>
-				</copy>					
+				</copy>
 			</then>
 			<else>
 				<if>
@@ -51,26 +51,26 @@
 						<copy>
 							<ref value="status"/>
 							<query question="4. is the documentation valid?"/>
-						</copy>	
+						</copy>
 						<copy>
 							<ref value="step"/>
 							<Integer name="egal">45</Integer>
-						</copy>						
+						</copy>
 					</then>
 					<else>
 					  <copy>
 						<ref value="status"/>
 						<String value="OK!"/>
-					  </copy>		
+					  </copy>
 					  <copy>
 						<ref value="step"/>
 						<Integer name="egal">5</Integer>
-					  </copy>						  
+					  </copy>
 					</else>
-				</if>		
+				</if>
 			</else>
 		</if>
-		
+
       </function>
       <call name="change.DutyOfClerk.todo" type="DutyOfClerk"/>
     </complexType>
@@ -99,10 +99,10 @@
 		  <copy>
 			<ref value="status"/>
 			<query question="1. what do you want to roll out?"/>
-		  </copy>		
+		  </copy>
 		</then>
 		<else>
-		
+
 		  <if>
 			<equal>
 				<Integer name="egal">3</Integer>
@@ -119,7 +119,7 @@
 						<ref value="amountOfFavour"/>
 						<Integer value="1"/>
 					</plus>
-				</copy>			  
+				</copy>
 			</then>
 			<else>
 			  <if>
@@ -131,14 +131,14 @@
 					<copy>
 						<ref value="status"/>
 						<query question="3. your documentation was not valid! where is the valid documentation?"/>
-					</copy>	
+					</copy>
 					<copy>
 						<ref value="amountOfFavour"/>
 						<plus>
 							<ref value="amountOfFavour"/>
 							<Integer value="1"/>
 						</plus>
-					</copy>					  
+					</copy>
 				</then>
 				<else>
 				  <if>
@@ -150,31 +150,31 @@
 						<copy>
 							<ref value="status"/>
 							<String value="5. End of process! Thanks! I owe you a coffee!"/>
-						</copy>	
+						</copy>
 						<copy>
 							<ref value="amountOfFavour"/>
 							<plus>
 								<ref value="amountOfFavour"/>
 								<Integer value="1"/>
 							</plus>
-						</copy>					  
+						</copy>
 					</then>
 					<else>
 					  <copy>
 						<ref value="status"/>
 						<String value="?"/>
-					  </copy>		
+					  </copy>
 					</else>
-				  </if>				  		
+				  </if>
 				</else>
 			  </if>
 			</else>
-		  </if>		
-		  
+		  </if>
+
 		</else>
 	  </if>
-	  
-	  
+
+
     </complexType>
     <complexType name="change.Duty">
       <attribute name="participant" type="change.Participant"/>
@@ -199,7 +199,7 @@
         <VIRTUAL_PRIM_VALUE name="mail" value=""/>
         <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB"/>
       </VIRTUAL_COMP_VALUE>
-      <VIRTUAL_PRIM_VALUE name="signing" value="bo/sg2EkKl5zge30x0WY7CdsVj1AJvU58C+8GaPnf5X9Z5aWtNKppyaZVGGCYbH6ABcnrbMH65IgeN20JNRveQJWQXbp3DlflzE5FTzInyIpDNSx+21qcFFiGeDoKHkvzIqiQVx8vvxNYB80WJoTZHbnUG0orNpkW5BynMvDf7Q="/>
+      <VIRTUAL_PRIM_VALUE name="signing" value=""/>
     </VIRTUAL_COMP_VALUE>
     <VIRTUAL_COMP_VALUE name="dutyOfClerk">
       <VIRTUAL_COMP_VALUE name="participant">

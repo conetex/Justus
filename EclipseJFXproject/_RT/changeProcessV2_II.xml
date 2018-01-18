@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<contract>
+  <complexType name="change">
+    <attribute name="amountOfFavour" type="t:Int"/>
+    <attribute name="step" type="t:Int"/>
+    <attribute name="integerAnswer" type="t:Int"/>
+    <attribute name="status" type="t:ASCII256"/>
+    <attribute name="signatureOfClerk" type="change.Signature"/>
+    <attribute name="signatureOfRequester" type="change.Signature"/>
+    <attribute name="dutyOfClerk" type="change.DutyOfClerk"/>
+    <attribute name="dutyOfRequester" type="change.DutyOfRequester"/>
+    <complexType name="change.DutyOfRequester" supertype="change.Duty">
+      <if>
+        <equal>
+          <Integer value="1"/>
+          <ref value="step"/>
+        </equal>
+        <then>
+          <copy>
+            <ref value="status"/>
+            <query question="1. what do you want to roll out?"/>
+          </copy>
+        </then>
+        <else>
+          <if>
+            <equal>
+              <Integer value="3"/>
+              <ref value="step"/>
+            </equal>
+            <then>
+              <copy>
+                <ref value="status"/>
+                <query question="3. where is the documentation?"/>
+              </copy>
+              <copy>
+                <ref value="amountOfFavour"/>
+                <plus>
+                  <ref value="amountOfFavour"/>
+                  <Integer value="1"/>
+                </plus>
+              </copy>
+            </then>
+            <else>
+              <if>
+                <equal>
+                  <Integer value="45"/>
+                  <ref value="step"/>
+                </equal>
+                <then>
+                  <copy>
+                    <ref value="status"/>
+                    <String value="3. your documentation was not valid! where is the valid documentation?"/>
+                  </copy>
+                  <copy>
+                    <ref value="amountOfFavour"/>
+                    <plus>
+                      <ref value="amountOfFavour"/>
+                      <Integer value="1"/>
+                    </plus>
+                  </copy>
+                </then>
+                <else>
+                  <if>
+                    <equal>
+                      <Integer value="5"/>
+                      <ref value="step"/>
+                    </equal>
+                    <then>
+                      <copy>
+                        <ref value="status"/>
+                        <String value="5. End of process! Thanks! I owe you a coffee!"/>
+                      </copy>
+                      <copy>
+                        <ref value="amountOfFavour"/>
+                        <plus>
+                          <ref value="amountOfFavour"/>
+                          <Integer value="1"/>
+                        </plus>
+                      </copy>
+                    </then>
+                    <else>
+                      <copy>
+                        <ref value="status"/>
+                        <String value="?"/>
+                      </copy>
+                    </else>
+                  </if>
+                </else>
+              </if>
+            </else>
+          </if>
+        </else>
+      </if>
+    </complexType>
+    <complexType name="change.Signature">
+      <attribute name="participant" type="change.Participant"/>
+      <attribute name="signing" type="t:Base64(1024)"/>
+    </complexType>
+    <complexType name="change.DutyOfClerk" supertype="change.Duty">
+      <function name="change.DutyOfClerk.todo" type="change.DutyOfClerk.todo">
+        <attribute name="param" type="t:Int"/>
+        <if>
+          <equal>
+            <Integer value="1"/>
+            <ref value="step"/>
+          </equal>
+          <then>
+            <copy>
+              <ref value="status"/>
+              <query question="2. what's the reference number of the change?"/>
+            </copy>
+            <copy>
+              <ref value="step"/>
+              <Integer value="3"/>
+            </copy>
+          </then>
+          <else>
+            <if>
+              <equal>
+                <Integer value="3"/>
+                <ref value="step"/>
+              </equal>
+              <then>
+                <copy>
+                  <ref value="status"/>
+                  <query question="4. is the documentation valid?"/>
+                </copy>
+                <copy>
+                  <ref value="step"/>
+                  <Integer value="45"/>
+                </copy>
+              </then>
+              <else>
+                <copy>
+                  <ref value="status"/>
+                  <String value="OK!"/>
+                </copy>
+                <copy>
+                  <ref value="step"/>
+                  <Integer value="5"/>
+                </copy>
+              </else>
+            </if>
+          </else>
+        </if>
+      </function>
+      <call name="change.DutyOfClerk.todo" type="DutyOfClerk"/>
+    </complexType>
+    <complexType name="change.Duty">
+      <attribute name="participant" type="change.Participant"/>
+    </complexType>
+    <complexType name="change.Participant">
+      <attribute name="nick" type="t:ASCII(32)"/>
+      <attribute name="mail" type="t:ASCII(32)"/>
+      <attribute name="publicKey" type="t:Base64(256)"/>
+    </complexType>
+  </complexType>
+  <VIRTUAL_COMP_VALUE name="change">
+    <VIRTUAL_PRIM_VALUE name="amountOfFavour" value="0"/>
+    <VIRTUAL_PRIM_VALUE name="step" value="3"/>
+    <VIRTUAL_PRIM_VALUE name="integerAnswer" value="0"/>
+    <VIRTUAL_PRIM_VALUE name="status" value="4711"/>
+    <VIRTUAL_COMP_VALUE name="signatureOfClerk">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="Bjoern"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB"/>
+      </VIRTUAL_COMP_VALUE>
+      <VIRTUAL_PRIM_VALUE name="signing" value="d+qEApQ2Gyetz47mIkWFZmQ8qiK5U8vmbhWtwczRHCfu9wC6Hs7uUgr0djIQcEyvX2hNEO6QHL90EoUWDmG4++ADuJoAv6z9U7SXN7tEJE9cLFbsMlwBDrKmgeJ2Avxnt4chQ7OsNFubqQeIm+fnAXWL57+F9TmZWgUAQTVOwBs="/>
+    </VIRTUAL_COMP_VALUE>
+    <VIRTUAL_COMP_VALUE name="signatureOfRequester">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="Matthias"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB"/>
+      </VIRTUAL_COMP_VALUE>
+      <VIRTUAL_PRIM_VALUE name="signing" value="QKJQDgnzkMuzRso19o4oLq2og4fN7+7JqnWQQQly1y8EiJShTLomoeL07+UhjE8SHa4pyM/sc0U7fBZBmDqBL/nM3/iSccciLdF3IBkzEHJkH+5SF5SIHhnI3hf2UdctjVhTGAqH2Qz0fezza0Pvxqf8gMxRKrH8fc8+qQFNOG4="/>
+    </VIRTUAL_COMP_VALUE>
+    <VIRTUAL_COMP_VALUE name="dutyOfClerk">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="Bjoern"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCTj/pKWLFZvugkf0TQps6wxju4K7oI/iwW5LxyBeAE74JgIwvocBcDnQAWUzhSaktEO5fWgEtH9wr3GvbMhNOqDX3RAX2u+b9nzL+ltqCRBojJqywwVj4HiSku9t7Sc6MkisUdE5jQvSzneml3dxUEXWjIEcwb29NpCpZpQ1Pa1QIDAQAB"/>
+      </VIRTUAL_COMP_VALUE>
+    </VIRTUAL_COMP_VALUE>
+    <VIRTUAL_COMP_VALUE name="dutyOfRequester">
+      <VIRTUAL_COMP_VALUE name="participant">
+        <VIRTUAL_PRIM_VALUE name="nick" value="Matthias"/>
+        <VIRTUAL_PRIM_VALUE name="mail" value=""/>
+        <VIRTUAL_PRIM_VALUE name="publicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCG4fKRuj6SX6lgaKtQ9pUV/2yVwFB4mq0l7DaeZkzlF/tH99vvMOD9Q0SVa0DuClcNQS8DXtKy3MU+0ax4UG8Yh8YL3C+zv7Cb3kGWsEP/dDWka+6mHhhf7ofZ6a1HZdUvj8qW4H3SDP83YP0j3QnjqCA+t4fjs8qbDu3x4r1ZkQIDAQAB"/>
+      </VIRTUAL_COMP_VALUE>
+    </VIRTUAL_COMP_VALUE>
+  </VIRTUAL_COMP_VALUE>
+</contract>

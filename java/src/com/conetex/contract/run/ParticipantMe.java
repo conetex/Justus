@@ -79,6 +79,7 @@ public class ParticipantMe extends Participant{
 						signature = rsa.sign();
 						Value<?> partSig = sig.getValue("signing");
 						partSig.setConverted( Base64.getEncoder().encodeToString(signature) );
+						
 					}
 					catch (NoSuchAlgorithmException e) {
 						// TODO Auto-generated catch block
