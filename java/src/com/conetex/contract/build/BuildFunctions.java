@@ -722,7 +722,7 @@ public class BuildFunctions{
 			public Accessible<?> functionCreate(CodeNode thisNode, TypeComplex parentType)
 					throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
 				return createIntern(thisNode, parentType);
-			}
+			} 
 
 			private Accessible<?> createIntern(CodeNode thisNode, TypeComplex parentType)
 					throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException {
