@@ -52,20 +52,34 @@
 							<ref value="status"/>
 							<query question="4. is the documentation valid?"/>
 						</copy>	
-						<copy>
-							<ref value="step"/>
-							<Integer name="egal">45</Integer>
-						</copy>						
+						<if>
+							<equal>
+								<Integer name="egal">1</Integer>
+								<ref value="integerAnswer"/>
+							</equal>
+							<then>
+								<copy>
+									<ref value="step"/>
+									<Integer name="egal">5</Integer>
+								</copy>						
+							</then>
+							<else>
+								<copy>
+									<ref value="step"/>
+									<Integer name="egal">3</Integer>
+								</copy>	
+								<copy>
+									<ref value="status"/>
+									<String value="3. Your documentation is not valid!"/>
+								</copy>								
+							</else>
+						</if>
 					</then>
 					<else>
 					  <copy>
 						<ref value="status"/>
-						<String value="OK!"/>
+						<String value="?"/>
 					  </copy>		
-					  <copy>
-						<ref value="step"/>
-						<Integer name="egal">5</Integer>
-					  </copy>						  
 					</else>
 				</if>		
 			</else>
@@ -124,13 +138,13 @@
 			<else>
 			  <if>
 				<equal>
-					<Integer name="egal">45</Integer>
+					<Integer name="egal">5</Integer>
 					<ref value="step"/>
 				</equal>
 				<then>
 					<copy>
 						<ref value="status"/>
-						<query question="3. your documentation was not valid! where is the valid documentation?"/>
+						<String value="5. End of process! Thanks! I owe you a coffee!"/>
 					</copy>	
 					<copy>
 						<ref value="amountOfFavour"/>
@@ -141,31 +155,10 @@
 					</copy>					  
 				</then>
 				<else>
-				  <if>
-					<equal>
-						<Integer name="egal">5</Integer>
-						<ref value="step"/>
-					</equal>
-					<then>
-						<copy>
-							<ref value="status"/>
-							<String value="5. End of process! Thanks! I owe you a coffee!"/>
-						</copy>	
-						<copy>
-							<ref value="amountOfFavour"/>
-							<plus>
-								<ref value="amountOfFavour"/>
-								<Integer value="1"/>
-							</plus>
-						</copy>					  
-					</then>
-					<else>
-					  <copy>
-						<ref value="status"/>
-						<String value="?"/>
-					  </copy>		
-					</else>
-				  </if>				  		
+				  <copy>
+					<ref value="status"/>
+					<String value="?"/>
+				  </copy>		
 				</else>
 			  </if>
 			</else>

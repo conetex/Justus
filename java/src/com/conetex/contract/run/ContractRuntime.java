@@ -159,6 +159,15 @@ public class ContractRuntime {
 		
 		for (Structure s : sigs) {
 
+			Value<?> ss = s.getValue(Symbols.TYPE_SIGNATURE_ATT_SIGNING);
+			if (ss == null || ss.get() == null) {
+				continue;
+			}
+			if (ss.get().toString() == null || ss.get().toString().length() == 0) {
+				continue;
+			}			
+			byte[] sss = fromBase64(ss.get().toString());
+
 			Value<?> p = s.getValue(Symbols.TYPE_SIGNATURE_ATT_PARTICIPANT);
 			if (p == null) {
 				continue;
@@ -172,19 +181,9 @@ public class ContractRuntime {
 				continue;
 			}
 			String thePublicKey = k.get().toString();
-			if (thePublicKey == null || thePublicKey.length() == 0 || thePublicKey.equals(me.publicKeyBase64)) {
+			if (thePublicKey == null || thePublicKey.length() == 0) {
 				continue;
 			}
-			
-			Value<?> ss = s.getValue(Symbols.TYPE_SIGNATURE_ATT_SIGNING);
-			if (ss == null || ss.get() == null) {
-				continue;
-			}
-			if (ss.get().toString() == null || ss.get().toString().length() == 0) {
-				continue;
-			}			
-			byte[] sss = fromBase64(ss.get().toString());
-			
 			try {
 				PublicKey publicKey = Participant.getPublicKey(thePublicKey);
 				Signature signature = Signature.getInstance(Constants.SEC_HASH_4_SIG); // TODO
@@ -197,10 +196,7 @@ public class ContractRuntime {
 				checked = true;
 				System.err.println(" valid signature --> " + result);
 				if(! result) {
-					//System.err.println(
-					 return 
-					 "signing invalid (document was changed after last sign off)" ;
-					//		);
+					return "signing invalid (document was changed after last sign off)";
 				}
 			}
 			catch (SignatureException e) {

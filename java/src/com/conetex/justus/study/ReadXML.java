@@ -301,7 +301,7 @@ public class ReadXML {
 					attributeList.toArray(theParams);
 					return new CodeNode(parentName, commandStr, theParams, createChildren(thisName, n));
 				}
-				else { 
+				else {
 					return new CodeNode(parentName, commandStr, new String[0], createChildren(thisName, n));
 				}
 			}

@@ -294,7 +294,7 @@ public class UImain extends Application {
 		}
 
 		try {
-			primaryStage.setTitle("Justus Contract View - " + ContractRuntime.whoAmI().getNick());
+			primaryStage.setTitle("Justus Contract View");
 
 			ObservableList<KeyValue> data = FXCollections.observableArrayList();// new
 																				// KeyValue("A",
@@ -526,20 +526,6 @@ public class UImain extends Application {
 			};
 			(new Thread(r)).start();
 
-			ContractRuntime.stringAgency.subscribe("4. is the documentation valid?", 
-					new Informant<String>() {
-
-						@Override
-						public String getStringAnswer(String question) {
-							return "your docu is not vaild!";
-						}
-
-						@Override
-						public String getStringAnswer(String question, Pair<String, String>[] allowedAnswers) {
-							return "your docu is not vaild!";
-						}
-				
-			});
 			ContractRuntime.stringAgency.subscribe(new Informant<String>() {
 
 				@Override

@@ -1,4 +1,5 @@
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
+regex '[A-Za-z0-9+/=]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
 regex '[ !"#\$%&'\(\)\*\+,\-\./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\|\}~]{1,}' is not matched by ''! Please report! This Issue should be debugged!
