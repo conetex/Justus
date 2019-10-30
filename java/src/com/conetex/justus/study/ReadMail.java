@@ -7,6 +7,12 @@ import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Store;
 
+
+import java.util.*;  
+import javax.mail.*;  
+import javax.mail.internet.*;  
+import javax.activation.*;  
+
 /**
  * Created by Matthias on 17.02.2017.
  */
@@ -22,8 +28,9 @@ class ReadMail {
 			Session session = Session.getDefaultInstance(props, null);
 			Store store = session.getStore("imaps");
 
-			store.connect("imap.gmx.net", "mat-franke@gmx.de", "munir1205");
-
+			//store.connect("imap.gmx.net", "mat-franke@gmx.de", "munir1205");
+			store.connect("imap.gmail.com", "ano17nymos@gmail.com", "200812Munir");
+			
 			Folder inbox = store.getFolder("inbox");
 			inbox.open(Folder.READ_ONLY);
 			int messageCount = inbox.getMessageCount();
@@ -32,7 +39,7 @@ class ReadMail {
 
 			Message[] messages = inbox.getMessages();
 			System.out.println("------------------------------");
-			for (int i = 0; i < 10; i++) {
+			for (int i = 0; i < messages.length && i < 1000; i++) {
 				System.out.println("Mail Subject:- " + messages[i].getSubject());
 			}
 			inbox.close(true);
@@ -44,4 +51,45 @@ class ReadMail {
 		}
 	}
 
+	
+    public static void mainX(String[] args) {
+
+        final String username = "ano17nymos@gmail.com";
+        final String password = "200812Munir";
+
+        Properties prop = new Properties();
+		prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("from@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse("munir.tas@outlook.de")
+            );
+            message.setSubject("Testing Gmail TLS");
+            message.setText("Dear Mail Crawler,"
+                    + "\n\n Please do not spam my email!");
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	
 }
