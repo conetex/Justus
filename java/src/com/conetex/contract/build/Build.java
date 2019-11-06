@@ -83,9 +83,9 @@ public class Build {
 		return myDuties;
 	}
 
-	public static Main create(CodeNode code) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException, ValueCastException {
+	public static Main createMain(CodeNode syntaxTreeRoot) throws AbstractInterpreterException, Inconvertible, Invalid, AbstractTypException, ValueCastException {
 		TypePrimitive.init();
-		CodeNode.init(code);
+		CodeNode.init(syntaxTreeRoot);
 		// List<TypeComplex> complexTyps = BuildTypes.createComplexTypes(code);
 		CodeNode complexRoot = CodeNode.getComplexRoot();
 		
@@ -93,7 +93,7 @@ public class Build {
 		TypeComplexFunction.clearInstances();
 		List<Pair<CodeNode, TypeComplex>> complexTypes = BuildTypes.createComplexTypes(complexRoot);
 
-		System.out.println("Builder " + code.getCommand());
+		System.out.println("Builder " + syntaxTreeRoot.getCommand());
 		if (complexTypes != null) {
 
 			Function.clearInstances();
@@ -107,6 +107,8 @@ public class Build {
 				BuildValues.createValues(valueRoot, complexTypeRoot, rootStructure);
 				rootStructure.fillMissingValues();
 				TypeComplexFunction.fillMissingPrototypeValues();
+				
+				// TODO 1: wozu dient diese mainFunction genau?
 				Function<?> mainFunction = BuildFunctions.build(complexRoot, complexTypeRoot);
 				
 				//ContractRuntime.validateSignatures(rootStructure);
@@ -173,7 +175,7 @@ public class Build {
 
 						@Override
 						public CodeNode getRootCodeNode() {
-							return code;
+							return syntaxTreeRoot;
 						}
 
 						@Override

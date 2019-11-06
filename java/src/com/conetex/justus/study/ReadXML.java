@@ -72,8 +72,7 @@ public class ReadXML {
 			Element e = null;
 			try {
 				e = this.odoc.createElement(n.getCommand());
-			}
-			catch (DOMException de) {
+			} catch (DOMException de) {
 				System.out.println(de);
 				return null;
 			}
@@ -107,32 +106,32 @@ public class ReadXML {
 	}
 
 	public static void main(String[] args)
-			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException, InvalidKeySpecException, NoSuchAlgorithmException {
+			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException,
+			AbstractRuntimeException, AbstractTypException, InvalidKeySpecException, NoSuchAlgorithmException {
 		String inFile = "changeProcessV2__out_out_out";
 		String fileExtension = ".xml";
-		
-		Main main = in( new File(inFile + fileExtension) );
-		ContractRuntime.stringAgency.subscribe(
-				new Informant<String>() {
-					@Override
-					public String getStringAnswer(String question) {
-						return "default answer A";
-					}
-					@Override
-					public String getStringAnswer(String question, Pair<String, String>[] allowedAnswers) {
-						return "default answer B";
-					}
-				}
-			);
+
+		Main main = in(new File(inFile + fileExtension));
+		ContractRuntime.stringAgency.subscribe(new Informant<String>() {
+			@Override
+			public String getStringAnswer(String question) {
+				return "default answer A";
+			}
+
+			@Override
+			public String getStringAnswer(String question, Pair<String, String>[] allowedAnswers) {
+				return "default answer B";
+			}
+		});
 		Document doc = run(main);
 		out(doc, new File(inFile + "_out" + fileExtension));
 	}
-	
-	public static Main in(File inFile)
-			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
+
+	public static Main in(File inFile) throws ParserConfigurationException, SAXException, IOException,
+			AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
 
 		CodeModel.build(); // TODO das sollte woanders gemacht werden, denn hier ist alles xml-driven...
-		
+
 		Main main = null;
 		try (FileInputStream is = new FileInputStream(inFile)) {
 
@@ -150,13 +149,12 @@ public class ReadXML {
 				short typOfNode = children.item(i).getNodeType();
 				if (typOfNode == Node.ELEMENT_NODE) {
 					if (main == null) {
-						CodeNode r2 = createSyntaxNode("", r);
+						CodeNode r2 = parse2SyntaxTree(r);
 
 						// createChildren("", r);
 
-						main = Build.create(r2);
-					}
-					else {
+						main = Build.createMain(r2);
+					} else {
 						System.err.println("more than one root element! can not proceed!");
 					}
 				}
@@ -166,11 +164,11 @@ public class ReadXML {
 		}
 
 		return main;
-		
 
 	}
 
-	public static Document run(Main main) throws ParserConfigurationException, UnknownCommandParameter, UnknownCommand, NullLabelException, EmptyLabelException, AbstractRuntimeException {
+	public static Document run(Main main) throws ParserConfigurationException, UnknownCommandParameter, UnknownCommand,
+			NullLabelException, EmptyLabelException, AbstractRuntimeException {
 		if (main != null) {
 			DocumentBuilderFactory odocumentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder odocumentBuilder = odocumentBuilderFactory.newDocumentBuilder();
@@ -185,10 +183,10 @@ public class ReadXML {
 		}
 		return null;
 	}
-		
-	public static void out(Document doc, File outFile)
-			throws ParserConfigurationException, SAXException, IOException, AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
-		if(doc == null) {
+
+	public static void out(Document doc, File outFile) throws ParserConfigurationException, SAXException, IOException,
+			AbstractInterpreterException, AbstractRuntimeException, AbstractTypException {
+		if (doc == null) {
 			return;
 		}
 		Document odoc = doc;
@@ -200,12 +198,15 @@ public class ReadXML {
 				t.setOutputProperty(OutputKeys.INDENT, "yes");
 				t.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 				t.transform(new DOMSource(odoc), res);
-			}
-			catch (TransformerFactoryConfigurationError | TransformerException e) {
+			} catch (TransformerFactoryConfigurationError | TransformerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static CodeNode parse2SyntaxTree(Node n) {
+		return createSyntaxNode("", n);
 	}
 	
 	private static CodeNode createSyntaxNode(String parentName, Node n) {
@@ -224,23 +225,21 @@ public class ReadXML {
 		if (commands == null) {
 			String theValue = ReadXMLtools.getNodeValue(n);
 			if (theValue == null) {
-				return new CodeNode(parentName, Symbols.comVirtualCompValue(), new String[] { commandStr }, createChildren(thisName, n));
+				return new CodeNode(parentName, Symbols.comVirtualCompValue(), new String[] { commandStr },
+						createChildren(thisName, n));
+			} else {
+				return new CodeNode(parentName, Symbols.comvirtualPrimValue(), new String[] { commandStr, theValue },
+						createChildren(thisName, n));
 			}
-			else {
-				return new CodeNode(parentName, Symbols.comvirtualPrimValue(), new String[] { commandStr, theValue }, createChildren(thisName, n));
-			}
-		}
-		else {
+		} else {
 			// TODO Sortierung ist nicht getestet...
 			commands.sort((o1, o2) -> {
 				if (o1.getParameterCount() < o2.getParameterCount()) {
 					return 1;
-				}
-				else {
+				} else {
 					if (o1.getParameterCount() == o2.getParameterCount()) {
 						return 0;
-					}
-					else {
+					} else {
 						return -1;
 					}
 				}
@@ -260,39 +259,34 @@ public class ReadXML {
 									errors.append(paramName).append(", ");
 									attributeList.clear();
 									continue outerLoop;
-								}
-								else {
+								} else {
 									attributeList.add(value);
 								}
-							}
-							else {
+							} else {
 								errors.append(paramName).append(", ");
 								attributeList.clear();
 								continue outerLoop;
 							}
-						}
-						else {
+						} else {
 							if (paramName.equals(Symbols.paramName())) {
 								if (parentName == null || parentName.equals("")) {
 									thisName = a.getNodeValue();
 									attributeList.add(thisName);
-								}
-								else {
+								} else {
 									// nur bei complex / function
-									thisName = parentName + Symbols.NAME_SEPERATOR + Symbols.getSimpleName(a.getNodeValue());
+									thisName = parentName + Symbols.NAME_SEPERATOR
+											+ Symbols.getSimpleName(a.getNodeValue());
 									if (thisName.equals("root.person.tuWas")) {
 										System.err.println("upps");
 									}
 
 									if (commandStr == Symbols.comFunction()) {
 										attributeList.add(thisName);
-									}
-									else {
+									} else {
 										attributeList.add(a.getNodeValue());
 									}
 								}
-							}
-							else {
+							} else {
 								attributeList.add(a.getNodeValue());
 							}
 						}
@@ -300,8 +294,7 @@ public class ReadXML {
 					theParams = new String[attributeList.size()];
 					attributeList.toArray(theParams);
 					return new CodeNode(parentName, commandStr, theParams, createChildren(thisName, n));
-				}
-				else {
+				} else {
 					return new CodeNode(parentName, commandStr, new String[0], createChildren(thisName, n));
 				}
 			}

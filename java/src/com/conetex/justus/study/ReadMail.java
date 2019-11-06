@@ -28,8 +28,8 @@ class ReadMail {
 			Session session = Session.getDefaultInstance(props, null);
 			Store store = session.getStore("imaps");
 
-			//store.connect("imap.gmx.net", "mat-franke@gmx.de", "munir1205");
-			store.connect("imap.gmail.com", "ano17nymos@gmail.com", "200812Munir");
+			store.connect("imap.gmx.net", "mat-franke@gmx.de", "munir1205");
+			//store.connect("imap.gmail.com", "ano17nymos@gmail.com", "200812Munir");
 			
 			Folder inbox = store.getFolder("inbox");
 			inbox.open(Folder.READ_ONLY);
