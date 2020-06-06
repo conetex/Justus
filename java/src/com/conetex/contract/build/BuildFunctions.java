@@ -633,7 +633,7 @@ public class BuildFunctions{
 				String functionName = thisNode.getParameter(Symbols.paramName());
 				Function<? extends Number> e = Function.getInstanceNum(functionName);
 				if(e == null){
-					CodeNode fNode = getFunctionNode(CodeNode.getComplexRoot(), functionName);
+					CodeNode fNode = getFunctionNode(functionName);
 					TypeComplex parentTypeOfFunction = TypeComplex
 							.getInstanceNoNull(Symbols.getParentNameNoNull(functionName));
 					e = Fun.number.functionCreate(fNode, parentTypeOfFunction);
@@ -664,7 +664,7 @@ public class BuildFunctions{
 				String functionName = thisNode.getParameter(Symbols.paramName());
 				Function<Boolean> e = Function.getInstanceBool(functionName);
 				if(e == null){
-					CodeNode fNode = getFunctionNode(CodeNode.getComplexRoot(), functionName);
+					CodeNode fNode = getFunctionNode(functionName);
 					TypeComplex parentTypeOfFunction = TypeComplex
 							.getInstanceNoNull(Symbols.getParentNameNoNull(functionName));
 					e = Fun.bool.functionCreate(fNode, parentTypeOfFunction);
