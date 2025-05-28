@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import com.conetex.contract.build.exceptionFunction.AbstractInterpreterException;
 import com.conetex.contract.build.exceptionFunction.EmptyLabelException;
 import com.conetex.contract.build.exceptionFunction.NullLabelException;
